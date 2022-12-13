@@ -4,6 +4,19 @@
     <p>An Flutter application for streaming music from YouTube Music</p>
 </div>
 
+---
+
+<p align="center">
+  <img src="./assets/images/1.jpg" width="30%" />
+  <img src="./assets/images/2.jpg" width="30%" />
+  <img src="./assets/images/3.jpg" width="30%" />
+
+    
+  <img src="./assets/images/4.jpg" width="30%" />
+  <img src="./assets/images/5.jpg" width="30%" />
+  <img src="./assets/images/6.jpg" width="30%" />
+</p>
+
 ## Features
 - Play (almost) any song or video from YouTube Music
 - Background playback
