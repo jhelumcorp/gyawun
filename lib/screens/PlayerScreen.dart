@@ -76,7 +76,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(16),
                         child: Column(
                           children: [
                             Text(
@@ -102,6 +102,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         ),
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           MaterialButton(
                             elevation: 0,
@@ -115,9 +116,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               context.read<MusicPlayer>().toggleShuffle();
                             },
                             shape: const CircleBorder(),
-                            child: const Icon(
+                            child: Icon(
                               CupertinoIcons.shuffle,
-                              color: Colors.black,
+                              color: player.loopMode == LoopMode.one
+                                  ? song.colorPalette?.darkMutedColor?.color
+                                  : Colors.black,
                               size: 30,
                             ),
                           ),
