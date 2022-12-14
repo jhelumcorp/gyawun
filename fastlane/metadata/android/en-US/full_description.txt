@@ -1,0 +1,1 @@
+<p><i>Vibe Music</i> lets you play (almost) any song or video from YouTube Music. You can search for songs and playlists, reorder songs in playlist or queue, and also have the music played in background.</p>
