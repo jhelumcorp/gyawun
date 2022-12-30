@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vibe_music/screens/TpScreen.dart';
+import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/utils/colors.dart';
 
 class PlaylistSearch extends StatefulWidget {
@@ -22,13 +22,14 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.all(16),
       itemCount: playlists.length,
       itemBuilder: (context, index) {
         Map playlist = playlists[index];
         return ListTile(
           onTap: () {
-            Navigator.pushNamed(context, '/playlist',
+            Navigator.pushNamed(context, '/search/playlist',
                 arguments: {'playlistId': playlist['browseId']});
             // Navigator.push(
             //     context,
@@ -44,6 +45,13 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
                   height: 100,
                   width: 100,
                   fit: BoxFit.fill,
+                  errorBuilder: ((context, error, stackTrace) {
+                    return Image.asset(
+                      "assets/images/playlist.png",
+                      height: 100,
+                      width: 100,
+                    );
+                  }),
                 ),
               ),
               Expanded(
@@ -56,19 +64,25 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
                         playlist['title'],
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .titleMedium
+                            ?.copyWith(
+                                overflow: TextOverflow.ellipsis, fontSize: 16),
                       ),
                       Text(
                         playlist['author'],
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 14, color: grayColor),
+                        style: const TextStyle(
+                            fontSize: 14,
+                            color: Color.fromARGB(255, 93, 92, 92)),
                       ),
                       Text(
-                        playlist['itemCount'] + ' songs',
+                        playlist['itemCount'] + ' ' + S.of(context).Songs,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 14, color: grayColor),
+                        style: const TextStyle(
+                            fontSize: 14,
+                            color: Color.fromARGB(255, 93, 92, 92)),
                       ),
                     ],
                   ),

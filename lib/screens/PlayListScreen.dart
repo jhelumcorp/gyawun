@@ -1,17 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
+import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
-import 'package:we_slide/we_slide.dart';
 
 class PlayListScreen extends StatefulWidget {
-  const PlayListScreen(
-      {required this.playlistId, required this.weSlideController, super.key});
-  final WeSlideController weSlideController;
+  const PlayListScreen({required this.playlistId, super.key});
   final String playlistId;
 
   @override
@@ -26,8 +22,6 @@ class _PlayListScreenState extends State<PlayListScreen> {
     super.initState();
     HomeApi.getPlaylist(widget.playlistId).then((Map value) {
       setState(() {
-        log(widget.playlistId);
-        log(value.toString());
         playlist = value;
         loading = false;
       });
@@ -46,7 +40,14 @@ class _PlayListScreenState extends State<PlayListScreen> {
                     Navigator.pop(context);
                     context.read<MusicPlayer>().addToQUeue(song);
                   },
-                  title: const Text("Add to Queue"),
+                  title: Text(
+                    S.of(context).addToQueue,
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .titleMedium
+                        ?.copyWith(
+                            overflow: TextOverflow.ellipsis, fontSize: 16),
+                  ),
                 ),
               )
             ],
@@ -62,6 +63,7 @@ class _PlayListScreenState extends State<PlayListScreen> {
         child: playlist == null || loading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -77,6 +79,13 @@ class _PlayListScreenState extends State<PlayListScreen> {
                                       .floor()]['url'],
                               width: (size.width / 2) - 24,
                               height: (size.width / 2) - 24,
+                              errorBuilder: ((context, error, stackTrace) {
+                                return Image.asset(
+                                  "assets/images/playlist.png",
+                                  width: (size.width / 2) - 24,
+                                  height: (size.width / 2) - 24,
+                                );
+                              }),
                             ),
                           ),
                           Expanded(
@@ -87,21 +96,36 @@ class _PlayListScreenState extends State<PlayListScreen> {
                                 children: [
                                   Text(
                                     playlist?['title'],
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w900),
+                                    style: Theme.of(context)
+                                        .primaryTextTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                   ),
-                                  Text('${playlist?['trackCount']} songs'),
-                                  Text(playlist?['author']['name']),
+                                  Text(
+                                    '${playlist?['tracks'].length} ${S.of(context).Songs}',
+                                    style: Theme.of(context)
+                                        .primaryTextTheme
+                                        .bodyMedium,
+                                  ),
+                                  Text(
+                                    playlist?['author']['name'],
+                                    style: Theme.of(context)
+                                        .primaryTextTheme
+                                        .bodyMedium,
+                                  ),
                                   MaterialButton(
                                     textColor: Colors.white,
                                     color: Colors.black,
                                     onPressed: () async {
                                       await context
                                           .read<MusicPlayer>()
-                                          .addPlayList(playlist?['tracks'],
-                                              widget.weSlideController);
+                                          .addPlayList(
+                                            playlist?['tracks'],
+                                          );
                                     },
-                                    child: const Text("PLAY ALL"),
+                                    child: Text(S.of(context).Play_All),
                                   ),
                                 ],
                               ),
@@ -110,13 +134,16 @@ class _PlayListScreenState extends State<PlayListScreen> {
                         ],
                       ),
                     ),
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
                       child: Text(
-                        "Tracks",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w900),
+                        S.of(context).Tracks,
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .bodyMedium
+                            ?.copyWith(
+                                fontSize: 20, fontWeight: FontWeight.w900),
                       ),
                     ),
                     if (playlist != null)
@@ -125,55 +152,49 @@ class _PlayListScreenState extends State<PlayListScreen> {
                           primary: false,
                           itemCount: playlist?['tracks'].length,
                           itemBuilder: (context, index) {
-                            Track? song =
-                                Track.fromMap(playlist?['tracks'][index]);
+                            Map<String, dynamic> track =
+                                playlist?['tracks'][index];
+                            if (track['videoId'] == null) {
+                              playlist?['tracks'].remove(track);
+                              setState(() {});
+                              return const SizedBox.shrink();
+                            }
+                            Track? song = Track.fromMap(track);
                             // return SizedBox();
                             return ListTile(
                               onTap: () async {
-                                await context
-                                    .read<MusicPlayer>()
-                                    .addNew(song, widget.weSlideController);
+                                await context.read<MusicPlayer>().addNew(song);
                               },
                               leading: ClipRRect(
                                 borderRadius: BorderRadius.circular(5),
                                 child: Image.network(
-                                  song.thumbnails.first.url,
+                                  'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
                                   width: 45,
                                   height: 45,
                                   fit: BoxFit.cover,
+                                  errorBuilder: ((context, error, stackTrace) {
+                                    return Image.asset(
+                                        "assets/images/song.png");
+                                  }),
                                 ),
                               ),
-                              title: Text(
-                                song.title,
+                              title: Text(song.title,
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                          overflow: TextOverflow.ellipsis)),
+                              subtitle: Text(
+                                song.artists.first.name,
                                 style: const TextStyle(
-                                    overflow: TextOverflow.ellipsis),
+                                    color: Color.fromARGB(255, 93, 92, 92)),
                               ),
-                              subtitle: Text(song.artists.first.name),
                               onLongPress: () {
                                 showOptions(song);
                               },
                               trailing: IconButton(
                                   onPressed: () {
                                     showOptions(song);
-                                    // showModalBottomSheet(
-                                    //     useRootNavigator: true,
-                                    //     context: context,
-                                    //     builder: (context) {
-                                    //       return Column(
-                                    //         children: [
-                                    //           ListTile(
-                                    //             onTap: () {
-                                    //               Navigator.pop(context);
-                                    //               context
-                                    //                   .read<MusicPlayer>()
-                                    //                   .addToQUeue(song);
-                                    //             },
-                                    //             title:
-                                    //                 const Text("Add to Queue"),
-                                    //           )
-                                    //         ],
-                                    //       );
-                                    //     });
                                   },
                                   icon: const Icon(Icons.more_vert)),
                             );

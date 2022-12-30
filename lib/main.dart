@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/providers/HomeScreenProvider.dart';
+import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/screens/MainScreen.dart';
-import 'package:vibe_music/utils/colors.dart';
+import 'generated/l10n.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
     androidNotificationChannelName: 'Audio playback',
-    androidNotificationOngoing: true,
+    androidNotificationOngoing: false,
   );
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => MusicPlayer()),
-    ChangeNotifierProvider(create: (_) => HomeScreenProvider())
+    ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
+    ChangeNotifierProvider(create: (_) => LanguageProvider(prefs)),
+    ChangeNotifierProvider(create: (_) => ThemeProvider(prefs)),
   ], child: const MyApp()));
 }
 
@@ -29,38 +35,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Vibe Music',
-      theme: ThemeData.light().copyWith(
-        scaffoldBackgroundColor: lighten(
-            song?.colorPalette?.lightVibrantColor?.color ?? tertiaryColor),
-        textTheme: GoogleFonts.poppinsTextTheme(),
-        appBarTheme: const AppBarTheme(
-          foregroundColor: Colors.black,
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-          ),
-        ),
-        sliderTheme: SliderThemeData(
-          trackHeight: 3,
-          trackShape: const RoundedRectSliderTrackShape(),
-          overlayShape: SliderComponentShape.noOverlay,
-          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
-          activeTrackColor: Colors.black,
-          thumbColor: Colors.black,
-          inactiveTrackColor: primaryColor,
-        ),
-      ),
-      // onGenerateRoute: (settings) {
-      //   switch (settings.name) {
-      //     case '/':
-      //       return MaterialPageRoute(builder: (_) => const MainScreen());
-      //     case '/search':
-      //       return MaterialPageRoute(builder: (_) => const MainScreen());
-      //     default:
-      //       return MaterialPageRoute(builder: (_) => const Text("data"));
-      //   }
-      // },
-      // initialRoute: "/",
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      locale: context.watch<LanguageProvider>().currentLocale,
+      theme: context.watch<ThemeProvider>().theme,
       home: const MainScreen(),
     );
   }

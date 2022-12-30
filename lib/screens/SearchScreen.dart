@@ -2,25 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
+import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/screens/SearchScreens/PlaylistSearch.dart';
 import 'package:vibe_music/screens/SearchScreens/SongsSearch.dart';
 import 'package:vibe_music/utils/colors.dart';
-import 'package:we_slide/we_slide.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen(
-      {this.searchQuery = "", required this.weSlideController, super.key});
+  const SearchScreen({this.searchQuery = "", super.key});
   final String searchQuery;
-  final WeSlideController? weSlideController;
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends State<SearchScreen>
+    with AutomaticKeepAliveClientMixin<SearchScreen> {
   TextEditingController textEditingController = TextEditingController();
-  // TabController? tabController;
   PageController pageController = PageController();
   int _pageIndex = 0;
   bool loading = false;
@@ -31,7 +29,6 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
-    // tabController = TabController(length: 1,vsync: this);
   }
 
   fetchSongs() async {
@@ -55,6 +52,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   search() async {
     loading = true;
+    setState(() {});
     HomeApi.getSearch(textEditingController.text).then((Map value) {
       setState(() {
         loading = false;
@@ -67,6 +65,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Track? song = context.watch<MusicPlayer>().song;
     return WillPopScope(
       onWillPop: () async {
@@ -75,108 +74,76 @@ class _SearchScreenState extends State<SearchScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.popAndPushNamed(context, '/');
-            },
-          ),
+          leading: null,
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: TextField(
-            decoration: const InputDecoration(
-                hintText: "Enter a name",
-                border: OutlineInputBorder(
+            style: Theme.of(context).primaryTextTheme.bodyMedium,
+            decoration: InputDecoration(
+                hintText: S.of(context).EnterAName,
+                border: const OutlineInputBorder(
                   borderSide: BorderSide.none,
                 )),
             textInputAction: TextInputAction.search,
-            autofocus: true,
             onSubmitted: (value) {
               search();
             },
-            // onChanged: (value) {
-            //   setState(() {
-            //     query = textEditingController.text;
-            //   });
-            // },
             controller: textEditingController,
           ),
         ),
-        body: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MaterialButton(
-                  elevation: 0,
-                  focusElevation: 0,
-                  hoverElevation: 0,
-                  disabledElevation: 0,
-                  highlightElevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  color: _pageIndex == 0
-                      ? song?.colorPalette?.lightVibrantColor?.color ??
-                          tertiaryColor
-                      : Colors.transparent,
-                  child: const Text("Songs"),
-                  onPressed: () {
-                    setState(() {
-                      _pageIndex = 0;
-                      pageController.animateToPage(0,
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.easeIn);
-                    });
-                  },
-                ),
-                // MaterialButton(
-                //   elevation: 0,
-                //   focusElevation: 0,
-                //   hoverElevation: 0,
-                //   disabledElevation: 0,
-                //   highlightElevation: 0,
-                //   shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(20)),
-                //   color: _pageIndex == 1
-                //       ? song?.colorPalette?.lightVibrantColor?.color ??
-                //           tertiaryColor
-                //       : Colors.transparent,
-                //   child: const Text("Artists"),
-                //   onPressed: () {
-                //     setState(() {
-                //       _pageIndex = 1;
-                //       pageController.animateToPage(1,
-                //           duration: const Duration(milliseconds: 200),
-                //           curve: Curves.easeIn);
-                //     });
-                //   },
-                // ),
-                MaterialButton(
-                  elevation: 0,
-                  focusElevation: 0,
-                  hoverElevation: 0,
-                  disabledElevation: 0,
-                  highlightElevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  color: _pageIndex == 1
-                      ? song?.colorPalette?.lightVibrantColor?.color ??
-                          tertiaryColor
-                      : Colors.transparent,
-                  child: const Text("Playlists"),
-                  onPressed: () {
-                    _pageIndex = 1;
-                    pageController.animateToPage(1,
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.easeIn);
-                  },
-                ),
-              ],
-            ),
-            Expanded(
-              child: loading
-                  ? const Center(child: CircularProgressIndicator())
-                  : PageView(
+        body: loading
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MaterialButton(
+                        elevation: 0,
+                        focusElevation: 0,
+                        hoverElevation: 0,
+                        disabledElevation: 0,
+                        highlightElevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        color: _pageIndex == 0
+                            ? song?.colorPalette?.lightVibrantColor?.color ??
+                                tertiaryColor
+                            : Colors.transparent,
+                        child: Text(S.of(context).Songs),
+                        onPressed: () {
+                          setState(() {
+                            _pageIndex = 0;
+                            pageController.animateToPage(0,
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.easeIn);
+                          });
+                        },
+                      ),
+                      MaterialButton(
+                        elevation: 0,
+                        focusElevation: 0,
+                        hoverElevation: 0,
+                        disabledElevation: 0,
+                        highlightElevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        color: _pageIndex == 1
+                            ? song?.colorPalette?.lightVibrantColor?.color ??
+                                tertiaryColor
+                            : Colors.transparent,
+                        child: Text(S.of(context).Playlists),
+                        onPressed: () {
+                          _pageIndex = 1;
+                          pageController.animateToPage(1,
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.easeIn);
+                        },
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: PageView(
                       onPageChanged: (value) {
                         setState(() {
                           _pageIndex = value;
@@ -184,17 +151,19 @@ class _SearchScreenState extends State<SearchScreen> {
                       },
                       controller: pageController,
                       children: [
-                        SongsSearch(
-                            songs: songs,
-                            weSlideController: widget.weSlideController),
+                        SongsSearch(songs: songs),
                         // ArtistsScreen(artists: artists),
                         PlaylistSearch(playlists: playlists)
                       ],
                     ),
-            ),
-          ],
-        ),
+                  ),
+                ],
+              ),
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

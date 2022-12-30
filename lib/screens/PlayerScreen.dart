@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
-import 'package:we_slide/we_slide.dart';
 
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
@@ -11,11 +10,13 @@ import 'package:vibe_music/widgets/MusicSlider.dart';
 
 class PlayerScreen extends StatefulWidget {
   const PlayerScreen({
-    required this.queueController,
+    required this.height,
+    required this.percentage,
     super.key,
   });
 
-  final WeSlideController queueController;
+  final double height;
+  final double percentage;
 
   @override
   State<PlayerScreen> createState() => _PlayerScreenState();
@@ -35,22 +36,12 @@ class _PlayerScreenState extends State<PlayerScreen> {
     Size size = MediaQuery.of(context).size;
 
     return song != null
-        ? Container(
-            color: lighten(
-                song.colorPalette?.lightVibrantColor?.color ?? tertiaryColor),
-            child: WeSlide(
-              isDismissible: false,
-              controller: widget.queueController,
-              panelMinSize: 55,
-              panelMaxSize: size.height,
-              panelWidth: size.width,
-              body: Container(
-                width: size.width,
-                decoration: BoxDecoration(
-                  color: lighten(song.colorPalette?.lightVibrantColor?.color) ??
-                      tertiaryColor,
-                ),
-                child: SafeArea(
+        ? SafeArea(
+            child: LayoutBuilder(builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: Container(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -61,7 +52,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(5),
                             child: Image.network(
-                              song.thumbnails.last.url,
+                              'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
                               errorBuilder: (context, error, stackTrace) {
                                 return Image.network(
                                   song.thumbnails.last.url,
@@ -79,22 +70,22 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         padding: const EdgeInsets.all(16),
                         child: Column(
                           children: [
-                            Text(
-                              song.title,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w900,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
+                            Text(song.title,
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w900,
+                                      overflow: TextOverflow.ellipsis,
+                                    )),
                             Text(
                               song.artists.first.name,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w900,
-                                color: grayColor,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w900,
+                                  overflow: TextOverflow.ellipsis,
+                                  color: Color.fromARGB(255, 93, 92, 92)),
                             ),
                             const SizedBox(height: 20),
                             const MusicSlider(),
@@ -116,11 +107,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               context.read<MusicPlayer>().toggleShuffle();
                             },
                             shape: const CircleBorder(),
-                            child: Icon(
-                              CupertinoIcons.shuffle,
-                              color: player.loopMode == LoopMode.one
-                                  ? song.colorPalette?.darkMutedColor?.color
-                                  : Colors.black,
+                            child: const Icon(
+                              Icons.shuffle_rounded,
                               size: 30,
                             ),
                           ),
@@ -130,7 +118,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 context.read<MusicPlayer>().previous();
                               },
                               icon: const Icon(
-                                Icons.skip_previous,
+                                Icons.skip_previous_rounded,
                                 size: 30,
                               )),
                           MaterialButton(
@@ -167,16 +155,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                                   ?.darkVibrantColor?.color ??
                                               primaryColor);
                                     case ProcessingState.completed:
-                                      return const Icon(Icons.play_arrow,
+                                      return const Icon(
+                                          Icons.play_arrow_rounded,
                                           size: 35);
                                     case ProcessingState.idle:
-                                      return const Icon(Icons.play_arrow,
+                                      return const Icon(
+                                          Icons.play_arrow_rounded,
                                           size: 35);
                                     case ProcessingState.ready:
                                       return Icon(
                                           player.playing
-                                              ? Icons.pause
-                                              : Icons.play_arrow,
+                                              ? Icons.pause_rounded
+                                              : Icons.play_arrow_rounded,
                                           size: 35);
                                   }
                                 }),
@@ -187,7 +177,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               context.read<MusicPlayer>().next();
                             },
                             icon: const Icon(
-                              Icons.skip_next,
+                              Icons.skip_next_rounded,
                               size: 30,
                             ),
                           ),
@@ -203,42 +193,28 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             onPressed: () {
                               context.read<MusicPlayer>().toggleLoop();
                             },
-                            child: Icon(
-                              Icons.loop,
-                              color: player.loopMode == LoopMode.one
-                                  ? song.colorPalette?.darkMutedColor?.color
-                                  : Colors.black,
+                            child: const Icon(
+                              Icons.loop_rounded,
                               size: 30,
                             ),
                           ),
                         ],
                       ),
+                      ListTile(
+                        onTap: (() {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return QueueScreen(song: song, songs: songs);
+                              });
+                        }),
+                        title: const Icon(CupertinoIcons.music_note_list),
+                      )
                     ],
                   ),
                 ),
-              ),
-              panel: QueueScreen(song: song, songs: songs),
-              panelHeader: context.watch<MusicPlayer>().isInitialized
-                  ? Container(
-                      color: context
-                              .watch<MusicPlayer>()
-                              .song
-                              .colorPalette
-                              ?.lightVibrantColor
-                              ?.color ??
-                          primaryColor,
-                      child: ListTile(
-                        onTap: () {
-                          widget.queueController.show();
-                        },
-                        title: const Icon(
-                          CupertinoIcons.music_note_list,
-                          color: Colors.black,
-                        ),
-                      ),
-                    )
-                  : null,
-            ),
+              );
+            }),
           )
         : const SizedBox();
   }
@@ -258,11 +234,11 @@ class QueueScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     AudioPlayer player = context.watch<MusicPlayer>().player;
     return Container(
-      color:
-          lighten(song.colorPalette?.lightVibrantColor?.color) ?? tertiaryColor,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SafeArea(
         child: ReorderableList(
-          shrinkWrap: true,
+          // shrinkWrap: true,
+          primary: true,
           itemCount: songs.length,
           onReorder: (oldIndex, newIndex) {
             int index = newIndex > oldIndex ? newIndex - 1 : newIndex;
@@ -282,10 +258,13 @@ class QueueScreen extends StatelessWidget {
                 key: Key("$index"),
                 leading: Stack(
                   children: [
-                    Image.network(
-                      song.thumbnails.last.url,
-                      width: 50,
-                      height: 50,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.network(
+                        'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
+                        width: 50,
+                        height: 50,
+                      ),
                     ),
                     if (player.currentIndex == index)
                       Container(
@@ -303,9 +282,16 @@ class QueueScreen extends StatelessWidget {
                 ),
                 title: Text(
                   song.title,
-                  style: const TextStyle(overflow: TextOverflow.ellipsis),
+                  style: Theme.of(context)
+                      .primaryTextTheme
+                      .titleMedium
+                      ?.copyWith(overflow: TextOverflow.ellipsis),
                 ),
-                subtitle: Text(song.artists.first.name),
+                subtitle: Text(
+                  song.artists.first.name,
+                  style:
+                      const TextStyle(color: Color.fromARGB(255, 93, 92, 92)),
+                ),
                 trailing: ReorderableDragStartListener(
                   index: index,
                   child: const Icon(Icons.drag_handle),

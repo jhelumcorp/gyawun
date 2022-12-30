@@ -37,9 +37,13 @@ class MusicSlider extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                      "${snapshot.data!.inMinutes}:${(snapshot.data!.inSeconds - (snapshot.data!.inMinutes * 60)).toString().padLeft(2, '0')}"),
+                    "${snapshot.data!.inMinutes}:${(snapshot.data!.inSeconds - (snapshot.data!.inMinutes * 60)).toString().padLeft(2, '0')}",
+                    style: Theme.of(context).primaryTextTheme.bodyMedium,
+                  ),
                   Text(
-                      "${player.duration!.inMinutes}:${(player.duration!.inSeconds - (player.duration!.inMinutes * 60)).toString().padLeft(2, '0')}"),
+                    "${player.duration!.inMinutes}:${(player.duration!.inSeconds - (player.duration!.inMinutes * 60)).toString().padLeft(2, '0')}",
+                    style: Theme.of(context).primaryTextTheme.bodyMedium,
+                  ),
                 ],
               ),
             ],

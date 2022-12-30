@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:miniplayer/miniplayer.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/utils/colors.dart';
-import 'package:we_slide/we_slide.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 YoutubeExplode _youtubeExplode = YoutubeExplode();
@@ -18,6 +18,7 @@ class MusicPlayer extends ChangeNotifier {
   bool _initialised = false;
   bool _isPlaying = false;
   List<Track> _songs = [];
+  MiniplayerController _miniplayerController = MiniplayerController();
 
   PaletteGenerator? _color;
   ConcatenatingAudioSource? playlist = ConcatenatingAudioSource(
@@ -50,6 +51,7 @@ class MusicPlayer extends ChangeNotifier {
 
   get player => _player;
   get isInitialized => _initialised;
+  get miniplayerController => _miniplayerController;
   get song {
     if (_songs.isEmpty) {
       return null;
@@ -62,9 +64,6 @@ class MusicPlayer extends ChangeNotifier {
     }
   }
 
-  // get song => _player.currentIndex != null && _songs.isNotEmpty
-  //     ? _songs[_player.currentIndex as int]
-  //     : null;
   get songs => _songs;
   get color => _color;
   get isPlaying => _isPlaying;
@@ -97,7 +96,7 @@ class MusicPlayer extends ChangeNotifier {
         initialIndex: 0, initialPosition: Duration.zero, preload: false);
   }
 
-  addNew(Track newSong, controller) async {
+  addNew(Track newSong) async {
     try {
       PaletteGenerator? color =
           await generateColor(newSong.thumbnails.last.url);
@@ -108,10 +107,9 @@ class MusicPlayer extends ChangeNotifier {
       _songs = [newSong];
 
       _initialised = true;
-
-      controller?.show();
-
+      _miniplayerController.animateToHeight(state: PanelState.MAX);
       notifyListeners();
+
       await playlist?.add(AudioSource.uri(
         await getAudioUri(newSong.videoId),
         tag: MediaItem(
@@ -148,7 +146,7 @@ class MusicPlayer extends ChangeNotifier {
     }
   }
 
-  Future addPlayList(List newSongs, WeSlideController controller) async {
+  Future addPlayList(List newSongs) async {
     _initialised = true;
     setPlayer();
     int i = 0;
@@ -158,7 +156,7 @@ class MusicPlayer extends ChangeNotifier {
         await addToQUeue(newSong);
         if (i == 0) {
           _player.play();
-          controller.show();
+          _miniplayerController.animateToHeight(state: PanelState.MAX);
         }
 
         i += 1;

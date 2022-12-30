@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 
-Color primaryColor = const Color.fromARGB(255, 205, 230, 248);
-Color secondaryColor = const Color.fromARGB(255, 231, 243, 251);
-Color tertiaryColor = const Color.fromARGB(255, 216, 236, 249);
+Color primaryColor = const Color.fromARGB(255, 136, 240, 196);
+Color secondaryColor = const Color.fromARGB(255, 160, 241, 207);
+Color tertiaryColor = const Color.fromARGB(255, 176, 237, 211);
 Color grayColor = const Color.fromARGB(255, 50, 50, 51);
 
 generateColor(image) async {
