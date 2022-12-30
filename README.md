@@ -7,24 +7,26 @@
 ---
 
 <p align="center">
-  <img src="./assets/images/1.jpg" width="30%" />
-  <img src="./assets/images/2.jpg" width="30%" />
-  <img src="./assets/images/3.jpg" width="30%" />
+  <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/01.jpg" width="30%" />
+  <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/02.jpg" width="30%" />
+  <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/03.jpg" width="30%" />
 
     
-  <img src="./assets/images/4.jpg" width="30%" />
-  <img src="./assets/images/5.jpg" width="30%" />
-  <img src="./assets/images/6.jpg" width="30%" />
+  <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/04.jpg" width="30%" />
+  <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/05.jpg" width="30%" />
+  <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/06.jpg" width="30%" />
 </p>
 
 ## Features
-- Play (almost) any song or video from YouTube Music
-- Background playback
-- Search for songs and playlists
-- Reorder songs in playlist or queue
-- Dynamic theme
-- Persistent queue
-- ...
+- [x] Play (almost) any song or video from YouTube Music
+- [x] Background playback
+- [x] Search for songs and playlists
+- [x] Reorder songs in playlist or queue
+- [x] Dark Mode
+- [x] Multiple Language Support
+- [ ] Add to favourites
+- [ ] Save history locally
+- [ ] Save playlist
 
 ## Installation
 
