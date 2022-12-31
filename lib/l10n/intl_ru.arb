@@ -10,5 +10,9 @@
     "Settings":"Настройки",
     "Dark_Theme":"Темная тема",
     "Play_All":"Играть все",
-    "Tracks":"Треки"
+    "Tracks":"Треки",
+    "Audio_Quality":"Audio Quality",
+    "High":"Высокий",
+    "Medium":"Середина",
+    "Low":"Низкий"
 }

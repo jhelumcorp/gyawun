@@ -10,5 +10,9 @@
     "Settings":"Settings",
     "Dark_Theme":"Dark Theme",
     "Play_All":"Play All",
-    "Tracks":"Tracks"
+    "Tracks":"Tracks",
+    "Audio_Quality":"Audio Quality",
+    "High":"High",
+    "Medium":"Medium",
+    "Low":"Low"
 }

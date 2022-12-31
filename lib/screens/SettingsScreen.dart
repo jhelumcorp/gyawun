@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/generated/l10n.dart';
+import 'package:vibe_music/providers/AudioQualityprovider.dart';
 import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
 
@@ -148,6 +149,65 @@ class SettingsScreen extends StatelessWidget {
                         .read<ThemeProvider>()
                         .setTheme(value == true ? 'dark' : 'light');
                   }),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: ListTile(
+              leading: const Icon(
+                Icons.language_rounded,
+                color: Color.fromARGB(255, 58, 41, 86),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              tileColor: const Color.fromARGB(255, 136, 240, 196),
+              title: Text(
+                S.of(context).Audio_Quality,
+                style: const TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              trailing: DropdownButton(
+                  value: context.watch<AudioQualityProvider>().quality,
+                  onChanged: (value) {
+                    context.read<AudioQualityProvider>().setQuality(value);
+                  },
+                  items: [
+                    DropdownMenuItem(
+                      value: "low",
+                      child: Text(
+                        S.of(context).Low,
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .bodySmall
+                            ?.copyWith(
+                                overflow: TextOverflow.ellipsis, fontSize: 16),
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: "medium",
+                      child: Text(
+                        S.of(context).Medium,
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .bodySmall
+                            ?.copyWith(
+                                overflow: TextOverflow.ellipsis, fontSize: 16),
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: "high",
+                      child: Text(
+                        S.of(context).High,
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .bodySmall
+                            ?.copyWith(
+                                overflow: TextOverflow.ellipsis, fontSize: 16),
+                      ),
+                    ),
+                  ]),
             ),
           ),
         ],

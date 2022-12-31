@@ -22,10 +22,14 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "Audio_Quality": MessageLookupByLibrary.simpleMessage("ध्वनि गुणवत्ता"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("डार्क थीम"),
         "EnterAName": MessageLookupByLibrary.simpleMessage("नाम डालें"),
+        "High": MessageLookupByLibrary.simpleMessage("उच्च"),
         "Home": MessageLookupByLibrary.simpleMessage("होम पेज"),
         "Language": MessageLookupByLibrary.simpleMessage("भाषा"),
+        "Low": MessageLookupByLibrary.simpleMessage("कम"),
+        "Medium": MessageLookupByLibrary.simpleMessage("मध्यम"),
         "Play_All": MessageLookupByLibrary.simpleMessage("सभी को बजाएं"),
         "Playlists": MessageLookupByLibrary.simpleMessage("प्लेलिस्ट"),
         "Search": MessageLookupByLibrary.simpleMessage("खोज"),

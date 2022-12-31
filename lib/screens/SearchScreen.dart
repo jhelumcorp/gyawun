@@ -78,7 +78,7 @@ class _SearchScreenState extends State<SearchScreen>
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: TextField(
-            style: Theme.of(context).primaryTextTheme.bodyMedium,
+            style: Theme.of(context).primaryTextTheme.titleLarge,
             decoration: InputDecoration(
                 hintText: S.of(context).EnterAName,
                 border: const OutlineInputBorder(

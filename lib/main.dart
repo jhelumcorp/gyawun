@@ -4,6 +4,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibe_music/Models/Track.dart';
+import 'package:vibe_music/providers/AudioQualityprovider.dart';
 import 'package:vibe_music/providers/HomeScreenProvider.dart';
 import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
@@ -24,6 +25,7 @@ void main() async {
     ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
     ChangeNotifierProvider(create: (_) => LanguageProvider(prefs)),
     ChangeNotifierProvider(create: (_) => ThemeProvider(prefs)),
+    ChangeNotifierProvider(create: (_) => AudioQualityProvider(prefs))
   ], child: const MyApp()));
 }
 

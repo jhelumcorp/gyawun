@@ -10,5 +10,9 @@
     "Settings":"समायोजन",
     "Dark_Theme":"डार्क थीम",
     "Play_All":"सभी को बजाएं",
-    "Tracks":"पटरियों"
+    "Tracks":"पटरियों",
+    "Audio_Quality":"ध्वनि गुणवत्ता",
+    "High":"उच्च",
+    "Medium":"मध्यम",
+    "Low":"कम"
 }

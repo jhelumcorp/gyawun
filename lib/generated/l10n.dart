@@ -169,6 +169,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Audio Quality`
+  String get Audio_Quality {
+    return Intl.message(
+      'Audio Quality',
+      name: 'Audio_Quality',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `High`
+  String get High {
+    return Intl.message(
+      'High',
+      name: 'High',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Medium`
+  String get Medium {
+    return Intl.message(
+      'Medium',
+      name: 'Medium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Low`
+  String get Low {
+    return Intl.message(
+      'Low',
+      name: 'Low',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -10,5 +10,9 @@
     "Settings":"設定",
     "Dark_Theme":"ダークテーマ",
     "Play_All":"すべて再生",
-    "Tracks":"トラック"
+    "Tracks":"トラック",
+    "Audio_Quality":"オーディオ品質",
+    "High":"高い",
+    "Medium":"中くらい",
+    "Low":"低い"
 }

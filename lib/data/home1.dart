@@ -34,7 +34,8 @@ class HomeApi {
     final response = await get(
         Uri.parse('${hostAddress}charts?lang=$lang&country=$country'));
     if (response.statusCode == 200) {
-      Map data = jsonDecode(response.body)['trending'];
+      Map data = jsonDecode(response.body)['videos'] ??
+          jsonDecode(response.body)['trending'];
       return data;
     }
     return {};

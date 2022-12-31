@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/utils/colors.dart';
@@ -204,11 +205,20 @@ class MusicPlayer extends ChangeNotifier {
   }
 
   static Future<Uri> getAudioUri(String videoId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String audioQuality = prefs.getString("audioQuality") ?? "medium";
     String audioUrl = '';
     try {
       final StreamManifest manifest =
           await _youtubeExplode.videos.streamsClient.getManifest(videoId);
-      audioUrl = manifest.audioOnly.withHighestBitrate().url.toString();
+
+      List<AudioOnlyStreamInfo> audios = manifest.audioOnly.sortByBitrate();
+
+      int audioNumber = audioQuality == 'high'
+          ? audios.length - 1
+          : (audioQuality == 'low' ? 0 : (audios.length / 2).floor());
+
+      audioUrl = manifest.audioOnly.sortByBitrate()[audioNumber].url.toString();
       return Uri.parse(audioUrl);
     } catch (e) {
       return Uri();
