@@ -1,6 +1,8 @@
 <div align="center">
     <img src="https://github.com/sheikhhaziq/vibemusic/blob/main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="128" height="128" style="display: block; margin: 0 auto"/>
     <h1>Vibe Music</h1>
+    ![Version badge][Version badge]
+    ![Build badge][Build badge]
     <p>A Flutter application for streaming music from YouTube Music</p>
 </div>
 
