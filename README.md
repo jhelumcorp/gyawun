@@ -24,6 +24,7 @@
 - [x] Reorder songs in playlist or queue
 - [x] Dark Mode
 - [x] Multiple Language Support
+- [x] Change Audio Quality
 - [ ] Add to favourites
 - [ ] Save history locally
 - [ ] Save playlist
