@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -174,6 +175,7 @@ class _HomeScreenState extends State<HomeScreen>
                               .getData
                               .map((item) {
                             String title = item['title'];
+                            log(title);
                             List content = item['contents'] as List;
                             bool areSongs = content.first['videoId'] != null;
                             return Padding(

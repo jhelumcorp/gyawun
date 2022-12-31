@@ -74,9 +74,42 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   DropdownMenuItem(
+                    value: "ja",
+                    child: Text(
+                      "Japanese",
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .bodySmall
+                          ?.copyWith(
+                              overflow: TextOverflow.ellipsis, fontSize: 16),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: "pt",
+                    child: Text(
+                      "Portuguese",
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .bodySmall
+                          ?.copyWith(
+                              overflow: TextOverflow.ellipsis, fontSize: 16),
+                    ),
+                  ),
+                  DropdownMenuItem(
                     value: "ru",
                     child: Text(
                       "Russian",
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .bodySmall
+                          ?.copyWith(
+                              overflow: TextOverflow.ellipsis, fontSize: 16),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: "es",
+                    child: Text(
+                      "Spanish",
                       style: Theme.of(context)
                           .primaryTextTheme
                           .bodySmall
