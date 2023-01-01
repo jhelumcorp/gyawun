@@ -1,10 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/widgets/TrackTile.dart';
 
 class SongsSearch extends StatefulWidget {
   const SongsSearch({required this.songs, super.key});
@@ -54,39 +54,9 @@ class _SongsSearchState extends State<SongsSearch> {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
-        children: songs.map((song) {
-          return ListTile(
-            onTap: () async {
-              await context.read<MusicPlayer>().addNew(Track.fromMap(song));
-            },
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Image.network(
-                'https://vibeapi-sheikh-haziq.vercel.app/thumb/sd?id=${song['videoId']}',
-                errorBuilder: ((context, error, stackTrace) {
-                  return Image.asset("assets/images/song.png");
-                }),
-              ),
-            ),
-            title: Text(
-              song['title'],
-              style: Theme.of(context)
-                  .primaryTextTheme
-                  .titleMedium
-                  ?.copyWith(overflow: TextOverflow.ellipsis),
-            ),
-            subtitle: Text(
-              song['artists'].first['name'],
-              style: const TextStyle(color: Color.fromARGB(255, 93, 92, 92)),
-            ),
-            onLongPress: () {
-              showOptions(song);
-            },
-            trailing: IconButton(
-                onPressed: () {
-                  showOptions(song);
-                },
-                icon: const Icon(Icons.more_vert)),
+        children: songs.map((track) {
+          return TrackTile(
+            track: track,
           );
         }).toList(),
       ),

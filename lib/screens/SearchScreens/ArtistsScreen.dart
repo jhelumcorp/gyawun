@@ -27,10 +27,15 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
       child: Column(
           children: artists.map(
         (artist) {
-          log(artist['browseId'].toString());
           return ListTile(
             contentPadding: const EdgeInsets.all(8),
-            onTap: () async {},
+            onTap: () async {
+              Navigator.pushNamed(context, '/search/artist', arguments: {
+                'browseId': artist['browseId'],
+                'imageUrl': artist['thumbnails'].last['url'],
+                'name': artist['artist'],
+              });
+            },
             leading: CircleAvatar(
               radius: 30,
               backgroundImage: NetworkImage(artist['thumbnails'].last['url']),

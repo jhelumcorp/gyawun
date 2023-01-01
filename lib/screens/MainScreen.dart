@@ -5,6 +5,7 @@ import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
+import 'package:vibe_music/screens/ArtistScreen.dart';
 import 'package:vibe_music/screens/HomeScreen.dart';
 import 'package:vibe_music/screens/PlayListScreen.dart';
 import 'package:vibe_music/screens/PlayerScreen.dart';
@@ -213,6 +214,15 @@ class SearchTab extends StatelessWidget {
               return MaterialPageRoute(
                   builder: (_) => PlayListScreen(
                         playlistId: args['playlistId'],
+                      ));
+            case '/search/artist':
+              Map<String, dynamic> args =
+                  settings.arguments as Map<String, dynamic>;
+              return MaterialPageRoute(
+                  builder: (_) => ArtistScreen(
+                        browseId: args['browseId'],
+                        imageUrl: args['imageUrl'],
+                        name: args['name'],
                       ));
             default:
               return MaterialPageRoute(builder: (_) => const Text("data"));

@@ -1,8 +1,6 @@
 <div align="center">
     <img src="https://github.com/sheikhhaziq/vibemusic/blob/main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="128" height="128" style="display: block; margin: 0 auto"/>
     <h1>Vibe Music</h1>
-    ![Version badge][Version badge]
-    ![Build badge][Build badge]
     <p>A Flutter application for streaming music from YouTube Music</p>
 </div>
 
@@ -22,14 +20,17 @@
 ## Features
 - [x] Play (almost) any song or video from YouTube Music
 - [x] Background playback
-- [x] Search for songs and playlists
+- [x] Search for Songs, Artists and Playlists
 - [x] Reorder songs in playlist or queue
 - [x] Dark Mode
 - [x] Multiple Language Support
 - [x] Change Audio Quality
+- [x] Material You theme
+- [x] Dynamic theme support
 - [ ] Add to favourites
 - [ ] Save history locally
 - [ ] Save playlist
+- [ ] Download songs locally
 
 ## Installation
 

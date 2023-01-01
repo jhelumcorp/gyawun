@@ -53,6 +53,18 @@ class HomeApi {
     return {};
   }
 
+  static Future<Map> getArtist(id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String lang = prefs.getString('locale') ?? "en";
+    final response =
+        await get(Uri.parse('$hostAddress/artist?id=$id&lang=$lang'));
+    if (response.statusCode == 200) {
+      Map data = jsonDecode(utf8.decode(response.bodyBytes));
+      return data;
+    }
+    return {};
+  }
+
   static Future<Map> getPlaylist(id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String lang = prefs.getString('locale') ?? "en";
@@ -76,30 +88,6 @@ class HomeApi {
       List tracks = data['tracks'];
 
       return tracks;
-    }
-    return [];
-  }
-
-  static Future<List> getSongs(query) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('locale') ?? "en";
-    final response =
-        await get(Uri.parse('$hostAddress/songs?query=$query&lang=$lang'));
-    if (response.statusCode == 200) {
-      List data = jsonDecode(utf8.decode(response.bodyBytes));
-      return data;
-    }
-    return [];
-  }
-
-  static Future<List> getArtists(query) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('locale') ?? "en";
-    final response =
-        await get(Uri.parse('$hostAddress/artists?query=$query&lang=$lang'));
-    if (response.statusCode == 200) {
-      List data = jsonDecode(utf8.decode(response.bodyBytes));
-      return data;
     }
     return [];
   }

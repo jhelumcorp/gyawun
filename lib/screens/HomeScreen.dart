@@ -12,6 +12,7 @@ import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/HomeScreenProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/widgets/TrackTile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -203,53 +204,8 @@ class _HomeScreenState extends State<HomeScreen>
                                   if (areSongs)
                                     Column(
                                         children:
-                                            content.sublist(0, 5).map((s) {
-                                      Track song =
-                                          Track.fromJson(jsonEncode(s));
-                                      return ListTile(
-                                        onTap: () async {
-                                          await context
-                                              .read<MusicPlayer>()
-                                              .addNew(
-                                                song,
-                                              );
-                                        },
-                                        leading: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          child: Image.network(
-                                            'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
-                                            errorBuilder:
-                                                ((context, error, stackTrace) {
-                                              return Image.asset(
-                                                  "assets/images/song.png");
-                                            }),
-                                          ),
-                                        ),
-                                        title: Text(
-                                          song.title,
-                                          style: Theme.of(context)
-                                              .primaryTextTheme
-                                              .titleMedium
-                                              ?.copyWith(
-                                                  overflow:
-                                                      TextOverflow.ellipsis),
-                                        ),
-                                        onLongPress: () {
-                                          showOptions(song);
-                                        },
-                                        subtitle: Text(
-                                          song.artists.first.name,
-                                          style: const TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 93, 92, 92)),
-                                        ),
-                                        trailing: IconButton(
-                                            onPressed: () {
-                                              showOptions(song);
-                                            },
-                                            icon: const Icon(Icons.more_vert)),
-                                      );
+                                            content.sublist(0, 5).map((track) {
+                                      return TrackTile(track: track);
                                     }).toList()),
                                   if (!areSongs)
                                     SizedBox(

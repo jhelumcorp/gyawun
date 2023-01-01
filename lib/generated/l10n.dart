@@ -120,6 +120,16 @@ class S {
     );
   }
 
+  /// `Artists`
+  String get Artists {
+    return Intl.message(
+      'Artists',
+      name: 'Artists',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Search`
   String get Search {
     return Intl.message(

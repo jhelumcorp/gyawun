@@ -1,15 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
-import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/screens/SearchScreens/ArtistsScreen.dart';
 import 'package:vibe_music/screens/SearchScreens/PlaylistSearch.dart';
 import 'package:vibe_music/screens/SearchScreens/SongsSearch.dart';
-import 'package:vibe_music/utils/colors.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({this.searchQuery = "", super.key});
@@ -34,36 +30,17 @@ class _SearchScreenState extends State<SearchScreen>
     super.initState();
   }
 
-  fetchSongs() async {
-    loading = true;
-    HomeApi.getSongs(textEditingController.text).then((List value) {
-      setState(() {
-        loading = false;
-        songs = value;
-      });
-    });
-  }
-
-  fetchArtists() async {
-    HomeApi.getArtists(textEditingController.text).then((List value) {
-      setState(() {
-        loading = false;
-        artists = value;
-      });
-    });
-  }
-
   search() async {
     loading = true;
     setState(() {});
     HomeApi.getSearch(textEditingController.text).then((Map value) {
-      log(value.toString());
       setState(() {
         loading = false;
         songs = value['songs'];
         artists = value['artists'];
         playlists = value['playlists'];
       });
+      pageController.jumpToPage(0);
     });
   }
 
@@ -133,7 +110,7 @@ class _SearchScreenState extends State<SearchScreen>
                         color: _pageIndex == 1
                             ? Theme.of(context).colorScheme.primary
                             : Colors.transparent,
-                        child: Text("Artists"),
+                        child: Text(S.of(context).Artists),
                         onPressed: () {
                           _pageIndex = 1;
                           pageController.animateToPage(1,
@@ -154,8 +131,8 @@ class _SearchScreenState extends State<SearchScreen>
                             : Colors.transparent,
                         child: Text(S.of(context).Playlists),
                         onPressed: () {
-                          _pageIndex = 1;
-                          pageController.animateToPage(1,
+                          _pageIndex = 2;
+                          pageController.animateToPage(2,
                               duration: const Duration(milliseconds: 200),
                               curve: Curves.easeIn);
                         },
