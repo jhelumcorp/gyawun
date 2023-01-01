@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/utils/colors.dart';
 import 'package:vibe_music/widgets/MusicSlider.dart';
 
@@ -35,6 +36,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
     Track? song = context.watch<MusicPlayer>().song;
     AudioPlayer player = context.watch<MusicPlayer>().player;
     Size size = MediaQuery.of(context).size;
+    bool isDarkTheme =
+        context.watch<ThemeProvider>().themeMode == ThemeMode.dark;
 
     return song != null
         ? Container(
@@ -107,9 +110,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   elevation: 0,
                                   padding: const EdgeInsets.all(8),
                                   color: player.shuffleModeEnabled
-                                      ? (song.colorPalette?.lightVibrantColor
-                                              ?.color ??
-                                          primaryColor)
+                                      ? Theme.of(context).colorScheme.primary
                                       : Colors.transparent,
                                   onPressed: () {
                                     context.read<MusicPlayer>().toggleShuffle();
@@ -138,6 +139,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                         size: constraints.maxWidth > 30
                                             ? 30
                                             : constraints.maxWidth - 5,
+                                        color: isDarkTheme
+                                            ? Colors.white
+                                            : Colors.black,
                                       ));
                                 },
                               ),
@@ -147,9 +151,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               child: LayoutBuilder(
                                 builder: (context, constraints) {
                                   return MaterialButton(
-                                    color: song.colorPalette?.lightVibrantColor
-                                            ?.color ??
-                                        primaryColor,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8, vertical: 16),
                                     shape: const CircleBorder(),
@@ -170,12 +173,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                           }
                                           switch (state.processingState) {
                                             case ProcessingState.buffering:
-                                              return CircularProgressIndicator(
-                                                  color: song
-                                                          .colorPalette
-                                                          ?.darkVibrantColor
-                                                          ?.color ??
-                                                      primaryColor);
                                             case ProcessingState.loading:
                                               return CircularProgressIndicator(
                                                 color: song
@@ -231,6 +228,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     size: constraints.maxWidth > 30
                                         ? 30
                                         : constraints.maxWidth - 5,
+                                    color: isDarkTheme
+                                        ? Colors.white
+                                        : Colors.black,
                                   ),
                                 );
                               }),
@@ -244,9 +244,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   shape: const CircleBorder(),
                                   elevation: 0,
                                   color: player.loopMode == LoopMode.one
-                                      ? (song.colorPalette?.lightVibrantColor
-                                              ?.color ??
-                                          primaryColor)
+                                      ? Theme.of(context).colorScheme.primary
                                       : Colors.transparent,
                                   onPressed: () {
                                     context.read<MusicPlayer>().toggleLoop();
@@ -270,7 +268,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   return QueueScreen(song: song, songs: songs);
                                 });
                           }),
-                          title: const Icon(CupertinoIcons.music_note_list),
+                          title: Icon(
+                            CupertinoIcons.music_note_list,
+                            color: isDarkTheme ? Colors.white : Colors.black,
+                          ),
                         )
                       ],
                     ),
@@ -296,6 +297,8 @@ class QueueScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AudioPlayer player = context.watch<MusicPlayer>().player;
+    bool isdarkTheme =
+        context.watch<ThemeProvider>().themeMode == ThemeMode.dark;
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: SafeArea(
@@ -318,29 +321,29 @@ class QueueScreen extends StatelessWidget {
                   }
                 },
                 key: Key("$index"),
-                leading: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image.network(
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Stack(
+                    children: [
+                      Image.network(
                         'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
                         width: 50,
                         height: 50,
                       ),
-                    ),
-                    if (player.currentIndex == index)
-                      Container(
-                        color: Colors.black.withOpacity(0.7),
-                        height: 50,
-                        width: 50,
-                        child: const Center(
-                          child: Icon(
-                            Icons.music_note,
-                            color: Colors.white,
+                      if (player.currentIndex == index)
+                        Container(
+                          color: Colors.black.withOpacity(0.7),
+                          height: 50,
+                          width: 50,
+                          child: const Center(
+                            child: Icon(
+                              Icons.music_note,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
                 title: Text(
                   song.title,
@@ -356,7 +359,10 @@ class QueueScreen extends StatelessWidget {
                 ),
                 trailing: ReorderableDragStartListener(
                   index: index,
-                  child: const Icon(Icons.drag_handle),
+                  child: Icon(
+                    Icons.drag_handle,
+                    color: isdarkTheme ? Colors.white : Colors.black,
+                  ),
                 ),
               ),
             );

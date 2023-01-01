@@ -7,6 +7,7 @@ import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/AudioQualityprovider.dart';
 import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
+import 'package:vibe_music/screens/AboutScreen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -24,6 +25,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool darkTheme = context.watch<ThemeProvider>().themeMode == ThemeMode.dark;
     List<Map<String, String>> audioQualities = [
       {"name": S.of(context).Low, "value": "low"},
       {"name": S.of(context).Medium, "value": "medium"},
@@ -45,36 +47,43 @@ class SettingsScreen extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: ExpansionTile(
-                leading: const Icon(
-                  Icons.language_rounded,
-                  color: Color.fromARGB(255, 58, 41, 86),
+                leading: Icon(
+                  Icons.translate_rounded,
+                  color: darkTheme
+                      ? Colors.white
+                      : const Color.fromARGB(255, 58, 41, 86),
                 ),
-                collapsedBackgroundColor:
-                    const Color.fromARGB(255, 136, 240, 196),
-                backgroundColor: const Color.fromARGB(255, 136, 240, 196),
-                textColor: Colors.black,
-                iconColor: Colors.black,
-                collapsedIconColor: Colors.black,
-                collapsedTextColor: Colors.black,
+                collapsedBackgroundColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                textColor: darkTheme ? Colors.white : Colors.black,
+                iconColor: darkTheme ? Colors.white : Colors.black,
+                collapsedIconColor: darkTheme ? Colors.white : Colors.black,
+                collapsedTextColor: darkTheme ? Colors.white : Colors.black,
                 title: Row(
                   children: [
                     Expanded(
                       child: Text(
                         S.of(context).Language,
-                        style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .titleLarge
+                            ?.copyWith(
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ),
-                    Text(langs
-                            .where((element) =>
-                                element['value'] ==
-                                context
-                                    .watch<LanguageProvider>()
-                                    .currentLocaleText)
-                            .toList()[0]['name'] ??
-                        "English"),
+                    Text(
+                      langs
+                              .where((element) =>
+                                  element['value'] ==
+                                  context
+                                      .watch<LanguageProvider>()
+                                      .currentLocaleText)
+                              .toList()[0]['name'] ??
+                          "English",
+                      style: Theme.of(context).primaryTextTheme.titleMedium,
+                    ),
                   ],
                 ),
                 children: [
@@ -86,21 +95,25 @@ class SettingsScreen extends StatelessWidget {
                           focusColor: Colors.black,
                           title: Text(
                             lang['name'] ?? "",
-                            style: TextStyle(
-                                fontWeight: context
-                                            .watch<LanguageProvider>()
-                                            .currentLocaleText ==
-                                        lang['value']
-                                    ? FontWeight.bold
-                                    : null),
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .titleMedium
+                                ?.copyWith(
+                                    fontWeight: context
+                                                .watch<LanguageProvider>()
+                                                .currentLocaleText ==
+                                            lang['value']
+                                        ? FontWeight.bold
+                                        : null),
                           ),
                           trailing: context
                                       .watch<LanguageProvider>()
                                       .currentLocaleText ==
                                   lang['value']
-                              ? const Icon(
+                              ? Icon(
                                   Icons.check_circle_rounded,
-                                  color: Colors.black,
+                                  color:
+                                      darkTheme ? Colors.white : Colors.black,
                                 )
                               : null,
                           onTap: () {
@@ -114,7 +127,9 @@ class SettingsScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Container(
                               height: 0.5,
-                              color: const Color.fromARGB(255, 87, 137, 91),
+                              color: darkTheme
+                                  ? const Color.fromARGB(255, 64, 64, 64)
+                                  : const Color.fromARGB(255, 87, 137, 91),
                             ),
                           ),
                       ],
@@ -129,60 +144,65 @@ class SettingsScreen extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: ExpansionTile(
-                leading: const Icon(
-                  CupertinoIcons.double_music_note,
-                  color: Color.fromARGB(255, 58, 41, 86),
-                ),
-                collapsedBackgroundColor:
-                    const Color.fromARGB(255, 136, 240, 196),
-                backgroundColor: const Color.fromARGB(255, 136, 240, 196),
-                textColor: Colors.black,
-                iconColor: Colors.black,
-                collapsedIconColor: Colors.black,
-                collapsedTextColor: Colors.black,
+                leading: Icon(CupertinoIcons.double_music_note,
+                    color: darkTheme ? Colors.white : Colors.black),
+                collapsedBackgroundColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                textColor: darkTheme ? Colors.white : Colors.black,
+                iconColor: darkTheme ? Colors.white : Colors.black,
+                collapsedIconColor: darkTheme ? Colors.white : Colors.black,
+                collapsedTextColor: darkTheme ? Colors.white : Colors.black,
                 title: Row(
                   children: [
                     Expanded(
                       child: Text(
                         S.of(context).Audio_Quality,
-                        style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .titleLarge
+                            ?.copyWith(
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ),
-                    Text(audioQualities
-                            .where((element) =>
-                                element['value'] ==
-                                context.watch<AudioQualityProvider>().quality)
-                            .toList()[0]['name'] ??
-                        "English"),
+                    Text(
+                      audioQualities
+                              .where((element) =>
+                                  element['value'] ==
+                                  context.watch<AudioQualityProvider>().quality)
+                              .toList()[0]['name'] ??
+                          "English",
+                      style: Theme.of(context).primaryTextTheme.titleMedium,
+                    ),
                   ],
                 ),
                 children: audioQualities.map((quality) {
                   return Column(
                     children: [
                       ListTile(
-                        hoverColor: Colors.black,
-                        focusColor: Colors.black,
                         title: Text(
                           quality['name'] ?? "",
-                          style: TextStyle(
-                              fontWeight: context
-                                          .watch<LanguageProvider>()
-                                          .currentLocaleText ==
-                                      quality['value']
-                                  ? FontWeight.bold
-                                  : null),
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .titleMedium
+                              ?.copyWith(
+                                  fontWeight: context
+                                              .watch<LanguageProvider>()
+                                              .currentLocaleText ==
+                                          quality['value']
+                                      ? FontWeight.bold
+                                      : null),
                         ),
-                        trailing:
-                            context.watch<AudioQualityProvider>().quality ==
-                                    quality['value']
-                                ? const Icon(
-                                    Icons.check_circle_rounded,
-                                    color: Colors.black,
-                                  )
-                                : null,
+                        trailing: context
+                                    .watch<AudioQualityProvider>()
+                                    .quality ==
+                                quality['value']
+                            ? Icon(
+                                Icons.check_circle_rounded,
+                                color: darkTheme ? Colors.white : Colors.black,
+                              )
+                            : null,
                         onTap: () {
                           context
                               .read<AudioQualityProvider>()
@@ -194,7 +214,9 @@ class SettingsScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Container(
                             height: .5,
-                            color: const Color.fromARGB(255, 87, 137, 91),
+                            color: darkTheme
+                                ? const Color.fromARGB(255, 64, 64, 64)
+                                : const Color.fromARGB(255, 87, 137, 91),
                           ),
                         ),
                     ],
@@ -206,22 +228,30 @@ class SettingsScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: ListTile(
-              leading: const Icon(
-                Icons.colorize_rounded,
-                color: Color.fromARGB(255, 58, 41, 86),
+              onTap: () {
+                String value =
+                    context.read<ThemeProvider>().themeMode == ThemeMode.dark
+                        ? 'light'
+                        : 'dark';
+                context.read<ThemeProvider>().setTheme(value);
+              },
+              leading: Icon(
+                Icons.dark_mode,
+                color: darkTheme ? Colors.white : Colors.black,
               ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              tileColor: const Color.fromARGB(255, 136, 240, 196),
+              tileColor: Theme.of(context).colorScheme.primary,
               title: Text(
                 S.of(context).Dark_Theme,
-                style: const TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).primaryTextTheme.titleLarge?.copyWith(
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               trailing: CupertinoSwitch(
-                  value: context.watch<ThemeProvider>().themeMode == 'dark',
+                  value: context.watch<ThemeProvider>().themeMode ==
+                      ThemeMode.dark,
                   onChanged: (value) {
                     context
                         .read<ThemeProvider>()
@@ -229,6 +259,65 @@ class SettingsScreen extends StatelessWidget {
                   }),
             ),
           ),
+          // Dynamic theme
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: ListTile(
+              onTap: () {
+                bool value = context.read<ThemeProvider>().dynamicThemeMode;
+                context.read<ThemeProvider>().setDynamicThemeMode(!value);
+              },
+              leading: Icon(
+                Icons.style_rounded,
+                color: darkTheme ? Colors.white : Colors.black,
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              tileColor: Theme.of(context).colorScheme.primary,
+              title: Text(
+                S.of(context).Dynamic_Theme,
+                style: Theme.of(context).primaryTextTheme.titleLarge?.copyWith(
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              subtitle: Text(
+                "Experimental",
+                style: Theme.of(context).primaryTextTheme.bodySmall?.copyWith(
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              trailing: CupertinoSwitch(
+                  value: context.watch<ThemeProvider>().dynamicThemeMode,
+                  onChanged: (value) {
+                    context.read<ThemeProvider>().setDynamicThemeMode(value);
+                  }),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: ListTile(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const AboutScreen()));
+              },
+              title: Text(
+                "About",
+                style: Theme.of(context).primaryTextTheme.titleLarge?.copyWith(
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              leading: Icon(
+                Icons.person_rounded,
+                color: darkTheme ? Colors.white : Colors.black,
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              tileColor: Theme.of(context).colorScheme.primary,
+            ),
+          )
         ],
       ),
     );

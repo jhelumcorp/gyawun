@@ -10,16 +10,31 @@ import '../utils/colors.dart';
 
 class ThemeProvider extends ChangeNotifier {
   String _themeMode = "light";
-  ThemeData _currentTheme = lightTheme;
+  bool _dynamicThemeMode = false;
+  ThemeData _currentTheme = _lightTheme;
   final SharedPreferences _prefs;
+
   ThemeProvider(this._prefs) {
     String? thememode = _prefs.getString('themeMode');
-
+    bool? dynamicThemeMode = _prefs.getBool('dynamicThemeMode');
     _themeMode = thememode ?? "light";
+    _dynamicThemeMode = dynamicThemeMode ?? false;
+
     _currentTheme = _themeMode == "light" ? lightTheme : darkTheme;
   }
-  get theme => _currentTheme;
-  get themeMode => _themeMode;
+  ThemeData get theme => _currentTheme;
+  ThemeData get lightTheme => _lightTheme;
+  ThemeData get darkTheme => _darkTheme;
+  bool get dynamicThemeMode => _dynamicThemeMode;
+  ThemeMode get themeMode =>
+      _themeMode == 'dark' ? ThemeMode.dark : ThemeMode.light;
+
+  setDynamicThemeMode(bool dynamicThemeMode) {
+    _dynamicThemeMode = dynamicThemeMode;
+    _prefs.setBool('dynamicThemeMode', dynamicThemeMode);
+    notifyListeners();
+  }
+
   setTheme(themeMode) {
     _themeMode = themeMode;
     // log(themeMode);
@@ -34,8 +49,8 @@ class ThemeProvider extends ChangeNotifier {
   }
 }
 
-ThemeData lightTheme = ThemeData.light().copyWith(
-  colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green),
+ThemeData _lightTheme = ThemeData.light().copyWith(
+  useMaterial3: true,
   primaryTextTheme: const TextTheme(
     displayLarge: TextStyle(color: Colors.black),
     displayMedium: TextStyle(color: Colors.black),
@@ -53,7 +68,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     labelMedium: TextStyle(color: Colors.black),
     labelSmall: TextStyle(color: Colors.black),
   ),
-  scaffoldBackgroundColor: Colors.white,
+  // scaffoldBackgroundColor: Colors.white,
   textTheme: GoogleFonts.poppinsTextTheme(),
   appBarTheme: const AppBarTheme(
     foregroundColor: Colors.black,
@@ -69,13 +84,12 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
     activeTrackColor: Colors.black,
     thumbColor: Colors.black,
-    inactiveTrackColor: primaryColor,
+    inactiveTrackColor: Colors.black.withOpacity(0.6),
   ),
 );
 
-ThemeData darkTheme = ThemeData.dark().copyWith(
-  colorScheme: ColorScheme.fromSwatch(
-      primarySwatch: Colors.green, brightness: Brightness.dark),
+ThemeData _darkTheme = ThemeData.dark().copyWith(
+  useMaterial3: true,
   primaryTextTheme: const TextTheme(
     displayLarge: TextStyle(color: Colors.white),
     displayMedium: TextStyle(color: Colors.white),
@@ -110,8 +124,8 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
     trackShape: const RoundedRectSliderTrackShape(),
     overlayShape: SliderComponentShape.noOverlay,
     thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
-    activeTrackColor: Colors.black,
-    thumbColor: Colors.black,
-    inactiveTrackColor: primaryColor,
+    activeTrackColor: Colors.white,
+    thumbColor: Colors.white,
+    inactiveTrackColor: Colors.white.withOpacity(0.6),
   ),
 );

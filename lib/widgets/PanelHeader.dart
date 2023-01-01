@@ -140,9 +140,16 @@ class PanelHeader extends StatelessWidget {
                             case ProcessingState.idle:
                               return const Icon(Icons.play_arrow);
                             case ProcessingState.ready:
-                              return Icon(player.playing
-                                  ? Icons.pause_rounded
-                                  : Icons.play_arrow_rounded);
+                              return Icon(
+                                player.playing
+                                    ? Icons.pause_rounded
+                                    : Icons.play_arrow_rounded,
+                                color:
+                                    context.watch<ThemeProvider>().themeMode ==
+                                            ThemeMode.dark
+                                        ? Colors.white
+                                        : Colors.black,
+                              );
                           }
                         }),
                   ),

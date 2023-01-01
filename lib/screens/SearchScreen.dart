@@ -69,7 +69,6 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Track? song = context.watch<MusicPlayer>().song;
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, '/');
@@ -110,8 +109,7 @@ class _SearchScreenState extends State<SearchScreen>
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         color: _pageIndex == 0
-                            ? song?.colorPalette?.lightVibrantColor?.color ??
-                                tertiaryColor
+                            ? Theme.of(context).colorScheme.primary
                             : Colors.transparent,
                         child: Text(S.of(context).Songs),
                         onPressed: () {
@@ -132,8 +130,7 @@ class _SearchScreenState extends State<SearchScreen>
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         color: _pageIndex == 1
-                            ? song?.colorPalette?.lightVibrantColor?.color ??
-                                tertiaryColor
+                            ? Theme.of(context).colorScheme.primary
                             : Colors.transparent,
                         child: Text(S.of(context).Playlists),
                         onPressed: () {

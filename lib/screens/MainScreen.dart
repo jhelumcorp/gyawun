@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/screens/HomeScreen.dart';
 import 'package:vibe_music/screens/PlayListScreen.dart';
 import 'package:vibe_music/screens/PlayerScreen.dart';
@@ -39,6 +40,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkTheme =
+        context.watch<ThemeProvider>().themeMode == ThemeMode.dark;
     return Scaffold(
       body: LayoutBuilder(builder: (context, constraints) {
         return Column(
@@ -98,17 +101,26 @@ class _MainScreenState extends State<MainScreen> {
         height: 60,
         destinations: [
           NavigationDestination(
-            icon: const Icon(Icons.home_outlined),
+            icon: Icon(
+              Icons.home_outlined,
+              color: isDarkTheme ? Colors.white : Colors.black,
+            ),
             selectedIcon: const Icon(Icons.home_rounded),
             label: S.of(context).Home,
           ),
           NavigationDestination(
-            icon: const Icon(Icons.search_outlined),
+            icon: Icon(
+              Icons.search_outlined,
+              color: isDarkTheme ? Colors.white : Colors.black,
+            ),
             selectedIcon: const Icon(Icons.search_rounded),
             label: S.of(context).Search,
           ),
           NavigationDestination(
-            icon: const Icon(Icons.settings_outlined),
+            icon: Icon(
+              Icons.settings_outlined,
+              color: isDarkTheme ? Colors.white : Colors.black,
+            ),
             selectedIcon: const Icon(Icons.settings_rounded),
             label: S.of(context).Settings,
           ),

@@ -7,7 +7,8 @@
 // ignore_for_file:unnecessary_brace_in_string_interps, unnecessary_new
 // ignore_for_file:prefer_single_quotes,comment_references, directives_ordering
 // ignore_for_file:annotate_overrides,prefer_generic_function_type_aliases
-// ignore_for_file:unused_import, file_names
+// ignore_for_file:unused_import, file_names, avoid_escaping_inner_quotes
+// ignore_for_file:unnecessary_string_interpolations, unnecessary_string_escapes
 
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
@@ -20,22 +21,25 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'pt';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static _notInlinedMessages(_) => <String, Function> {
-    "Audio_Quality" : MessageLookupByLibrary.simpleMessage("Qualidade de áudio"),
-    "Dark_Theme" : MessageLookupByLibrary.simpleMessage("Tema escuro"),
-    "EnterAName" : MessageLookupByLibrary.simpleMessage("Insira o nome"),
-    "High" : MessageLookupByLibrary.simpleMessage("Alto"),
-    "Home" : MessageLookupByLibrary.simpleMessage("Lar"),
-    "Language" : MessageLookupByLibrary.simpleMessage("Língua"),
-    "Low" : MessageLookupByLibrary.simpleMessage("Baixo"),
-    "Medium" : MessageLookupByLibrary.simpleMessage("Médio"),
-    "Play_All" : MessageLookupByLibrary.simpleMessage("Jogar tudo"),
-    "Playlists" : MessageLookupByLibrary.simpleMessage("listas de reprodução"),
-    "Search" : MessageLookupByLibrary.simpleMessage("Procurar"),
-    "Settings" : MessageLookupByLibrary.simpleMessage("Definições"),
-    "Songs" : MessageLookupByLibrary.simpleMessage("Músicas"),
-    "Tracks" : MessageLookupByLibrary.simpleMessage("Faixas"),
-    "addToQueue" : MessageLookupByLibrary.simpleMessage("Adicionar à fila"),
-    "quickPicks" : MessageLookupByLibrary.simpleMessage("Escolhas rápidas")
-  };
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "Audio_Quality":
+            MessageLookupByLibrary.simpleMessage("Qualidade de áudio"),
+        "Dark_Theme": MessageLookupByLibrary.simpleMessage("Tema escuro"),
+        "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Tema Dinâmico"),
+        "EnterAName": MessageLookupByLibrary.simpleMessage("Insira o nome"),
+        "High": MessageLookupByLibrary.simpleMessage("Alto"),
+        "Home": MessageLookupByLibrary.simpleMessage("Lar"),
+        "Language": MessageLookupByLibrary.simpleMessage("Língua"),
+        "Low": MessageLookupByLibrary.simpleMessage("Baixo"),
+        "Medium": MessageLookupByLibrary.simpleMessage("Médio"),
+        "Play_All": MessageLookupByLibrary.simpleMessage("Jogar tudo"),
+        "Playlists":
+            MessageLookupByLibrary.simpleMessage("listas de reprodução"),
+        "Search": MessageLookupByLibrary.simpleMessage("Procurar"),
+        "Settings": MessageLookupByLibrary.simpleMessage("Definições"),
+        "Songs": MessageLookupByLibrary.simpleMessage("Músicas"),
+        "Tracks": MessageLookupByLibrary.simpleMessage("Faixas"),
+        "addToQueue": MessageLookupByLibrary.simpleMessage("Adicionar à fila"),
+        "quickPicks": MessageLookupByLibrary.simpleMessage("Escolhas rápidas")
+      };
 }
