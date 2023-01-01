@@ -185,36 +185,36 @@ class _HomeScreenState extends State<HomeScreen>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (!areSongs)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
-                                      child: Text(
-                                        title,
-                                        style: Theme.of(context)
-                                            .primaryTextTheme
-                                            .titleLarge
-                                            ?.copyWith(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
+                                  // if (!areSongs)
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    child: Text(
+                                      title,
+                                      style: Theme.of(context)
+                                          .primaryTextTheme
+                                          .titleLarge
+                                          ?.copyWith(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
-                                  if (areSongs)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
-                                      child: Text(
-                                        S.of(context).quickPicks,
-                                        style: Theme.of(context)
-                                            .primaryTextTheme
-                                            .titleLarge
-                                            ?.copyWith(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ),
+                                  ),
+                                  // if (areSongs)
+                                  //   Padding(
+                                  //     padding: const EdgeInsets.symmetric(
+                                  //         vertical: 8),
+                                  //     child: Text(
+                                  //       S.of(context).quickPicks,
+                                  //       style: Theme.of(context)
+                                  //           .primaryTextTheme
+                                  //           .titleLarge
+                                  //           ?.copyWith(
+                                  //             fontSize: 24,
+                                  //             fontWeight: FontWeight.bold,
+                                  //           ),
+                                  //     ),
+                                  //   ),
                                   if (areSongs)
                                     Column(
                                         children:

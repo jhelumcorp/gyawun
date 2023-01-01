@@ -14,6 +14,7 @@ class SettingsScreen extends StatelessWidget {
   static const List<Map<String, String>> langs = [
     {"name": "English", "value": "en"},
     {"name": "French", "value": "fr"},
+    {"name": "German", "value": "de"},
     {"name": "Hindi", "value": "hi"},
     {"name": "Japanese", "value": "ja"},
     {"name": "Portuguese", "value": "pt"},
