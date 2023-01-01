@@ -9,7 +9,7 @@ class HomeApi {
   static setCountry() async {
     final response = await get(Uri.parse('http://ip-api.com/json'));
     if (response.statusCode == 200) {
-      Map data = jsonDecode(response.body);
+      Map data = jsonDecode(utf8.decode(response.bodyBytes));
       String country = data['countryCode'];
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('country', country);
@@ -21,7 +21,7 @@ class HomeApi {
     String lang = prefs.getString('locale') ?? "en";
     final response = await get(Uri.parse('${hostAddress}home?lang=$lang'));
     if (response.statusCode == 200) {
-      List data = jsonDecode(response.body);
+      List data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     }
     return [];
@@ -34,8 +34,8 @@ class HomeApi {
     final response = await get(
         Uri.parse('${hostAddress}charts?lang=$lang&country=$country'));
     if (response.statusCode == 200) {
-      Map data = jsonDecode(response.body)['videos'] ??
-          jsonDecode(response.body)['trending'];
+      Map data = jsonDecode(utf8.decode(response.bodyBytes))['videos'] ??
+          jsonDecode(utf8.decode(response.bodyBytes))['trending'];
       return data;
     }
     return {};
@@ -59,7 +59,7 @@ class HomeApi {
     final response =
         await get(Uri.parse('$hostAddress/playlist?id=$id&lang=$lang'));
     if (response.statusCode == 200) {
-      Map data = jsonDecode(response.body);
+      Map data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     }
     return {};
@@ -72,7 +72,7 @@ class HomeApi {
         "$hostAddress/searchwatchplaylist?videoId=$videoId&limit=$limit&lang=$lang";
     final response = await get(Uri.parse(url));
     if (response.statusCode == 200) {
-      Map data = jsonDecode(response.body);
+      Map data = jsonDecode(utf8.decode(response.bodyBytes));
       List tracks = data['tracks'];
 
       return tracks;
@@ -86,7 +86,7 @@ class HomeApi {
     final response =
         await get(Uri.parse('$hostAddress/songs?query=$query&lang=$lang'));
     if (response.statusCode == 200) {
-      List data = jsonDecode(response.body);
+      List data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     }
     return [];
@@ -98,7 +98,7 @@ class HomeApi {
     final response =
         await get(Uri.parse('$hostAddress/artists?query=$query&lang=$lang'));
     if (response.statusCode == 200) {
-      List data = jsonDecode(response.body);
+      List data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     }
     return [];

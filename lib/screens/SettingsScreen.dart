@@ -112,8 +112,8 @@ class SettingsScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Container(
-                              height: 1,
-                              color: Colors.black,
+                              height: 0.5,
+                              color: const Color.fromARGB(255, 87, 137, 91),
                             ),
                           ),
                       ],
@@ -192,8 +192,8 @@ class SettingsScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Container(
-                            height: 1,
-                            color: Colors.black,
+                            height: .5,
+                            color: const Color.fromARGB(255, 87, 137, 91),
                           ),
                         ),
                     ],
