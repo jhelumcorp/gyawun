@@ -22,24 +22,39 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "About": MessageLookupByLibrary.simpleMessage("Sobre"),
         "Audio_Quality":
             MessageLookupByLibrary.simpleMessage("Qualidade de áudio"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Tema escuro"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Tema Dinâmico"),
         "EnterAName": MessageLookupByLibrary.simpleMessage("Insira o nome"),
+        "Experimental": MessageLookupByLibrary.simpleMessage("Experimental"),
         "High": MessageLookupByLibrary.simpleMessage("Alto"),
         "Home": MessageLookupByLibrary.simpleMessage("Lar"),
         "Language": MessageLookupByLibrary.simpleMessage("Língua"),
         "Low": MessageLookupByLibrary.simpleMessage("Baixo"),
         "Medium": MessageLookupByLibrary.simpleMessage("Médio"),
+        "Open_in_Browser":
+            MessageLookupByLibrary.simpleMessage("Abra no navegador"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Jogar tudo"),
         "Playlists":
             MessageLookupByLibrary.simpleMessage("listas de reprodução"),
+        "Report_an_issue":
+            MessageLookupByLibrary.simpleMessage("Informar um problema"),
+        "Request_a_feature":
+            MessageLookupByLibrary.simpleMessage("Solicite um recurso"),
+        "SOCIALS": MessageLookupByLibrary.simpleMessage("REDES SOCIAIS"),
         "Search": MessageLookupByLibrary.simpleMessage("Procurar"),
         "Settings": MessageLookupByLibrary.simpleMessage("Definições"),
         "Songs": MessageLookupByLibrary.simpleMessage("Músicas"),
+        "TROUBLESHOOTING":
+            MessageLookupByLibrary.simpleMessage("SOLUÇÃO DE PROBLEMAS"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Faixas"),
+        "View_source_code":
+            MessageLookupByLibrary.simpleMessage("Ver código-fonte"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("Adicionar à fila"),
+        "github_redirect": MessageLookupByLibrary.simpleMessage(
+            "Você será redirecionado para o Github"),
         "quickPicks": MessageLookupByLibrary.simpleMessage("Escolhas rápidas")
       };
 }

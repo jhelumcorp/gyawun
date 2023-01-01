@@ -15,5 +15,14 @@
     "Audio_Quality":"Качество звука",
     "High":"Высокий",
     "Medium":"Середина",
-    "Low":"Низкий"
+    "Low":"Низкий",
+    "Experimental":"Экспериментальный",
+    "About":"О",
+    "SOCIALS":"СОЦИАЛЬНЫЕ",
+    "TROUBLESHOOTING":"ИСПРАВЛЕНИЕ ПРОБЛЕМ",
+    "Open_in_Browser":"Открыть в браузере",
+    "View_source_code":"Посмотреть исходный код",
+    "Report_an_issue":"Сообщить о проблеме",
+    "github_redirect":"Вы будете перенаправлены на Github",
+    "Request_a_feature":"Запросить функцию"
 }

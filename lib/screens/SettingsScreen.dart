@@ -66,7 +66,7 @@ class SettingsScreen extends StatelessWidget {
                         S.of(context).Language,
                         style: Theme.of(context)
                             .primaryTextTheme
-                            .titleLarge
+                            .titleMedium
                             ?.copyWith(
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -159,7 +159,7 @@ class SettingsScreen extends StatelessWidget {
                         S.of(context).Audio_Quality,
                         style: Theme.of(context)
                             .primaryTextTheme
-                            .titleLarge
+                            .titleMedium
                             ?.copyWith(
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -244,7 +244,7 @@ class SettingsScreen extends StatelessWidget {
               tileColor: Theme.of(context).colorScheme.primary,
               title: Text(
                 S.of(context).Dark_Theme,
-                style: Theme.of(context).primaryTextTheme.titleLarge?.copyWith(
+                style: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.bold,
                     ),
@@ -276,13 +276,13 @@ class SettingsScreen extends StatelessWidget {
               tileColor: Theme.of(context).colorScheme.primary,
               title: Text(
                 S.of(context).Dynamic_Theme,
-                style: Theme.of(context).primaryTextTheme.titleLarge?.copyWith(
+                style: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.bold,
                     ),
               ),
               subtitle: Text(
-                "Experimental",
+                S.of(context).Experimental,
                 style: Theme.of(context).primaryTextTheme.bodySmall?.copyWith(
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.bold,
@@ -303,8 +303,8 @@ class SettingsScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => const AboutScreen()));
               },
               title: Text(
-                "About",
-                style: Theme.of(context).primaryTextTheme.titleLarge?.copyWith(
+                S.of(context).About,
+                style: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.bold,
                     ),

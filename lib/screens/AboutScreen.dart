@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -14,19 +15,19 @@ class AboutScreen extends StatelessWidget {
         'icon': FontAwesomeIcons.github,
         'title': 'GitHub',
         'link': 'https://github.com/sheikhhaziq',
-        'subtitle': 'Open in browser'
+        'subtitle': S.of(context).Open_in_Browser
       },
       {
         'icon': FontAwesomeIcons.twitter,
         'title': 'Twitter',
         'link': 'https://twitter.com/SheikhHaziq9',
-        'subtitle': 'Open in browser'
+        'subtitle': S.of(context).Open_in_Browser
       },
       {
         'icon': FontAwesomeIcons.instagram,
         'title': 'Instagram',
         'link': 'https://www.instagram.com/rohan__rashid/',
-        'subtitle': 'Open in browser'
+        'subtitle': S.of(context).Open_in_Browser
       },
     ];
 
@@ -34,20 +35,20 @@ class AboutScreen extends StatelessWidget {
       {
         'icon': Icons.source_rounded,
         'title': 'Github',
-        'subtitle': 'View the source code',
+        'subtitle': S.of(context).View_source_code,
         'link': 'https://github.com/sheikhhaziq/vibemusic'
       },
       {
         'icon': FontAwesomeIcons.bug,
-        'title': 'Report an issue',
-        'subtitle': 'You will be redirected to Github',
+        'title': S.of(context).Report_an_issue,
+        'subtitle': S.of(context).github_redirect,
         'link':
             'https://github.com/sheikhhaziq/vibemusic/issues/new?assignees=&labels=bug&template=bug_report.yaml'
       },
       {
         'icon': Icons.request_page_rounded,
-        'title': 'Request a feature',
-        'subtitle': 'You will be redirected to Github',
+        'title': S.of(context).Request_a_feature,
+        'subtitle': S.of(context).github_redirect,
         'link':
             'https://github.com/sheikhhaziq/vibemusic/issues/new?assignees=&labels=enhancement&template=feature_request.yaml'
       }
@@ -66,7 +67,7 @@ class AboutScreen extends StatelessWidget {
             )),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text("About"),
+        title: Text(S.of(context).About),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -99,7 +100,7 @@ class AboutScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 50),
                 Text(
-                  "SOCIALS",
+                  S.of(context).SOCIALS,
                   style: Theme.of(context)
                       .primaryTextTheme
                       .titleMedium
@@ -155,7 +156,7 @@ class AboutScreen extends StatelessWidget {
                 }).toList(),
                 const SizedBox(height: 30),
                 Text(
-                  "TROUBLESHOOTING",
+                  S.of(context).TROUBLESHOOTING,
                   style: Theme.of(context)
                       .primaryTextTheme
                       .titleMedium

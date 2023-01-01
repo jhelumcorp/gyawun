@@ -15,5 +15,14 @@
     "Audio_Quality":"オーディオ品質",
     "High":"高い",
     "Medium":"中くらい",
-    "Low":"低い"
+    "Low":"低い",
+    "Experimental":"実験的",
+    "About":"だいたい",
+    "SOCIALS":"ソーシャル",
+    "TROUBLESHOOTING":"トラブルシューティング",
+    "Open_in_Browser":"ブラウザで開く",
+    "View_source_code":"ソースコードを表示",
+    "Report_an_issue":"問題を報告する",
+    "github_redirect":"Github にリダイレクトされます",
+    "Request_a_feature":"機能をリクエストする"
 }

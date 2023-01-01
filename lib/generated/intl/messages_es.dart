@@ -22,24 +22,39 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "About": MessageLookupByLibrary.simpleMessage("Sobre"),
         "Audio_Quality":
             MessageLookupByLibrary.simpleMessage("Calidad de audio"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Tema oscuro"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Tema dinámico"),
         "EnterAName": MessageLookupByLibrary.simpleMessage("Ingresa un nombre"),
+        "Experimental": MessageLookupByLibrary.simpleMessage("Experimental"),
         "High": MessageLookupByLibrary.simpleMessage("Alto"),
         "Home": MessageLookupByLibrary.simpleMessage("Casa"),
         "Language": MessageLookupByLibrary.simpleMessage("Idioma"),
         "Low": MessageLookupByLibrary.simpleMessage("Bajo"),
         "Medium": MessageLookupByLibrary.simpleMessage("Medio"),
+        "Open_in_Browser":
+            MessageLookupByLibrary.simpleMessage("Abierto en el navegador"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Jugar todo"),
         "Playlists":
             MessageLookupByLibrary.simpleMessage("listas de reproducción"),
+        "Report_an_issue":
+            MessageLookupByLibrary.simpleMessage("Reportar un problema"),
+        "Request_a_feature": MessageLookupByLibrary.simpleMessage(
+            "Solicitar una característica"),
+        "SOCIALS": MessageLookupByLibrary.simpleMessage("SOCIALES"),
         "Search": MessageLookupByLibrary.simpleMessage("Búsqueda"),
         "Settings": MessageLookupByLibrary.simpleMessage("Ajustes"),
         "Songs": MessageLookupByLibrary.simpleMessage("Canciones"),
+        "TROUBLESHOOTING":
+            MessageLookupByLibrary.simpleMessage("SOLUCIÓN DE PROBLEMAS"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Pistas"),
+        "View_source_code":
+            MessageLookupByLibrary.simpleMessage("Ver código fuente"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("Añadir a la cola"),
+        "github_redirect":
+            MessageLookupByLibrary.simpleMessage("Serás redirigido a Github"),
         "quickPicks": MessageLookupByLibrary.simpleMessage("Elecciones rápidas")
       };
 }

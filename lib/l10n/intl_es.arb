@@ -15,5 +15,14 @@
     "Audio_Quality":"Calidad de audio",
     "High":"Alto",
     "Medium":"Medio",
-    "Low":"Bajo"
+    "Low":"Bajo",
+    "Experimental":"Experimental",
+    "About":"Sobre",
+    "SOCIALS":"SOCIALES",
+    "TROUBLESHOOTING":"SOLUCIÓN DE PROBLEMAS",
+    "Open_in_Browser":"Abierto en el navegador",
+    "View_source_code":"Ver código fuente",
+    "Report_an_issue":"Reportar un problema",
+    "github_redirect":"Serás redirigido a Github",
+    "Request_a_feature":"Solicitar una característica"
 }

@@ -219,6 +219,96 @@ class S {
       args: [],
     );
   }
+
+  /// `Experimental`
+  String get Experimental {
+    return Intl.message(
+      'Experimental',
+      name: 'Experimental',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About`
+  String get About {
+    return Intl.message(
+      'About',
+      name: 'About',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SOCIALS`
+  String get SOCIALS {
+    return Intl.message(
+      'SOCIALS',
+      name: 'SOCIALS',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TROUBLESHOOTING`
+  String get TROUBLESHOOTING {
+    return Intl.message(
+      'TROUBLESHOOTING',
+      name: 'TROUBLESHOOTING',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open in Browser`
+  String get Open_in_Browser {
+    return Intl.message(
+      'Open in Browser',
+      name: 'Open_in_Browser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View source Code`
+  String get View_source_code {
+    return Intl.message(
+      'View source Code',
+      name: 'View_source_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Report an issue`
+  String get Report_an_issue {
+    return Intl.message(
+      'Report an issue',
+      name: 'Report_an_issue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You will be redirected to Github`
+  String get github_redirect {
+    return Intl.message(
+      'You will be redirected to Github',
+      name: 'github_redirect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request a feature`
+  String get Request_a_feature {
+    return Intl.message(
+      'Request a feature',
+      name: 'Request_a_feature',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

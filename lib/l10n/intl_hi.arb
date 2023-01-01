@@ -15,5 +15,14 @@
     "Audio_Quality":"ध्वनि गुणवत्ता",
     "High":"उच्च",
     "Medium":"मध्यम",
-    "Low":"कम"
+    "Low":"कम",
+    "Experimental":"प्रयोगात्मक",
+    "About":"के बारे में",
+    "SOCIALS":"सामाजिक",
+    "TROUBLESHOOTING":"समस्या निवारण",
+    "Open_in_Browser":"ब्राउज़र में खोलें",
+    "View_source_code":"स्रोत कोड देखें",
+    "Report_an_issue":"मामले की रिपोर्ट करें",
+    "github_redirect":"आपको जीथब पर पुनर्निर्देशित किया जाएगा",
+    "Request_a_feature":"एक सुविधा का अनुरोध करें"
 }

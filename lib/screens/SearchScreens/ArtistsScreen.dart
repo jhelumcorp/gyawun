@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +27,7 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
       child: Column(
           children: artists.map(
         (artist) {
+          log(artist['browseId'].toString());
           return ListTile(
             contentPadding: const EdgeInsets.all(8),
             onTap: () async {},
@@ -34,7 +37,10 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
             ),
             title: Text(
               artist['artist'],
-              style: const TextStyle(overflow: TextOverflow.ellipsis),
+              style: Theme.of(context)
+                  .primaryTextTheme
+                  .titleMedium
+                  ?.copyWith(overflow: TextOverflow.ellipsis),
             ),
           );
         },

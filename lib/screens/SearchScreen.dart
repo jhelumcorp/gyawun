@@ -6,6 +6,7 @@ import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/screens/SearchScreens/ArtistsScreen.dart';
 import 'package:vibe_music/screens/SearchScreens/PlaylistSearch.dart';
 import 'package:vibe_music/screens/SearchScreens/SongsSearch.dart';
 import 'package:vibe_music/utils/colors.dart';
@@ -132,6 +133,25 @@ class _SearchScreenState extends State<SearchScreen>
                         color: _pageIndex == 1
                             ? Theme.of(context).colorScheme.primary
                             : Colors.transparent,
+                        child: Text("Artists"),
+                        onPressed: () {
+                          _pageIndex = 1;
+                          pageController.animateToPage(1,
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.easeIn);
+                        },
+                      ),
+                      MaterialButton(
+                        elevation: 0,
+                        focusElevation: 0,
+                        hoverElevation: 0,
+                        disabledElevation: 0,
+                        highlightElevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        color: _pageIndex == 2
+                            ? Theme.of(context).colorScheme.primary
+                            : Colors.transparent,
                         child: Text(S.of(context).Playlists),
                         onPressed: () {
                           _pageIndex = 1;
@@ -152,7 +172,7 @@ class _SearchScreenState extends State<SearchScreen>
                       controller: pageController,
                       children: [
                         SongsSearch(songs: songs),
-                        // ArtistsScreen(artists: artists),
+                        ArtistsScreen(artists: artists),
                         PlaylistSearch(playlists: playlists)
                       ],
                     ),
