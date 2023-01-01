@@ -1,0 +1,19 @@
+name: 😎 Feature Request
+description: Something isn't working, uh?
+labels: [ENHANCEMENT]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ⚠️ Make sure there is no issue about this feature already.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature description
+      placeholder: |
+        Example:
+          1. Add this feature...
+          2. Add this feature...
+    validations:
+      required: true
