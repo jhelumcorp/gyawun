@@ -108,8 +108,9 @@ class MusicPlayer extends ChangeNotifier {
       _songs = [newSong];
 
       _initialised = true;
-      _miniplayerController.animateToHeight(state: PanelState.MAX);
+
       notifyListeners();
+      _miniplayerController.animateToHeight(state: PanelState.MAX);
 
       await playlist?.add(AudioSource.uri(
         await getAudioUri(newSong.videoId),
@@ -215,10 +216,14 @@ class MusicPlayer extends ChangeNotifier {
       List<AudioOnlyStreamInfo> audios = manifest.audioOnly.sortByBitrate();
 
       int audioNumber = audioQuality == 'high'
-          ? audios.length - 1
-          : (audioQuality == 'low' ? 0 : (audios.length / 2).floor());
+          ? 0
+          : (audioQuality == 'low'
+              ? audios.length - 1
+              : (audios.length / 2).floor());
 
-      audioUrl = manifest.audioOnly.sortByBitrate()[audioNumber].url.toString();
+      audioUrl = audios[audioNumber].url.toString();
+      // log(audios[audioNumber].size.totalMegaBytes.toString());
+      // log(audioQuality);
       return Uri.parse(audioUrl);
     } catch (e) {
       return Uri();

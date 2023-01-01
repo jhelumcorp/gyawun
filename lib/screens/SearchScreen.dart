@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/Models/Track.dart';
@@ -54,6 +56,7 @@ class _SearchScreenState extends State<SearchScreen>
     loading = true;
     setState(() {});
     HomeApi.getSearch(textEditingController.text).then((Map value) {
+      log(value.toString());
       setState(() {
         loading = false;
         songs = value['songs'];

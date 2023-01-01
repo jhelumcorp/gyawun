@@ -44,10 +44,10 @@ class HomeApi {
   static Future<Map> getSearch(query) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String lang = prefs.getString('locale') ?? "en";
-    final response =
+    final Response response =
         await get(Uri.parse('$hostAddress/search?query=$query&lang=$lang'));
     if (response.statusCode == 200) {
-      Map data = jsonDecode(response.body);
+      Map data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     }
     return {};

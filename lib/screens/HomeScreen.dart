@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
@@ -116,8 +118,9 @@ class _HomeScreenState extends State<HomeScreen>
                                       },
                                       child: Stack(
                                         children: [
-                                          Image.network(
-                                            song.thumbnails.first.url,
+                                          CachedNetworkImage(
+                                            imageUrl:
+                                                'https://img.youtube.com/vi/${song.videoId}/maxresdefault.jpg',
                                             fit: BoxFit.fill,
                                             width: double.infinity,
                                             height: double.infinity,
@@ -230,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen>
                                           borderRadius:
                                               BorderRadius.circular(5),
                                           child: Image.network(
-                                            song.thumbnails.first.url,
+                                            'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
                                             errorBuilder:
                                                 ((context, error, stackTrace) {
                                               return Image.asset(
@@ -275,7 +278,6 @@ class _HomeScreenState extends State<HomeScreen>
                                         },
                                         itemBuilder: (context, index) {
                                           Map playlist = content[index] as Map;
-                                          // print(song);
 
                                           return ClipRRect(
                                             borderRadius:
@@ -289,10 +291,10 @@ class _HomeScreenState extends State<HomeScreen>
                                                           playlist['playlistId']
                                                     });
                                               },
-                                              child: Image.network(
-                                                playlist['thumbnails']
+                                              child: CachedNetworkImage(
+                                                imageUrl: playlist['thumbnails']
                                                     .last['url'],
-                                                errorBuilder: ((context, error,
+                                                errorWidget: ((context, error,
                                                     stackTrace) {
                                                   return Image.asset(
                                                       "assets/images/playlist.png");

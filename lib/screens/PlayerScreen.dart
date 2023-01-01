@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -299,7 +300,6 @@ class QueueScreen extends StatelessWidget {
       color: Theme.of(context).scaffoldBackgroundColor,
       child: SafeArea(
         child: ReorderableList(
-          // shrinkWrap: true,
           primary: true,
           itemCount: songs.length,
           onReorder: (oldIndex, newIndex) {

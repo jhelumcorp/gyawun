@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vibe_music/generated/l10n.dart';
@@ -31,10 +32,6 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
           onTap: () {
             Navigator.pushNamed(context, '/search/playlist',
                 arguments: {'playlistId': playlist['browseId']});
-            // Navigator.push(
-            //     context,
-            //     CupertinoPageRoute(
-            //         builder: (_) => TpSrceen(playListId: playlist)));
           },
           title: Row(
             children: [

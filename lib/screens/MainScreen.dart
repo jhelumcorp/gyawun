@@ -39,8 +39,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: LayoutBuilder(builder: (context, constraints) {
         return Column(
@@ -77,7 +75,6 @@ class _MainScreenState extends State<MainScreen> {
                   controller: context.watch<MusicPlayer>().miniplayerController,
                   minHeight: 70,
                   maxHeight: constraints.maxHeight,
-                  // maxHeight: size.height - 80,
                   builder: (height, percentage) {
                     return Stack(
                       children: [

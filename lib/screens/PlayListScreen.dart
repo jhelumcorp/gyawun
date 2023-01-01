@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -73,13 +74,13 @@ class _PlayListScreenState extends State<PlayListScreen> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(5),
-                            child: Image.network(
-                              playlist?['thumbnails'][
+                            child: CachedNetworkImage(
+                              imageUrl: playlist?['thumbnails'][
                                   (playlist?['thumbnails'].length / 2)
                                       .floor()]['url'],
                               width: (size.width / 2) - 24,
                               height: (size.width / 2) - 24,
-                              errorBuilder: ((context, error, stackTrace) {
+                              errorWidget: ((context, error, stackTrace) {
                                 return Image.asset(
                                   "assets/images/playlist.png",
                                   width: (size.width / 2) - 24,
