@@ -1,6 +1,6 @@
 name: 😎 Feature Request
-description: Something isn't working, uh?
-labels: [ENHANCEMENT]
+description: Want something new?
+labels: [enhancement]
 body:
   - type: markdown
     attributes:
