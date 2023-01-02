@@ -54,6 +54,12 @@ to discuss what you would like to change.
 Please make sure to update tests as appropriate.
 
 
+## 👩‍💻👨‍💻 Our valuable Contributors
+
+<p align="center"><a href="https://github.com/sheikhhaziq/vibemusic/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=sheikhhaziq/vibemusic" />
+</a></p>
+
 ## Disclaimer
 This project and its contents are not affiliated with, funded, authorized, endorsed by, or in any way associated with YouTube, Google LLC or any of its affiliates and subsidiaries.
 Any trademark, service mark, trade name, or other intellectual property rights used in this project are owned by the respective owners.
