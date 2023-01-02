@@ -1,5 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_theme/animated_theme_app.dart';
+import 'package:flutter_animated_theme/animation_type.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
@@ -35,10 +37,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Track? song = context.watch<MusicPlayer>().song;
-    ;
+
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
-        return MaterialApp(
+        return AnimatedThemeApp(
+          animationType: AnimationType.CIRCULAR_ANIMATED_THEME,
           debugShowCheckedModeBanner: false,
           title: 'Vibe Music',
           localizationsDelegates: const [
@@ -73,7 +76,8 @@ class MyApp extends StatelessWidget {
                                 const Color.fromARGB(255, 80, 141, 115)))),
               ),
           themeMode: context.watch<ThemeProvider>().themeMode,
-          home: const MainScreen(),
+          home: const Directionality(
+              textDirection: TextDirection.ltr, child: MainScreen()),
         );
       },
     );

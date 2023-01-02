@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
 import 'package:vibe_music/Models/Track.dart';
+import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/utils/colors.dart';
@@ -299,74 +300,77 @@ class QueueScreen extends StatelessWidget {
     AudioPlayer player = context.watch<MusicPlayer>().player;
     bool isdarkTheme =
         context.watch<ThemeProvider>().themeMode == ThemeMode.dark;
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: SafeArea(
-        child: ReorderableList(
-          primary: true,
-          itemCount: songs.length,
-          onReorder: (oldIndex, newIndex) {
-            int index = newIndex > oldIndex ? newIndex - 1 : newIndex;
-            context.read<MusicPlayer>().moveTo(oldIndex, index);
-          },
-          itemBuilder: (context, index) {
-            Track song = songs[index];
-            return Material(
-              color: Colors.transparent,
-              key: Key("$index"),
-              child: ListTile(
-                onTap: () {
-                  if (player.currentIndex != index) {
-                    player.play();
-                  }
-                },
+    return Directionality(
+      textDirection: context.watch<LanguageProvider>().textDirection,
+      child: Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: SafeArea(
+          child: ReorderableList(
+            primary: true,
+            itemCount: songs.length,
+            onReorder: (oldIndex, newIndex) {
+              int index = newIndex > oldIndex ? newIndex - 1 : newIndex;
+              context.read<MusicPlayer>().moveTo(oldIndex, index);
+            },
+            itemBuilder: (context, index) {
+              Track song = songs[index];
+              return Material(
+                color: Colors.transparent,
                 key: Key("$index"),
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Stack(
-                    children: [
-                      Image.network(
-                        'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
-                        width: 50,
-                        height: 50,
-                      ),
-                      if (player.currentIndex == index)
-                        Container(
-                          color: Colors.black.withOpacity(0.7),
-                          height: 50,
+                child: ListTile(
+                  onTap: () {
+                    if (player.currentIndex != index) {
+                      player.play();
+                    }
+                  },
+                  key: Key("$index"),
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Stack(
+                      children: [
+                        Image.network(
+                          'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
                           width: 50,
-                          child: const Center(
-                            child: Icon(
-                              Icons.music_note,
-                              color: Colors.white,
+                          height: 50,
+                        ),
+                        if (player.currentIndex == index)
+                          Container(
+                            color: Colors.black.withOpacity(0.7),
+                            height: 50,
+                            width: 50,
+                            child: const Center(
+                              child: Icon(
+                                Icons.music_note,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
+                  ),
+                  title: Text(
+                    song.title,
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .titleMedium
+                        ?.copyWith(overflow: TextOverflow.ellipsis),
+                  ),
+                  subtitle: Text(
+                    song.artists.first.name,
+                    style:
+                        const TextStyle(color: Color.fromARGB(255, 93, 92, 92)),
+                  ),
+                  trailing: ReorderableDragStartListener(
+                    index: index,
+                    child: Icon(
+                      Icons.drag_handle,
+                      color: isdarkTheme ? Colors.white : Colors.black,
+                    ),
                   ),
                 ),
-                title: Text(
-                  song.title,
-                  style: Theme.of(context)
-                      .primaryTextTheme
-                      .titleMedium
-                      ?.copyWith(overflow: TextOverflow.ellipsis),
-                ),
-                subtitle: Text(
-                  song.artists.first.name,
-                  style:
-                      const TextStyle(color: Color.fromARGB(255, 93, 92, 92)),
-                ),
-                trailing: ReorderableDragStartListener(
-                  index: index,
-                  child: Icon(
-                    Icons.drag_handle,
-                    color: isdarkTheme ? Colors.white : Colors.black,
-                  ),
-                ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

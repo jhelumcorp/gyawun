@@ -3,6 +3,7 @@ import 'package:miniplayer/miniplayer.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
+import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/screens/ArtistScreen.dart';
@@ -61,13 +62,24 @@ class _MainScreenState extends State<MainScreen> {
                     });
                   }),
                   children: [
-                    HomeTab(
-                      navigatorKey: _homeNavigatorKey,
+                    Directionality(
+                      textDirection:
+                          context.watch<LanguageProvider>().textDirection,
+                      child: HomeTab(
+                        navigatorKey: _homeNavigatorKey,
+                      ),
                     ),
-                    SearchTab(
-                      navigatorKey: _searchNavigatorKey,
+                    Directionality(
+                      textDirection:
+                          context.watch<LanguageProvider>().textDirection,
+                      child: SearchTab(
+                        navigatorKey: _searchNavigatorKey,
+                      ),
                     ),
-                    const SettingsScreen(),
+                    Directionality(
+                        textDirection:
+                            context.watch<LanguageProvider>().textDirection,
+                        child: const SettingsScreen()),
                   ],
                 );
               }),

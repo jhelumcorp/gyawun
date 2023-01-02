@@ -1,10 +1,11 @@
 {
-    "quickPicks":"おすすめ",
     "Language":"言語",
     "addToQueue":"キューに追加",
     "Songs":"曲",
     "Playlists":"プレイリスト",
-    "EnterAName":"名前を入力",
+    "Search_something":"何かを検索",
+    "RTL":"右から左に",
+    "Right_to_left_direction":"テキストの方向を右から左に設定",
     "Home":"ホーム",
     "Artists":"アーティスト",
     "Search":"検索",

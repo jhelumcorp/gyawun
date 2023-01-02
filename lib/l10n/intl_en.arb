@@ -1,10 +1,11 @@
 {
-    "quickPicks":"Quick picks",
     "Language":"Language",
     "addToQueue":"Add to Queue",
     "Songs":"Songs",
     "Playlists":"Playlists",
-    "EnterAName":"Enter a name",
+    "Search_something":"Search something",
+    "RTL":"Right to Left",
+    "Right_to_left_direction":"Set text direction to Right to left",
     "Home":"Home",
     "Artists":"Artists",
     "Search":"Search",

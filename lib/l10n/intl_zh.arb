@@ -1,10 +1,11 @@
 {
-    "quickPicks":"快速选择",
     "Language":"语",
     "addToQueue":"添加到队列",
     "Songs":"歌曲",
     "Playlists":"播放列表",
-    "EnterAName":"输入一个名字",
+    "Search_something":"搜索东西",
+    "RTL":"右到左",
+    "Right_to_left_direction":"将文本方向设置为从右到左",
     "Home":"家",
     "Artists":"艺术家",
     "Search":"搜索",

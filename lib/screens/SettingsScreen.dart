@@ -24,6 +24,7 @@ class SettingsScreen extends StatelessWidget {
     {"name": "Russian", "value": "ru"},
     {"name": "Spanish", "value": "es"},
     {"name": "Turkish", "value": "tr"},
+    {"name": "Urdu", "value": "ur"}
   ];
 
   @override
@@ -140,6 +141,40 @@ class SettingsScreen extends StatelessWidget {
                   }).toList(),
                 ],
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: ListTile(
+              onTap: () {
+                bool value = context.read<LanguageProvider>().textDirection ==
+                    TextDirection.rtl;
+                context
+                    .read<LanguageProvider>()
+                    .setTextDirection(value == false ? 'rtl' : 'ltr');
+              },
+              leading: Icon(
+                Icons.directions,
+                color: darkTheme ? Colors.white : Colors.black,
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              tileColor: Theme.of(context).colorScheme.primary,
+              title: Text(
+                "Text Direction",
+                style: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              trailing: CupertinoSwitch(
+                  value: context.watch<LanguageProvider>().textDirection ==
+                      TextDirection.rtl,
+                  onChanged: (value) {
+                    context
+                        .read<LanguageProvider>()
+                        .setTextDirection(value == true ? 'rtl' : 'ltr');
+                  }),
             ),
           ),
           Padding(

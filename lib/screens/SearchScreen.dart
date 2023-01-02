@@ -60,7 +60,7 @@ class _SearchScreenState extends State<SearchScreen>
           title: TextField(
             style: Theme.of(context).primaryTextTheme.titleLarge,
             decoration: InputDecoration(
-                hintText: S.of(context).EnterAName,
+                hintText: S.of(context).Search_something,
                 border: const OutlineInputBorder(
                   borderSide: BorderSide.none,
                 )),

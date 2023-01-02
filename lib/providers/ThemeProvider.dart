@@ -84,7 +84,7 @@ ThemeData _lightTheme = ThemeData.light().copyWith(
     thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
     activeTrackColor: Colors.black,
     thumbColor: Colors.black,
-    inactiveTrackColor: Colors.black.withOpacity(0.6),
+    inactiveTrackColor: Colors.black.withOpacity(0.4),
   ),
 );
 
@@ -126,6 +126,6 @@ ThemeData _darkTheme = ThemeData.dark().copyWith(
     thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
     activeTrackColor: Colors.white,
     thumbColor: Colors.white,
-    inactiveTrackColor: Colors.white.withOpacity(0.6),
+    inactiveTrackColor: Colors.white.withOpacity(0.4),
   ),
 );

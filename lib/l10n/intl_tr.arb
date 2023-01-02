@@ -1,10 +1,11 @@
 {
-    "quickPicks":"Hızlı seçimler",
     "Language":"Dil",
     "addToQueue":"Sıraya ekle",
     "Songs":"Şarkılar",
     "Playlists":"Oynatma listeleri",
-    "EnterAName":"İsim girin",
+    "Search_something":"bir şey ara",
+    "RTL":"Sağdan sola",
+    "Right_to_left_direction":"Metin yönünü Sağdan sola olarak ayarla",
     "Home":"Anasayfa",
     "Artists":"Sanatçılar",
     "Search":"Ara",

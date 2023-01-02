@@ -1,10 +1,11 @@
 {
-    "quickPicks":"Escolhas rápidas",
     "Language":"Língua",
     "addToQueue":"Adicionar à fila",
     "Songs":"Músicas",
     "Playlists":"listas de reprodução",
-    "EnterAName":"Insira o nome",
+    "Search_something":"Pesquisar algo",
+    "RTL":"Direita para esquerda",
+    "Right_to_left_direction":"Definir a direção do texto da direita para a esquerda",
     "Home":"Lar",
     "Artists":"Artistas",
     "Search":"Procurar",

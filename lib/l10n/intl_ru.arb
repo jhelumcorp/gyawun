@@ -1,10 +1,11 @@
 {
-    "quickPicks":"Быстрый выбор",
     "Language":"Язык",
     "addToQueue":"Добавить в очередь",
     "Songs":"Песни",
     "Playlists":"Плейлисты",
-    "EnterAName":"Введите имя",
+    "Search_something":"Искать что-то",
+    "RTL":"Справа налево",
+    "Right_to_left_direction":"Установить направление текста справа налево",
     "Home":"Дом",
     "Artists":"Художники",
     "Search":"Поиск",

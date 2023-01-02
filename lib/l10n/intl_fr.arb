@@ -1,10 +1,11 @@
 {
-    "quickPicks":"Sélections rapides",
     "Language":"Langue",
     "addToQueue":"Ajouter à la liste",
     "Songs":"Chansons",
     "Playlists":"Listes de lecture",
-    "EnterAName":"Entrez un nom",
+    "Search_something":"Rechercher quelque chose",
+    "RTL":"De droite à gauche",
+    "Right_to_left_direction":"Définir la direction du texte de droite à gauche",
     "Home":"Domicile",
     "Artists":"Artistes",
     "Search":"Chercher",

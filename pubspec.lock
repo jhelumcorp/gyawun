@@ -153,6 +153,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_animated_theme:
+    dependency: "direct main"
+    description:
+      name: flutter_animated_theme
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   flutter_blurhash:
     dependency: transitive
     description:
@@ -434,6 +441,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.4"
+  rect_getter:
+    dependency: transitive
+    description:
+      name: rect_getter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   rxdart:
     dependency: transitive
     description:

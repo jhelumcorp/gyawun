@@ -1,10 +1,11 @@
 {
-    "quickPicks":"जल्दी चुनाव",
     "Language":"भाषा",
     "addToQueue":"क़तार में जोड़ें",
     "Songs":"गीत",
     "Playlists":"प्लेलिस्ट",
-    "EnterAName":"नाम डालें",
+    "Search_something":"कुछ खोजो",
+    "RTL":"दाएं से बाएं",
+    "Right_to_left_direction":"पाठ दिशा को दाएं से बाएं सेट करें",
     "Home":"होम पेज",
     "Artists":"कलाकार",
     "Search":"खोज",
