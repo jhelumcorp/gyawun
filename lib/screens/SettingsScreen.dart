@@ -21,6 +21,7 @@ class SettingsScreen extends StatelessWidget {
     {"name": "Portuguese", "value": "pt"},
     {"name": "Russian", "value": "ru"},
     {"name": "Spanish", "value": "es"},
+    {"name": "Turkish", "value": "tr"},
   ];
 
   @override

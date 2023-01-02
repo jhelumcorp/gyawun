@@ -22,33 +22,6 @@ class _SongsSearchState extends State<SongsSearch> {
     songs = widget.songs;
   }
 
-  showOptions(song) {
-    showCupertinoModalPopup(
-        context: context,
-        builder: (context) {
-          return CupertinoActionSheet(
-            actions: [
-              Material(
-                child: ListTile(
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.read<MusicPlayer>().addToQUeue(Track.fromMap(song));
-                  },
-                  title: Text(
-                    S.of(context).addToQueue,
-                    style: Theme.of(context)
-                        .primaryTextTheme
-                        .titleMedium
-                        ?.copyWith(
-                            overflow: TextOverflow.ellipsis, fontSize: 16),
-                  ),
-                ),
-              )
-            ],
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

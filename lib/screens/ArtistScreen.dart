@@ -42,33 +42,6 @@ class _ArtistScreenState extends State<ArtistScreen> {
     });
   }
 
-  showOptions(song) {
-    showCupertinoModalPopup(
-        context: context,
-        builder: (context) {
-          return CupertinoActionSheet(
-            actions: [
-              Material(
-                child: ListTile(
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.read<MusicPlayer>().addToQUeue(song);
-                  },
-                  title: Text(
-                    S.of(context).addToQueue,
-                    style: Theme.of(context)
-                        .primaryTextTheme
-                        .titleMedium
-                        ?.copyWith(
-                            overflow: TextOverflow.ellipsis, fontSize: 16),
-                  ),
-                ),
-              )
-            ],
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;

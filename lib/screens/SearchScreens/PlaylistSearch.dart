@@ -1,8 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vibe_music/generated/l10n.dart';
-import 'package:vibe_music/utils/colors.dart';
 
 class PlaylistSearch extends StatefulWidget {
   const PlaylistSearch({required this.playlists, super.key});

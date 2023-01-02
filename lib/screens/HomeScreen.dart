@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
@@ -26,12 +27,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin<HomeScreen> {
   List trending = [];
+  List? artists = [];
+  PageController songsController = PageController(
+    viewportFraction: 0.9,
+  );
   @override
   void initState() {
     super.initState();
 
     HomeApi.getCharts().then((value) {
-      trending = value['items'];
+      trending = value['trending'];
+      artists = value['artists'];
       setState(() {});
     });
     HomeApi.getHome().then((List value) {
@@ -174,6 +180,70 @@ class _HomeScreenState extends State<HomeScreen>
                               );
                             }).toList(),
                           ),
+                          if (artists != null && artists!.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8, right: 8, top: 16),
+                              child: Text(
+                                S.of(context).Artists,
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ),
+                          if (artists != null && artists!.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 8.0,
+                              ),
+                              child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: artists!.map((artist) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                                context, '/home/artist',
+                                                arguments: {
+                                                  'browseId':
+                                                      artist['browseId'],
+                                                  'imageUrl':
+                                                      artist['thumbnails']
+                                                          .last['url'],
+                                                  'name': artist['title'],
+                                                });
+                                          },
+                                          child: Column(
+                                            children: [
+                                              CircleAvatar(
+                                                radius: 50,
+                                                backgroundImage: NetworkImage(
+                                                    artist['thumbnails']
+                                                        .last['url']),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                artist['title'],
+                                                style: Theme.of(context)
+                                                    .primaryTextTheme
+                                                    .titleMedium
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  )),
+                            ),
                           ...context
                               .watch<HomeScreenProvider>()
                               .getData
@@ -182,14 +252,15 @@ class _HomeScreenState extends State<HomeScreen>
                             List content = item['contents'] as List;
                             bool areSongs = content.first['videoId'] != null;
                             return Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.only(
+                                  left: 0, top: 8.0, bottom: 8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // if (!areSongs)
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 8),
                                     child: Text(
                                       title,
                                       style: Theme.of(context)
@@ -201,16 +272,72 @@ class _HomeScreenState extends State<HomeScreen>
                                           ),
                                     ),
                                   ),
+                                  // if (areSongs)
+                                  //   Column(
+                                  //       children:
+                                  //           content.sublist(0, 5).map((track) {
+                                  //     return TrackTile(track: track);
+                                  //   }).toList()),
                                   if (areSongs)
-                                    Column(
-                                        children:
-                                            content.sublist(0, 5).map((track) {
-                                      return TrackTile(track: track);
-                                    }).toList()),
+                                    ExpandablePageView(
+                                      controller: songsController,
+                                      padEnds: false,
+                                      children: [
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: content
+                                                .sublist(0, 5)
+                                                .map((track) {
+                                              return TrackTile(track: track);
+                                            }).toList()),
+                                        if (content.length > 5)
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: content
+                                                  .sublist(
+                                                      5,
+                                                      content.length > 10
+                                                          ? 10
+                                                          : content.length)
+                                                  .map((track) {
+                                                return TrackTile(track: track);
+                                              }).toList()),
+                                        if (content.length > 10)
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: content
+                                                  .sublist(
+                                                      10,
+                                                      content.length > 15
+                                                          ? 15
+                                                          : content.length)
+                                                  .map((track) {
+                                                return TrackTile(track: track);
+                                              }).toList()),
+                                        if (content.length > 15)
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: content
+                                                  .sublist(
+                                                      15,
+                                                      content.length > 20
+                                                          ? 20
+                                                          : content.length)
+                                                  .map((track) {
+                                                return TrackTile(track: track);
+                                              }).toList()),
+                                      ],
+                                    ),
                                   if (!areSongs)
                                     SizedBox(
                                       height: 150,
                                       child: ListView.separated(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
                                         shrinkWrap: true,
                                         scrollDirection: Axis.horizontal,
                                         itemCount: content.length,

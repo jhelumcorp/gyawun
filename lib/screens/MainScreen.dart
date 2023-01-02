@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
             Expanded(
               child: Builder(builder: (context) {
                 return PageView(
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   controller: _pageController,
                   onPageChanged: ((value) {
                     MiniplayerController miniplayerController =
@@ -172,6 +172,15 @@ class HomeTab extends StatelessWidget {
               return MaterialPageRoute(
                   builder: (_) => PlayListScreen(
                         playlistId: args['playlistId'],
+                      ));
+            case '/home/artist':
+              Map<String, dynamic> args =
+                  settings.arguments as Map<String, dynamic>;
+              return MaterialPageRoute(
+                  builder: (_) => ArtistScreen(
+                        browseId: args['browseId'],
+                        imageUrl: args['imageUrl'],
+                        name: args['name'],
                       ));
             default:
               return MaterialPageRoute(builder: (_) => const Text("data"));

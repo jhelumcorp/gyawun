@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
-import 'package:vibe_music/screens/SearchScreens/ArtistsScreen.dart';
+import 'package:vibe_music/screens/SearchScreens/ArtistsSearch.dart';
 import 'package:vibe_music/screens/SearchScreens/PlaylistSearch.dart';
 import 'package:vibe_music/screens/SearchScreens/SongsSearch.dart';
 
@@ -39,8 +39,8 @@ class _SearchScreenState extends State<SearchScreen>
         songs = value['songs'];
         artists = value['artists'];
         playlists = value['playlists'];
+        _pageIndex = 0;
       });
-      pageController.jumpToPage(0);
     });
   }
 

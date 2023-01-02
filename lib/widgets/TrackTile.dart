@@ -69,8 +69,11 @@ class TrackTile extends StatelessWidget {
               .titleMedium
               ?.copyWith(overflow: TextOverflow.ellipsis)),
       subtitle: Text(
-        song.artists.first.name,
-        style: const TextStyle(color: Color.fromARGB(255, 93, 92, 92)),
+        song.artists.map((e) => e.name).toList().join(', '),
+        style: const TextStyle(
+          color: Color.fromARGB(255, 93, 92, 92),
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       onLongPress: () {
         showOptions(song);

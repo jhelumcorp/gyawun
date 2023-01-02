@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,9 +35,15 @@ class HomeApi {
     final response = await get(
         Uri.parse('${hostAddress}charts?lang=$lang&country=$country'));
     if (response.statusCode == 200) {
-      Map data = jsonDecode(utf8.decode(response.bodyBytes))['videos'] ??
-          jsonDecode(utf8.decode(response.bodyBytes))['trending'];
-      return data;
+      List trending = jsonDecode(utf8.decode(response.bodyBytes))['videos']
+              ['items'] ??
+          jsonDecode(utf8.decode(response.bodyBytes))['trending']['items'];
+      List artists =
+          jsonDecode(utf8.decode(response.bodyBytes))['artists']['items'];
+      return {
+        'trending': trending,
+        'artists': artists,
+      };
     }
     return {};
   }
