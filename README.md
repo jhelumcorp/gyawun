@@ -32,6 +32,8 @@
 - [x] Change Audio Quality
 - [x] Material You theme
 - [x] Dynamic theme support
+- [ ] Search Suggestions
+- [ ] Change location
 - [ ] Add to favourites
 - [ ] Save history locally
 - [ ] Save playlist
