@@ -31,8 +31,8 @@ class ThemeProvider extends ChangeNotifier {
 
   setDynamicThemeMode(bool dynamicThemeMode) {
     _dynamicThemeMode = dynamicThemeMode;
-    _prefs.setBool('dynamicThemeMode', dynamicThemeMode);
     notifyListeners();
+    _prefs.setBool('dynamicThemeMode', dynamicThemeMode);
   }
 
   setTheme(themeMode) {

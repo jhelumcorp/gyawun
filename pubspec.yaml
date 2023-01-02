@@ -11,11 +11,11 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.5
   youtube_explode_dart: ^1.12.3
   provider: ^6.0.4
-  just_audio: ^0.9.30
-  just_audio_background: ^0.0.1-beta.8
+  just_audio: ^0.9.31
+  just_audio_background: ^0.0.1-beta.9
   google_fonts: ^3.0.1
   palette_generator: ^0.3.3+2
   intl: ^0.17.0

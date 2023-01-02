@@ -258,14 +258,14 @@ packages:
       name: just_audio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.30"
+    version: "0.9.31"
   just_audio_background:
     dependency: "direct main"
     description:
       name: just_audio_background
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1-beta.8"
+    version: "0.0.1-beta.9"
   just_audio_platform_interface:
     dependency: transitive
     description:
