@@ -7,7 +7,8 @@
 // ignore_for_file:unnecessary_brace_in_string_interps, unnecessary_new
 // ignore_for_file:prefer_single_quotes,comment_references, directives_ordering
 // ignore_for_file:annotate_overrides,prefer_generic_function_type_aliases
-// ignore_for_file:unused_import, file_names
+// ignore_for_file:unused_import, file_names, avoid_escaping_inner_quotes
+// ignore_for_file:unnecessary_string_interpolations, unnecessary_string_escapes
 
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
@@ -20,33 +21,34 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ja';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static _notInlinedMessages(_) => <String, Function> {
-    "About" : MessageLookupByLibrary.simpleMessage("だいたい"),
-    "Artists" : MessageLookupByLibrary.simpleMessage("アーティスト"),
-    "Audio_Quality" : MessageLookupByLibrary.simpleMessage("オーディオ品質"),
-    "Dark_Theme" : MessageLookupByLibrary.simpleMessage("ダークテーマ"),
-    "Dynamic_Theme" : MessageLookupByLibrary.simpleMessage("動的テーマ"),
-    "EnterAName" : MessageLookupByLibrary.simpleMessage("名前を入力"),
-    "Experimental" : MessageLookupByLibrary.simpleMessage("実験的"),
-    "High" : MessageLookupByLibrary.simpleMessage("高い"),
-    "Home" : MessageLookupByLibrary.simpleMessage("ホーム"),
-    "Language" : MessageLookupByLibrary.simpleMessage("言語"),
-    "Low" : MessageLookupByLibrary.simpleMessage("低い"),
-    "Medium" : MessageLookupByLibrary.simpleMessage("中くらい"),
-    "Open_in_Browser" : MessageLookupByLibrary.simpleMessage("ブラウザで開く"),
-    "Play_All" : MessageLookupByLibrary.simpleMessage("すべて再生"),
-    "Playlists" : MessageLookupByLibrary.simpleMessage("プレイリスト"),
-    "Report_an_issue" : MessageLookupByLibrary.simpleMessage("問題を報告する"),
-    "Request_a_feature" : MessageLookupByLibrary.simpleMessage("機能をリクエストする"),
-    "SOCIALS" : MessageLookupByLibrary.simpleMessage("ソーシャル"),
-    "Search" : MessageLookupByLibrary.simpleMessage("検索"),
-    "Settings" : MessageLookupByLibrary.simpleMessage("設定"),
-    "Songs" : MessageLookupByLibrary.simpleMessage("曲"),
-    "TROUBLESHOOTING" : MessageLookupByLibrary.simpleMessage("トラブルシューティング"),
-    "Tracks" : MessageLookupByLibrary.simpleMessage("トラック"),
-    "View_source_code" : MessageLookupByLibrary.simpleMessage("ソースコードを表示"),
-    "addToQueue" : MessageLookupByLibrary.simpleMessage("キューに追加"),
-    "github_redirect" : MessageLookupByLibrary.simpleMessage("Github にリダイレクトされます"),
-    "quickPicks" : MessageLookupByLibrary.simpleMessage("おすすめ")
-  };
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "About": MessageLookupByLibrary.simpleMessage("だいたい"),
+        "Artists": MessageLookupByLibrary.simpleMessage("アーティスト"),
+        "Audio_Quality": MessageLookupByLibrary.simpleMessage("オーディオ品質"),
+        "Dark_Theme": MessageLookupByLibrary.simpleMessage("ダークテーマ"),
+        "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("動的テーマ"),
+        "EnterAName": MessageLookupByLibrary.simpleMessage("名前を入力"),
+        "Experimental": MessageLookupByLibrary.simpleMessage("実験的"),
+        "High": MessageLookupByLibrary.simpleMessage("高い"),
+        "Home": MessageLookupByLibrary.simpleMessage("ホーム"),
+        "Language": MessageLookupByLibrary.simpleMessage("言語"),
+        "Low": MessageLookupByLibrary.simpleMessage("低い"),
+        "Medium": MessageLookupByLibrary.simpleMessage("中くらい"),
+        "Open_in_Browser": MessageLookupByLibrary.simpleMessage("ブラウザで開く"),
+        "Play_All": MessageLookupByLibrary.simpleMessage("すべて再生"),
+        "Playlists": MessageLookupByLibrary.simpleMessage("プレイリスト"),
+        "Report_an_issue": MessageLookupByLibrary.simpleMessage("問題を報告する"),
+        "Request_a_feature": MessageLookupByLibrary.simpleMessage("機能をリクエストする"),
+        "SOCIALS": MessageLookupByLibrary.simpleMessage("ソーシャル"),
+        "Search": MessageLookupByLibrary.simpleMessage("検索"),
+        "Settings": MessageLookupByLibrary.simpleMessage("設定"),
+        "Songs": MessageLookupByLibrary.simpleMessage("曲"),
+        "TROUBLESHOOTING": MessageLookupByLibrary.simpleMessage("トラブルシューティング"),
+        "Tracks": MessageLookupByLibrary.simpleMessage("トラック"),
+        "View_source_code": MessageLookupByLibrary.simpleMessage("ソースコードを表示"),
+        "addToQueue": MessageLookupByLibrary.simpleMessage("キューに追加"),
+        "github_redirect":
+            MessageLookupByLibrary.simpleMessage("Github にリダイレクトされます"),
+        "quickPicks": MessageLookupByLibrary.simpleMessage("おすすめ")
+      };
 }
