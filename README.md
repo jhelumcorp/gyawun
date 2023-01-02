@@ -22,7 +22,7 @@
   <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/06.jpg" width="30%" />
 </p>
 
-## Features
+## Features / TODO
 - [x] Play (almost) any song or video from YouTube Music
 - [x] Background playback
 - [x] Search for Songs, Artists and Playlists
