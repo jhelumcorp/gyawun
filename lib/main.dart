@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_theme/animated_theme_app.dart';
@@ -7,6 +8,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibe_music/Models/Track.dart';
+import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/providers/AudioQualityprovider.dart';
 import 'package:vibe_music/providers/HomeScreenProvider.dart';
 import 'package:vibe_music/providers/LanguageProvider.dart';
@@ -23,6 +25,7 @@ void main() async {
     androidNotificationChannelName: 'Audio playback',
     androidNotificationOngoing: false,
   );
+  HomeApi.setCountry();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => MusicPlayer()),
     ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
@@ -45,6 +48,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Vibe Music',
           localizationsDelegates: const [
+            CountryLocalizations.delegate,
             S.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,

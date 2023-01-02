@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -161,8 +163,15 @@ class SettingsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20)),
               tileColor: Theme.of(context).colorScheme.primary,
               title: Text(
-                "Text Direction",
+                S.of(context).RTL,
                 style: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              subtitle: Text(
+                S.of(context).Right_to_left_direction,
+                style: Theme.of(context).primaryTextTheme.bodySmall?.copyWith(
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.bold,
                     ),
@@ -177,6 +186,54 @@ class SettingsScreen extends StatelessWidget {
                   }),
             ),
           ),
+// Location picker
+
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: ListTile(
+              onTap: () {
+                showCountryPicker(
+                  context: context,
+                  onSelect: (Country value) {
+                    context
+                        .read<LanguageProvider>()
+                        .setCountry(name: value.name, code: value.countryCode);
+                  },
+                  countryListTheme: CountryListThemeData(
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    textStyle: Theme.of(context).primaryTextTheme.titleLarge,
+                    searchTextStyle:
+                        Theme.of(context).primaryTextTheme.titleLarge,
+                    borderRadius: BorderRadius.circular(10),
+                    bottomSheetHeight:
+                        MediaQuery.of(context).size.height * (2 / 3),
+                  ),
+                );
+              },
+              leading: Icon(
+                Icons.directions,
+                color: darkTheme ? Colors.white : Colors.black,
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              tileColor: Theme.of(context).colorScheme.primary,
+              title: Text(
+                S.of(context).Change_country,
+                style: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              trailing: Text(
+                context.watch<LanguageProvider>().countryName,
+                style: Theme.of(context).primaryTextTheme.titleSmall?.copyWith(
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ),
+          ),
+
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: ClipRRect(

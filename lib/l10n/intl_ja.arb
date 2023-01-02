@@ -26,5 +26,6 @@
     "View_source_code":"ソースコードを表示",
     "Report_an_issue":"問題を報告する",
     "github_redirect":"Github にリダイレクトされます",
-    "Request_a_feature":"機能をリクエストする"
+    "Request_a_feature":"機能をリクエストする",
+    "Change_country":"国を変える"
 }

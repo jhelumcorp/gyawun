@@ -25,6 +25,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("О"),
         "Artists": MessageLookupByLibrary.simpleMessage("Художники"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Качество звука"),
+        "Change_country":
+            MessageLookupByLibrary.simpleMessage("Сменить страну"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Темная тема"),
         "Dynamic_Theme":
             MessageLookupByLibrary.simpleMessage("Динамическая тема"),

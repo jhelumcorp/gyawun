@@ -28,6 +28,7 @@ dependencies:
   url_launcher: ^6.1.7
   expandable_page_view: ^1.0.17
   flutter_animated_theme: ^1.0.0
+  country_picker: ^2.0.19
 
 dev_dependencies:
   flutter_test:

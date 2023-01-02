@@ -329,6 +329,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Change Country`
+  String get Change_country {
+    return Intl.message(
+      'Change Country',
+      name: 'Change_country',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

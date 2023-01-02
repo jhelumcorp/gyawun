@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("Hakkında"),
         "Artists": MessageLookupByLibrary.simpleMessage("Sanatçılar"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Ses Kalitesi"),
+        "Change_country": MessageLookupByLibrary.simpleMessage("Ülke değiştir"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Karanlık Tema"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Dinamik Tema"),
         "Experimental": MessageLookupByLibrary.simpleMessage("Deneysel"),

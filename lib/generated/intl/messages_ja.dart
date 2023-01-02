@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("だいたい"),
         "Artists": MessageLookupByLibrary.simpleMessage("アーティスト"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("オーディオ品質"),
+        "Change_country": MessageLookupByLibrary.simpleMessage("国を変える"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("ダークテーマ"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("動的テーマ"),
         "Experimental": MessageLookupByLibrary.simpleMessage("実験的"),

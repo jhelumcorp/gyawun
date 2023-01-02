@@ -26,5 +26,6 @@
     "View_source_code":"Посмотреть исходный код",
     "Report_an_issue":"Сообщить о проблеме",
     "github_redirect":"Вы будете перенаправлены на Github",
-    "Request_a_feature":"Запросить функцию"
+    "Request_a_feature":"Запросить функцию",
+    "Change_country":"Сменить страну"
 }
