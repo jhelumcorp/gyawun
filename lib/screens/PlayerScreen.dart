@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
@@ -78,22 +79,74 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           padding: const EdgeInsets.all(16),
                           child: Column(
                             children: [
-                              Text(song.title,
-                                  style: Theme.of(context)
-                                      .primaryTextTheme
-                                      .titleMedium
-                                      ?.copyWith(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w900,
-                                        overflow: TextOverflow.ellipsis,
-                                      )),
-                              Text(
-                                song.artists.first.name,
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w900,
-                                    overflow: TextOverflow.ellipsis,
-                                    color: Color.fromARGB(255, 93, 92, 92)),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(song.title,
+                                            style: Theme.of(context)
+                                                .primaryTextTheme
+                                                .titleMedium
+                                                ?.copyWith(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w900,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                )),
+                                        Text(
+                                          song.artists.first.name,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w900,
+                                              overflow: TextOverflow.ellipsis,
+                                              color: Color.fromARGB(
+                                                  255, 93, 92, 92)),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  ValueListenableBuilder(
+                                    valueListenable:
+                                        Hive.box('myfavourites').listenable(),
+                                    builder: (context, Box box, child) {
+                                      Map? favourite = box.get(song.videoId);
+                                      return MaterialButton(
+                                          elevation: 0,
+                                          color: favourite != null
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Colors.transparent,
+                                          shape: const CircleBorder(),
+                                          onPressed: () {
+                                            if (favourite == null) {
+                                              int timeStamp = DateTime.now()
+                                                  .millisecondsSinceEpoch;
+                                              Map<String, dynamic> mapSong =
+                                                  song.toMap();
+                                              mapSong['timeStamp'] = timeStamp;
+
+                                              box.put(song.videoId, mapSong);
+                                            } else {
+                                              box.delete(song.videoId);
+                                            }
+                                          },
+                                          child: Icon(
+                                            favourite == null
+                                                ? CupertinoIcons.heart
+                                                : CupertinoIcons.heart_fill,
+                                            color: isDarkTheme
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ));
+                                    },
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 20),
                               const MusicSlider(),
@@ -176,11 +229,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                             case ProcessingState.buffering:
                                             case ProcessingState.loading:
                                               return CircularProgressIndicator(
-                                                color: song
-                                                        .colorPalette
-                                                        ?.darkVibrantColor
-                                                        ?.color ??
-                                                    primaryColor,
+                                                color: isDarkTheme
+                                                    ? Colors.white
+                                                    : Colors.black,
                                               );
                                             case ProcessingState.completed:
                                               return Icon(

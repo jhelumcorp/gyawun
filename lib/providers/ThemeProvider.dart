@@ -37,14 +37,13 @@ class ThemeProvider extends ChangeNotifier {
 
   setTheme(themeMode) {
     _themeMode = themeMode;
-
+    notifyListeners();
     if (themeMode == 'dark') {
       _currentTheme = darkTheme;
     } else {
       _currentTheme = lightTheme;
     }
     _prefs.setString('themeMode', themeMode);
-    notifyListeners();
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,7 @@ import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/screens/ArtistScreen.dart';
+import 'package:vibe_music/screens/FavouriteScreen.dart';
 import 'package:vibe_music/screens/HomeScreen.dart';
 import 'package:vibe_music/screens/PlayListScreen.dart';
 import 'package:vibe_music/screens/PlayerScreen.dart';
@@ -76,6 +78,11 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                     Directionality(
+                      textDirection:
+                          context.watch<LanguageProvider>().textDirection,
+                      child: const FavouriteScreen(),
+                    ),
+                    Directionality(
                         textDirection:
                             context.watch<LanguageProvider>().textDirection,
                         child: const SettingsScreen()),
@@ -127,6 +134,14 @@ class _MainScreenState extends State<MainScreen> {
             ),
             selectedIcon: const Icon(Icons.search_rounded),
             label: S.of(context).Search,
+          ),
+          NavigationDestination(
+            icon: Icon(
+              CupertinoIcons.heart,
+              color: isDarkTheme ? Colors.white : Colors.black,
+            ),
+            selectedIcon: const Icon(CupertinoIcons.heart_fill),
+            label: S.of(context).Settings,
           ),
           NavigationDestination(
             icon: Icon(

@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 .sublist(0,
                                     trending.length > 10 ? 10 : trending.length)
                                 .map((s) {
-                              Track song = Track.fromJson(jsonEncode(s));
+                              Track song = Track.fromMap(s);
                               return Builder(
                                 builder: (BuildContext context) {
                                   return ClipRRect(

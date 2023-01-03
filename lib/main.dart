@@ -1,9 +1,8 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_theme/animated_theme_app.dart';
-import 'package:flutter_animated_theme/animation_type.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +24,9 @@ void main() async {
     androidNotificationChannelName: 'Audio playback',
     androidNotificationOngoing: false,
   );
-  HomeApi.setCountry();
+  await Hive.initFlutter();
+  Hive.openBox('myfavourites');
+  await HomeApi.setCountry();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => MusicPlayer()),
     ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
@@ -43,8 +44,7 @@ class MyApp extends StatelessWidget {
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
-        return AnimatedThemeApp(
-          animationType: AnimationType.CIRCULAR_ANIMATED_THEME,
+        return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Vibe Music',
           localizationsDelegates: const [
@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
                 colorScheme: context.watch<ThemeProvider>().dynamicThemeMode
                     ? ColorScheme.fromSwatch(
                         primarySwatch: createMaterialColor(
-                            song?.colorPalette?.lightMutedColor?.color ??
+                            song?.colorPalette?.lightMutedColor ??
                                 const Color.fromARGB(255, 136, 240, 196)))
                     : lightDynamic ??
                         ColorScheme.fromSwatch(
@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
                 colorScheme: context.watch<ThemeProvider>().dynamicThemeMode
                     ? ColorScheme.fromSwatch(
                         primarySwatch: createMaterialColor(
-                            song?.colorPalette?.darkMutedColor?.color ??
+                            song?.colorPalette?.darkMutedColor ??
                                 const Color.fromARGB(255, 80, 141, 115)))
                     : darkDynamic ??
                         (ColorScheme.fromSwatch(

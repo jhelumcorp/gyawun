@@ -136,15 +136,8 @@ class PanelHeader extends StatelessWidget {
                             }
                             switch (state.processingState) {
                               case ProcessingState.buffering:
-                                return CircularProgressIndicator(
-                                    color: song.colorPalette?.darkVibrantColor
-                                            ?.color ??
-                                        primaryColor);
                               case ProcessingState.loading:
-                                return CircularProgressIndicator(
-                                    color: song.colorPalette?.darkVibrantColor
-                                            ?.color ??
-                                        primaryColor);
+                                return const CircularProgressIndicator();
                               case ProcessingState.completed:
                                 return const Icon(Icons.play_arrow);
                               case ProcessingState.idle:

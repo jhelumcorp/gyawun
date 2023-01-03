@@ -71,7 +71,9 @@ class MusicPlayer extends ChangeNotifier {
 
   addToQUeue(Track newSong) async {
     PaletteGenerator? color = await generateColor(newSong.thumbnails.last.url);
-    newSong.colorPalette = color;
+    newSong.colorPalette = ColorPalette(
+        darkMutedColor: color?.darkMutedColor?.color,
+        lightMutedColor: color?.lightMutedColor?.color);
     _songs.add(newSong);
     _initialised = true;
     notifyListeners();
@@ -101,7 +103,9 @@ class MusicPlayer extends ChangeNotifier {
     try {
       PaletteGenerator? color =
           await generateColor(newSong.thumbnails.last.url);
-      newSong.colorPalette = color;
+      newSong.colorPalette = ColorPalette(
+          darkMutedColor: color?.darkMutedColor?.color,
+          lightMutedColor: color?.lightMutedColor?.color);
 
       await setPlayer();
 

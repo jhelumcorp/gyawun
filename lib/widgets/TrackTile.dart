@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
@@ -41,6 +42,38 @@ class TrackTile extends StatelessWidget {
                               overflow: TextOverflow.ellipsis, fontSize: 16),
                     ),
                   ),
+                ),
+                ValueListenableBuilder(
+                  valueListenable: Hive.box('myfavourites').listenable(),
+                  builder: (context, Box box, child) {
+                    Map? favourite = box.get(song.videoId);
+                    return Material(
+                      child: ListTile(
+                        onTap: () {
+                          if (favourite == null) {
+                            int timeStamp =
+                                DateTime.now().millisecondsSinceEpoch;
+                            Map<String, dynamic> mapSong = song.toMap();
+                            mapSong['timeStamp'] = timeStamp;
+
+                            box.put(song.videoId, mapSong);
+                          } else {
+                            box.delete(song.videoId);
+                          }
+                          Navigator.pop(context);
+                        },
+                        title: Text(
+                          "${favourite == null ? "Add to" : "Remove from"} Favourites",
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .titleMedium
+                              ?.copyWith(
+                                  overflow: TextOverflow.ellipsis,
+                                  fontSize: 16),
+                        ),
+                      ),
+                    );
+                  },
                 )
               ],
             );
