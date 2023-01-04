@@ -116,6 +116,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     builder: (context, Box box, child) {
                                       Map? favourite = box.get(song.videoId);
                                       return MaterialButton(
+                                          padding: EdgeInsets.all(16),
                                           elevation: 0,
                                           color: favourite != null
                                               ? Theme.of(context)
@@ -317,7 +318,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             showModalBottomSheet(
                                 context: context,
                                 builder: (context) {
-                                  return QueueScreen(song: song, songs: songs);
+                                  return QueueScreen(
+                                    song: song, /*songs: songs*/
+                                  );
                                 });
                           }),
                           title: Icon(
@@ -340,15 +343,16 @@ class QueueScreen extends StatelessWidget {
   const QueueScreen({
     Key? key,
     required this.song,
-    required this.songs,
+    // required this.songs,
   }) : super(key: key);
 
   final Track song;
-  final List<Track> songs;
+  // final List<Track> songs;
 
   @override
   Widget build(BuildContext context) {
     AudioPlayer player = context.watch<MusicPlayer>().player;
+    List<Track> songs = context.watch<MusicPlayer>().songs ?? [];
     bool isdarkTheme =
         context.watch<ThemeProvider>().themeMode == ThemeMode.dark;
     return Directionality(
@@ -368,54 +372,78 @@ class QueueScreen extends StatelessWidget {
               return Material(
                 color: Colors.transparent,
                 key: Key("$index"),
-                child: ListTile(
-                  onTap: () {
-                    if (player.currentIndex != index) {
-                      player.play();
+                child: Dismissible(
+                  key: Key(song.videoId),
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction) async {
+                    await context.read<MusicPlayer>().removeAt(index);
+                    if (songs.isEmpty) {
+                      Navigator.pop(context);
                     }
                   },
-                  key: Key("$index"),
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Stack(
-                      children: [
-                        Image.network(
-                          'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
-                          width: 50,
-                          height: 50,
-                        ),
-                        if (player.currentIndex == index)
-                          Container(
-                            color: Colors.black.withOpacity(0.7),
-                            height: 50,
-                            width: 50,
-                            child: const Center(
-                              child: Icon(
-                                Icons.music_note,
+                  background: Container(
+                    color: Colors.red,
+                    child: Center(
+                      child: Text(
+                        "Remove from queue",
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .bodyLarge
+                            ?.copyWith(
                                 color: Colors.white,
-                              ),
-                            ),
-                          ),
-                      ],
+                                fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
-                  title: Text(
-                    song.title,
-                    style: Theme.of(context)
-                        .primaryTextTheme
-                        .titleMedium
-                        ?.copyWith(overflow: TextOverflow.ellipsis),
-                  ),
-                  subtitle: Text(
-                    song.artists.first.name,
-                    style:
-                        const TextStyle(color: Color.fromARGB(255, 93, 92, 92)),
-                  ),
-                  trailing: ReorderableDragStartListener(
-                    index: index,
-                    child: Icon(
-                      Icons.drag_handle,
-                      color: isdarkTheme ? Colors.white : Colors.black,
+                  child: ListTile(
+                    onTap: () {
+                      if (player.currentIndex != index) {
+                        player.play();
+                      }
+                    },
+                    key: Key("$index"),
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Stack(
+                        children: [
+                          Image.network(
+                            'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
+                            width: 50,
+                            height: 50,
+                          ),
+                          if (player.currentIndex == index)
+                            Container(
+                              color: Colors.black.withOpacity(0.7),
+                              height: 50,
+                              width: 50,
+                              child: const Center(
+                                child: Icon(
+                                  Icons.music_note,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    title: Text(
+                      song.title,
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .titleMedium
+                          ?.copyWith(overflow: TextOverflow.ellipsis),
+                    ),
+                    subtitle: Text(
+                      song.artists.first.name,
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 93, 92, 92)),
+                    ),
+                    trailing: ReorderableDragStartListener(
+                      index: index,
+                      child: Icon(
+                        Icons.drag_handle,
+                        color: isdarkTheme ? Colors.white : Colors.black,
+                      ),
                     ),
                   ),
                 ),

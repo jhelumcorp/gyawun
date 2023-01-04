@@ -287,7 +287,11 @@ class _HomeScreenState extends State<HomeScreen>
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: content
-                                                .sublist(0, 5)
+                                                .sublist(
+                                                    0,
+                                                    content.length > 5
+                                                        ? 5
+                                                        : content.length)
                                                 .map((track) {
                                               return TrackTile(track: track);
                                             }).toList()),

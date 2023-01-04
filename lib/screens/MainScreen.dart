@@ -45,6 +45,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     bool isDarkTheme =
         context.watch<ThemeProvider>().themeMode == ThemeMode.dark;
+
     return Scaffold(
       body: LayoutBuilder(builder: (context, constraints) {
         return Column(
@@ -109,7 +110,9 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                         Opacity(
                             opacity: 1 - (percentage),
-                            child: const PanelHeader()),
+                            child: PanelHeader(
+                              song: context.watch<MusicPlayer>().song!,
+                            )),
                       ],
                     );
                   }),

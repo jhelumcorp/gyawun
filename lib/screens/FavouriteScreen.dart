@@ -37,7 +37,28 @@ class FavouriteScreen extends StatelessWidget {
           return ListView(
             children: favourites.map((track) {
               Map<String, dynamic> newMap = jsonDecode(jsonEncode(track));
-              return TrackTile(track: newMap);
+
+              return Dismissible(
+                direction: DismissDirection.endToStart,
+                key: Key("$newMap['videoId']"),
+                onDismissed: (direction) {
+                  box.delete(newMap['videoId']);
+                },
+                background: Container(
+                  color: Colors.red,
+                  child: Center(
+                    child: Text(
+                      "Remove from Favourites",
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .bodyLarge
+                          ?.copyWith(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                child: TrackTile(track: newMap),
+              );
             }).toList(),
           );
         },
