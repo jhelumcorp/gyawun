@@ -7,6 +7,10 @@
     <a href="https://github.com/sheikhhaziq/vibemusic/commits"><img src="https://img.shields.io/github/commit-activity/m/sheikhhaziq/vibemusic?color=g" alt="Commits per month" /></a>
     <a href="https://github.com/sheikhhaziq/vibemusic/releases/latest"><img src="https://img.shields.io/github/release-date/sheikhhaziq/vibemusic" alt="Last release" /></a>
     
+## Join Our Discord server
+
+[![Join our Discord server!](https://invidget.switchblade.xyz/YtxYgGSYwN)](http://discord.gg/YtxYgGSYwN)
+    
 </div>
 
 ---
