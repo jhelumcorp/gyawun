@@ -339,6 +339,46 @@ class S {
       args: [],
     );
   }
+
+  /// `My Favorites`
+  String get My_Favorites {
+    return Intl.message(
+      'My Favorites',
+      name: 'My_Favorites',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove from Queue`
+  String get Remove_from_Queue {
+    return Intl.message(
+      'Remove from Queue',
+      name: 'Remove_from_Queue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove from Favorites`
+  String get Remove_from_favorites {
+    return Intl.message(
+      'Remove from Favorites',
+      name: 'Remove_from_favorites',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add to Favorites`
+  String get Add_to_favorites {
+    return Intl.message(
+      'Add to Favorites',
+      name: 'Add_to_favorites',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
@@ -347,12 +387,15 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'af'),
       Locale.fromSubtags(languageCode: 'ar'),
       Locale.fromSubtags(languageCode: 'de'),
+      Locale.fromSubtags(languageCode: 'el'),
       Locale.fromSubtags(languageCode: 'es'),
       Locale.fromSubtags(languageCode: 'fr'),
       Locale.fromSubtags(languageCode: 'hi'),
       Locale.fromSubtags(languageCode: 'ja'),
+      Locale.fromSubtags(languageCode: 'ko'),
       Locale.fromSubtags(languageCode: 'pt'),
       Locale.fromSubtags(languageCode: 'ru'),
       Locale.fromSubtags(languageCode: 'tr'),

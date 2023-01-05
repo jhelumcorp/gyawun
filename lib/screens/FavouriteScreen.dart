@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:vibe_music/Models/Track.dart';
+import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/widgets/TrackTile.dart';
 
 class FavouriteScreen extends StatelessWidget {
@@ -18,7 +19,7 @@ class FavouriteScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text("My Favorites"),
+        title: Text(S.of(context).My_Favorites),
         centerTitle: true,
       ),
       body: ValueListenableBuilder(
@@ -48,7 +49,7 @@ class FavouriteScreen extends StatelessWidget {
                   color: Colors.red,
                   child: Center(
                     child: Text(
-                      "Remove from Favourites",
+                      S.of(context).Remove_from_favorites,
                       style: Theme.of(context)
                           .primaryTextTheme
                           .bodyLarge

@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "About": MessageLookupByLibrary.simpleMessage("Hakkında"),
+        "Add_to_favorites":
+            MessageLookupByLibrary.simpleMessage("Favorilere ekle"),
         "Artists": MessageLookupByLibrary.simpleMessage("Sanatçılar"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Ses Kalitesi"),
         "Change_country": MessageLookupByLibrary.simpleMessage("Ülke değiştir"),
@@ -34,11 +36,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "Language": MessageLookupByLibrary.simpleMessage("Dil"),
         "Low": MessageLookupByLibrary.simpleMessage("Düşük"),
         "Medium": MessageLookupByLibrary.simpleMessage("Orta"),
+        "My_Favorites": MessageLookupByLibrary.simpleMessage("Favorilerim"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Tarayıcıda Aç"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Hepsini Oynat"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Oynatma listeleri"),
         "RTL": MessageLookupByLibrary.simpleMessage("Sağdan sola"),
+        "Remove_from_Queue":
+            MessageLookupByLibrary.simpleMessage("Sıradan Kaldır"),
+        "Remove_from_favorites":
+            MessageLookupByLibrary.simpleMessage("Favorilerden çıkar"),
         "Report_an_issue": MessageLookupByLibrary.simpleMessage("Sorun bildir"),
         "Request_a_feature":
             MessageLookupByLibrary.simpleMessage("Özellik talep et"),

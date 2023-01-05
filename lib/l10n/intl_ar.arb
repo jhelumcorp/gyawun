@@ -28,5 +28,9 @@
     "Report_an_issue":"بلغ عن خطأ",
     "github_redirect":"ستتم إعادة توجيهك إلى جيثب",
     "Request_a_feature":"اطلب ميزة",
-    "Change_country":"تغيير الدولة"
+    "Change_country":"تغيير الدولة",
+    "My_Favorites":"مفضلتي",
+    "Remove_from_Queue":"إزالة من قائمة الانتظار",
+    "Remove_from_favorites":"إزالة من المفضلة",
+    "Add_to_favorites":"اضافة الى المفضلة"
 }

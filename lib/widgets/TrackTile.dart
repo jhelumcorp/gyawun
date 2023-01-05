@@ -63,7 +63,9 @@ class TrackTile extends StatelessWidget {
                           Navigator.pop(context);
                         },
                         title: Text(
-                          "${favourite == null ? "Add to" : "Remove from"} Favourites",
+                          favourite == null
+                              ? S.of(context).Add_to_favorites
+                              : S.of(context).Remove_from_favorites,
                           style: Theme.of(context)
                               .primaryTextTheme
                               .titleMedium

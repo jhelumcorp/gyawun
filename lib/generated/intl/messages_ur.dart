@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "About": MessageLookupByLibrary.simpleMessage("ہمارے بارے میں"),
+        "Add_to_favorites":
+            MessageLookupByLibrary.simpleMessage("پسندیدہ میں شامل کریں"),
         "Artists": MessageLookupByLibrary.simpleMessage("فنکار"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("آڈیو کوالٹی"),
         "Change_country":
@@ -35,11 +37,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "Language": MessageLookupByLibrary.simpleMessage("زبان"),
         "Low": MessageLookupByLibrary.simpleMessage("کم"),
         "Medium": MessageLookupByLibrary.simpleMessage("درمیانہ"),
+        "My_Favorites": MessageLookupByLibrary.simpleMessage("میرے پسندیدہ"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("براؤزر میں کھولیں"),
         "Play_All": MessageLookupByLibrary.simpleMessage("سارے چلائیں"),
         "Playlists": MessageLookupByLibrary.simpleMessage("پلے لسٹس"),
         "RTL": MessageLookupByLibrary.simpleMessage("دائیں سے بائیں"),
+        "Remove_from_Queue":
+            MessageLookupByLibrary.simpleMessage("قطار سے ہٹا دیں"),
+        "Remove_from_favorites":
+            MessageLookupByLibrary.simpleMessage("پسندیدہ سے ہٹا دیں"),
         "Report_an_issue":
             MessageLookupByLibrary.simpleMessage("ایک مسئلہ کی اطلاع دیں"),
         "Request_a_feature":

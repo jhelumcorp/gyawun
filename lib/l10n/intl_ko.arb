@@ -27,5 +27,9 @@
     "Report_an_issue":"문제 신고",
     "github_redirect":"Github로 리디렉션됩니다.",
     "Request_a_feature":"기능 요청",
-    "Change_country":"국가 변경"
+    "Change_country":"국가 변경",
+    "My_Favorites":"내가 좋아하는 것들",
+    "Remove_from_Queue":"대기열에서 제거",
+    "Remove_from_favorites":"즐겨 찾기에서 삭제하기",
+    "Add_to_favorites":"즐겨 찾기에 추가"
 }

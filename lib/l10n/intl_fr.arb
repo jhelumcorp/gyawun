@@ -27,5 +27,9 @@
     "Report_an_issue":"Signaler un problème",
     "github_redirect":"Vous allez être redirigé vers Github",
     "Request_a_feature":"Demander une fonctionnalité",
-    "Change_country":"Changer de pays"
+    "Change_country":"Changer de pays",
+    "My_Favorites":"Mes favoris",
+    "Remove_from_Queue":"Supprimer de la file d'attente",
+    "Remove_from_favorites":"Retirer des favoris",
+    "Add_to_favorites":"Ajouter aux Favoris"
 }

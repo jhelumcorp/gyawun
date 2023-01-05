@@ -48,7 +48,6 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Vibe Music',
           localizationsDelegates: const [
-            CountryLocalizations.delegate,
             S.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,

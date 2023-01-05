@@ -75,69 +75,85 @@ class _SearchScreenState extends State<SearchScreen>
             ? const Center(child: CircularProgressIndicator())
             : Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      MaterialButton(
-                        elevation: 0,
-                        focusElevation: 0,
-                        hoverElevation: 0,
-                        disabledElevation: 0,
-                        highlightElevation: 0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        color: _pageIndex == 0
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.transparent,
-                        child: Text(S.of(context).Songs),
-                        onPressed: () {
-                          setState(() {
-                            _pageIndex = 0;
-                            pageController.animateToPage(0,
-                                duration: const Duration(milliseconds: 200),
-                                curve: Curves.easeIn);
-                          });
-                        },
-                      ),
-                      MaterialButton(
-                        elevation: 0,
-                        focusElevation: 0,
-                        hoverElevation: 0,
-                        disabledElevation: 0,
-                        highlightElevation: 0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        color: _pageIndex == 1
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.transparent,
-                        child: Text(S.of(context).Artists),
-                        onPressed: () {
-                          _pageIndex = 1;
-                          pageController.animateToPage(1,
-                              duration: const Duration(milliseconds: 200),
-                              curve: Curves.easeIn);
-                        },
-                      ),
-                      MaterialButton(
-                        elevation: 0,
-                        focusElevation: 0,
-                        hoverElevation: 0,
-                        disabledElevation: 0,
-                        highlightElevation: 0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        color: _pageIndex == 2
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.transparent,
-                        child: Text(S.of(context).Playlists),
-                        onPressed: () {
-                          _pageIndex = 2;
-                          pageController.animateToPage(2,
-                              duration: const Duration(milliseconds: 200),
-                              curve: Curves.easeIn);
-                        },
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: MaterialButton(
+                            elevation: 0,
+                            focusElevation: 0,
+                            hoverElevation: 0,
+                            disabledElevation: 0,
+                            highlightElevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            color: _pageIndex == 0
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.transparent,
+                            child: Text(S.of(context).Songs,
+                                style:
+                                    TextStyle(overflow: TextOverflow.ellipsis)),
+                            onPressed: () {
+                              setState(() {
+                                _pageIndex = 0;
+                                pageController.animateToPage(0,
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeIn);
+                              });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: MaterialButton(
+                            elevation: 0,
+                            focusElevation: 0,
+                            hoverElevation: 0,
+                            disabledElevation: 0,
+                            highlightElevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            color: _pageIndex == 1
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.transparent,
+                            child: Text(
+                              S.of(context).Artists,
+                              style: TextStyle(overflow: TextOverflow.ellipsis),
+                            ),
+                            onPressed: () {
+                              _pageIndex = 1;
+                              pageController.animateToPage(1,
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeIn);
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: MaterialButton(
+                            elevation: 0,
+                            focusElevation: 0,
+                            hoverElevation: 0,
+                            disabledElevation: 0,
+                            highlightElevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            color: _pageIndex == 2
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.transparent,
+                            child: Text(S.of(context).Playlists,
+                                style:
+                                    TextStyle(overflow: TextOverflow.ellipsis)),
+                            onPressed: () {
+                              _pageIndex = 2;
+                              pageController.animateToPage(2,
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeIn);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Expanded(
                     child: PageView(

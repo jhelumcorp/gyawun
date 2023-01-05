@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "About": MessageLookupByLibrary.simpleMessage("حول"),
+        "Add_to_favorites":
+            MessageLookupByLibrary.simpleMessage("اضافة الى المفضلة"),
         "Artists": MessageLookupByLibrary.simpleMessage("الفنانين"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("جودة الصوت"),
         "Change_country": MessageLookupByLibrary.simpleMessage("تغيير الدولة"),
@@ -34,11 +36,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "Language": MessageLookupByLibrary.simpleMessage("اللغة"),
         "Low": MessageLookupByLibrary.simpleMessage("قليل"),
         "Medium": MessageLookupByLibrary.simpleMessage("متوسط"),
+        "My_Favorites": MessageLookupByLibrary.simpleMessage("مفضلتي"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("افتح في المتصفح"),
         "Play_All": MessageLookupByLibrary.simpleMessage("لعب كل"),
         "Playlists": MessageLookupByLibrary.simpleMessage("قوائم التشغيل"),
         "RTL": MessageLookupByLibrary.simpleMessage("من اليمين الى اليسار"),
+        "Remove_from_Queue":
+            MessageLookupByLibrary.simpleMessage("إزالة من قائمة الانتظار"),
+        "Remove_from_favorites":
+            MessageLookupByLibrary.simpleMessage("إزالة من المفضلة"),
         "Report_an_issue": MessageLookupByLibrary.simpleMessage("بلغ عن خطأ"),
         "Request_a_feature": MessageLookupByLibrary.simpleMessage("اطلب ميزة"),
         "Right_to_left_direction": MessageLookupByLibrary.simpleMessage(

@@ -93,7 +93,7 @@ class AboutScreen extends StatelessWidget {
                       style: Theme.of(context).primaryTextTheme.titleLarge,
                     ),
                     Text(
-                      '0.4.2',
+                      '0.5.1-beta.1',
                       style: Theme.of(context).primaryTextTheme.bodyLarge,
                     )
                   ],

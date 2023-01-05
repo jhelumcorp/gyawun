@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "About": MessageLookupByLibrary.simpleMessage("के बारे में"),
+        "Add_to_favorites":
+            MessageLookupByLibrary.simpleMessage("पसंदीदा में जोड़े"),
         "Artists": MessageLookupByLibrary.simpleMessage("कलाकार"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("ध्वनि गुणवत्ता"),
         "Change_country": MessageLookupByLibrary.simpleMessage("देश बदलें"),
@@ -34,11 +36,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "Language": MessageLookupByLibrary.simpleMessage("भाषा"),
         "Low": MessageLookupByLibrary.simpleMessage("कम"),
         "Medium": MessageLookupByLibrary.simpleMessage("मध्यम"),
+        "My_Favorites": MessageLookupByLibrary.simpleMessage("मेरे प्रिय"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("ब्राउज़र में खोलें"),
         "Play_All": MessageLookupByLibrary.simpleMessage("सभी को बजाएं"),
         "Playlists": MessageLookupByLibrary.simpleMessage("प्लेलिस्ट"),
         "RTL": MessageLookupByLibrary.simpleMessage("दाएं से बाएं"),
+        "Remove_from_Queue":
+            MessageLookupByLibrary.simpleMessage("कतार से हटाएं"),
+        "Remove_from_favorites":
+            MessageLookupByLibrary.simpleMessage("पसंदीदा से निकालें"),
         "Report_an_issue":
             MessageLookupByLibrary.simpleMessage("मामले की रिपोर्ट करें"),
         "Request_a_feature":

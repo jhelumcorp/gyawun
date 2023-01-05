@@ -27,5 +27,9 @@
     "Report_an_issue":"मामले की रिपोर्ट करें",
     "github_redirect":"आपको जीथब पर पुनर्निर्देशित किया जाएगा",
     "Request_a_feature":"एक सुविधा का अनुरोध करें",
-    "Change_country":"देश बदलें"
+    "Change_country":"देश बदलें",
+    "My_Favorites":"मेरे प्रिय",
+    "Remove_from_Queue":"कतार से हटाएं",
+    "Remove_from_favorites":"पसंदीदा से निकालें",
+    "Add_to_favorites":"पसंदीदा में जोड़े"
 }

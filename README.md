@@ -36,9 +36,10 @@
 - [x] Change Audio Quality
 - [x] Material You theme
 - [x] Dynamic theme support
+- [x] Change location
+- [x] Add to favorites
+- [x] Change direction from right to left
 - [ ] Search Suggestions
-- [ ] Change location
-- [ ] Add to favourites
 - [ ] Save history locally
 - [ ] Save playlist
 - [ ] Download songs locally

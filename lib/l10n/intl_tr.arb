@@ -27,5 +27,9 @@
     "Report_an_issue":"Sorun bildir",
     "github_redirect":"Github'a yönlendirileceksiniz",
     "Request_a_feature":"Özellik talep et",
-    "Change_country":"Ülke değiştir"
+    "Change_country":"Ülke değiştir",
+    "My_Favorites":"Favorilerim",
+    "Remove_from_Queue":"Sıradan Kaldır",
+    "Remove_from_favorites":"Favorilerden çıkar",
+    "Add_to_favorites":"Favorilere ekle"
 }

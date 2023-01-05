@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "About": MessageLookupByLibrary.simpleMessage("Sobre"),
+        "Add_to_favorites":
+            MessageLookupByLibrary.simpleMessage("Agregar a los favoritos"),
         "Artists": MessageLookupByLibrary.simpleMessage("Artistas"),
         "Audio_Quality":
             MessageLookupByLibrary.simpleMessage("Calidad de audio"),
@@ -35,12 +37,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "Language": MessageLookupByLibrary.simpleMessage("Idioma"),
         "Low": MessageLookupByLibrary.simpleMessage("Bajo"),
         "Medium": MessageLookupByLibrary.simpleMessage("Medio"),
+        "My_Favorites": MessageLookupByLibrary.simpleMessage("Mis favoritos"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Abierto en el navegador"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Jugar todo"),
         "Playlists":
             MessageLookupByLibrary.simpleMessage("listas de reproducción"),
         "RTL": MessageLookupByLibrary.simpleMessage("De derecha a izquierda"),
+        "Remove_from_Queue":
+            MessageLookupByLibrary.simpleMessage("Eliminar de la cola"),
+        "Remove_from_favorites":
+            MessageLookupByLibrary.simpleMessage("Quitar de favoritos"),
         "Report_an_issue":
             MessageLookupByLibrary.simpleMessage("Reportar un problema"),
         "Request_a_feature": MessageLookupByLibrary.simpleMessage(

@@ -27,5 +27,9 @@
     "Report_an_issue":"Gee 'n probleem aan",
     "github_redirect":"Jy sal na Github herlei word",
     "Request_a_feature":"Versoek 'n kenmerk",
-    "Change_country":"Verander Land"
+    "Change_country":"Verander Land",
+    "My_Favorites":"My Gunstelinge",
+    "Remove_from_Queue":"Verwyder uit waglys",
+    "Remove_from_favorites":"Verwyder uit gunstelinge",
+    "Add_to_favorites":"Voeg by gunstelinge"
 }

@@ -27,5 +27,9 @@
     "Report_an_issue":"Αναφορά ενός προβλήματος",
     "github_redirect":"Θα ανακατευθυνθείτε στο Github",
     "Request_a_feature":"Ζητήστε ένα χαρακτηριστικό",
-    "Change_country":"Αλλαγή χώρας"
+    "Change_country":"Αλλαγή χώρας",
+    "My_Favorites":"Τα αγαπημένα μου",
+    "Remove_from_Queue":"Κατάργηση από την ουρά",
+    "Remove_from_favorites":"Αφαίρεση από τα Αγαπημένα",
+    "Add_to_favorites":"Προσθήκη στα αγαπημένα"
 }
