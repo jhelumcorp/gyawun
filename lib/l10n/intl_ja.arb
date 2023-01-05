@@ -27,5 +27,9 @@
     "Report_an_issue":"問題を報告する",
     "github_redirect":"Github にリダイレクトされます",
     "Request_a_feature":"機能をリクエストする",
-    "Change_country":"国を変更"
+    "Change_country":"国を変更",
+    "My_Favorites":"私のお気に入り",
+    "Remove_from_Queue":"キューから削除",
+    "Remove_from_favorites":"お気に入りから削除",
+    "Add_to_favorites":"お気に入りに追加"
 }
