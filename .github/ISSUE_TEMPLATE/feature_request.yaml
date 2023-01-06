@@ -1,6 +1,6 @@
 name: 😎 Feature Request
 description: Want something new?
-labels: [enhancement]
+labels: [enhancement,Feature Request]
 body:
   - type: markdown
     attributes:
