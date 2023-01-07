@@ -1,6 +1,7 @@
 name: 😎 Feature Request
 description: Want something new?
 labels: [enhancement,Feature Request]
+assignees: [sheikhhaziq]
 body:
   - type: markdown
     attributes:
