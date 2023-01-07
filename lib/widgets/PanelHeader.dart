@@ -73,98 +73,97 @@ class PanelHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              if (song != null)
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(2),
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
-                          width: 54,
-                          height: 54,
-                          fit: BoxFit.fill,
-                          errorWidget: (context, error, stackTrace) {
-                            return Image.network(
-                              song.thumbnails.last.url,
-                              width: double.infinity,
-                              fit: BoxFit.fill,
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              song.title,
-                              style: Theme.of(context)
-                                  .primaryTextTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                            ),
-                            Text(
-                              song.artists.first.name,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 93, 92, 92),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          context.read<MusicPlayer>().togglePlay();
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(2),
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            'https://vibeapi-sheikh-haziq.vercel.app/thumb/sd?id=${song.videoId}',
+                        width: 54,
+                        height: 54,
+                        fit: BoxFit.fill,
+                        errorWidget: (context, error, stackTrace) {
+                          return Image.network(
+                            song.thumbnails.last.url,
+                            width: double.infinity,
+                            fit: BoxFit.fill,
+                          );
                         },
-                        icon: StreamBuilder(
-                            stream: player.playerStateStream,
-                            builder: (context, snapshot) {
-                              PlayerState? state = snapshot.data;
-                              if (state == null) {
-                                return const CircularProgressIndicator();
-                              }
-                              switch (state.processingState) {
-                                case ProcessingState.buffering:
-                                case ProcessingState.loading:
-                                case ProcessingState.idle:
-                                  return const CircularProgressIndicator();
-                                case ProcessingState.completed:
-                                  return const Icon(Icons.play_arrow);
-                                // case ProcessingState.idle:
-                                //   return const Icon(Icons.play_arrow);
-                                case ProcessingState.ready:
-                                  return Icon(
-                                    player.playing
-                                        ? Icons.pause_rounded
-                                        : Icons.play_arrow_rounded,
-                                    color: context
-                                                .watch<ThemeProvider>()
-                                                .themeMode ==
-                                            ThemeMode.dark
-                                        ? Colors.white
-                                        : Colors.black,
-                                  );
-                                default:
-                                  return const CircularProgressIndicator();
-                              }
-                            }),
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            song.title,
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                          ),
+                          Text(
+                            song.artists.first.name,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 93, 92, 92),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        context.read<MusicPlayer>().togglePlay();
+                      },
+                      icon: StreamBuilder(
+                          stream: player.playerStateStream,
+                          builder: (context, snapshot) {
+                            PlayerState? state = snapshot.data;
+                            if (state == null) {
+                              return const CircularProgressIndicator();
+                            }
+                            switch (state.processingState) {
+                              case ProcessingState.buffering:
+                              case ProcessingState.loading:
+                              case ProcessingState.idle:
+                                return const CircularProgressIndicator();
+                              case ProcessingState.completed:
+                                return const Icon(Icons.play_arrow);
+                              // case ProcessingState.idle:
+                              //   return const Icon(Icons.play_arrow);
+                              case ProcessingState.ready:
+                                return Icon(
+                                  player.playing
+                                      ? Icons.pause_rounded
+                                      : Icons.play_arrow_rounded,
+                                  color: context
+                                              .watch<ThemeProvider>()
+                                              .themeMode ==
+                                          ThemeMode.dark
+                                      ? Colors.white
+                                      : Colors.black,
+                                );
+                              default:
+                                return const CircularProgressIndicator();
+                            }
+                          }),
+                    ),
+                  ],
                 ),
+              ),
             ],
           ),
         ),

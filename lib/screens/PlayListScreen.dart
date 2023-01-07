@@ -1,16 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/widgets/TrackTile.dart';
 
 class PlayListScreen extends StatefulWidget {
-  const PlayListScreen({required this.playlistId, super.key});
+  const PlayListScreen(
+      {required this.playlistId, this.isAlbum = false, super.key});
   final String playlistId;
+  final bool isAlbum;
 
   @override
   State<PlayListScreen> createState() => _PlayListScreenState();
@@ -22,12 +22,21 @@ class _PlayListScreenState extends State<PlayListScreen> {
   @override
   void initState() {
     super.initState();
-    HomeApi.getPlaylist(widget.playlistId).then((Map value) {
-      setState(() {
-        playlist = value;
-        loading = false;
+    if (widget.isAlbum) {
+      HomeApi.getAlbum(widget.playlistId).then((Map value) {
+        setState(() {
+          playlist = value;
+          loading = false;
+        });
       });
-    });
+    } else {
+      HomeApi.getPlaylist(widget.playlistId).then((Map value) {
+        setState(() {
+          playlist = value;
+          loading = false;
+        });
+      });
+    }
   }
 
   @override
@@ -85,7 +94,9 @@ class _PlayListScreenState extends State<PlayListScreen> {
                                         .bodyMedium,
                                   ),
                                   Text(
-                                    playlist?['author']['name'],
+                                    playlist?['author']?['name'] ??
+                                        playlist?['artists']?.first['name'] ??
+                                        "",
                                     style: Theme.of(context)
                                         .primaryTextTheme
                                         .bodyMedium,
@@ -134,7 +145,16 @@ class _PlayListScreenState extends State<PlayListScreen> {
                               setState(() {});
                               return const SizedBox.shrink();
                             }
-
+                            if (widget.isAlbum) {
+                              track['thumbnails'] = [
+                                {
+                                  'url':
+                                      'https://vibeapi-sheikh-haziq.vercel.app/thumb/sd?id=${track['videoId']}',
+                                  'width': 60,
+                                  'height': 60,
+                                }
+                              ];
+                            }
                             return TrackTile(
                               track: track,
                             );

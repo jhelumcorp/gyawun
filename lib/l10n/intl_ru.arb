@@ -31,5 +31,7 @@
     "My_Favorites":"Мои любимые",
     "Remove_from_Queue":"Удалить из очереди",
     "Remove_from_favorites":"Удалить из Избранного",
-    "Add_to_favorites":"Добавить в избранное"
+    "Add_to_favorites":"Добавить в избранное",
+    "Theme":"Тема",
+    "Nothing_Here":"Здесь ничего"
 }

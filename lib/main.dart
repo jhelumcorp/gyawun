@@ -1,4 +1,3 @@
-import 'package:country_picker/country_picker.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -58,25 +57,29 @@ class MyApp extends StatelessWidget {
           theme: context.watch<ThemeProvider>().lightTheme.copyWith(
                 colorScheme: context.watch<ThemeProvider>().dynamicThemeMode
                     ? ColorScheme.fromSwatch(
-                        primarySwatch: createMaterialColor(
-                            song?.colorPalette?.lightMutedColor ??
-                                const Color.fromARGB(255, 136, 240, 196)))
+                        primarySwatch: createMaterialColor(song
+                                ?.colorPalette?.lightMutedColor ??
+                            context.watch<ThemeProvider>().primaryColor.light))
                     : lightDynamic ??
                         ColorScheme.fromSwatch(
-                                primarySwatch: createMaterialColor(
-                                    const Color.fromARGB(255, 136, 240, 196)))
+                                primarySwatch: createMaterialColor(context
+                                    .watch<ThemeProvider>()
+                                    .primaryColor
+                                    .light))
                             .harmonized(),
               ),
           darkTheme: context.watch<ThemeProvider>().darkTheme.copyWith(
                 colorScheme: context.watch<ThemeProvider>().dynamicThemeMode
                     ? ColorScheme.fromSwatch(
-                        primarySwatch: createMaterialColor(
-                            song?.colorPalette?.darkMutedColor ??
-                                const Color.fromARGB(255, 80, 141, 115)))
+                        primarySwatch: createMaterialColor(song
+                                ?.colorPalette?.darkMutedColor ??
+                            context.watch<ThemeProvider>().primaryColor.dark))
                     : darkDynamic ??
                         (ColorScheme.fromSwatch(
-                            primarySwatch: createMaterialColor(
-                                const Color.fromARGB(255, 80, 141, 115)))),
+                            primarySwatch: createMaterialColor(context
+                                .watch<ThemeProvider>()
+                                .primaryColor
+                                .dark))),
               ),
           themeMode: context.watch<ThemeProvider>().themeMode,
           home: const Directionality(

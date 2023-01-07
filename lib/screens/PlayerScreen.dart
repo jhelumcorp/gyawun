@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -10,7 +9,6 @@ import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
-import 'package:vibe_music/utils/colors.dart';
 import 'package:vibe_music/widgets/MusicSlider.dart';
 
 class PlayerScreen extends StatefulWidget {
@@ -35,7 +33,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Track> songs = context.watch<MusicPlayer>().songs ?? [];
     Track? song = context.watch<MusicPlayer>().song;
     AudioPlayer player = context.watch<MusicPlayer>().player;
     Size size = MediaQuery.of(context).size;
@@ -117,7 +114,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     builder: (context, Box box, child) {
                                       Map? favourite = box.get(song.videoId);
                                       return MaterialButton(
-                                          padding: EdgeInsets.all(16),
+                                          padding: const EdgeInsets.all(16),
                                           elevation: 0,
                                           color: favourite != null
                                               ? Theme.of(context)
@@ -398,9 +395,8 @@ class QueueScreen extends StatelessWidget {
                     ),
                     child: ListTile(
                       onTap: () {
-                        if (player.currentIndex != index) {
-                          player.play();
-                        }
+                        player.seek(Duration.zero, index: index);
+                        player.play();
                       },
                       key: Key("$index"),
                       leading: ClipRRect(

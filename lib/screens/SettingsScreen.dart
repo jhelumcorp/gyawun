@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +7,7 @@ import 'package:vibe_music/providers/AudioQualityprovider.dart';
 import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/screens/AboutScreen.dart';
+import 'package:vibe_music/screens/ThemeScreen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -278,7 +276,7 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
               leading: Icon(
-                Icons.directions,
+                Icons.flag_rounded,
                 color: darkTheme ? Colors.white : Colors.black,
               ),
               shape: RoundedRectangleBorder(
@@ -391,70 +389,23 @@ class SettingsScreen extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8),
             child: ListTile(
               onTap: () {
-                String value =
-                    context.read<ThemeProvider>().themeMode == ThemeMode.dark
-                        ? 'light'
-                        : 'dark';
-                context.read<ThemeProvider>().setTheme(value);
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => ThemeScreen()));
               },
-              leading: Icon(
-                Icons.dark_mode,
-                color: darkTheme ? Colors.white : Colors.black,
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              tileColor: Theme.of(context).colorScheme.primary,
               title: Text(
-                S.of(context).Dark_Theme,
+                S.of(context).Theme,
                 style: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.bold,
                     ),
               ),
-              trailing: CupertinoSwitch(
-                  value: context.watch<ThemeProvider>().themeMode ==
-                      ThemeMode.dark,
-                  onChanged: (value) {
-                    context
-                        .read<ThemeProvider>()
-                        .setTheme(value == true ? 'dark' : 'light');
-                  }),
-            ),
-          ),
-          // Dynamic theme
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: ListTile(
-              onTap: () {
-                bool value = context.read<ThemeProvider>().dynamicThemeMode;
-                context.read<ThemeProvider>().setDynamicThemeMode(!value);
-              },
               leading: Icon(
-                Icons.style_rounded,
+                Icons.color_lens_rounded,
                 color: darkTheme ? Colors.white : Colors.black,
               ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               tileColor: Theme.of(context).colorScheme.primary,
-              title: Text(
-                S.of(context).Dynamic_Theme,
-                style: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
-                      overflow: TextOverflow.ellipsis,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              subtitle: Text(
-                S.of(context).Experimental,
-                style: Theme.of(context).primaryTextTheme.bodySmall?.copyWith(
-                      overflow: TextOverflow.ellipsis,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              trailing: CupertinoSwitch(
-                  value: context.watch<ThemeProvider>().dynamicThemeMode,
-                  onChanged: (value) {
-                    context.read<ThemeProvider>().setDynamicThemeMode(value);
-                  }),
             ),
           ),
           Padding(

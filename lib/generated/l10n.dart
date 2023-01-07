@@ -376,6 +376,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Theme`
+  String get Theme {
+    return Intl.message(
+      'Theme',
+      name: 'Theme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nothing Here`
+  String get Nothing_Here {
+    return Intl.message(
+      'Nothing Here',
+      name: 'Nothing_Here',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -1,7 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:ffi';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
@@ -359,8 +355,12 @@ class _HomeScreenState extends State<HomeScreen>
                                                 Navigator.pushNamed(
                                                     context, '/playlist',
                                                     arguments: {
-                                                      'playlistId':
-                                                          playlist['playlistId']
+                                                      'playlistId': playlist[
+                                                              'playlistId'] ??
+                                                          playlist['browseId'],
+                                                      'isAlbum': playlist[
+                                                              'browseId'] !=
+                                                          null,
                                                     });
                                               },
                                               child: CachedNetworkImage(

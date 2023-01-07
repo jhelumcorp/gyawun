@@ -31,5 +31,7 @@
     "My_Favorites":"내가 좋아하는 것들",
     "Remove_from_Queue":"대기열에서 제거",
     "Remove_from_favorites":"즐겨 찾기에서 삭제하기",
-    "Add_to_favorites":"즐겨 찾기에 추가"
+    "Add_to_favorites":"즐겨 찾기에 추가",
+    "Theme":"주제",
+    "Nothing_Here":"여기 아무것도"
 }

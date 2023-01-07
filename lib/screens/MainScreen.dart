@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:provider/provider.dart';
-import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
@@ -201,6 +200,7 @@ class HomeTab extends StatelessWidget {
               return MaterialPageRoute(
                   builder: (_) => PlayListScreen(
                         playlistId: args['playlistId'],
+                        isAlbum: args['isAlbum'],
                       ));
             case '/home/artist':
               Map<String, dynamic> args =

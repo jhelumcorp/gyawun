@@ -31,5 +31,7 @@
     "My_Favorites":"私のお気に入り",
     "Remove_from_Queue":"キューから削除",
     "Remove_from_favorites":"お気に入りから削除",
-    "Add_to_favorites":"お気に入りに追加"
+    "Add_to_favorites":"お気に入りに追加",
+    "Theme":"テーマ",
+    "Nothing_Here":"ここには何もない"
 }

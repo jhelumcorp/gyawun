@@ -31,5 +31,7 @@
     "My_Favorites":"Mes favoris",
     "Remove_from_Queue":"Supprimer de la file d'attente",
     "Remove_from_favorites":"Retirer des favoris",
-    "Add_to_favorites":"Ajouter aux Favoris"
+    "Add_to_favorites":"Ajouter aux Favoris",
+    "Theme":"Thème",
+    "Nothing_Here":"Rien ici"
 }

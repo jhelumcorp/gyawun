@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
@@ -93,8 +91,8 @@ class _SearchScreenState extends State<SearchScreen>
                                 ? Theme.of(context).colorScheme.primary
                                 : Colors.transparent,
                             child: Text(S.of(context).Songs,
-                                style:
-                                    TextStyle(overflow: TextOverflow.ellipsis)),
+                                style: const TextStyle(
+                                    overflow: TextOverflow.ellipsis)),
                             onPressed: () {
                               setState(() {
                                 _pageIndex = 0;
@@ -119,7 +117,8 @@ class _SearchScreenState extends State<SearchScreen>
                                 : Colors.transparent,
                             child: Text(
                               S.of(context).Artists,
-                              style: TextStyle(overflow: TextOverflow.ellipsis),
+                              style: const TextStyle(
+                                  overflow: TextOverflow.ellipsis),
                             ),
                             onPressed: () {
                               _pageIndex = 1;
@@ -142,8 +141,8 @@ class _SearchScreenState extends State<SearchScreen>
                                 ? Theme.of(context).colorScheme.primary
                                 : Colors.transparent,
                             child: Text(S.of(context).Playlists,
-                                style:
-                                    TextStyle(overflow: TextOverflow.ellipsis)),
+                                style: const TextStyle(
+                                    overflow: TextOverflow.ellipsis)),
                             onPressed: () {
                               _pageIndex = 2;
                               pageController.animateToPage(2,
@@ -177,6 +176,5 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

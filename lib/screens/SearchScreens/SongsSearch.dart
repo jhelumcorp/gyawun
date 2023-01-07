@@ -1,9 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:vibe_music/Models/Track.dart';
-import 'package:vibe_music/generated/l10n.dart';
-import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/widgets/TrackTile.dart';
 
 class SongsSearch extends StatefulWidget {

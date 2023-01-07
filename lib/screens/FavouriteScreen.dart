@@ -1,12 +1,7 @@
-import 'dart:collection';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/widgets/TrackTile.dart';
 
@@ -30,7 +25,7 @@ class FavouriteScreen extends StatelessWidget {
           if (favourites.isEmpty) {
             return Center(
               child: Text(
-                "Nothing Here",
+                S.of(context).Nothing_Here,
                 style: Theme.of(context).primaryTextTheme.bodyLarge,
               ),
             );

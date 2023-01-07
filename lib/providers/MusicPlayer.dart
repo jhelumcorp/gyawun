@@ -1,8 +1,5 @@
 import 'dart:async';
-// import 'dart:developer';
-// _player.sequenceState?.effectiveSequence
-//           .map((e) => e.tag.extras['track'] as Track)
-//           .toList()
+
 import 'package:flutter/cupertino.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -37,7 +34,7 @@ class MusicPlayer extends ChangeNotifier {
     _isPlaying = _player.playing;
     _player.setAudioSource(playlist!,
         initialIndex: 0, initialPosition: Duration.zero, preload: false);
-    init();
+
     _player.playerStateStream.listen((state) async {
       _index = _player.currentIndex ?? 0;
     });

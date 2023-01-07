@@ -10,12 +10,16 @@ class HomeApi {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? countryCode = prefs.getString('countryCode');
     if (countryCode == null) {
-      final response = await get(Uri.parse('http://ip-api.com/json'));
-      if (response.statusCode == 200) {
-        Map data = jsonDecode(utf8.decode(response.bodyBytes));
-        String countryCode = data['countryCode'];
-        await prefs.setString('countryCode', countryCode);
-      } else {
+      try {
+        final response = await get(Uri.parse('http://ip-api.com/json'));
+        if (response.statusCode == 200) {
+          Map data = jsonDecode(utf8.decode(response.bodyBytes));
+          String countryCode = data['countryCode'];
+          await prefs.setString('countryCode', countryCode);
+        } else {
+          await prefs.setString('countryCode', 'IN');
+        }
+      } catch (err) {
         await prefs.setString('countryCode', 'IN');
       }
     }
@@ -82,6 +86,18 @@ class HomeApi {
     String lang = prefs.getString('locale') ?? "en";
     final response =
         await get(Uri.parse('$hostAddress/playlist?id=$id&lang=$lang'));
+    if (response.statusCode == 200) {
+      Map data = jsonDecode(utf8.decode(response.bodyBytes));
+      return data;
+    }
+    return {};
+  }
+
+  static Future<Map> getAlbum(id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String lang = prefs.getString('locale') ?? "en";
+    final response =
+        await get(Uri.parse('$hostAddress/album?id=$id&lang=$lang'));
     if (response.statusCode == 200) {
       Map data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;

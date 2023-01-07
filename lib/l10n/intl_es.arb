@@ -31,5 +31,7 @@
     "My_Favorites":"Mis favoritos",
     "Remove_from_Queue":"Eliminar de la cola",
     "Remove_from_favorites":"Quitar de favoritos",
-    "Add_to_favorites":"Agregar a los favoritos"
+    "Add_to_favorites":"Agregar a los favoritos",
+    "Theme":"Temática",
+    "Nothing_Here":"Nada aquí"
 }
