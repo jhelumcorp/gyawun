@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:just_audio/just_audio.dart';
@@ -71,6 +72,10 @@ class MusicPlayer extends ChangeNotifier {
   get isPlaying => _isPlaying;
 
   addToQUeue(Track newSong) async {
+    if (_player.sequence!.isEmpty) {
+      addNew(newSong);
+      return;
+    }
     bool exists = _player.sequence
             ?.where((element) => element.tag.id == newSong.videoId)
             .isNotEmpty ??
@@ -92,7 +97,48 @@ class MusicPlayer extends ChangeNotifier {
           id: newSong.videoId,
           title: newSong.title,
           artUri: Uri.parse(newSong.thumbnails.last.url),
-          artist: newSong.artists.first.name,
+          artist:
+              newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
+          extras: newSong.toMap(),
+        ),
+      ),
+    )
+        .then((value) {
+      tempSong = null;
+      notifyListeners();
+    });
+  }
+
+  playNext(Track newSong) async {
+    if (_player.sequence!.isEmpty) {
+      addNew(newSong);
+      return;
+    }
+    bool exists = _player.sequence
+            ?.where((element) => element.tag.id == newSong.videoId)
+            .isNotEmpty ??
+        false;
+    if (exists) {
+      return;
+    }
+    PaletteGenerator? color = await generateColor(newSong.thumbnails.last.url);
+    newSong.colorPalette = ColorPalette(
+        darkMutedColor: color?.darkMutedColor?.color,
+        lightMutedColor: color?.lightMutedColor?.color);
+    _initialised = true;
+    notifyListeners();
+    int ind = _player.currentIndex != null ? _player.currentIndex! + 1 : 0;
+    playlist
+        ?.insert(
+      ind,
+      AudioSource.uri(
+        await getAudioUri(newSong.videoId),
+        tag: MediaItem(
+          id: newSong.videoId,
+          title: newSong.title,
+          artUri: Uri.parse(newSong.thumbnails.last.url),
+          artist:
+              newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
           extras: newSong.toMap(),
         ),
       ),
@@ -146,7 +192,8 @@ class MusicPlayer extends ChangeNotifier {
           id: newSong.videoId,
           title: newSong.title,
           artUri: Uri.parse(newSong.thumbnails.last.url),
-          artist: newSong.artists.first.name,
+          artist:
+              newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
           album: newSong.albums?.name,
           extras: newSong.toMap(),
         ),
@@ -161,6 +208,9 @@ class MusicPlayer extends ChangeNotifier {
           .then((List value) async {
         List tracks = value;
         // _songs[0].thumbnails.last.url = tracks[0]['thumbnail'].last['url'];
+
+        playlist?.sequence.first.tag.extras['artists'] = tracks[0]['artists'];
+        // playlist?.sequence.first.tag.artist = tracks[0]['artist'].first['name'];
         tracks.removeAt(0);
 
         bool breakIt = false;

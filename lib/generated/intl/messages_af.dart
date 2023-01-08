@@ -7,7 +7,8 @@
 // ignore_for_file:unnecessary_brace_in_string_interps, unnecessary_new
 // ignore_for_file:prefer_single_quotes,comment_references, directives_ordering
 // ignore_for_file:annotate_overrides,prefer_generic_function_type_aliases
-// ignore_for_file:unused_import, file_names
+// ignore_for_file:unused_import, file_names, avoid_escaping_inner_quotes
+// ignore_for_file:unnecessary_string_interpolations, unnecessary_string_escapes
 
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
@@ -20,7 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'af';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static _notInlinedMessages(_) => <String, Function>{
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "About": MessageLookupByLibrary.simpleMessage("Oor"),
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Voeg by gunstelinge"),
@@ -47,9 +48,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Verwyder uit gunstelinge"),
         "Report_an_issue":
-            MessageLookupByLibrary.simpleMessage("Gee 'n probleem aan"),
+            MessageLookupByLibrary.simpleMessage("Gee \'n probleem aan"),
         "Request_a_feature":
-            MessageLookupByLibrary.simpleMessage("Versoek 'n kenmerk"),
+            MessageLookupByLibrary.simpleMessage("Versoek \'n kenmerk"),
         "Right_to_left_direction": MessageLookupByLibrary.simpleMessage(
             "Stel teksrigting na regs na links"),
         "SOCIALS": MessageLookupByLibrary.simpleMessage("SOSIALE"),

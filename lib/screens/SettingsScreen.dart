@@ -23,6 +23,7 @@ class SettingsScreen extends StatelessWidget {
     {"name": "Hindi", "value": "hi"},
     {"name": "Japanese", "value": "ja"},
     {"name": "Korean", "value": "ko"},
+    {"name": "Oriya", "value": "or"},
     {"name": "Portuguese", "value": "pt"},
     {"name": "Russian", "value": "ru"},
     {"name": "Spanish", "value": "es"},
@@ -430,7 +431,7 @@ class SettingsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20)),
               tileColor: Theme.of(context).colorScheme.primary,
             ),
-          )
+          ),
         ],
       ),
     );

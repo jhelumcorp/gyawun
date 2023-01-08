@@ -112,15 +112,16 @@ class PanelHeader extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                           ),
-                          Text(
-                            song.artists.first.name,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 93, 92, 92),
-                              overflow: TextOverflow.ellipsis,
+                          if (song.artists.isNotEmpty)
+                            Text(
+                              song.artists.first.name,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 93, 92, 92),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),

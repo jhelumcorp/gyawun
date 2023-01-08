@@ -1,9 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/screens/SearchScreens/ArtistsSearch.dart';
 import 'package:vibe_music/screens/SearchScreens/PlaylistSearch.dart';
 import 'package:vibe_music/screens/SearchScreens/SongsSearch.dart';
+import 'package:vibe_music/screens/SearchScreens/SuggestionsSearch.dart';
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
+}
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({this.searchQuery = "", super.key});
@@ -19,18 +27,22 @@ class _SearchScreenState extends State<SearchScreen>
   PageController pageController = PageController();
   int _pageIndex = 0;
   bool loading = false;
-  String query = "";
   List songs = [];
   List artists = [];
   List playlists = [];
+  List suggestions = [];
+
+  FocusNode nodeFirst = FocusNode();
   @override
   void initState() {
     super.initState();
   }
 
   search() async {
-    loading = true;
-    setState(() {});
+    setState(() {
+      loading = true;
+    });
+
     HomeApi.getSearch(textEditingController.text).then((Map value) {
       setState(() {
         loading = false;
@@ -56,6 +68,19 @@ class _SearchScreenState extends State<SearchScreen>
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: TextField(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => SearchSuggestions(
+                            query: textEditingController.text,
+                          ))).then((value) {
+                if (value != null && value.length > 0) {
+                  textEditingController.text = value;
+                  search();
+                }
+              });
+            },
             style: Theme.of(context).primaryTextTheme.titleLarge,
             decoration: InputDecoration(
                 hintText: S.of(context).Search_something,
@@ -63,9 +88,8 @@ class _SearchScreenState extends State<SearchScreen>
                   borderSide: BorderSide.none,
                 )),
             textInputAction: TextInputAction.search,
-            onSubmitted: (value) {
-              search();
-            },
+            enableInteractiveSelection: false,
+            focusNode: AlwaysDisabledFocusNode(),
             controller: textEditingController,
           ),
         ),

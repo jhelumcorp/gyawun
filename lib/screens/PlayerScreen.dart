@@ -96,15 +96,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 )),
-                                        Text(
-                                          song.artists.first.name,
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w900,
-                                              overflow: TextOverflow.ellipsis,
-                                              color: Color.fromARGB(
-                                                  255, 93, 92, 92)),
-                                        ),
+                                        if (song.artists.isNotEmpty)
+                                          Text(
+                                            song.artists.first.name,
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w900,
+                                                overflow: TextOverflow.ellipsis,
+                                                color: Color.fromARGB(
+                                                    255, 93, 92, 92)),
+                                          ),
                                       ],
                                     ),
                                   ),
@@ -430,11 +431,13 @@ class QueueScreen extends StatelessWidget {
                             .titleMedium
                             ?.copyWith(overflow: TextOverflow.ellipsis),
                       ),
-                      subtitle: Text(
-                        song.artists.first.name,
-                        style: const TextStyle(
-                            color: Color.fromARGB(255, 93, 92, 92)),
-                      ),
+                      subtitle: song.artists.isNotEmpty
+                          ? Text(
+                              song.artists.first.name,
+                              style: const TextStyle(
+                                  color: Color.fromARGB(255, 93, 92, 92)),
+                            )
+                          : null,
                       trailing: ReorderableDragStartListener(
                         index: index,
                         child: Icon(

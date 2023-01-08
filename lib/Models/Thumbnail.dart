@@ -1,13 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Thumbnail {
   String url;
-  int width;
-  int height;
+  int? width;
+  int? height;
   Thumbnail({
     required this.url,
-    required this.width,
-    required this.height,
+    this.width,
+    this.height,
   });
 
   Thumbnail copyWith({
@@ -33,8 +34,8 @@ class Thumbnail {
   factory Thumbnail.fromMap(Map<String, dynamic> map) {
     return Thumbnail(
       url: map['url'] as String,
-      width: map['width'] as int,
-      height: map['height'] as int,
+      width: map['width'] != null ? map['width'] as int : null,
+      height: map['height'] != null ? map['height'] as int : null,
     );
   }
 

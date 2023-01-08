@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/providers/AudioQualityprovider.dart';
-import 'package:vibe_music/providers/HomeScreenProvider.dart';
 import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
@@ -25,10 +24,10 @@ void main() async {
   );
   await Hive.initFlutter();
   Hive.openBox('myfavourites');
+  Hive.openBox('settings');
   await HomeApi.setCountry();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => MusicPlayer()),
-    ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
     ChangeNotifierProvider(create: (_) => LanguageProvider(prefs)),
     ChangeNotifierProvider(create: (_) => ThemeProvider(prefs)),
     ChangeNotifierProvider(create: (_) => AudioQualityProvider(prefs))
