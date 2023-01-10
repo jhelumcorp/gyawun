@@ -40,8 +40,8 @@
 - [x] Change location
 - [x] Add to favorites
 - [x] Change direction from right to left
-- [ ] Search Suggestions
-- [ ] Save history locally
+- [x] Search Suggestions
+- [x] Save history locally
 - [ ] Save playlist
 - [ ] Download songs locally
 
