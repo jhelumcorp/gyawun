@@ -25,8 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("ہمارے بارے میں"),
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("پسندیدہ میں شامل کریں"),
+        "Albums": MessageLookupByLibrary.simpleMessage("البمز"),
         "Artists": MessageLookupByLibrary.simpleMessage("فنکار"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("آڈیو کوالٹی"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("منسوخ کریں"),
         "Change_country":
             MessageLookupByLibrary.simpleMessage("ملک تبدیل کیجئے"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("ڈارک تھیم"),
@@ -44,11 +46,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("براؤزر میں کھولیں"),
         "Play_All": MessageLookupByLibrary.simpleMessage("سارے چلائیں"),
         "Playlists": MessageLookupByLibrary.simpleMessage("پلے لسٹس"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("ہٹائیں"),
         "RTL": MessageLookupByLibrary.simpleMessage("دائیں سے بائیں"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("قطار سے ہٹا دیں"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("پسندیدہ سے ہٹا دیں"),
+        "Remove_from_search_history":
+            MessageLookupByLibrary.simpleMessage("تلاش کی سرگزشت سے ہٹائیں؟"),
         "Report_an_issue":
             MessageLookupByLibrary.simpleMessage("ایک مسئلہ کی اطلاع دیں"),
         "Request_a_feature":

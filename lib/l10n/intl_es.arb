@@ -33,5 +33,9 @@
     "Remove_from_favorites":"Quitar de favoritos",
     "Add_to_favorites":"Agregar a los favoritos",
     "Theme":"Temática",
-    "Nothing_Here":"Nada aquí"
+    "Nothing_Here":"Nada aquí",
+    "Albums":"Álbumes",
+    "CANCEL":"CANCELAR",
+    "REMOVE":"RETIRAR",
+    "Remove_from_search_history":"¿Quitar del historial de búsqueda?"
 }

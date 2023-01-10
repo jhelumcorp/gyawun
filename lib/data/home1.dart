@@ -1,27 +1,29 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+Box box = Hive.box('settings');
 
 class HomeApi {
   static String hostAddress = "https://vibeapi-sheikh-haziq.vercel.app/";
 
   static setCountry() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? countryCode = prefs.getString('countryCode');
+    String? countryCode = box.get('countryCode');
     if (countryCode == null) {
       try {
         final response = await get(Uri.parse('http://ip-api.com/json'));
         if (response.statusCode == 200) {
           Map data = jsonDecode(utf8.decode(response.bodyBytes));
           String countryCode = data['countryCode'];
-          await prefs.setString('countryCode', countryCode);
-        } else {
-          await prefs.setString('countryCode', 'IN');
+          String countryName = data['India'];
+          await box.put('countryCode', countryCode);
+          await box.put('countryName', countryName);
         }
       } catch (err) {
-        await prefs.setString('countryCode', 'IN');
+        await box.put('countryCode', 'IN');
+        await box.put('countryName', 'India');
       }
     }
   }
@@ -55,10 +57,10 @@ class HomeApi {
   }
 
   Future<Map<String, List>> getMusicHome() async {
-    final Uri link = Uri.https(
-      searchAuthority,
-      paths['music'].toString(),
-    );
+    final Uri link = Uri.https(searchAuthority, paths['music'].toString(), {
+      'hl': box.get('language_code', defaultValue: 'en'),
+      'gl': box.get('countryCode', defaultValue: 'IN')
+    });
     try {
       final Response response = await get(link);
       if (response.statusCode != 200) {
@@ -161,6 +163,9 @@ class HomeApi {
   }
 
   List formatVideoItems(List itemsList) {
+    if (itemsList.isEmpty) {
+      return List.empty();
+    }
     try {
       final List result = itemsList.map((e) {
         return {
@@ -267,8 +272,7 @@ class HomeApi {
   }
 
   static Future<List> getHome() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('locale') ?? "en";
+    String lang = box.get('language_code', defaultValue: 'en');
     final response = await get(Uri.parse('${hostAddress}home?lang=$lang'));
     if (response.statusCode == 200) {
       List data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -278,9 +282,8 @@ class HomeApi {
   }
 
   static Future<Map> getCharts() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('locale') ?? "en";
-    String country = prefs.getString('countryCode') ?? "IN";
+    String lang = box.get('language_code', defaultValue: 'en');
+    String country = box.get('countryCode', defaultValue: 'IN');
 
     final response = await get(
         Uri.parse('${hostAddress}charts?lang=$lang&country=$country'));
@@ -299,8 +302,7 @@ class HomeApi {
   }
 
   static Future<Map> getSearch(query) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('locale') ?? "en";
+    String lang = box.get('language_code', defaultValue: 'en');
     final Response response =
         await get(Uri.parse('$hostAddress/search?query=$query&lang=$lang'));
     if (response.statusCode == 200) {
@@ -310,9 +312,35 @@ class HomeApi {
     return {};
   }
 
+  static Future<List> searchSongs(query) async {
+    return await searchCategory(query, 'song');
+  }
+
+  static Future<List> searchArtists(query) async {
+    return await searchCategory(query, 'artist');
+  }
+
+  static Future<List> searchAlbums(query) async {
+    return await searchCategory(query, 'album');
+  }
+
+  static Future<List> searchPlaylists(query) async {
+    return await searchCategory(query, 'playlist');
+  }
+
+  static Future<List> searchCategory(query, category) async {
+    String lang = box.get('language_code', defaultValue: 'en');
+    final Response response = await get(
+        Uri.parse('$hostAddress/search/$category?query=$query&lang=$lang'));
+    if (response.statusCode == 200) {
+      List data = jsonDecode(utf8.decode(response.bodyBytes));
+      return data;
+    }
+    return [];
+  }
+
   static Future<Map> getArtist(id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('locale') ?? "en";
+    String lang = box.get('language_code', defaultValue: 'en');
     final response =
         await get(Uri.parse('$hostAddress/artist?id=$id&lang=$lang'));
     if (response.statusCode == 200) {
@@ -323,8 +351,8 @@ class HomeApi {
   }
 
   static Future<Map> getPlaylist(id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('locale') ?? "en";
+    String lang = box.get('language_code', defaultValue: 'en');
+
     final response =
         await get(Uri.parse('$hostAddress/playlist?id=$id&lang=$lang'));
     if (response.statusCode == 200) {
@@ -335,8 +363,8 @@ class HomeApi {
   }
 
   static Future<Map> getAlbum(id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('locale') ?? "en";
+    String lang = box.get('language_code', defaultValue: 'en');
+
     final response =
         await get(Uri.parse('$hostAddress/album?id=$id&lang=$lang'));
     if (response.statusCode == 200) {
@@ -347,8 +375,8 @@ class HomeApi {
   }
 
   static Future<List> getWatchPlaylist(String videoId, int limit) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('locale') ?? "en";
+    String lang = box.get('language_code', defaultValue: 'en');
+
     String url =
         "$hostAddress/searchwatchplaylist?videoId=$videoId&limit=$limit&lang=$lang";
     final response = await get(Uri.parse(url));

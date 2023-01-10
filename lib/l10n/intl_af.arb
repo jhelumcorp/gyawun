@@ -33,5 +33,9 @@
     "Remove_from_favorites":"Verwyder uit gunstelinge",
     "Add_to_favorites":"Voeg by gunstelinge",
     "Theme":"Tema",
-    "Nothing_Here":"Niks hier"
+    "Nothing_Here":"Niks hier",
+    "Albums":"Albums",
+    "CANCEL":"KANSELLEER",
+    "REMOVE":"VERWYDER",
+    "Remove_from_search_history":"Verwyder uit soekgeskiedenis?"
 }

@@ -33,5 +33,9 @@
     "Remove_from_favorites":"Удалить из Избранного",
     "Add_to_favorites":"Добавить в избранное",
     "Theme":"Тема",
-    "Nothing_Here":"Здесь ничего"
+    "Nothing_Here":"Здесь ничего",
+    "Albums":"Альбомы",
+    "CANCEL":"ОТМЕНИТЬ",
+    "REMOVE":"УДАЛИТЬ",
+    "Remove_from_search_history":"Удалить из истории поиска?"
 }

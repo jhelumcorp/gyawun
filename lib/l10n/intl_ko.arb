@@ -33,5 +33,9 @@
     "Remove_from_favorites":"즐겨 찾기에서 삭제하기",
     "Add_to_favorites":"즐겨 찾기에 추가",
     "Theme":"주제",
-    "Nothing_Here":"여기 아무것도"
+    "Nothing_Here":"여기 아무것도",
+    "Albums":"앨범",
+    "CANCEL":"취소",
+    "REMOVE":"제거하다",
+    "Remove_from_search_history":"검색 기록에서 삭제하시겠습니까?"
 }

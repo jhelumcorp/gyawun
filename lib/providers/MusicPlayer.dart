@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/utils/colors.dart';
@@ -72,7 +73,7 @@ class MusicPlayer extends ChangeNotifier {
   get isPlaying => _isPlaying;
 
   addToQUeue(Track newSong) async {
-    if (_player.sequence!.isEmpty) {
+    if (_player.sequence?.isEmpty ?? true) {
       addNew(newSong);
       return;
     }
@@ -110,7 +111,7 @@ class MusicPlayer extends ChangeNotifier {
   }
 
   playNext(Track newSong) async {
-    if (_player.sequence!.isEmpty) {
+    if (_player.sequence?.isEmpty ?? true) {
       addNew(newSong);
       return;
     }
@@ -183,7 +184,10 @@ class MusicPlayer extends ChangeNotifier {
       _initialised = true;
       notifyListeners();
 
-      _player.play();
+      _player.play().then((value) {
+        notifyListeners();
+        _miniplayerController.animateToHeight(state: PanelState.MAX);
+      });
 
       await playlist
           ?.add(AudioSource.uri(
@@ -198,41 +202,39 @@ class MusicPlayer extends ChangeNotifier {
           extras: newSong.toMap(),
         ),
       ))
-          .then((value) {
+          .then((value) async {
         tempSong = null;
         _miniplayerController.animateToHeight(state: PanelState.MAX);
         notifyListeners();
-      });
+        await HomeApi.getWatchPlaylist(newSong.videoId, 10)
+            .then((List value) async {
+          List tracks = value;
 
-      await HomeApi.getWatchPlaylist(newSong.videoId, 10)
-          .then((List value) async {
-        List tracks = value;
-        // _songs[0].thumbnails.last.url = tracks[0]['thumbnail'].last['url'];
+          playlist?.sequence.first.tag.extras['artists'] = tracks[0]['artists'];
+          tracks.removeAt(0);
 
-        playlist?.sequence.first.tag.extras['artists'] = tracks[0]['artists'];
-        // playlist?.sequence.first.tag.artist = tracks[0]['artist'].first['name'];
-        tracks.removeAt(0);
+          bool breakIt = false;
+          _cancelController.stream.first.then((cancelled) async {
+            if (cancelled) {
+              breakIt = true;
+            }
+          });
+          for (Map<String, dynamic> track in tracks) {
+            // If the loop has been cancelled, exit
 
-        bool breakIt = false;
-        _cancelController.stream.first.then((cancelled) async {
-          if (cancelled) {
-            breakIt = true;
+            if (breakIt) {
+              break;
+            }
+
+            // Add the item to the otherSongs list
+
+            track['thumbnails'] = track['thumbnail'];
+            Track tr = Track.fromMap(track);
+            await addToQUeue(tr);
           }
         });
-        for (Map<String, dynamic> track in tracks) {
-          // If the loop has been cancelled, exit
-
-          if (breakIt) {
-            break;
-          }
-
-          // Add the item to the otherSongs list
-
-          track['thumbnails'] = track['thumbnail'];
-          Track tr = Track.fromMap(track);
-          await addToQUeue(tr);
-        }
       });
+
       return true;
     } catch (e) {
       return true;
@@ -253,28 +255,48 @@ class MusicPlayer extends ChangeNotifier {
     await setPlayer();
 
     _initialised = true;
+    _player.play().then((value) {
+      notifyListeners();
+      _miniplayerController.animateToHeight(state: PanelState.MAX);
+    });
     notifyListeners();
-    _miniplayerController.animateToHeight(state: PanelState.MAX);
 
-    _player.play();
+    await playlist
+        ?.add(AudioSource.uri(
+      await getAudioUri(newSong.videoId),
+      tag: MediaItem(
+        id: newSong.videoId,
+        title: newSong.title,
+        artUri: Uri.parse(newSong.thumbnails.last.url),
+        artist: newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
+        album: newSong.albums?.name,
+        extras: newSong.toMap(),
+      ),
+    ))
+        .then((value) async {
+      tempSong = null;
+      _miniplayerController.animateToHeight(state: PanelState.MAX);
+      notifyListeners();
+      bool breakIt = false;
+      _cancelController.stream.first.then((cancelled) async {
+        if (cancelled) {
+          breakIt = true;
+        }
+      });
+      List nsongs = newSongs.sublist(1, newSongs.length);
 
-    bool breakIt = false;
-    _cancelController.stream.first.then((cancelled) async {
-      if (cancelled) {
-        breakIt = true;
+      for (Map<String, dynamic> nSong in nsongs) {
+        // If the loop has been cancelled, exit
+        if (breakIt) {
+          break;
+        }
+
+        // Add the item to the otherSongs list
+        Track ns = Track.fromMap(nSong);
+        await addToQUeue(ns);
       }
     });
-
-    for (Map<String, dynamic> nSong in newSongs) {
-      // If the loop has been cancelled, exit
-      if (breakIt) {
-        break;
-      }
-
-      // Add the item to the otherSongs list
-      Track newSong = Track.fromMap(nSong);
-      await addToQUeue(newSong);
-    }
+    // _miniplayerController.animateToHeight(state: PanelState.MAX);
   }
 
   /// Change the songe position in playlist from one index to another.
@@ -320,8 +342,8 @@ class MusicPlayer extends ChangeNotifier {
   }
 
   static Future<Uri> getAudioUri(String videoId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String audioQuality = prefs.getString("audioQuality") ?? "medium";
+    Box box = Hive.box('settings');
+    String audioQuality = box.get("audioQuality", defaultValue: 'medium');
     String audioUrl = '';
     try {
       final StreamManifest manifest =

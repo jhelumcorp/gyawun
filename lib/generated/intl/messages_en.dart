@@ -25,8 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("About"),
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Add to Favorites"),
+        "Albums": MessageLookupByLibrary.simpleMessage("Albums"),
         "Artists": MessageLookupByLibrary.simpleMessage("Artists"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Audio Quality"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("CANCEL"),
         "Change_country":
             MessageLookupByLibrary.simpleMessage("Change Country"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Dark Theme"),
@@ -43,11 +45,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Open in Browser"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Play All"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Playlists"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("REMOVE"),
         "RTL": MessageLookupByLibrary.simpleMessage("Right to Left"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("Remove from Queue"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Remove from Favorites"),
+        "Remove_from_search_history":
+            MessageLookupByLibrary.simpleMessage("Remove from search history?"),
         "Report_an_issue":
             MessageLookupByLibrary.simpleMessage("Report an issue"),
         "Request_a_feature":

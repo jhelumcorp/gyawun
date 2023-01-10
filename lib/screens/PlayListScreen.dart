@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +28,8 @@ class _PlayListScreenState extends State<PlayListScreen> {
       HomeApi.getAlbum(widget.playlistId).then((Map value) {
         setState(() {
           playlist = value;
+          playlist?['tracks']
+              .removeWhere((element) => element['videoId'] == null);
           loading = false;
         });
       });
@@ -33,6 +37,8 @@ class _PlayListScreenState extends State<PlayListScreen> {
       HomeApi.getPlaylist(widget.playlistId).then((Map value) {
         setState(() {
           playlist = value;
+          playlist?['tracks']
+              .removeWhere((element) => element['videoId'] == null);
           loading = false;
         });
       });
@@ -140,11 +146,11 @@ class _PlayListScreenState extends State<PlayListScreen> {
                           itemBuilder: (context, index) {
                             Map<String, dynamic> track =
                                 playlist?['tracks'][index];
-                            if (track['videoId'] == null) {
-                              playlist?['tracks'].remove(track);
-                              setState(() {});
-                              return const SizedBox.shrink();
-                            }
+                            // if (track['videoId'] == null) {
+                            //   playlist?['tracks'].remove(track);
+                            //   setState(() {});
+                            //   return const SizedBox.shrink();
+                            // }
                             if (widget.isAlbum) {
                               track['thumbnails'] = [
                                 {

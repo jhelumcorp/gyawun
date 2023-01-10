@@ -3,14 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/SearchProvider.dart';
 
-class PlaylistSearch extends StatefulWidget {
-  const PlaylistSearch({this.query = "", super.key});
+class AlbumSearch extends StatefulWidget {
+  const AlbumSearch({this.query = "", super.key});
   final String query;
   @override
-  State<PlaylistSearch> createState() => _PlaylistSearchState();
+  State<AlbumSearch> createState() => _AlbumSearchState();
 }
 
-class _PlaylistSearchState extends State<PlaylistSearch> {
+class _AlbumSearchState extends State<AlbumSearch> {
   @override
   void initState() {
     super.initState();
@@ -18,28 +18,30 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<SearchProvider>().searchPlaylists(widget.query);
-    return !context.watch<SearchProvider>().playlistsLoaded
+    context.read<SearchProvider>().searchAlbums(widget.query);
+    return !context.watch<SearchProvider>().albumsLoaded
         ? const Center(child: CircularProgressIndicator())
         : ListView.builder(
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.all(18),
-            itemCount: context.watch<SearchProvider>().playlists.length,
+            padding: const EdgeInsets.all(8),
+            itemCount: context.watch<SearchProvider>().albums.length,
             itemBuilder: (context, index) {
-              Map playlist = context.watch<SearchProvider>().playlists[index];
+              Map album = context.watch<SearchProvider>().albums[index];
               return ListTile(
                 onTap: () {
-                  Navigator.pushNamed(context, '/search/playlist',
-                      arguments: {'playlistId': playlist['browseId']});
+                  Navigator.pushNamed(context, '/search/playlist', arguments: {
+                    'playlistId': album['browseId'],
+                    'isAlbum': true
+                  });
                 },
                 title: Row(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(5),
                       child: Image.network(
-                        playlist['thumbnails'].last['url'],
-                        height: 100,
-                        width: 100,
+                        album['thumbnails'].last['url'],
+                        height: 45,
+                        width: 45,
                         fit: BoxFit.fill,
                         errorBuilder: ((context, error, stackTrace) {
                           return Image.asset(
@@ -57,7 +59,7 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              playlist['title'],
+                              album['title'],
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               style: Theme.of(context)
@@ -68,19 +70,12 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
                                       fontSize: 16),
                             ),
                             Text(
-                              playlist['author'],
+                              album['artists'].first['name'],
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                   fontSize: 14,
                                   color: Color.fromARGB(255, 93, 92, 92)),
-                            ),
-                            Text(
-                              playlist['itemCount'] + ' ' + S.of(context).Songs,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromARGB(255, 93, 92, 92)),
-                            ),
+                            )
                           ],
                         ),
                       ),
@@ -92,20 +87,3 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
           );
   }
 }
-
-
-
-// Column(
-//           children: [
-//             Image.network(playlist['thumbnails'].last['url']),
-//             Text(
-//               playlist['title'],
-//               overflow: TextOverflow.ellipsis,
-//               maxLines: 2,
-//             ),
-//             Text(
-//               playlist['author'],
-//               overflow: TextOverflow.ellipsis,
-//             ),
-//           ],
-//         );,

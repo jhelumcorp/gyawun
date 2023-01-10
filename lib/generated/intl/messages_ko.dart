@@ -24,8 +24,10 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "About": MessageLookupByLibrary.simpleMessage("정보"),
         "Add_to_favorites": MessageLookupByLibrary.simpleMessage("즐겨 찾기에 추가"),
+        "Albums": MessageLookupByLibrary.simpleMessage("앨범"),
         "Artists": MessageLookupByLibrary.simpleMessage("아티스트"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("오디오 품질"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("취소"),
         "Change_country": MessageLookupByLibrary.simpleMessage("국가 변경"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("어두운 테마"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("동적 테마"),
@@ -40,10 +42,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage("브라우저에서 열기"),
         "Play_All": MessageLookupByLibrary.simpleMessage("모두 재생"),
         "Playlists": MessageLookupByLibrary.simpleMessage("재생목록"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("제거하다"),
         "RTL": MessageLookupByLibrary.simpleMessage("오른쪽에서 왼쪽으로"),
         "Remove_from_Queue": MessageLookupByLibrary.simpleMessage("대기열에서 제거"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("즐겨 찾기에서 삭제하기"),
+        "Remove_from_search_history":
+            MessageLookupByLibrary.simpleMessage("검색 기록에서 삭제하시겠습니까?"),
         "Report_an_issue": MessageLookupByLibrary.simpleMessage("문제 신고"),
         "Request_a_feature": MessageLookupByLibrary.simpleMessage("기능 요청"),
         "Right_to_left_direction":

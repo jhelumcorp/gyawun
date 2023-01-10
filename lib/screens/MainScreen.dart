@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/generated/l10n.dart';
-import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/screens/ArtistScreen.dart';
@@ -42,129 +42,146 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkTheme =
-        context.watch<ThemeProvider>().themeMode == ThemeMode.dark;
-
-    return Scaffold(
-      body: LayoutBuilder(builder: (context, constraints) {
-        return Column(
-          children: [
-            Expanded(
-              child: Builder(builder: (context) {
-                return PageView(
-                  physics: const BouncingScrollPhysics(),
-                  controller: _pageController,
-                  onPageChanged: ((value) {
-                    MiniplayerController miniplayerController =
-                        context.read<MusicPlayer>().miniplayerController;
-                    miniplayerController.animateToHeight(state: PanelState.MIN);
-                    setState(() {
-                      _pageIndex = value;
-                    });
-                  }),
-                  children: [
-                    Directionality(
-                      textDirection:
-                          context.watch<LanguageProvider>().textDirection,
-                      child: HomeTab(
-                        navigatorKey: _homeNavigatorKey,
-                      ),
-                    ),
-                    Directionality(
-                      textDirection:
-                          context.watch<LanguageProvider>().textDirection,
-                      child: SearchTab(
-                        navigatorKey: _searchNavigatorKey,
-                      ),
-                    ),
-                    Directionality(
-                      textDirection:
-                          context.watch<LanguageProvider>().textDirection,
-                      child: const FavouriteScreen(),
-                    ),
-                    Directionality(
-                        textDirection:
-                            context.watch<LanguageProvider>().textDirection,
-                        child: const SettingsScreen()),
-                  ],
-                );
-              }),
-            ),
-            if (context.watch<MusicPlayer>().isInitialized &&
-                context.watch<MusicPlayer>().song != null)
-              Miniplayer(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  controller: context.watch<MusicPlayer>().miniplayerController,
-                  minHeight: 70,
-                  maxHeight: constraints.maxHeight,
-                  builder: (height, percentage) {
-                    return Stack(
-                      children: [
-                        Opacity(
-                          opacity: percentage,
-                          child: PlayerScreen(
-                            height: height,
-                            percentage: percentage,
+    return ValueListenableBuilder(
+        valueListenable: Hive.box('settings').listenable(),
+        builder: (context, Box box, child) {
+          bool isDarkTheme = box.get('theme', defaultValue: 'light') == 'dark';
+          return Scaffold(
+            body: LayoutBuilder(builder: (context, constraints) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: Builder(builder: (context) {
+                      return PageView(
+                        physics: const BouncingScrollPhysics(),
+                        controller: _pageController,
+                        onPageChanged: ((value) {
+                          MiniplayerController miniplayerController =
+                              context.read<MusicPlayer>().miniplayerController;
+                          miniplayerController.animateToHeight(
+                              state: PanelState.MIN);
+                          setState(() {
+                            _pageIndex = value;
+                          });
+                        }),
+                        children: [
+                          Directionality(
+                            textDirection:
+                                box.get('textDirection', defaultValue: 'ltr') ==
+                                        'rtl'
+                                    ? TextDirection.rtl
+                                    : TextDirection.ltr,
+                            child: HomeTab(
+                              navigatorKey: _homeNavigatorKey,
+                            ),
                           ),
-                        ),
-                        Opacity(
-                            opacity: 1 - (percentage),
-                            child: PanelHeader(
-                              song: context.watch<MusicPlayer>().song!,
-                            )),
-                      ],
-                    );
-                  }),
-          ],
-        );
-      }),
-      bottomNavigationBar: NavigationBar(
-        height: 60,
-        destinations: [
-          NavigationDestination(
-            icon: Icon(
-              Icons.home_outlined,
-              color: isDarkTheme ? Colors.white : Colors.black,
+                          Directionality(
+                            textDirection:
+                                box.get('textDirection', defaultValue: 'ltr') ==
+                                        'rtl'
+                                    ? TextDirection.rtl
+                                    : TextDirection.ltr,
+                            child: SearchTab(
+                              navigatorKey: _searchNavigatorKey,
+                            ),
+                          ),
+                          Directionality(
+                            textDirection:
+                                box.get('textDirection', defaultValue: 'ltr') ==
+                                        'rtl'
+                                    ? TextDirection.rtl
+                                    : TextDirection.ltr,
+                            child: const FavouriteScreen(),
+                          ),
+                          Directionality(
+                              textDirection: box.get('textDirection',
+                                          defaultValue: 'ltr') ==
+                                      'rtl'
+                                  ? TextDirection.rtl
+                                  : TextDirection.ltr,
+                              child: const SettingsScreen()),
+                        ],
+                      );
+                    }),
+                  ),
+                  if (context.watch<MusicPlayer>().isInitialized &&
+                      context.watch<MusicPlayer>().song != null)
+                    Miniplayer(
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        controller:
+                            context.watch<MusicPlayer>().miniplayerController,
+                        minHeight: 70,
+                        maxHeight: constraints.maxHeight,
+                        builder: (height, percentage) {
+                          return Stack(
+                            children: [
+                              Opacity(
+                                opacity: percentage,
+                                child: PlayerScreen(
+                                  height: height,
+                                  percentage: percentage,
+                                ),
+                              ),
+                              Opacity(
+                                  opacity: 1 - (percentage),
+                                  child: PanelHeader(
+                                    song: context.watch<MusicPlayer>().song!,
+                                  )),
+                            ],
+                          );
+                        }),
+                ],
+              );
+            }),
+            bottomNavigationBar: NavigationBar(
+              height: 60,
+              destinations: [
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.home_outlined,
+                    color: isDarkTheme ? Colors.white : Colors.black,
+                  ),
+                  selectedIcon: const Icon(Icons.home_rounded),
+                  label: S.of(context).Home,
+                ),
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.search_outlined,
+                    color: isDarkTheme ? Colors.white : Colors.black,
+                  ),
+                  selectedIcon: const Icon(Icons.search_rounded),
+                  label: S.of(context).Search,
+                ),
+                NavigationDestination(
+                  icon: Icon(
+                    CupertinoIcons.heart,
+                    color: isDarkTheme ? Colors.white : Colors.black,
+                  ),
+                  selectedIcon: const Icon(CupertinoIcons.heart_fill),
+                  label: S.of(context).Settings,
+                ),
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.settings_outlined,
+                    color: isDarkTheme ? Colors.white : Colors.black,
+                  ),
+                  selectedIcon: const Icon(Icons.settings_rounded),
+                  label: S.of(context).Settings,
+                ),
+              ],
+              onDestinationSelected: (int index) {
+                _pageController.animateToPage(
+                  index,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeInOut,
+                );
+              },
+              selectedIndex: _pageIndex,
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
             ),
-            selectedIcon: const Icon(Icons.home_rounded),
-            label: S.of(context).Home,
-          ),
-          NavigationDestination(
-            icon: Icon(
-              Icons.search_outlined,
-              color: isDarkTheme ? Colors.white : Colors.black,
-            ),
-            selectedIcon: const Icon(Icons.search_rounded),
-            label: S.of(context).Search,
-          ),
-          NavigationDestination(
-            icon: Icon(
-              CupertinoIcons.heart,
-              color: isDarkTheme ? Colors.white : Colors.black,
-            ),
-            selectedIcon: const Icon(CupertinoIcons.heart_fill),
-            label: S.of(context).Settings,
-          ),
-          NavigationDestination(
-            icon: Icon(
-              Icons.settings_outlined,
-              color: isDarkTheme ? Colors.white : Colors.black,
-            ),
-            selectedIcon: const Icon(Icons.settings_rounded),
-            label: S.of(context).Settings,
-          ),
-        ],
-        onDestinationSelected: (int index) {
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOut,
           );
-        },
-        selectedIndex: _pageIndex,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-      ),
-    );
+        });
   }
 }
 
@@ -252,6 +269,7 @@ class SearchTab extends StatelessWidget {
               return MaterialPageRoute(
                   builder: (_) => PlayListScreen(
                         playlistId: args['playlistId'],
+                        isAlbum: args['isAlbum'] ?? false,
                       ));
             case '/search/artist':
               Map<String, dynamic> args =

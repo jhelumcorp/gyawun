@@ -25,8 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("ବିଷୟରେ"),
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("ପସନ୍ଦ ରେ ଯୋଡ଼ନ୍ତୁ"),
+        "Albums": MessageLookupByLibrary.simpleMessage("ଆଲବମ୍"),
         "Artists": MessageLookupByLibrary.simpleMessage("କଳାକାର ମାନେ"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("ଅଡିଓ ଗୁଣବତ୍ତା"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("ବାତିଲ୍"),
         "Change_country": MessageLookupByLibrary.simpleMessage("ଦେଶ ବଦଳାନ୍ତୁ"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("ଅନ୍ଧାର ଥିମ୍"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("ଗତିଶୀଳ ଥିମ୍"),
@@ -44,11 +46,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ବ୍ରାଉଜର ରେ ଖୋଲନ୍ତୁ"),
         "Play_All": MessageLookupByLibrary.simpleMessage("ସମସ୍ତ ପ୍ଲେ କରନ୍ତୁ"),
         "Playlists": MessageLookupByLibrary.simpleMessage("ପ୍ଲେଲିଷ୍ଟ୍ ଗୁଡ଼ିକ"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("ଅପସାରଣ କରନ୍ତୁ |"),
         "RTL": MessageLookupByLibrary.simpleMessage("ଡ଼ାହାଣ ରୁ ବାମ"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("ଧାଡ଼ିରୁ ଅପସାରଣ କରନ୍ତୁ"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("ପସନ୍ଦ ରୁ ଅପସାରଣ କରନ୍ତୁ"),
+        "Remove_from_search_history": MessageLookupByLibrary.simpleMessage(
+            "ସନ୍ଧାନ ଇତିହାସରୁ ଅପସାରଣ କରିବେ କି?ସନ୍ଧାନ ଇତିହାସରୁ ଅପସାରଣ କରିବେ କି?"),
         "Report_an_issue":
             MessageLookupByLibrary.simpleMessage("ଏକ ସମସ୍ୟା ରିପୋର୍ଟ କରନ୍ତୁ"),
         "Request_a_feature": MessageLookupByLibrary.simpleMessage(

@@ -33,5 +33,9 @@
     "Remove_from_favorites":"Favorilerden çıkar",
     "Add_to_favorites":"Favorilere ekle",
     "Theme":"Tema",
-    "Nothing_Here":"Burada hiçbir şey"
+    "Nothing_Here":"Burada hiçbir şey",
+    "Albums":"Albümler",
+    "CANCEL":"İPTAL ETMEK",
+    "REMOVE":"KALDIRMAK",
+    "Remove_from_search_history":"Arama geçmişinden kaldırılsın mı?"
 }

@@ -25,9 +25,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("Sobre"),
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Agregar a los favoritos"),
+        "Albums": MessageLookupByLibrary.simpleMessage("Álbumes"),
         "Artists": MessageLookupByLibrary.simpleMessage("Artistas"),
         "Audio_Quality":
             MessageLookupByLibrary.simpleMessage("Calidad de audio"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("CANCELAR"),
         "Change_country": MessageLookupByLibrary.simpleMessage("Cambiar pais"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Tema oscuro"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Tema dinámico"),
@@ -44,11 +46,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "Play_All": MessageLookupByLibrary.simpleMessage("Jugar todo"),
         "Playlists":
             MessageLookupByLibrary.simpleMessage("listas de reproducción"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("RETIRAR"),
         "RTL": MessageLookupByLibrary.simpleMessage("De derecha a izquierda"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("Eliminar de la cola"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Quitar de favoritos"),
+        "Remove_from_search_history": MessageLookupByLibrary.simpleMessage(
+            "¿Quitar del historial de búsqueda?"),
         "Report_an_issue":
             MessageLookupByLibrary.simpleMessage("Reportar un problema"),
         "Request_a_feature": MessageLookupByLibrary.simpleMessage(

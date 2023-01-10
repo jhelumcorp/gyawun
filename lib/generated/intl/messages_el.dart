@@ -25,8 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("Σχετικά"),
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Προσθήκη στα αγαπημένα"),
+        "Albums": MessageLookupByLibrary.simpleMessage("Άλμπουμ"),
         "Artists": MessageLookupByLibrary.simpleMessage("Καλλιτέχνες"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Ποιότητα ήχου"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("ΜΑΤΑΙΩΣΗ"),
         "Change_country": MessageLookupByLibrary.simpleMessage("Αλλαγή χώρας"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Σκοτεινό θέμα"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Δυναμικό θέμα"),
@@ -44,12 +46,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "Play_All": MessageLookupByLibrary.simpleMessage("Αναπαραγωγή όλων"),
         "Playlists":
             MessageLookupByLibrary.simpleMessage("Λίστες αναπαραγωγής"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("ΑΦΑΙΡΩ"),
         "RTL":
             MessageLookupByLibrary.simpleMessage("Από δεξιά προς τα αριστερά"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("Κατάργηση από την ουρά"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Αφαίρεση από τα Αγαπημένα"),
+        "Remove_from_search_history": MessageLookupByLibrary.simpleMessage(
+            "Κατάργηση από το ιστορικό αναζήτησης;"),
         "Report_an_issue":
             MessageLookupByLibrary.simpleMessage("Αναφορά ενός προβλήματος"),
         "Request_a_feature":

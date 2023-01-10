@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
@@ -37,9 +40,6 @@ class _ArtistScreenState extends State<ArtistScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
-    bool isDarkTheme =
-        context.watch<ThemeProvider>().themeMode == ThemeMode.dark;
     return Scaffold(
       body: SafeArea(
         child: artist == null || loading
@@ -65,21 +65,34 @@ class _ArtistScreenState extends State<ArtistScreen> {
                                   Theme.of(context).primaryTextTheme.titleLarge,
                             ),
                             const SizedBox(height: 20),
-                            MaterialButton(
-                              textColor:
-                                  isDarkTheme ? Colors.black : Colors.white,
-                              color: isDarkTheme ? Colors.white : Colors.black,
-                              onPressed: () async {
-                                await context.read<MusicPlayer>().addPlayList(
-                                      artist?['tracks'],
-                                    );
-                              },
-                              child: Text(
-                                S.of(context).Play_All,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
+                            ValueListenableBuilder(
+                                valueListenable:
+                                    Hive.box('settings').listenable(),
+                                builder: (context, Box box, child) {
+                                  bool isDarkTheme =
+                                      box.get('theme', defaultValue: 'light') ==
+                                          'dark';
+                                  return MaterialButton(
+                                    textColor: isDarkTheme
+                                        ? Colors.black
+                                        : Colors.white,
+                                    color: isDarkTheme
+                                        ? Colors.white
+                                        : Colors.black,
+                                    onPressed: () async {
+                                      await context
+                                          .read<MusicPlayer>()
+                                          .addPlayList(
+                                            artist?['tracks'],
+                                          );
+                                    },
+                                    child: Text(
+                                      S.of(context).Play_All,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  );
+                                }),
                           ],
                         ),
                       ),
@@ -100,7 +113,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                       ListView.builder(
                           shrinkWrap: true,
                           primary: false,
-                          itemCount: artist?['tracks'].length,
+                          itemCount: artist?['tracks']?.length ?? 0,
                           itemBuilder: (context, index) {
                             Map<String, dynamic> track =
                                 artist?['tracks'][index];

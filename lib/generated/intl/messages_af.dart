@@ -25,8 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("Oor"),
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Voeg by gunstelinge"),
+        "Albums": MessageLookupByLibrary.simpleMessage("Albums"),
         "Artists": MessageLookupByLibrary.simpleMessage("Kunstens"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Klankkwaliteit"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("KANSELLEER"),
         "Change_country": MessageLookupByLibrary.simpleMessage("Verander Land"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Donker Tema"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Dynamiese Tema"),
@@ -42,11 +44,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Maak oop in blaaier"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Speel alles"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Snitlyste"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("VERWYDER"),
         "RTL": MessageLookupByLibrary.simpleMessage("Res na links"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("Verwyder uit waglys"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Verwyder uit gunstelinge"),
+        "Remove_from_search_history": MessageLookupByLibrary.simpleMessage(
+            "Verwyder uit soekgeskiedenis?"),
         "Report_an_issue":
             MessageLookupByLibrary.simpleMessage("Gee \'n probleem aan"),
         "Request_a_feature":

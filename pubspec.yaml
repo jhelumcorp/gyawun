@@ -1,7 +1,7 @@
 name: vibe_music
 description: A new Flutter project.
 publish_to: 'none' 
-version: 0.5.1+5
+version: 0.6.0-beta.1+6
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
@@ -19,7 +19,6 @@ dependencies:
   google_fonts: ^3.0.1
   palette_generator: ^0.3.3+2
   intl: ^0.17.0
-  shared_preferences: ^2.0.15
   miniplayer: ^1.0.1
   carousel_slider: ^4.2.1
   cached_network_image: ^3.2.3

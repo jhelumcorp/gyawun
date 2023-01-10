@@ -1,36 +1,35 @@
+import 'dart:developer';
+
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
-import 'package:vibe_music/providers/AudioQualityprovider.dart';
-import 'package:vibe_music/providers/LanguageProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/providers/SearchProvider.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/screens/MainScreen.dart';
+import 'package:vibe_music/utils/navigator.dart';
 import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
     androidNotificationChannelName: 'Audio playback',
     androidNotificationOngoing: false,
   );
   await Hive.initFlutter();
-  Hive.openBox('myfavourites');
-  Hive.openBox('settings');
+  await Hive.openBox('myfavourites');
+  await Hive.openBox('settings');
+  await Hive.openBox('search_history');
   await HomeApi.setCountry();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => MusicPlayer()),
-    ChangeNotifierProvider(create: (_) => LanguageProvider(prefs)),
-    ChangeNotifierProvider(create: (_) => ThemeProvider(prefs)),
-    ChangeNotifierProvider(create: (_) => AudioQualityProvider(prefs))
+    ChangeNotifierProvider(create: (_) => SearchProvider())
   ], child: const MyApp()));
 }
 
@@ -42,47 +41,59 @@ class MyApp extends StatelessWidget {
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Vibe Music',
-          localizationsDelegates: const [
-            S.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: S.delegate.supportedLocales,
-          locale: context.watch<LanguageProvider>().currentLocale,
-          theme: context.watch<ThemeProvider>().lightTheme.copyWith(
-                colorScheme: context.watch<ThemeProvider>().dynamicThemeMode
+        return ValueListenableBuilder(
+          valueListenable: Hive.box('settings').listenable(),
+          builder: (context, Box box, child) {
+            String locale = box.get('language_code', defaultValue: 'en');
+            return MaterialApp(
+              navigatorKey: mainNavigatorKey,
+              debugShowCheckedModeBanner: false,
+              title: 'Vibe Music',
+              localizationsDelegates: const [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: S.delegate.supportedLocales,
+              locale: Locale(locale),
+              theme: lightTheme.copyWith(
+                colorScheme: box.get('dynamicTheme', defaultValue: false)
                     ? ColorScheme.fromSwatch(
-                        primarySwatch: createMaterialColor(song
-                                ?.colorPalette?.lightMutedColor ??
-                            context.watch<ThemeProvider>().primaryColor.light))
+                        primarySwatch: createMaterialColor(
+                            song?.colorPalette?.lightMutedColor ??
+                                Color(box.get('primaryColorLight',
+                                    defaultValue:
+                                        defaultPrimaryColor.light.value))))
                     : lightDynamic ??
                         ColorScheme.fromSwatch(
-                                primarySwatch: createMaterialColor(context
-                                    .watch<ThemeProvider>()
-                                    .primaryColor
-                                    .light))
+                                primarySwatch: createMaterialColor(Color(
+                                    box.get('primaryColorLight',
+                                        defaultValue:
+                                            defaultPrimaryColor.light.value))))
                             .harmonized(),
               ),
-          darkTheme: context.watch<ThemeProvider>().darkTheme.copyWith(
-                colorScheme: context.watch<ThemeProvider>().dynamicThemeMode
+              darkTheme: darkTheme.copyWith(
+                colorScheme: box.get('dynamicTheme', defaultValue: false)
                     ? ColorScheme.fromSwatch(
                         primarySwatch: createMaterialColor(song
                                 ?.colorPalette?.darkMutedColor ??
-                            context.watch<ThemeProvider>().primaryColor.dark))
+                            Color(box.get('primaryColorDark',
+                                defaultValue: defaultPrimaryColor.dark.value))))
                     : darkDynamic ??
                         (ColorScheme.fromSwatch(
-                            primarySwatch: createMaterialColor(context
-                                .watch<ThemeProvider>()
-                                .primaryColor
-                                .dark))),
+                            primarySwatch: createMaterialColor(Color(box.get(
+                                'primaryColorDark',
+                                defaultValue:
+                                    defaultPrimaryColor.dark.value))))),
               ),
-          themeMode: context.watch<ThemeProvider>().themeMode,
-          home: const Directionality(
-              textDirection: TextDirection.ltr, child: MainScreen()),
+              themeMode: box.get('theme', defaultValue: 'light') == 'dark'
+                  ? ThemeMode.dark
+                  : ThemeMode.light,
+              home: const Directionality(
+                  textDirection: TextDirection.ltr, child: MainScreen()),
+            );
+          },
         );
       },
     );

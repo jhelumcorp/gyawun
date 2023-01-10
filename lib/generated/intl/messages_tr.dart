@@ -25,8 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("Hakkında"),
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Favorilere ekle"),
+        "Albums": MessageLookupByLibrary.simpleMessage("Albümler"),
         "Artists": MessageLookupByLibrary.simpleMessage("Sanatçılar"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Ses Kalitesi"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("İPTAL ETMEK"),
         "Change_country": MessageLookupByLibrary.simpleMessage("Ülke değiştir"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Karanlık Tema"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Dinamik Tema"),
@@ -43,11 +45,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Tarayıcıda Aç"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Hepsini Oynat"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Oynatma listeleri"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("KALDIRMAK"),
         "RTL": MessageLookupByLibrary.simpleMessage("Sağdan sola"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("Sıradan Kaldır"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Favorilerden çıkar"),
+        "Remove_from_search_history": MessageLookupByLibrary.simpleMessage(
+            "Arama geçmişinden kaldırılsın mı?"),
         "Report_an_issue": MessageLookupByLibrary.simpleMessage("Sorun bildir"),
         "Request_a_feature":
             MessageLookupByLibrary.simpleMessage("Özellik talep et"),

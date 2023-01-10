@@ -33,5 +33,9 @@
     "Remove_from_favorites":"पसंदीदा से निकालें",
     "Add_to_favorites":"पसंदीदा में जोड़े",
     "Theme":"थीम",
-    "Nothing_Here":"यहाँ कुछ नहीं"
+    "Nothing_Here":"यहाँ कुछ नहीं",
+    "Albums":"एलबम",
+    "CANCEL":"रद्द करना",
+    "REMOVE":"निकालना",
+    "Remove_from_search_history":"खोज इतिहास से निकालें?"
 }

@@ -31,7 +31,7 @@ class TrackTile extends StatelessWidget {
         child: Image.network(
           // 'https://vibeapi-sheikh-haziq.vercel.app/thumb/sd?id=${song.videoId}',
           song.thumbnails.first.url,
-          // width: 45,
+          width: 45,
           height: 45,
           fit: BoxFit.fill,
           errorBuilder: ((context, error, stackTrace) {

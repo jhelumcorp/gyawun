@@ -25,8 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("حول"),
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("اضافة الى المفضلة"),
+        "Albums": MessageLookupByLibrary.simpleMessage("ألبومات"),
         "Artists": MessageLookupByLibrary.simpleMessage("الفنانين"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("جودة الصوت"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("إلغاء"),
         "Change_country": MessageLookupByLibrary.simpleMessage("تغيير الدولة"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("مظهر داكن"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("موضوع ديناميكي"),
@@ -42,11 +44,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("افتح في المتصفح"),
         "Play_All": MessageLookupByLibrary.simpleMessage("لعب كل"),
         "Playlists": MessageLookupByLibrary.simpleMessage("قوائم التشغيل"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("إزالة"),
         "RTL": MessageLookupByLibrary.simpleMessage("من اليمين الى اليسار"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("إزالة من قائمة الانتظار"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("إزالة من المفضلة"),
+        "Remove_from_search_history":
+            MessageLookupByLibrary.simpleMessage("إزالة من سجل البحث؟"),
         "Report_an_issue": MessageLookupByLibrary.simpleMessage("بلغ عن خطأ"),
         "Request_a_feature": MessageLookupByLibrary.simpleMessage("اطلب ميزة"),
         "Right_to_left_direction": MessageLookupByLibrary.simpleMessage(

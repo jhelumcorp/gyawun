@@ -24,8 +24,10 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "About": MessageLookupByLibrary.simpleMessage("アプリについて"),
         "Add_to_favorites": MessageLookupByLibrary.simpleMessage("お気に入りに追加"),
+        "Albums": MessageLookupByLibrary.simpleMessage("アルバム"),
         "Artists": MessageLookupByLibrary.simpleMessage("アーティスト"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("オーディオ品質"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("キャンセル"),
         "Change_country": MessageLookupByLibrary.simpleMessage("国を変更"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("ダークテーマ"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("ダイナミックテーマ"),
@@ -40,10 +42,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage("ブラウザで開く"),
         "Play_All": MessageLookupByLibrary.simpleMessage("すべて再生"),
         "Playlists": MessageLookupByLibrary.simpleMessage("プレイリスト"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("削除する"),
         "RTL": MessageLookupByLibrary.simpleMessage("右から左"),
         "Remove_from_Queue": MessageLookupByLibrary.simpleMessage("キューから削除"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("お気に入りから削除"),
+        "Remove_from_search_history":
+            MessageLookupByLibrary.simpleMessage("検索履歴から削除しますか?"),
         "Report_an_issue": MessageLookupByLibrary.simpleMessage("問題を報告する"),
         "Request_a_feature": MessageLookupByLibrary.simpleMessage("機能をリクエストする"),
         "Right_to_left_direction":

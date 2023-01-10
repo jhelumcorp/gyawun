@@ -25,8 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("О"),
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Добавить в избранное"),
+        "Albums": MessageLookupByLibrary.simpleMessage("Альбомы"),
         "Artists": MessageLookupByLibrary.simpleMessage("Художники"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Качество звука"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("ОТМЕНИТЬ"),
         "Change_country":
             MessageLookupByLibrary.simpleMessage("Сменить страну"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Темная тема"),
@@ -45,11 +47,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Открыть в браузере"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Играть все"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Плейлисты"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("УДАЛИТЬ"),
         "RTL": MessageLookupByLibrary.simpleMessage("Справа налево"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("Удалить из очереди"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Удалить из Избранного"),
+        "Remove_from_search_history":
+            MessageLookupByLibrary.simpleMessage("Удалить из истории поиска?"),
         "Report_an_issue":
             MessageLookupByLibrary.simpleMessage("Сообщить о проблеме"),
         "Request_a_feature":

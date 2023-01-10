@@ -399,6 +399,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Albums`
+  String get Albums {
+    return Intl.message(
+      'Albums',
+      name: 'Albums',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `CANCEL`
+  String get CANCEL {
+    return Intl.message(
+      'CANCEL',
+      name: 'CANCEL',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `REMOVE`
+  String get REMOVE {
+    return Intl.message(
+      'REMOVE',
+      name: 'REMOVE',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove from search history?`
+  String get Remove_from_search_history {
+    return Intl.message(
+      'Remove from search history?',
+      name: 'Remove_from_search_history',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

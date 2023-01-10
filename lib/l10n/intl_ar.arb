@@ -34,5 +34,9 @@
     "Remove_from_favorites":"إزالة من المفضلة",
     "Add_to_favorites":"اضافة الى المفضلة",
     "Theme":"سمة",
-    "Nothing_Here":"لا شيء هنا"
+    "Nothing_Here":"لا شيء هنا",
+    "Albums":"ألبومات",
+    "CANCEL":"إلغاء",
+    "REMOVE":"إزالة",
+    "Remove_from_search_history":"إزالة من سجل البحث؟"
 }

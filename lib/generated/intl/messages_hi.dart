@@ -25,8 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("के बारे में"),
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("पसंदीदा में जोड़े"),
+        "Albums": MessageLookupByLibrary.simpleMessage("एलबम"),
         "Artists": MessageLookupByLibrary.simpleMessage("कलाकार"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("ध्वनि गुणवत्ता"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("रद्द करना"),
         "Change_country": MessageLookupByLibrary.simpleMessage("देश बदलें"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("डार्क थीम"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("गतिशील थीम"),
@@ -42,11 +44,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ब्राउज़र में खोलें"),
         "Play_All": MessageLookupByLibrary.simpleMessage("सभी को बजाएं"),
         "Playlists": MessageLookupByLibrary.simpleMessage("प्लेलिस्ट"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("निकालना"),
         "RTL": MessageLookupByLibrary.simpleMessage("दाएं से बाएं"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("कतार से हटाएं"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("पसंदीदा से निकालें"),
+        "Remove_from_search_history":
+            MessageLookupByLibrary.simpleMessage("खोज इतिहास से निकालें?"),
         "Report_an_issue":
             MessageLookupByLibrary.simpleMessage("मामले की रिपोर्ट करें"),
         "Request_a_feature":

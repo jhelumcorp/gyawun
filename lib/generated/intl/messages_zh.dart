@@ -24,8 +24,10 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "About": MessageLookupByLibrary.simpleMessage("关于"),
         "Add_to_favorites": MessageLookupByLibrary.simpleMessage("添加到收藏夹"),
+        "Albums": MessageLookupByLibrary.simpleMessage("相册"),
         "Artists": MessageLookupByLibrary.simpleMessage("艺术家"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("音质"),
+        "CANCEL": MessageLookupByLibrary.simpleMessage("取消"),
         "Change_country": MessageLookupByLibrary.simpleMessage("改变国家"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("深色主题"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("动态主题"),
@@ -40,10 +42,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage("在浏览器中打开"),
         "Play_All": MessageLookupByLibrary.simpleMessage("全部播放"),
         "Playlists": MessageLookupByLibrary.simpleMessage("播放列表"),
+        "REMOVE": MessageLookupByLibrary.simpleMessage("消除"),
         "RTL": MessageLookupByLibrary.simpleMessage("右到左"),
         "Remove_from_Queue": MessageLookupByLibrary.simpleMessage("从队列中移除"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("从收藏夹中删除"),
+        "Remove_from_search_history":
+            MessageLookupByLibrary.simpleMessage("从搜索历史中删除？"),
         "Report_an_issue": MessageLookupByLibrary.simpleMessage("报告问题"),
         "Request_a_feature": MessageLookupByLibrary.simpleMessage("请求功能"),
         "Right_to_left_direction":

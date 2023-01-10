@@ -33,5 +33,9 @@
     "Remove_from_favorites":"お気に入りから削除",
     "Add_to_favorites":"お気に入りに追加",
     "Theme":"テーマ",
-    "Nothing_Here":"ここには何もない"
+    "Nothing_Here":"ここには何もない",
+    "Albums":"アルバム",
+    "CANCEL":"キャンセル",
+    "REMOVE":"削除する",
+    "Remove_from_search_history":"検索履歴から削除しますか?"
 }

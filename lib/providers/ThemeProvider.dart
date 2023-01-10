@@ -2,66 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class ThemeProvider extends ChangeNotifier {
-  PrimaryColor _primaryColor = PrimaryColor(
-      light: const Color(0xffb9f6ca), dark: const Color(0xff00c853));
-  String _themeMode = "light";
-  bool _dynamicThemeMode = false;
-  ThemeData _currentTheme = _lightTheme;
-  final SharedPreferences _prefs;
+PrimaryColor defaultPrimaryColor =
+    PrimaryColor(light: const Color(0xffb9f6ca), dark: const Color(0xff00c853));
 
-  ThemeProvider(this._prefs) {
-    String? thememode = _prefs.getString('themeMode');
-    bool? dynamicThemeMode = _prefs.getBool('dynamicThemeMode');
-
-    Color primaryColorLight = Color(
-        _prefs.getInt('primaryColorLight') ?? const Color(0xffb9f6ca).value);
-    Color primaryColorDark = Color(
-        _prefs.getInt('primaryColorDark') ?? const Color(0xff00c853).value);
-
-    _themeMode = thememode ?? "light";
-    _dynamicThemeMode = dynamicThemeMode ?? false;
-
-    _currentTheme = _themeMode == "light" ? lightTheme : darkTheme;
-    _primaryColor =
-        PrimaryColor(light: primaryColorLight, dark: primaryColorDark);
-  }
-  ThemeData get theme => _currentTheme;
-  ThemeData get lightTheme => _lightTheme;
-  ThemeData get darkTheme => _darkTheme;
-  bool get dynamicThemeMode => _dynamicThemeMode;
-  ThemeMode get themeMode =>
-      _themeMode == 'dark' ? ThemeMode.dark : ThemeMode.light;
-  PrimaryColor get primaryColor => _primaryColor;
-
-  setDynamicThemeMode(bool dynamicThemeMode) {
-    _dynamicThemeMode = dynamicThemeMode;
-    notifyListeners();
-    _prefs.setBool('dynamicThemeMode', dynamicThemeMode);
-  }
-
-  setTheme(themeMode) {
-    _themeMode = themeMode;
-    notifyListeners();
-    if (themeMode == 'dark') {
-      _currentTheme = darkTheme;
-    } else {
-      _currentTheme = lightTheme;
-    }
-    _prefs.setString('themeMode', themeMode);
-  }
-
-  setPrimaryColor(PrimaryColor primaryColor) {
-    _primaryColor = primaryColor;
-    _prefs.setInt('primaryColorLight', primaryColor.light.value);
-    _prefs.setInt('primaryColorDark', primaryColor.dark.value);
-    notifyListeners();
-  }
-}
-
-ThemeData _lightTheme = ThemeData.light().copyWith(
+ThemeData lightTheme = ThemeData.light().copyWith(
   useMaterial3: true,
   primaryTextTheme: const TextTheme(
     displayLarge: TextStyle(color: Colors.black),
@@ -99,7 +44,7 @@ ThemeData _lightTheme = ThemeData.light().copyWith(
   ),
 );
 
-ThemeData _darkTheme = ThemeData.dark().copyWith(
+ThemeData darkTheme = ThemeData.dark().copyWith(
   useMaterial3: true,
   primaryTextTheme: const TextTheme(
     displayLarge: TextStyle(color: Colors.white),

@@ -33,5 +33,9 @@
     "Remove_from_favorites":"Αφαίρεση από τα Αγαπημένα",
     "Add_to_favorites":"Προσθήκη στα αγαπημένα",
     "Theme":"Θέμα",
-    "Nothing_Here":"Τίποτα εδώ"
+    "Nothing_Here":"Τίποτα εδώ",
+    "Albums":"Άλμπουμ",
+    "CANCEL":"ΜΑΤΑΙΩΣΗ",
+    "REMOVE":"ΑΦΑΙΡΩ",
+    "Remove_from_search_history":"Κατάργηση από το ιστορικό αναζήτησης;"
 }
