@@ -37,5 +37,7 @@
     "Albums":"アルバム",
     "CANCEL":"キャンセル",
     "REMOVE":"削除する",
-    "Remove_from_search_history":"検索履歴から削除しますか?"
+    "Remove_from_search_history":"検索履歴から削除しますか?", 
+    "Play_next":"次に再生",
+    "Videos":"動画"
 }

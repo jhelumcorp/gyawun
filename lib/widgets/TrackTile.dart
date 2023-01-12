@@ -1,13 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:vibe_music/Models/Track.dart';
-import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/utils/showOptions.dart';
 
-import '../generated/l10n.dart';
 import '../providers/MusicPlayer.dart';
 
 class TrackTile extends StatelessWidget {

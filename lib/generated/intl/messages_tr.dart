@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Tarayıcıda Aç"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Hepsini Oynat"),
+        "Play_next": MessageLookupByLibrary.simpleMessage("Sonrakini çal"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Oynatma listeleri"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("KALDIRMAK"),
         "RTL": MessageLookupByLibrary.simpleMessage("Sağdan sola"),
@@ -66,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "TROUBLESHOOTING": MessageLookupByLibrary.simpleMessage("SORUN GİDER"),
         "Theme": MessageLookupByLibrary.simpleMessage("Tema"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Parçalar"),
+        "Videos": MessageLookupByLibrary.simpleMessage("videolar"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("Kaynak kodunu görüntüle"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("Sıraya ekle"),

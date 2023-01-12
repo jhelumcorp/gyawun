@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -11,6 +9,7 @@ import 'package:vibe_music/screens/SearchScreens/ArtistsSearch.dart';
 import 'package:vibe_music/screens/SearchScreens/PlaylistSearch.dart';
 import 'package:vibe_music/screens/SearchScreens/SongsSearch.dart';
 import 'package:vibe_music/screens/SearchScreens/SuggestionsSearch.dart';
+import 'package:vibe_music/screens/SearchScreens/videoSearch.dart';
 import 'package:vibe_music/utils/navigator.dart';
 import 'package:vibe_music/widgets/search_history.dart';
 
@@ -42,11 +41,40 @@ class _SearchScreenState extends State<SearchScreen>
   void initState() {
     super.initState();
     tabController = TabController(
-      length: 4,
+      length: 5,
       vsync: this,
     )..addListener(() {
         setState(() {});
       });
+  }
+
+  search(value) {
+    if (value != null) {
+      context.read<SearchProvider>().refresh();
+      textEditingController.text = value;
+      Box box = Hive.box('search_history');
+      int index = box.values.toList().indexOf(textEditingController.text);
+      if (index != -1) {
+        box.deleteAt(index);
+      }
+      box.add(textEditingController.text);
+    }
+    setState(() {});
+  }
+
+  openSearch() {
+    mainNavigatorKey.currentState
+        ?.push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          SearchSuggestions(
+        query: textEditingController.text,
+      ),
+      transitionDuration: Duration.zero,
+      reverseTransitionDuration: Duration.zero,
+    ))
+        .then((value) {
+      search(value);
+    });
   }
 
   @override
@@ -64,7 +92,7 @@ class _SearchScreenState extends State<SearchScreen>
         return false;
       },
       child: DefaultTabController(
-        length: 4,
+        length: 5,
         child: Scaffold(
           appBar: AppBar(
             leading: const Icon(Icons.search_rounded),
@@ -91,29 +119,7 @@ class _SearchScreenState extends State<SearchScreen>
             elevation: 0,
             title: TextField(
               onTap: () {
-                mainNavigatorKey?.currentState
-                    ?.push(PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      SearchSuggestions(
-                    query: textEditingController.text,
-                  ),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ))
-                    .then((value) {
-                  if (value != null) {
-                    context.read<SearchProvider>().refresh();
-                    textEditingController.text = value;
-                    Box box = Hive.box('search_history');
-                    int index =
-                        box.values.toList().indexOf(textEditingController.text);
-                    if (index != -1) {
-                      box.deleteAt(index);
-                    }
-                    box.add(textEditingController.text);
-                  }
-                  setState(() {});
-                });
+                openSearch();
               },
               style: Theme.of(context).primaryTextTheme.titleLarge,
               decoration: InputDecoration(
@@ -160,7 +166,7 @@ class _SearchScreenState extends State<SearchScreen>
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Text(S.of(context).Artists),
+                          child: Text(S.of(context).Videos),
                         ),
                       ),
                       Tab(
@@ -173,7 +179,7 @@ class _SearchScreenState extends State<SearchScreen>
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Text(S.of(context).Albums),
+                          child: Text(S.of(context).Artists),
                         ),
                       ),
                       Tab(
@@ -182,6 +188,19 @@ class _SearchScreenState extends State<SearchScreen>
                               horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
                             color: tabController?.index == 3
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(S.of(context).Albums),
+                        ),
+                      ),
+                      Tab(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: tabController?.index == 4
                                 ? Theme.of(context).colorScheme.primary
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(20),
@@ -195,14 +214,12 @@ class _SearchScreenState extends State<SearchScreen>
           body: textEditingController.text.trim().isEmpty
               ? SearchHistory(
                   onTap: (value) {
-                    if (value != null) {
-                      textEditingController.text = value;
-                    }
-                    setState(() {});
+                    search(value);
                   },
                   onTrailing: (e) {
                     setState(() {
                       textEditingController.text = e;
+                      openSearch();
                     });
                   },
                 )
@@ -213,6 +230,7 @@ class _SearchScreenState extends State<SearchScreen>
                         controller: tabController,
                         children: [
                           SongsSearch(query: textEditingController.text),
+                          VideoSearch(query: textEditingController.text),
                           ArtistsSearch(query: textEditingController.text),
                           AlbumSearch(query: textEditingController.text),
                           PlaylistSearch(query: textEditingController.text)

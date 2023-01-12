@@ -36,19 +36,20 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    HomeApi().getMusicHome().then((value) {
-      setState(() {
-        head = value['head'];
-        body = value['body'];
-      });
-    });
-    HomeApi.getCharts().then((value) {
+    getHomeData();
+  }
+
+  Future getHomeData() async {
+    Map valueHome = await HomeApi().getMusicHome();
+    Map value = await HomeApi.getCharts();
+    setState(() {
+      head = valueHome['head'];
+      body = valueHome['body'];
       trending = value['trending'];
       artists = value['artists'];
-      setState(() {
-        isLoading = false;
-      });
+      isLoading = false;
     });
+    return true;
   }
 
   @override
@@ -66,377 +67,391 @@ class _HomeScreenState extends State<HomeScreen>
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: SafeArea(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          if (head != null)
-                            CarouselSlider(
-                              options: CarouselOptions(
-                                aspectRatio: 16 / 9,
-                                enableInfiniteScroll: true,
-                                autoPlay: true,
-                                enlargeCenterPage: true,
-                              ),
-                              items: head!.map((s) {
-                                Track song = Track(
-                                  title: s['title'],
-                                  videoId: s['videoId'],
-                                  artists: [],
-                                  thumbnails: [Thumbnail(url: s['image'])],
-                                );
-                                return Builder(
-                                  builder: (BuildContext context) {
-                                    return ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          await context
-                                              .read<MusicPlayer>()
-                                              .addNew(
-                                                song,
-                                              );
-                                        },
-                                        onLongPress: () {
-                                          showOptions(song, context);
-                                        },
-                                        child: Stack(
-                                          children: [
-                                            CachedNetworkImage(
-                                              imageUrl:
-                                                  'https://img.youtube.com/vi/${song.videoId}/maxresdefault.jpg',
-                                              fit: BoxFit.fill,
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                            ),
-                                            Container(
-                                              decoration: const BoxDecoration(
-                                                gradient: LinearGradient(
-                                                  colors: [
-                                                    Colors.transparent,
-                                                    Colors.black
-                                                  ],
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment.bottomCenter,
-                                                ),
-                                              ),
-                                              alignment: Alignment.bottomLeft,
-                                              child: ListTile(
-                                                onTap: () async {
-                                                  await context
-                                                      .read<MusicPlayer>()
-                                                      .addNew(
-                                                        song,
-                                                      );
-                                                },
-                                                title: Text(
-                                                  song.title,
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      overflow: TextOverflow
-                                                          .ellipsis),
-                                                ),
-                                                trailing: IconButton(
-                                                    color: Colors.white,
-                                                    onPressed: () async {
-                                                      await context
-                                                          .read<MusicPlayer>()
-                                                          .addNew(
-                                                            song,
-                                                          );
-                                                    },
-                                                    icon: const Icon(Icons
-                                                        .play_arrow_rounded)),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }).toList(),
-                            ),
-                          if (artists != null && artists!.isNotEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8, right: 8, top: 16),
-                              child: Text(
-                                S.of(context).Artists,
-                                style: Theme.of(context)
-                                    .primaryTextTheme
-                                    .titleLarge
-                                    ?.copyWith(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ),
-                          if (artists != null && artists!.isNotEmpty)
-                            SingleChildScrollView(
-                                padding: const EdgeInsets.only(
-                                  left: 8.0,
+            : RefreshIndicator(
+                onRefresh: getHomeData,
+                child: SingleChildScrollView(
+                  child: SafeArea(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            if (head != null)
+                              CarouselSlider(
+                                options: CarouselOptions(
+                                  aspectRatio: 16 / 9,
+                                  enableInfiniteScroll: true,
+                                  autoPlay: true,
+                                  enlargeCenterPage: true,
                                 ),
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: artists!.map((artist) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.pushNamed(
-                                              context, '/home/artist',
-                                              arguments: {
-                                                'browseId': artist['browseId'],
-                                                'imageUrl': artist['thumbnails']
-                                                    .last['url'],
-                                                'name': artist['title'],
-                                              });
-                                        },
+                                items: head!.map((s) {
+                                  Track song = Track(
+                                    title: s['title'],
+                                    videoId: s['videoId'],
+                                    artists: [],
+                                    thumbnails: [Thumbnail(url: s['image'])],
+                                  );
+                                  return Builder(
+                                    builder: (BuildContext context) {
+                                      return ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            await context
+                                                .read<MusicPlayer>()
+                                                .addNew(
+                                                  song,
+                                                );
+                                          },
+                                          onLongPress: () {
+                                            showOptions(song, context);
+                                          },
+                                          child: Stack(
+                                            children: [
+                                              CachedNetworkImage(
+                                                imageUrl:
+                                                    'https://img.youtube.com/vi/${song.videoId}/maxresdefault.jpg',
+                                                fit: BoxFit.fill,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                decoration: const BoxDecoration(
+                                                  gradient: LinearGradient(
+                                                    colors: [
+                                                      Colors.transparent,
+                                                      Colors.black
+                                                    ],
+                                                    begin: Alignment.topCenter,
+                                                    end: Alignment.bottomCenter,
+                                                  ),
+                                                ),
+                                                alignment: Alignment.bottomLeft,
+                                                child: ListTile(
+                                                  onTap: () async {
+                                                    await context
+                                                        .read<MusicPlayer>()
+                                                        .addNew(
+                                                          song,
+                                                        );
+                                                  },
+                                                  title: Text(
+                                                    song.title,
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                                  ),
+                                                  trailing: IconButton(
+                                                      color: Colors.white,
+                                                      onPressed: () async {
+                                                        await context
+                                                            .read<MusicPlayer>()
+                                                            .addNew(
+                                                              song,
+                                                            );
+                                                      },
+                                                      icon: const Icon(Icons
+                                                          .play_arrow_rounded)),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                            if (artists != null && artists!.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 8, right: 8, top: 16),
+                                child: Text(
+                                  S.of(context).Artists,
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .titleLarge
+                                      ?.copyWith(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                            if (artists != null && artists!.isNotEmpty)
+                              SingleChildScrollView(
+                                  padding: const EdgeInsets.only(
+                                    left: 8.0,
+                                  ),
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: artists!.map((artist) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                                context, '/home/artist',
+                                                arguments: {
+                                                  'browseId':
+                                                      artist['browseId'],
+                                                  'imageUrl':
+                                                      artist['thumbnails']
+                                                          .last['url'],
+                                                  'name': artist['title'],
+                                                });
+                                          },
+                                          child: Column(
+                                            children: [
+                                              CircleAvatar(
+                                                radius: 50,
+                                                backgroundImage: NetworkImage(
+                                                    artist['thumbnails']
+                                                        .last['url']),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                artist['title'],
+                                                style: Theme.of(context)
+                                                    .primaryTextTheme
+                                                    .titleMedium
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  )),
+                            if (body != null && body!.isNotEmpty)
+                              ...body!.map((item) {
+                                String title = item['title'];
+                                List content = item['playlists'] as List;
+                                bool areSongs = content.isNotEmpty
+                                    ? content.first['videoId'] != null
+                                    : false;
+
+                                return content.isEmpty
+                                    ? const SizedBox.shrink()
+                                    : Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 0, top: 8.0, bottom: 8.0),
                                         child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage: NetworkImage(
-                                                  artist['thumbnails']
-                                                      .last['url']),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              artist['title'],
-                                              style: Theme.of(context)
-                                                  .primaryTextTheme
-                                                  .titleMedium
-                                                  ?.copyWith(
+                                            // if (!areSongs)
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8,
+                                                      horizontal: 8),
+                                              child: Text(
+                                                title,
+                                                style: Theme.of(context)
+                                                    .primaryTextTheme
+                                                    .titleLarge
+                                                    ?.copyWith(
+                                                      fontSize: 24,
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
                                             ),
+                                            if (areSongs)
+                                              ExpandablePageView(
+                                                controller: songsController,
+                                                padEnds: false,
+                                                children: [
+                                                  Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: content
+                                                          .sublist(
+                                                              0,
+                                                              content.length > 4
+                                                                  ? 4
+                                                                  : content
+                                                                      .length)
+                                                          .map((track) {
+                                                        track['artists'] = [
+                                                          Artist(
+                                                                  name: track[
+                                                                      'count'])
+                                                              .toMap()
+                                                        ];
+                                                        track['thumbnails'] = [
+                                                          Thumbnail(
+                                                                  url: track[
+                                                                      'image'])
+                                                              .toMap()
+                                                        ];
+                                                        return TrackTile(
+                                                            track: track);
+                                                      }).toList()),
+                                                  if (content.length > 4)
+                                                    Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: content
+                                                            .sublist(
+                                                                4,
+                                                                content.length >
+                                                                        8
+                                                                    ? 8
+                                                                    : content
+                                                                        .length)
+                                                            .map((track) {
+                                                          track['artists'] = [
+                                                            Artist(
+                                                                    name: track[
+                                                                        'count'])
+                                                                .toMap()
+                                                          ];
+                                                          track['thumbnails'] =
+                                                              [
+                                                            Thumbnail(
+                                                                    url: track[
+                                                                        'image'])
+                                                                .toMap()
+                                                          ];
+                                                          return TrackTile(
+                                                              track: track);
+                                                        }).toList()),
+                                                  if (content.length > 8)
+                                                    Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: content
+                                                            .sublist(
+                                                                8,
+                                                                content.length >
+                                                                        12
+                                                                    ? 12
+                                                                    : content
+                                                                        .length)
+                                                            .map((track) {
+                                                          track['artists'] = [
+                                                            Artist(
+                                                                    name: track[
+                                                                        'count'])
+                                                                .toMap()
+                                                          ];
+                                                          track['thumbnails'] =
+                                                              [
+                                                            Thumbnail(
+                                                                    url: track[
+                                                                        'image'])
+                                                                .toMap()
+                                                          ];
+                                                          return TrackTile(
+                                                              track: track);
+                                                        }).toList()),
+                                                  if (content.length > 12)
+                                                    Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: content
+                                                            .sublist(
+                                                                12,
+                                                                content.length >
+                                                                        16
+                                                                    ? 16
+                                                                    : content
+                                                                        .length)
+                                                            .map((track) {
+                                                          track['artists'] = [
+                                                            Artist(
+                                                                    name: track[
+                                                                        'count'])
+                                                                .toMap()
+                                                          ];
+                                                          track['thumbnails'] =
+                                                              [
+                                                            Thumbnail(
+                                                                    url: track[
+                                                                        'image'])
+                                                                .toMap()
+                                                          ];
+                                                          return TrackTile(
+                                                              track: track);
+                                                        }).toList()),
+                                                ],
+                                              ),
+                                            if (!areSongs)
+                                              SizedBox(
+                                                height: 150,
+                                                child: ListView.separated(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 16),
+                                                  shrinkWrap: true,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount: content.length,
+                                                  separatorBuilder:
+                                                      (context, index) {
+                                                    return const SizedBox(
+                                                        width: 10);
+                                                  },
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    Map playlist =
+                                                        content[index] as Map;
+
+                                                    return ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              '/playlist',
+                                                              arguments: {
+                                                                'playlistId': playlist[
+                                                                        'playlistId'] ??
+                                                                    playlist[
+                                                                        'browseId'],
+                                                                'isAlbum': playlist[
+                                                                        'browseId'] !=
+                                                                    null,
+                                                              });
+                                                        },
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              playlist['image'],
+                                                          errorWidget:
+                                                              ((context, error,
+                                                                  stackTrace) {
+                                                            return Image.asset(
+                                                                "assets/images/playlist.png");
+                                                          }),
+                                                          height: 150,
+                                                          // width: 150,
+                                                          fit: BoxFit.fitHeight,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
                                           ],
                                         ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                )),
-                          if (body != null && body!.isNotEmpty)
-                            ...body!.map((item) {
-                              String title = item['title'];
-                              List content = item['playlists'] as List;
-                              bool areSongs = content.isNotEmpty
-                                  ? content.first['videoId'] != null
-                                  : false;
-
-                              return content.isEmpty
-                                  ? const SizedBox.shrink()
-                                  : Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 0, top: 8.0, bottom: 8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          // if (!areSongs)
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8, horizontal: 8),
-                                            child: Text(
-                                              title,
-                                              style: Theme.of(context)
-                                                  .primaryTextTheme
-                                                  .titleLarge
-                                                  ?.copyWith(
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                          ),
-                                          if (areSongs)
-                                            ExpandablePageView(
-                                              controller: songsController,
-                                              padEnds: false,
-                                              children: [
-                                                Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: content
-                                                        .sublist(
-                                                            0,
-                                                            content.length > 4
-                                                                ? 4
-                                                                : content
-                                                                    .length)
-                                                        .map((track) {
-                                                      track['artists'] = [
-                                                        Artist(
-                                                                name: track[
-                                                                    'count'])
-                                                            .toMap()
-                                                      ];
-                                                      track['thumbnails'] = [
-                                                        Thumbnail(
-                                                                url: track[
-                                                                    'image'])
-                                                            .toMap()
-                                                      ];
-                                                      return TrackTile(
-                                                          track: track);
-                                                    }).toList()),
-                                                if (content.length > 4)
-                                                  Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: content
-                                                          .sublist(
-                                                              4,
-                                                              content.length > 8
-                                                                  ? 8
-                                                                  : content
-                                                                      .length)
-                                                          .map((track) {
-                                                        track['artists'] = [
-                                                          Artist(
-                                                                  name: track[
-                                                                      'count'])
-                                                              .toMap()
-                                                        ];
-                                                        track['thumbnails'] = [
-                                                          Thumbnail(
-                                                                  url: track[
-                                                                      'image'])
-                                                              .toMap()
-                                                        ];
-                                                        return TrackTile(
-                                                            track: track);
-                                                      }).toList()),
-                                                if (content.length > 8)
-                                                  Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: content
-                                                          .sublist(
-                                                              8,
-                                                              content.length >
-                                                                      12
-                                                                  ? 12
-                                                                  : content
-                                                                      .length)
-                                                          .map((track) {
-                                                        track['artists'] = [
-                                                          Artist(
-                                                                  name: track[
-                                                                      'count'])
-                                                              .toMap()
-                                                        ];
-                                                        track['thumbnails'] = [
-                                                          Thumbnail(
-                                                                  url: track[
-                                                                      'image'])
-                                                              .toMap()
-                                                        ];
-                                                        return TrackTile(
-                                                            track: track);
-                                                      }).toList()),
-                                                if (content.length > 12)
-                                                  Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: content
-                                                          .sublist(
-                                                              12,
-                                                              content.length >
-                                                                      16
-                                                                  ? 16
-                                                                  : content
-                                                                      .length)
-                                                          .map((track) {
-                                                        track['artists'] = [
-                                                          Artist(
-                                                                  name: track[
-                                                                      'count'])
-                                                              .toMap()
-                                                        ];
-                                                        track['thumbnails'] = [
-                                                          Thumbnail(
-                                                                  url: track[
-                                                                      'image'])
-                                                              .toMap()
-                                                        ];
-                                                        return TrackTile(
-                                                            track: track);
-                                                      }).toList()),
-                                              ],
-                                            ),
-                                          if (!areSongs)
-                                            SizedBox(
-                                              height: 150,
-                                              child: ListView.separated(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 16),
-                                                shrinkWrap: true,
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemCount: content.length,
-                                                separatorBuilder:
-                                                    (context, index) {
-                                                  return const SizedBox(
-                                                      width: 10);
-                                                },
-                                                itemBuilder: (context, index) {
-                                                  Map playlist =
-                                                      content[index] as Map;
-
-                                                  return ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        Navigator.pushNamed(
-                                                            context,
-                                                            '/playlist',
-                                                            arguments: {
-                                                              'playlistId': playlist[
-                                                                      'playlistId'] ??
-                                                                  playlist[
-                                                                      'browseId'],
-                                                              'isAlbum': playlist[
-                                                                      'browseId'] !=
-                                                                  null,
-                                                            });
-                                                      },
-                                                      child: CachedNetworkImage(
-                                                        imageUrl:
-                                                            playlist['image'],
-                                                        errorWidget: ((context,
-                                                            error, stackTrace) {
-                                                          return Image.asset(
-                                                              "assets/images/playlist.png");
-                                                        }),
-                                                        height: 150,
-                                                        // width: 150,
-                                                        fit: BoxFit.fitHeight,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            )
-                                        ],
-                                      ),
-                                    );
-                            }).toList()
-                        ],
-                      )
-                    ],
+                                      );
+                              }).toList()
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

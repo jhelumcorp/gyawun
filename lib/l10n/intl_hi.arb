@@ -37,5 +37,7 @@
     "Albums":"एलबम",
     "CANCEL":"रद्द करना",
     "REMOVE":"निकालना",
-    "Remove_from_search_history":"खोज इतिहास से निकालें?"
+    "Remove_from_search_history":"खोज इतिहास से निकालें?", 
+    "Play_next":"अगला खेलें",
+    "Videos":"वीडियो"
 }

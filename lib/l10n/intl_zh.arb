@@ -37,5 +37,7 @@
     "Albums":"相册",
     "CANCEL":"取消",
     "REMOVE":"消除",
-    "Remove_from_search_history":"从搜索历史中删除？"
+    "Remove_from_search_history":"从搜索历史中删除？", 
+    "Play_next":"接下来播放",
+    "Videos":"影片"
 }

@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Maak oop in blaaier"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Speel alles"),
+        "Play_next": MessageLookupByLibrary.simpleMessage("Speel volgende"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Snitlyste"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("VERWYDER"),
         "RTL": MessageLookupByLibrary.simpleMessage("Res na links"),
@@ -67,6 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("PROUBLESHOOTING"),
         "Theme": MessageLookupByLibrary.simpleMessage("Tema"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Snitte"),
+        "Videos": MessageLookupByLibrary.simpleMessage("Video\'s"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("Bekyk bronkode"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("Voeg by waglys"),

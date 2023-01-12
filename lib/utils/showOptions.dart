@@ -62,7 +62,7 @@ showOptions(Track song, context) {
                       context.read<MusicPlayer>().playNext(song);
                     },
                     title: Text(
-                      "Play Next",
+                      S.of(context).Play_next,
                       style: Theme.of(context)
                           .primaryTextTheme
                           .titleMedium

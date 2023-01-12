@@ -1,7 +1,7 @@
 name: vibe_music
 description: A new Flutter project.
 publish_to: 'none' 
-version: 0.6.0-beta.1+6
+version: 0.6.0-beta.2+7
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
@@ -36,6 +36,7 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+  change_app_package_name: ^1.1.0
 
 
 flutter:
@@ -43,19 +44,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+    - assets/icons/
 flutter_intl:
   enabled: true

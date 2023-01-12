@@ -41,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("ここには何もない"),
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage("ブラウザで開く"),
         "Play_All": MessageLookupByLibrary.simpleMessage("すべて再生"),
+        "Play_next": MessageLookupByLibrary.simpleMessage("次に再生"),
         "Playlists": MessageLookupByLibrary.simpleMessage("プレイリスト"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("削除する"),
         "RTL": MessageLookupByLibrary.simpleMessage("右から左"),
@@ -61,6 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "TROUBLESHOOTING": MessageLookupByLibrary.simpleMessage("トラブルシューティング"),
         "Theme": MessageLookupByLibrary.simpleMessage("テーマ"),
         "Tracks": MessageLookupByLibrary.simpleMessage("トラック"),
+        "Videos": MessageLookupByLibrary.simpleMessage("動画"),
         "View_source_code": MessageLookupByLibrary.simpleMessage("ソースコードを表示"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("キューに追加"),
         "github_redirect":

@@ -37,5 +37,7 @@
     "Albums":"Álbumes",
     "CANCEL":"CANCELAR",
     "REMOVE":"RETIRAR",
-    "Remove_from_search_history":"¿Quitar del historial de búsqueda?"
+    "Remove_from_search_history":"¿Quitar del historial de búsqueda?", 
+    "Play_next":"jugar siguiente",
+    "Videos":"Vídeos"
 }

@@ -37,5 +37,7 @@
     "Albums":"Άλμπουμ",
     "CANCEL":"ΜΑΤΑΙΩΣΗ",
     "REMOVE":"ΑΦΑΙΡΩ",
-    "Remove_from_search_history":"Κατάργηση από το ιστορικό αναζήτησης;"
+    "Remove_from_search_history":"Κατάργηση από το ιστορικό αναζήτησης;", 
+    "Play_next":"Παίξτε το επόμενο",
+    "Videos":"Βίντεο"
 }

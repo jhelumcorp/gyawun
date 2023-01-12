@@ -37,5 +37,7 @@
     "Albums":"Albums",
     "CANCEL":"KANSELLEER",
     "REMOVE":"VERWYDER",
-    "Remove_from_search_history":"Verwyder uit soekgeskiedenis?"
+    "Remove_from_search_history":"Verwyder uit soekgeskiedenis?", 
+    "Play_next":"Speel volgende",
+    "Videos":"Video's"
 }

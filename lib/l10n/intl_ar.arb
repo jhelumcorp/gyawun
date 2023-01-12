@@ -38,5 +38,7 @@
     "Albums":"ألبومات",
     "CANCEL":"إلغاء",
     "REMOVE":"إزالة",
-    "Remove_from_search_history":"إزالة من سجل البحث؟"
+    "Remove_from_search_history":"إزالة من سجل البحث؟", 
+    "Play_next":"العب بعد ذلك",
+    "Videos":"أشرطة فيديو"
 }

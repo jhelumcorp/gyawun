@@ -44,6 +44,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Im Browser öffnen"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Alles abspielen"),
+        "Play_next":
+            MessageLookupByLibrary.simpleMessage("Als nächstes spielen"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Wiedergabelisten"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("LÖSCHEN"),
         "RTL": MessageLookupByLibrary.simpleMessage("Rechts nach links"),
@@ -68,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("FEHLERBEHEBUNG"),
         "Theme": MessageLookupByLibrary.simpleMessage("Thema"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Titel"),
+        "Videos": MessageLookupByLibrary.simpleMessage("Videos"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("Quellcode anzeigen"),
         "addToQueue": MessageLookupByLibrary.simpleMessage(

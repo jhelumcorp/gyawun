@@ -37,5 +37,7 @@
     "Albums":"Albümler",
     "CANCEL":"İPTAL ETMEK",
     "REMOVE":"KALDIRMAK",
-    "Remove_from_search_history":"Arama geçmişinden kaldırılsın mı?"
+    "Remove_from_search_history":"Arama geçmişinden kaldırılsın mı?", 
+    "Play_next":"Sonrakini çal",
+    "Videos":"videolar"
 }

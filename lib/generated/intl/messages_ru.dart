@@ -46,6 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Открыть в браузере"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Играть все"),
+        "Play_next": MessageLookupByLibrary.simpleMessage("Играть дальше"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Плейлисты"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("УДАЛИТЬ"),
         "RTL": MessageLookupByLibrary.simpleMessage("Справа налево"),
@@ -71,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ИСПРАВЛЕНИЕ ПРОБЛЕМ"),
         "Theme": MessageLookupByLibrary.simpleMessage("Тема"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Треки"),
+        "Videos": MessageLookupByLibrary.simpleMessage("Ролики"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("Посмотреть исходный код"),
         "addToQueue":

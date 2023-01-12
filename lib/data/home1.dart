@@ -316,6 +316,10 @@ class HomeApi {
     return await searchCategory(query, 'song');
   }
 
+  static Future<List> searchVideos(query) async {
+    return await searchCategory(query, 'video');
+  }
+
   static Future<List> searchArtists(query) async {
     return await searchCategory(query, 'artist');
   }

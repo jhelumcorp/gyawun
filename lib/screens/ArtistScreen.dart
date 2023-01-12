@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
-import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/widgets/TrackTile.dart';
 import '../providers/MusicPlayer.dart';
 

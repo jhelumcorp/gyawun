@@ -21,6 +21,7 @@ class _SearchSuggestionsState extends State<SearchSuggestions> {
   void initState() {
     super.initState();
     textEditingController.text = widget.query;
+    if (widget.query.isNotEmpty) getSuggestions();
   }
 
   getSuggestions() async {

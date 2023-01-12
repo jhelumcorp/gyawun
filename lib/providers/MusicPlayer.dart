@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:palette_generator/palette_generator.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/utils/colors.dart';
@@ -16,8 +13,8 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 YoutubeExplode _youtubeExplode = YoutubeExplode();
 
 class MusicPlayer extends ChangeNotifier {
-  final AudioPlayer _player = AudioPlayer();
-  int _index = 0;
+  final AndroidLoudnessEnhancer _loudnessEnhancer = AndroidLoudnessEnhancer();
+  AudioPlayer _player = AudioPlayer();
   bool _initialised = false;
   bool _isPlaying = false;
 
@@ -33,15 +30,18 @@ class MusicPlayer extends ChangeNotifier {
   );
 
   MusicPlayer() {
+    _player = AudioPlayer(
+      audioPipeline: AudioPipeline(androidAudioEffects: [_loudnessEnhancer]),
+    );
+    _loudnessEnhancer.setEnabled(true);
+    _loudnessEnhancer.setTargetGain(0);
+    _player.setVolume(1);
     _isPlaying = _player.playing;
     _player.setAudioSource(playlist!,
-        initialIndex: 0, initialPosition: Duration.zero, preload: false);
+        initialIndex: 0, initialPosition: Duration.zero, preload: true);
 
-    _player.playerStateStream.listen((state) async {
-      _index = _player.currentIndex ?? 0;
-    });
+    _player.playerStateStream.listen((state) async {});
     _player.currentIndexStream.listen((event) {
-      _index = event ?? _index;
       notifyListeners();
     });
     _player.sequenceStream.listen((event) {
@@ -60,6 +60,7 @@ class MusicPlayer extends ChangeNotifier {
 
   get player => _player;
   get isInitialized => _initialised;
+  AndroidLoudnessEnhancer get loudnessEnhancer => _loudnessEnhancer;
 
   get miniplayerController => _miniplayerController;
   Track? get song => _player.sequenceState?.currentSource?.tag.extras == null
@@ -74,7 +75,7 @@ class MusicPlayer extends ChangeNotifier {
 
   addToQUeue(Track newSong) async {
     if (_player.sequence?.isEmpty ?? true) {
-      addNew(newSong);
+      addOneToQueue(newSong);
       return;
     }
     bool exists = _player.sequence
@@ -112,7 +113,7 @@ class MusicPlayer extends ChangeNotifier {
 
   playNext(Track newSong) async {
     if (_player.sequence?.isEmpty ?? true) {
-      addNew(newSong);
+      addOneToQueue(newSong);
       return;
     }
     bool exists = _player.sequence
@@ -297,6 +298,29 @@ class MusicPlayer extends ChangeNotifier {
       }
     });
     // _miniplayerController.animateToHeight(state: PanelState.MAX);
+  }
+
+  Future addOneToQueue(Track newSong) async {
+    PaletteGenerator? color = await generateColor(newSong.thumbnails.last.url);
+    newSong.colorPalette = ColorPalette(
+        darkMutedColor: color?.darkMutedColor?.color,
+        lightMutedColor: color?.lightMutedColor?.color);
+    tempSong = newSong;
+    _initialised = true;
+
+    notifyListeners();
+
+    await playlist?.add(AudioSource.uri(
+      await getAudioUri(newSong.videoId),
+      tag: MediaItem(
+        id: newSong.videoId,
+        title: newSong.title,
+        artUri: Uri.parse(newSong.thumbnails.last.url),
+        artist: newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
+        album: newSong.albums?.name,
+        extras: newSong.toMap(),
+      ),
+    ));
   }
 
   /// Change the songe position in playlist from one index to another.

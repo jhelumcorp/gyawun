@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/SearchProvider.dart';
 
 class AlbumSearch extends StatefulWidget {

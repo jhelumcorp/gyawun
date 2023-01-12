@@ -37,5 +37,7 @@
     "Albums":"앨범",
     "CANCEL":"취소",
     "REMOVE":"제거하다",
-    "Remove_from_search_history":"검색 기록에서 삭제하시겠습니까?"
+    "Remove_from_search_history":"검색 기록에서 삭제하시겠습니까?", 
+    "Play_next":"다음 플레이",
+    "Videos":"비디오"
 }

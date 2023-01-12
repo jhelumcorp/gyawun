@@ -37,5 +37,7 @@
     "Albums":"Альбомы",
     "CANCEL":"ОТМЕНИТЬ",
     "REMOVE":"УДАЛИТЬ",
-    "Remove_from_search_history":"Удалить из истории поиска?"
+    "Remove_from_search_history":"Удалить из истории поиска?", 
+    "Play_next":"Играть дальше",
+    "Videos":"Ролики"
 }

@@ -37,5 +37,7 @@
     "Albums":"Albums",
     "CANCEL":"CANCEL",
     "REMOVE":"REMOVE",
-    "Remove_from_search_history":"Remove from search history?"
+    "Remove_from_search_history":"Remove from search history?", 
+    "Play_next":"Play next",
+    "Videos":"Videos"
 }

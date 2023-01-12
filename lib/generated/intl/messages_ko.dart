@@ -41,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("여기 아무것도"),
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage("브라우저에서 열기"),
         "Play_All": MessageLookupByLibrary.simpleMessage("모두 재생"),
+        "Play_next": MessageLookupByLibrary.simpleMessage("다음 플레이"),
         "Playlists": MessageLookupByLibrary.simpleMessage("재생목록"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("제거하다"),
         "RTL": MessageLookupByLibrary.simpleMessage("오른쪽에서 왼쪽으로"),
@@ -61,6 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "TROUBLESHOOTING": MessageLookupByLibrary.simpleMessage("문제 해결"),
         "Theme": MessageLookupByLibrary.simpleMessage("주제"),
         "Tracks": MessageLookupByLibrary.simpleMessage("트랙"),
+        "Videos": MessageLookupByLibrary.simpleMessage("비디오"),
         "View_source_code": MessageLookupByLibrary.simpleMessage("소스 코드 보기"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("대기열에 추가"),
         "github_redirect":

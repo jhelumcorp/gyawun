@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Abra no navegador"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Jogar tudo"),
+        "Play_next": MessageLookupByLibrary.simpleMessage("Jogar a seguir"),
         "Playlists":
             MessageLookupByLibrary.simpleMessage("listas de reprodução"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("RETIRAR"),
@@ -70,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("SOLUÇÃO DE PROBLEMAS"),
         "Theme": MessageLookupByLibrary.simpleMessage("Tema"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Faixas"),
+        "Videos": MessageLookupByLibrary.simpleMessage("Vídeos"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("Ver código-fonte"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("Adicionar à fila"),

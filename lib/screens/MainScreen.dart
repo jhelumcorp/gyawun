@@ -5,7 +5,6 @@ import 'package:miniplayer/miniplayer.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
-import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/screens/ArtistScreen.dart';
 import 'package:vibe_music/screens/FavouriteScreen.dart';
 import 'package:vibe_music/screens/HomeScreen.dart';

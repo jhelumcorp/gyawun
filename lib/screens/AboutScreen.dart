@@ -100,7 +100,7 @@ class AboutScreen extends StatelessWidget {
                                 Theme.of(context).primaryTextTheme.titleLarge,
                           ),
                           Text(
-                            '0.6.0-beta.1',
+                            '0.6.0-beta.2',
                             style: Theme.of(context).primaryTextTheme.bodyLarge,
                           )
                         ],

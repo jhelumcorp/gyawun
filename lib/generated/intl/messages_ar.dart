@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("افتح في المتصفح"),
         "Play_All": MessageLookupByLibrary.simpleMessage("لعب كل"),
+        "Play_next": MessageLookupByLibrary.simpleMessage("العب بعد ذلك"),
         "Playlists": MessageLookupByLibrary.simpleMessage("قوائم التشغيل"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("إزالة"),
         "RTL": MessageLookupByLibrary.simpleMessage("من اليمين الى اليسار"),
@@ -66,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("استكشاف الأخطاء وإصلاحها"),
         "Theme": MessageLookupByLibrary.simpleMessage("سمة"),
         "Tracks": MessageLookupByLibrary.simpleMessage("المسارات"),
+        "Videos": MessageLookupByLibrary.simpleMessage("أشرطة فيديو"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("عرض كود المصدر"),
         "addToQueue":

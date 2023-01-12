@@ -439,6 +439,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Play next`
+  String get Play_next {
+    return Intl.message(
+      'Play next',
+      name: 'Play_next',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Videos`
+  String get Videos {
+    return Intl.message(
+      'Videos',
+      name: 'Videos',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

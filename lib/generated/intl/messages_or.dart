@@ -45,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("ବ୍ରାଉଜର ରେ ଖୋଲନ୍ତୁ"),
         "Play_All": MessageLookupByLibrary.simpleMessage("ସମସ୍ତ ପ୍ଲେ କରନ୍ତୁ"),
+        "Play_next": MessageLookupByLibrary.simpleMessage("ଏହାପରେ ଚଲାନ୍ତୁ"),
         "Playlists": MessageLookupByLibrary.simpleMessage("ପ୍ଲେଲିଷ୍ଟ୍ ଗୁଡ଼ିକ"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("ଅପସାରଣ କରନ୍ତୁ |"),
         "RTL": MessageLookupByLibrary.simpleMessage("ଡ଼ାହାଣ ରୁ ବାମ"),
@@ -70,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ଅସୁବିଧା ବିଶ୍ଳେଷଣ ହେଉଛି"),
         "Theme": MessageLookupByLibrary.simpleMessage("ଥିମ୍"),
         "Tracks": MessageLookupByLibrary.simpleMessage("ଟ୍ରାକ ଗୁଡ଼ିକ"),
+        "Videos": MessageLookupByLibrary.simpleMessage("ଭିଡିଓଗୁଡିକ"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("ଉତ୍ସ କୋଡ୍ ଦେଖନ୍ତୁ"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("ଧାଡିରେ ଯୋଡ଼ନ୍ତୁ"),

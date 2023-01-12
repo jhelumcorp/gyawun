@@ -41,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("这里没有什么"),
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage("在浏览器中打开"),
         "Play_All": MessageLookupByLibrary.simpleMessage("全部播放"),
+        "Play_next": MessageLookupByLibrary.simpleMessage("接下来播放"),
         "Playlists": MessageLookupByLibrary.simpleMessage("播放列表"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("消除"),
         "RTL": MessageLookupByLibrary.simpleMessage("右到左"),
@@ -61,6 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "TROUBLESHOOTING": MessageLookupByLibrary.simpleMessage("故障排除"),
         "Theme": MessageLookupByLibrary.simpleMessage("主题"),
         "Tracks": MessageLookupByLibrary.simpleMessage("曲目"),
+        "Videos": MessageLookupByLibrary.simpleMessage("影片"),
         "View_source_code": MessageLookupByLibrary.simpleMessage("查看源代码"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("添加到队列"),
         "github_redirect":

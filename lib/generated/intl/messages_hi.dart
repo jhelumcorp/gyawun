@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("ब्राउज़र में खोलें"),
         "Play_All": MessageLookupByLibrary.simpleMessage("सभी को बजाएं"),
+        "Play_next": MessageLookupByLibrary.simpleMessage("अगला खेलें"),
         "Playlists": MessageLookupByLibrary.simpleMessage("प्लेलिस्ट"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("निकालना"),
         "RTL": MessageLookupByLibrary.simpleMessage("दाएं से बाएं"),
@@ -67,6 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("समस्या निवारण"),
         "Theme": MessageLookupByLibrary.simpleMessage("थीम"),
         "Tracks": MessageLookupByLibrary.simpleMessage("पटरियों"),
+        "Videos": MessageLookupByLibrary.simpleMessage("वीडियो"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("स्रोत कोड देखें"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("क़तार में जोड़ें"),

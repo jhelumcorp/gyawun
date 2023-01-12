@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage(
             "Άνοιγμα σε πρόγραμμα περιήγησης"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Αναπαραγωγή όλων"),
+        "Play_next": MessageLookupByLibrary.simpleMessage("Παίξτε το επόμενο"),
         "Playlists":
             MessageLookupByLibrary.simpleMessage("Λίστες αναπαραγωγής"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("ΑΦΑΙΡΩ"),
@@ -71,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ΑΝΤΙΜΕΤΏΠΙΣΗ ΠΡΟΒΛΗΜΆΤΩΝ"),
         "Theme": MessageLookupByLibrary.simpleMessage("Θέμα"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Τραγούδια"),
+        "Videos": MessageLookupByLibrary.simpleMessage("Βίντεο"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("Προβολή πηγαίου κώδικα"),
         "addToQueue":
