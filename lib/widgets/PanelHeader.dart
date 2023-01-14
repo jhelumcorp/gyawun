@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ class PanelHeader extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: Hive.box('settings').listenable(),
       builder: (context, Box box, child) {
+        bool darkTheme = Theme.of(context).brightness == Brightness.dark;
         return Directionality(
           textDirection: box.get('textDirection', defaultValue: 'ltr') == 'rtl'
               ? TextDirection.rtl
@@ -38,14 +40,11 @@ class PanelHeader extends StatelessWidget {
                       data: const SliderThemeData().copyWith(
                         trackHeight: 2,
                         thumbColor: Colors.black,
-                        inactiveTrackColor:
-                            box.get('theme', defaultValue: 'light') == 'light'
-                                ? Colors.black.withOpacity(0.4)
-                                : Colors.white.withOpacity(0.4),
+                        inactiveTrackColor: darkTheme
+                            ? Colors.black.withOpacity(0.4)
+                            : Colors.white.withOpacity(0.4),
                         activeTrackColor:
-                            box.get('theme', defaultValue: 'light') == 'light'
-                                ? Colors.black
-                                : Colors.white,
+                            darkTheme ? Colors.white : Colors.black,
                         thumbShape: SliderComponentShape.noThumb,
                         trackShape: const RectangularSliderTrackShape(),
                         overlayShape: SliderComponentShape.noOverlay,
@@ -151,9 +150,7 @@ class PanelHeader extends StatelessWidget {
                                       player.playing
                                           ? Icons.pause_rounded
                                           : Icons.play_arrow_rounded,
-                                      color: box.get('theme',
-                                                  defaultValue: 'light') ==
-                                              'dark'
+                                      color: darkTheme
                                           ? Colors.white
                                           : Colors.black,
                                     );

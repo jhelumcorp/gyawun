@@ -39,5 +39,11 @@
     "REMOVE":"LÖSCHEN",
     "Remove_from_search_history":"Aus dem Suchverlauf entfernen?", 
     "Play_next":"Als nächstes spielen",
-    "Videos":"Videos"
+    "Videos":"Videos",
+    "Theme_Mode":"Themenmodus",
+    "System":"System",
+    "Light":"Hell",
+    "Dark":"Dunkel",
+    "Pitch_black":"Pechschwarz",
+    "Material_You_colors":"Material Sie Farben"
 }

@@ -39,5 +39,11 @@
     "REMOVE":"KALDIRMAK",
     "Remove_from_search_history":"Arama geçmişinden kaldırılsın mı?", 
     "Play_next":"Sonrakini çal",
-    "Videos":"videolar"
+    "Videos":"videolar",
+    "Theme_Mode":"Tema Modu",
+    "System":"Sistem",
+    "Light":"Işık",
+    "Dark":"Karanlık",
+    "Pitch_black":"Zifiri karanlık",
+    "Material_You_colors":"Malzeme Siz renkler"
 }

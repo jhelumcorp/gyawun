@@ -31,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "CANCEL": MessageLookupByLibrary.simpleMessage("ANNULER"),
         "Change_country":
             MessageLookupByLibrary.simpleMessage("Changer de pays"),
+        "Dark": MessageLookupByLibrary.simpleMessage("Sombre"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Thème sombre"),
         "Dynamic_Theme":
             MessageLookupByLibrary.simpleMessage("Thème dynamique"),
@@ -38,12 +39,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "High": MessageLookupByLibrary.simpleMessage("Haut"),
         "Home": MessageLookupByLibrary.simpleMessage("Domicile"),
         "Language": MessageLookupByLibrary.simpleMessage("Langue"),
+        "Light": MessageLookupByLibrary.simpleMessage("Lumière"),
         "Low": MessageLookupByLibrary.simpleMessage("Faible"),
+        "Material_You_colors":
+            MessageLookupByLibrary.simpleMessage("Matériel Tes couleurs"),
         "Medium": MessageLookupByLibrary.simpleMessage("Moyen"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("Mes favoris"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("Rien ici"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Ouvrir dans le navigateur"),
+        "Pitch_black": MessageLookupByLibrary.simpleMessage("Noir absolu"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Jouer à tous"),
         "Play_next": MessageLookupByLibrary.simpleMessage("Jouer ensuite"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Listes de lecture"),
@@ -67,8 +72,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Rechercher quelque chose"),
         "Settings": MessageLookupByLibrary.simpleMessage("Réglages"),
         "Songs": MessageLookupByLibrary.simpleMessage("Chansons"),
+        "System": MessageLookupByLibrary.simpleMessage("Système"),
         "TROUBLESHOOTING": MessageLookupByLibrary.simpleMessage("DÉPANNAGE"),
         "Theme": MessageLookupByLibrary.simpleMessage("Thème"),
+        "Theme_Mode": MessageLookupByLibrary.simpleMessage("Mode Thème"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Des pistes"),
         "Videos": MessageLookupByLibrary.simpleMessage("Vidéos"),
         "View_source_code":

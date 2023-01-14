@@ -32,6 +32,7 @@ class SearchHistory extends StatelessWidget {
                     dynamic key = keys[index];
                     String e = values[index];
                     return ListTile(
+                      enableFeedback: false,
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 0),
                       visualDensity: VisualDensity.compact,

@@ -30,19 +30,24 @@ class MessageLookup extends MessageLookupByLibrary {
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Ποιότητα ήχου"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("ΜΑΤΑΙΩΣΗ"),
         "Change_country": MessageLookupByLibrary.simpleMessage("Αλλαγή χώρας"),
+        "Dark": MessageLookupByLibrary.simpleMessage("Σκοτάδι"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Σκοτεινό θέμα"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Δυναμικό θέμα"),
         "Experimental": MessageLookupByLibrary.simpleMessage("Πειραματικό"),
         "High": MessageLookupByLibrary.simpleMessage("Υψηλή"),
         "Home": MessageLookupByLibrary.simpleMessage("Αρχική σελίδα"),
         "Language": MessageLookupByLibrary.simpleMessage("Γλώσσα"),
+        "Light": MessageLookupByLibrary.simpleMessage("Φως"),
         "Low": MessageLookupByLibrary.simpleMessage("Χαμηλή"),
+        "Material_You_colors":
+            MessageLookupByLibrary.simpleMessage("Υλικά εσείς χρώματα"),
         "Medium": MessageLookupByLibrary.simpleMessage("Μέτρια"),
         "My_Favorites":
             MessageLookupByLibrary.simpleMessage("Τα αγαπημένα μου"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("Τίποτα εδώ"),
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage(
             "Άνοιγμα σε πρόγραμμα περιήγησης"),
+        "Pitch_black": MessageLookupByLibrary.simpleMessage("Κατάμαυρο"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Αναπαραγωγή όλων"),
         "Play_next": MessageLookupByLibrary.simpleMessage("Παίξτε το επόμενο"),
         "Playlists":
@@ -68,9 +73,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Αναζήτηση σε κάτι"),
         "Settings": MessageLookupByLibrary.simpleMessage("Ρυθμίσεις"),
         "Songs": MessageLookupByLibrary.simpleMessage("Τραγούδια"),
+        "System": MessageLookupByLibrary.simpleMessage("Σύστημα"),
         "TROUBLESHOOTING":
             MessageLookupByLibrary.simpleMessage("ΑΝΤΙΜΕΤΏΠΙΣΗ ΠΡΟΒΛΗΜΆΤΩΝ"),
         "Theme": MessageLookupByLibrary.simpleMessage("Θέμα"),
+        "Theme_Mode":
+            MessageLookupByLibrary.simpleMessage("Λειτουργία θέματος"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Τραγούδια"),
         "Videos": MessageLookupByLibrary.simpleMessage("Βίντεο"),
         "View_source_code":

@@ -51,7 +51,7 @@ class _PlayListScreenState extends State<PlayListScreen> {
         child: playlist == null || loading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
+                // physics: const BouncingScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

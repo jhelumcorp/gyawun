@@ -40,5 +40,11 @@
     "REMOVE":"إزالة",
     "Remove_from_search_history":"إزالة من سجل البحث؟", 
     "Play_next":"العب بعد ذلك",
-    "Videos":"أشرطة فيديو"
+    "Videos":"أشرطة فيديو",
+    "Theme_Mode":"وضع السمة",
+    "System":"نظام",
+    "Light":"نور",
+    "Dark":"داكن",
+    "Pitch_black":"شديد السواد",
+    "Material_You_colors":"المواد أنت الألوان"
 }

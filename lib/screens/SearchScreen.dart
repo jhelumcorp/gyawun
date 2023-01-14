@@ -153,7 +153,14 @@ class _SearchScreenState extends State<SearchScreen>
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Text(S.of(context).Songs),
+                          child: Text(
+                            S.of(context).Songs,
+                            style: tabController?.index == 0
+                                ? Theme.of(context)
+                                    .primaryTextTheme
+                                    .displaySmall
+                                : null,
+                          ),
                         ),
                       ),
                       Tab(
@@ -166,7 +173,14 @@ class _SearchScreenState extends State<SearchScreen>
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Text(S.of(context).Videos),
+                          child: Text(
+                            S.of(context).Videos,
+                            style: tabController?.index == 1
+                                ? Theme.of(context)
+                                    .primaryTextTheme
+                                    .displaySmall
+                                : null,
+                          ),
                         ),
                       ),
                       Tab(
@@ -179,7 +193,14 @@ class _SearchScreenState extends State<SearchScreen>
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Text(S.of(context).Artists),
+                          child: Text(
+                            S.of(context).Artists,
+                            style: tabController?.index == 2
+                                ? Theme.of(context)
+                                    .primaryTextTheme
+                                    .displaySmall
+                                : null,
+                          ),
                         ),
                       ),
                       Tab(
@@ -192,7 +213,14 @@ class _SearchScreenState extends State<SearchScreen>
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Text(S.of(context).Albums),
+                          child: Text(
+                            S.of(context).Albums,
+                            style: tabController?.index == 3
+                                ? Theme.of(context)
+                                    .primaryTextTheme
+                                    .displaySmall
+                                : null,
+                          ),
                         ),
                       ),
                       Tab(
@@ -205,7 +233,14 @@ class _SearchScreenState extends State<SearchScreen>
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Text(S.of(context).Playlists),
+                          child: Text(
+                            S.of(context).Playlists,
+                            style: tabController?.index == 4
+                                ? Theme.of(context)
+                                    .primaryTextTheme
+                                    .displaySmall
+                                : null,
+                          ),
                         ),
                       ),
                     ],

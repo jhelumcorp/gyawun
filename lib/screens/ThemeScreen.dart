@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../generated/l10n.dart';
@@ -9,16 +10,21 @@ class ThemeScreen extends StatelessWidget {
   ThemeScreen({super.key});
   final List<PrimaryColor> colorPallete = [
     ...Colors.primaries
-        .map((e) => PrimaryColor(light: e.shade100, dark: e.shade900)),
-    PrimaryColor(light: Colors.white, dark: Colors.black)
+        .map((e) => PrimaryColor(light: e.shade900, dark: e.shade100)),
+    PrimaryColor(light: Colors.black, dark: Colors.white)
   ];
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> themeModes = [
+      {"name": S.of(context).System, "value": "system"},
+      {"name": S.of(context).Light, "value": "light"},
+      {"name": S.of(context).Dark, "value": "dark"},
+    ];
     return ValueListenableBuilder(
       valueListenable: Hive.box('settings').listenable(),
       builder: (context, Box box, child) {
-        bool darkTheme = box.get('theme', defaultValue: 'light') == 'dark';
+        bool darkTheme = Theme.of(context).brightness == Brightness.dark;
         return Directionality(
           textDirection: box.get('textDirection', defaultValue: 'ltr') == 'rtl'
               ? TextDirection.rtl
@@ -51,64 +57,69 @@ class ThemeScreen extends StatelessWidget {
                           builder: (context) {
                             return Directionality(
                               textDirection: TextDirection.ltr,
-                              child: AlertDialog(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 20),
-                                backgroundColor:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                                content: SizedBox(
-                                  height: 340,
-                                  child: GridView(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 20, horizontal: 0),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4,
-                                      mainAxisSpacing: 4,
-                                      crossAxisSpacing: 4,
-                                    ),
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                child: AlertDialog(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 20),
+                                  backgroundColor:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  content: Wrap(
+                                    spacing: 4,
+                                    runSpacing: 4,
+                                    alignment: WrapAlignment.center,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
                                     children:
                                         colorPallete.map((PrimaryColor color) {
-                                      return InkWell(
-                                        onTap: () {
-                                          box.put('primaryColorDark',
-                                              color.dark.value);
-                                          box.put('primaryColorLight',
-                                              color.light.value);
+                                      return Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: SizedBox(
+                                          height: 50,
+                                          width: 50,
+                                          child: InkWell(
+                                            onTap: () {
+                                              box.put('primaryColorDark',
+                                                  color.dark.value);
+                                              box.put('primaryColorLight',
+                                                  color.light.value);
 
-                                          Navigator.pop(context);
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              height: 50,
-                                              width: 25,
-                                              decoration: BoxDecoration(
-                                                  color: color.light,
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  25),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  25))),
+                                              Navigator.pop(context);
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  height: 50,
+                                                  width: 25,
+                                                  decoration: BoxDecoration(
+                                                      color: color.light,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(25),
+                                                              bottomLeft: Radius
+                                                                  .circular(
+                                                                      25))),
+                                                ),
+                                                Container(
+                                                  height: 50,
+                                                  width: 25,
+                                                  decoration: BoxDecoration(
+                                                      color: color.dark,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topRight: Radius
+                                                                  .circular(25),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          25))),
+                                                ),
+                                              ],
                                             ),
-                                            Container(
-                                              height: 50,
-                                              width: 25,
-                                              decoration: BoxDecoration(
-                                                  color: color.dark,
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  25),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  25))),
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                       );
                                     }).toList(),
@@ -119,10 +130,7 @@ class ThemeScreen extends StatelessWidget {
                           },
                         );
                       },
-                      leading: Icon(
-                        Icons.color_lens_rounded,
-                        color: darkTheme ? Colors.white : Colors.black,
-                      ),
+                      leading: const Icon(Icons.color_lens_rounded),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       tileColor: Theme.of(context).colorScheme.primary,
@@ -134,11 +142,12 @@ class ThemeScreen extends StatelessWidget {
                             ?.copyWith(
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
+                              color: darkTheme ? Colors.black : Colors.white,
                             ),
                       ),
                       trailing: CircleAvatar(
                         backgroundColor:
-                            darkTheme ? Colors.white : Colors.black,
+                            darkTheme ? Colors.black : Colors.white,
                         child: Container(
                             margin: const EdgeInsets.all(8),
                             child: CircleAvatar(
@@ -146,10 +155,6 @@ class ThemeScreen extends StatelessWidget {
                                   ? Color(box.get('primaryColorDark',
                                       defaultValue:
                                           defaultPrimaryColor.dark.value))
-                                  //  context
-                                  //     .watch<ThemeProvider>()
-                                  //     .primaryColor
-                                  //     .dark
                                   : Color(box.get('primaryColorLight',
                                       defaultValue:
                                           defaultPrimaryColor.light.value)),
@@ -158,36 +163,175 @@ class ThemeScreen extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: ExpansionTile(
+                      leading: const Icon(
+                        Icons.dark_mode,
+                      ),
+                      collapsedBackgroundColor:
+                          Theme.of(context).colorScheme.primary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      textColor: darkTheme ? Colors.black : Colors.white,
+                      iconColor: darkTheme ? Colors.black : Colors.white,
+                      collapsedIconColor:
+                          darkTheme ? Colors.black : Colors.white,
+                      collapsedTextColor:
+                          darkTheme ? Colors.black : Colors.white,
+                      title: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              S.of(context).Theme_Mode,
+                              style: Theme.of(context)
+                                  .primaryTextTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    overflow: TextOverflow.ellipsis,
+                                    fontWeight: FontWeight.bold,
+                                    color:
+                                        darkTheme ? Colors.black : Colors.white,
+                                  ),
+                            ),
+                          ),
+                          Text(
+                            themeModes
+                                    .where((element) =>
+                                        element['value'] ==
+                                        box.get('theme',
+                                            defaultValue: 'system'))
+                                    .toList()[0]['name'] ??
+                                "",
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color:
+                                      darkTheme ? Colors.black : Colors.white,
+                                ),
+                          ),
+                        ],
+                      ),
+                      children: [
+                        ListTile(
+                          hoverColor: Colors.black,
+                          focusColor: Colors.black,
+                          title: Text(
+                            S.of(context).System,
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .titleMedium
+                                ?.copyWith(
+                                    color:
+                                        darkTheme ? Colors.black : Colors.white,
+                                    fontWeight: box.get('theme',
+                                                defaultValue: 'system') ==
+                                            "system"
+                                        ? FontWeight.bold
+                                        : null),
+                          ),
+                          trailing: box.get('theme', defaultValue: 'system') ==
+                                  "system"
+                              ? Icon(
+                                  Icons.check_circle_rounded,
+                                  color:
+                                      darkTheme ? Colors.black : Colors.white,
+                                )
+                              : null,
+                          onTap: () {
+                            box.put('theme', "system");
+                          },
+                        ),
+                        ListTile(
+                          hoverColor: Colors.black,
+                          focusColor: Colors.black,
+                          title: Text(
+                            S.of(context).Light,
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .titleMedium
+                                ?.copyWith(
+                                    color:
+                                        darkTheme ? Colors.black : Colors.white,
+                                    fontWeight: box.get('theme',
+                                                defaultValue: 'system') ==
+                                            "light"
+                                        ? FontWeight.bold
+                                        : null),
+                          ),
+                          trailing: box.get('theme', defaultValue: 'system') ==
+                                  "light"
+                              ? Icon(
+                                  Icons.check_circle_rounded,
+                                  color:
+                                      darkTheme ? Colors.black : Colors.white,
+                                )
+                              : null,
+                          onTap: () {
+                            box.put('theme', "light");
+                          },
+                        ),
+                        ListTile(
+                          hoverColor: Colors.black,
+                          focusColor: Colors.black,
+                          title: Text(
+                            S.of(context).Dark,
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .titleMedium
+                                ?.copyWith(
+                                    color:
+                                        darkTheme ? Colors.black : Colors.white,
+                                    fontWeight: box.get('theme',
+                                                defaultValue: 'system') ==
+                                            "dark"
+                                        ? FontWeight.bold
+                                        : null),
+                          ),
+                          trailing: box.get('theme', defaultValue: 'system') ==
+                                  "dark"
+                              ? Icon(
+                                  Icons.check_circle_rounded,
+                                  color:
+                                      darkTheme ? Colors.black : Colors.white,
+                                )
+                              : null,
+                          onTap: () {
+                            box.put('theme', "dark");
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: ListTile(
                     onTap: () {
-                      String value =
-                          box.get('theme', defaultValue: 'light') == 'dark'
-                              ? 'light'
-                              : 'dark';
-                      box.put('theme', value);
+                      bool value = box.get('pitchBlack', defaultValue: false);
+                      box.put('pitchBlack', !value);
                     },
-                    leading: Icon(
-                      Icons.dark_mode,
-                      color: darkTheme ? Colors.white : Colors.black,
+                    leading: const Icon(
+                      Icons.colorize,
                     ),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
                     tileColor: Theme.of(context).colorScheme.primary,
                     title: Text(
-                      S.of(context).Dark_Theme,
+                      S.of(context).Pitch_black,
                       style: Theme.of(context)
                           .primaryTextTheme
                           .titleMedium
                           ?.copyWith(
                             overflow: TextOverflow.ellipsis,
                             fontWeight: FontWeight.bold,
+                            color: darkTheme ? Colors.black : Colors.white,
                           ),
                     ),
                     trailing: CupertinoSwitch(
-                        value:
-                            box.get('theme', defaultValue: 'light') == 'dark',
+                        value: box.get('pitchBlack', defaultValue: false),
                         onChanged: (value) {
-                          box.put('theme', value == true ? 'dark' : 'light');
+                          box.put('pitchBlack', value);
                         }),
                   ),
                 ),
@@ -196,13 +340,14 @@ class ThemeScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 8),
                   child: ListTile(
                     onTap: () {
-                      bool value = box.get('dynamicTheme', defaultValue: false);
-                      box.put('dynamicTheme', !value);
+                      bool value =
+                          !box.get('dynamicTheme', defaultValue: false);
+                      if (value) {
+                        box.put('materialYouTheme', false);
+                      }
+                      box.put('dynamicTheme', value);
                     },
-                    leading: Icon(
-                      Icons.style_rounded,
-                      color: darkTheme ? Colors.white : Colors.black,
-                    ),
+                    leading: const Icon(Icons.style_rounded),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
                     tileColor: Theme.of(context).colorScheme.primary,
@@ -214,12 +359,52 @@ class ThemeScreen extends StatelessWidget {
                           ?.copyWith(
                             overflow: TextOverflow.ellipsis,
                             fontWeight: FontWeight.bold,
+                            color: darkTheme ? Colors.black : Colors.white,
                           ),
                     ),
                     trailing: CupertinoSwitch(
                         value: box.get('dynamicTheme', defaultValue: false),
                         onChanged: (value) {
+                          if (value) {
+                            box.put('materialYouTheme', false);
+                          }
                           box.put('dynamicTheme', value);
+                        }),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: ListTile(
+                    onTap: () {
+                      bool value =
+                          !box.get('materialYouTheme', defaultValue: false);
+                      if (value) {
+                        box.put('dynamicTheme', false);
+                      }
+                      box.put('materialYouTheme', value);
+                    },
+                    leading: const Icon(Icons.new_label),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    tileColor: Theme.of(context).colorScheme.primary,
+                    title: Text(
+                      S.of(context).Material_You_colors,
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .titleMedium
+                          ?.copyWith(
+                            overflow: TextOverflow.ellipsis,
+                            fontWeight: FontWeight.bold,
+                            color: darkTheme ? Colors.black : Colors.white,
+                          ),
+                    ),
+                    trailing: CupertinoSwitch(
+                        value: box.get('materialYouTheme', defaultValue: false),
+                        onChanged: (value) {
+                          if (value) {
+                            box.put('dynamicTheme', false);
+                          }
+                          box.put('materialYouTheme', value);
                         }),
                   ),
                 ),

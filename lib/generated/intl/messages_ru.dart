@@ -31,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "CANCEL": MessageLookupByLibrary.simpleMessage("ОТМЕНИТЬ"),
         "Change_country":
             MessageLookupByLibrary.simpleMessage("Сменить страну"),
+        "Dark": MessageLookupByLibrary.simpleMessage("Темнота"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Темная тема"),
         "Dynamic_Theme":
             MessageLookupByLibrary.simpleMessage("Динамическая тема"),
@@ -39,12 +40,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "High": MessageLookupByLibrary.simpleMessage("Высокий"),
         "Home": MessageLookupByLibrary.simpleMessage("Дом"),
         "Language": MessageLookupByLibrary.simpleMessage("Язык"),
+        "Light": MessageLookupByLibrary.simpleMessage("Свет"),
         "Low": MessageLookupByLibrary.simpleMessage("Низкий"),
+        "Material_You_colors":
+            MessageLookupByLibrary.simpleMessage("Материал Вы цвета"),
         "Medium": MessageLookupByLibrary.simpleMessage("Середина"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("Мои любимые"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("Здесь ничего"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Открыть в браузере"),
+        "Pitch_black": MessageLookupByLibrary.simpleMessage("Черный как смоль"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Играть все"),
         "Play_next": MessageLookupByLibrary.simpleMessage("Играть дальше"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Плейлисты"),
@@ -68,9 +73,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Искать что-то"),
         "Settings": MessageLookupByLibrary.simpleMessage("Настройки"),
         "Songs": MessageLookupByLibrary.simpleMessage("Песни"),
+        "System": MessageLookupByLibrary.simpleMessage("Система"),
         "TROUBLESHOOTING":
             MessageLookupByLibrary.simpleMessage("ИСПРАВЛЕНИЕ ПРОБЛЕМ"),
         "Theme": MessageLookupByLibrary.simpleMessage("Тема"),
+        "Theme_Mode":
+            MessageLookupByLibrary.simpleMessage("Тематический режим"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Треки"),
         "Videos": MessageLookupByLibrary.simpleMessage("Ролики"),
         "View_source_code":

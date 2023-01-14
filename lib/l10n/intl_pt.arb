@@ -39,5 +39,11 @@
     "REMOVE":"RETIRAR",
     "Remove_from_search_history":"Remover do histórico de pesquisa?", 
     "Play_next":"Jogar a seguir",
-    "Videos":"Vídeos"
+    "Videos":"Vídeos",
+    "Theme_Mode":"Modo Tema",
+    "System":"Sistema",
+    "Light":"Claro",
+    "Dark":"Escuro",
+    "Pitch_black":"Escuro como breu",
+    "Material_You_colors":"Material Você cores"
 }

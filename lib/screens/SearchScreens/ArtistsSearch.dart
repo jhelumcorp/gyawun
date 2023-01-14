@@ -26,6 +26,7 @@ class _ArtistsSearchState extends State<ArtistsSearch> {
                 children: context.watch<SearchProvider>().artists.map(
               (artist) {
                 return ListTile(
+                  enableFeedback: false,
                   contentPadding: const EdgeInsets.all(8),
                   onTap: () async {
                     Navigator.pushNamed(context, '/search/artist', arguments: {

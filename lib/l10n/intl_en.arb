@@ -39,5 +39,11 @@
     "REMOVE":"REMOVE",
     "Remove_from_search_history":"Remove from search history?", 
     "Play_next":"Play next",
-    "Videos":"Videos"
+    "Videos":"Videos",
+    "Theme_Mode":"Theme Mode",
+    "System":"System",
+    "Light":"Light",
+    "Dark":"Dark",
+    "Pitch_black":"Pitch black",
+    "Material_You_colors":"Material You colors"
 }

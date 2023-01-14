@@ -1,7 +1,7 @@
 name: vibe_music
 description: A new Flutter project.
 publish_to: 'none' 
-version: 0.6.0-beta.2+7
+version: 0.6.1+6
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
@@ -30,6 +30,8 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   share_plus: ^6.3.0
+  just_audio_windows: ^0.2.0
+
 
 dev_dependencies:
   flutter_test:

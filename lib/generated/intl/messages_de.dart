@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Tonqualität"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("ABBRECHEN"),
         "Change_country": MessageLookupByLibrary.simpleMessage("Land wählen"),
+        "Dark": MessageLookupByLibrary.simpleMessage("Dunkel"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Dunkles Thema"),
         "Dynamic_Theme":
             MessageLookupByLibrary.simpleMessage("Dynamisches Thema"),
@@ -37,12 +38,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "High": MessageLookupByLibrary.simpleMessage("Hoch"),
         "Home": MessageLookupByLibrary.simpleMessage("Startseite"),
         "Language": MessageLookupByLibrary.simpleMessage("Sprache"),
+        "Light": MessageLookupByLibrary.simpleMessage("Hell"),
         "Low": MessageLookupByLibrary.simpleMessage("Schwach"),
+        "Material_You_colors":
+            MessageLookupByLibrary.simpleMessage("Material Sie Farben"),
         "Medium": MessageLookupByLibrary.simpleMessage("Mittel"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("Meine Favoriten"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("Nichts hier"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Im Browser öffnen"),
+        "Pitch_black": MessageLookupByLibrary.simpleMessage("Pechschwarz"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Alles abspielen"),
         "Play_next":
             MessageLookupByLibrary.simpleMessage("Als nächstes spielen"),
@@ -66,9 +71,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "Search_something": MessageLookupByLibrary.simpleMessage("Suche etwas"),
         "Settings": MessageLookupByLibrary.simpleMessage("Einstellungen"),
         "Songs": MessageLookupByLibrary.simpleMessage("Lieder"),
+        "System": MessageLookupByLibrary.simpleMessage("System"),
         "TROUBLESHOOTING":
             MessageLookupByLibrary.simpleMessage("FEHLERBEHEBUNG"),
         "Theme": MessageLookupByLibrary.simpleMessage("Thema"),
+        "Theme_Mode": MessageLookupByLibrary.simpleMessage("Themenmodus"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Titel"),
         "Videos": MessageLookupByLibrary.simpleMessage("Videos"),
         "View_source_code":

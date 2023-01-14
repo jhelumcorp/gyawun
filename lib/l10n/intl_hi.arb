@@ -39,5 +39,11 @@
     "REMOVE":"निकालना",
     "Remove_from_search_history":"खोज इतिहास से निकालें?", 
     "Play_next":"अगला खेलें",
-    "Videos":"वीडियो"
+    "Videos":"वीडियो",
+    "Theme_Mode":"थीम मोड",
+    "System":"प्रणाली",
+    "Light":"रोशनी",
+    "Dark":"अँधेरा",
+    "Pitch_black":"घोर अँधेरा",
+    "Material_You_colors":"सामग्री आप रंग"
 }

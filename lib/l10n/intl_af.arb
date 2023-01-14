@@ -39,5 +39,11 @@
     "REMOVE":"VERWYDER",
     "Remove_from_search_history":"Verwyder uit soekgeskiedenis?", 
     "Play_next":"Speel volgende",
-    "Videos":"Video's"
+    "Videos":"Video's",
+    "Theme_Mode":"Tema-modus",
+    "System":"Stelsel",
+    "Light":"Lig",
+    "Dark":"Donker",
+    "Pitch_black":"Pikswart",
+    "Material_You_colors":"Materiaal Jy kleur"
 }

@@ -28,6 +28,7 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
             itemBuilder: (context, index) {
               Map playlist = context.watch<SearchProvider>().playlists[index];
               return ListTile(
+                enableFeedback: false,
                 onTap: () {
                   Navigator.pushNamed(context, '/search/playlist',
                       arguments: {'playlistId': playlist['browseId']});

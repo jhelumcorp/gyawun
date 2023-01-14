@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +47,7 @@ class _MainScreenState extends State<MainScreen> {
     return ValueListenableBuilder(
         valueListenable: Hive.box('settings').listenable(),
         builder: (context, Box box, child) {
-          bool isDarkTheme = box.get('theme', defaultValue: 'light') == 'dark';
+          bool darkTheme = Theme.of(context).brightness == Brightness.dark;
           return Scaffold(
             body: LayoutBuilder(builder: (context, constraints) {
               return Column(
@@ -117,10 +120,7 @@ class _MainScreenState extends State<MainScreen> {
                             children: [
                               Opacity(
                                 opacity: percentage,
-                                child: PlayerScreen(
-                                  height: height,
-                                  percentage: percentage,
-                                ),
+                                child: const PlayerScreen(),
                               ),
                               Opacity(
                                   opacity: 1 - (percentage),
@@ -139,33 +139,45 @@ class _MainScreenState extends State<MainScreen> {
                 NavigationDestination(
                   icon: Icon(
                     Icons.home_outlined,
-                    color: isDarkTheme ? Colors.white : Colors.black,
+                    color: darkTheme ? Colors.white : Colors.black,
                   ),
-                  selectedIcon: const Icon(Icons.home_rounded),
+                  selectedIcon: Icon(
+                    Icons.home_rounded,
+                    color: darkTheme ? Colors.black : Colors.white,
+                  ),
                   label: S.of(context).Home,
                 ),
                 NavigationDestination(
                   icon: Icon(
                     Icons.search_outlined,
-                    color: isDarkTheme ? Colors.white : Colors.black,
+                    color: darkTheme ? Colors.white : Colors.black,
                   ),
-                  selectedIcon: const Icon(Icons.search_rounded),
+                  selectedIcon: Icon(
+                    Icons.search_rounded,
+                    color: darkTheme ? Colors.black : Colors.white,
+                  ),
                   label: S.of(context).Search,
                 ),
                 NavigationDestination(
                   icon: Icon(
                     CupertinoIcons.heart,
-                    color: isDarkTheme ? Colors.white : Colors.black,
+                    color: darkTheme ? Colors.white : Colors.black,
                   ),
-                  selectedIcon: const Icon(CupertinoIcons.heart_fill),
+                  selectedIcon: Icon(
+                    CupertinoIcons.heart_fill,
+                    color: darkTheme ? Colors.black : Colors.white,
+                  ),
                   label: S.of(context).Settings,
                 ),
                 NavigationDestination(
                   icon: Icon(
                     Icons.settings_outlined,
-                    color: isDarkTheme ? Colors.white : Colors.black,
+                    color: darkTheme ? Colors.white : Colors.black,
                   ),
-                  selectedIcon: const Icon(Icons.settings_rounded),
+                  selectedIcon: Icon(
+                    Icons.settings_rounded,
+                    color: darkTheme ? Colors.black : Colors.white,
+                  ),
                   label: S.of(context).Settings,
                 ),
               ],

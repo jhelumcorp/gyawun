@@ -27,6 +27,7 @@ class _AlbumSearchState extends State<AlbumSearch> {
             itemBuilder: (context, index) {
               Map album = context.watch<SearchProvider>().albums[index];
               return ListTile(
+                enableFeedback: false,
                 onTap: () {
                   Navigator.pushNamed(context, '/search/playlist', arguments: {
                     'playlistId': album['browseId'],

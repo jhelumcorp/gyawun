@@ -39,5 +39,11 @@
     "REMOVE":"УДАЛИТЬ",
     "Remove_from_search_history":"Удалить из истории поиска?", 
     "Play_next":"Играть дальше",
-    "Videos":"Ролики"
+    "Videos":"Ролики",
+    "Theme_Mode":"Тематический режим",
+    "System":"Система",
+    "Light":"Свет",
+    "Dark":"Темнота",
+    "Pitch_black":"Черный как смоль",
+    "Material_You_colors":"Материал Вы цвета"
 }

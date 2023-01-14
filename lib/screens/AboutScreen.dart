@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -56,7 +57,7 @@ class AboutScreen extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: Hive.box('settings').listenable(),
       builder: (context, Box box, child) {
-        bool isDarkTheme = box.get('theme', defaultValue: 'light') == 'dark';
+        bool darkTheme = Theme.of(context).brightness == Brightness.dark;
         return Directionality(
           textDirection: box.get('textDirection', defaultValue: 'ltr') == 'rtl'
               ? TextDirection.rtl
@@ -69,7 +70,7 @@ class AboutScreen extends StatelessWidget {
                   },
                   icon: Icon(
                     Icons.arrow_back,
-                    color: isDarkTheme ? Colors.white : Colors.black,
+                    color: darkTheme ? Colors.white : Colors.black,
                   )),
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -100,7 +101,7 @@ class AboutScreen extends StatelessWidget {
                                 Theme.of(context).primaryTextTheme.titleLarge,
                           ),
                           Text(
-                            '0.6.0-beta.2',
+                            '0.6.1',
                             style: Theme.of(context).primaryTextTheme.bodyLarge,
                           )
                         ],
@@ -112,8 +113,7 @@ class AboutScreen extends StatelessWidget {
                             .primaryTextTheme
                             .titleMedium
                             ?.copyWith(
-                                color:
-                                    isDarkTheme ? Colors.white : Colors.black,
+                                color: darkTheme ? Colors.white : Colors.black,
                                 fontWeight: FontWeight.bold),
                       ),
                       ...socials.map((item) {
@@ -129,7 +129,7 @@ class AboutScreen extends StatelessWidget {
                             },
                             leading: Icon(
                               item['icon'],
-                              color: isDarkTheme ? Colors.white : Colors.black,
+                              color: darkTheme ? Colors.black : Colors.white,
                             ),
                             title: Text(
                               item['title'],
@@ -139,6 +139,8 @@ class AboutScreen extends StatelessWidget {
                                   ?.copyWith(
                                     overflow: TextOverflow.ellipsis,
                                     fontWeight: FontWeight.bold,
+                                    color:
+                                        darkTheme ? Colors.black : Colors.white,
                                   ),
                             ),
                             subtitle: item['subtitle'] == null
@@ -151,11 +153,14 @@ class AboutScreen extends StatelessWidget {
                                         ?.copyWith(
                                           overflow: TextOverflow.ellipsis,
                                           fontWeight: FontWeight.bold,
+                                          color: darkTheme
+                                              ? Colors.black
+                                              : Colors.white,
                                         ),
                                   ),
                             trailing: Icon(
                               Icons.open_in_browser_rounded,
-                              color: isDarkTheme ? Colors.white : Colors.black,
+                              color: darkTheme ? Colors.black : Colors.white,
                             ),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
@@ -170,8 +175,7 @@ class AboutScreen extends StatelessWidget {
                             .primaryTextTheme
                             .titleMedium
                             ?.copyWith(
-                                color:
-                                    isDarkTheme ? Colors.white : Colors.black,
+                                color: darkTheme ? Colors.white : Colors.black,
                                 fontWeight: FontWeight.bold),
                       ),
                       ...troubleshooting.map((item) {
@@ -187,7 +191,7 @@ class AboutScreen extends StatelessWidget {
                             },
                             leading: Icon(
                               item['icon'],
-                              color: isDarkTheme ? Colors.white : Colors.black,
+                              color: darkTheme ? Colors.black : Colors.white,
                             ),
                             title: Text(
                               item['title'],
@@ -197,6 +201,8 @@ class AboutScreen extends StatelessWidget {
                                   ?.copyWith(
                                     overflow: TextOverflow.ellipsis,
                                     fontWeight: FontWeight.bold,
+                                    color:
+                                        darkTheme ? Colors.black : Colors.white,
                                   ),
                             ),
                             subtitle: item['subtitle'] == null
@@ -209,11 +215,14 @@ class AboutScreen extends StatelessWidget {
                                         ?.copyWith(
                                           overflow: TextOverflow.ellipsis,
                                           fontWeight: FontWeight.bold,
+                                          color: darkTheme
+                                              ? Colors.black
+                                              : Colors.white,
                                         ),
                                   ),
                             trailing: Icon(
                               Icons.open_in_browser_rounded,
-                              color: isDarkTheme ? Colors.white : Colors.black,
+                              color: darkTheme ? Colors.black : Colors.white,
                             ),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),

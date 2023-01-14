@@ -1,6 +1,7 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/screens/AboutScreen.dart';
@@ -45,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
       body: ValueListenableBuilder(
         valueListenable: Hive.box('settings').listenable(),
         builder: (context, Box box, child) {
-          bool darkTheme = box.get('theme', defaultValue: 'light') == 'dark';
+          bool darkTheme = Theme.of(context).brightness == Brightness.dark;
           return ListView(
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(16.0),
@@ -57,17 +58,15 @@ class SettingsScreen extends StatelessWidget {
                   child: ExpansionTile(
                     leading: Icon(
                       Icons.translate_rounded,
-                      color: darkTheme
-                          ? Colors.white
-                          : const Color.fromARGB(255, 58, 41, 86),
+                      color: darkTheme ? Colors.black : Colors.white,
                     ),
                     collapsedBackgroundColor:
                         Theme.of(context).colorScheme.primary,
                     backgroundColor: Theme.of(context).colorScheme.primary,
-                    textColor: darkTheme ? Colors.white : Colors.black,
-                    iconColor: darkTheme ? Colors.white : Colors.black,
-                    collapsedIconColor: darkTheme ? Colors.white : Colors.black,
-                    collapsedTextColor: darkTheme ? Colors.white : Colors.black,
+                    textColor: darkTheme ? Colors.black : Colors.white,
+                    iconColor: darkTheme ? Colors.black : Colors.white,
+                    collapsedIconColor: darkTheme ? Colors.black : Colors.white,
+                    collapsedTextColor: darkTheme ? Colors.black : Colors.white,
                     title: Row(
                       children: [
                         Expanded(
@@ -77,6 +76,8 @@ class SettingsScreen extends StatelessWidget {
                                 .primaryTextTheme
                                 .titleMedium
                                 ?.copyWith(
+                                  color:
+                                      darkTheme ? Colors.black : Colors.white,
                                   overflow: TextOverflow.ellipsis,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -90,7 +91,12 @@ class SettingsScreen extends StatelessWidget {
                                           defaultValue: 'en'))
                                   .toList()[0]['name'] ??
                               "English",
-                          style: Theme.of(context).primaryTextTheme.titleMedium,
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .titleMedium
+                              ?.copyWith(
+                                color: darkTheme ? Colors.black : Colors.white,
+                              ),
                         ),
                       ],
                     ),
@@ -107,6 +113,9 @@ class SettingsScreen extends StatelessWidget {
                                     .primaryTextTheme
                                     .titleMedium
                                     ?.copyWith(
+                                        color: darkTheme
+                                            ? Colors.black
+                                            : Colors.white,
                                         fontWeight: box.get('language_code',
                                                     defaultValue: 'en') ==
                                                 lang['value']
@@ -119,8 +128,8 @@ class SettingsScreen extends StatelessWidget {
                                   ? Icon(
                                       Icons.check_circle_rounded,
                                       color: darkTheme
-                                          ? Colors.white
-                                          : Colors.black,
+                                          ? Colors.black
+                                          : Colors.white,
                                     )
                                   : null,
                               onTap: () {
@@ -155,7 +164,7 @@ class SettingsScreen extends StatelessWidget {
                   },
                   leading: Icon(
                     Icons.directions,
-                    color: darkTheme ? Colors.white : Colors.black,
+                    color: darkTheme ? Colors.black : Colors.white,
                   ),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -166,6 +175,7 @@ class SettingsScreen extends StatelessWidget {
                         .primaryTextTheme
                         .titleMedium
                         ?.copyWith(
+                          color: darkTheme ? Colors.black : Colors.white,
                           overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.bold,
                         ),
@@ -174,6 +184,7 @@ class SettingsScreen extends StatelessWidget {
                     S.of(context).Right_to_left_direction,
                     style:
                         Theme.of(context).primaryTextTheme.bodySmall?.copyWith(
+                              color: darkTheme ? Colors.black : Colors.white,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
                             ),
@@ -464,7 +475,7 @@ class SettingsScreen extends StatelessWidget {
                   },
                   leading: Icon(
                     Icons.flag_rounded,
-                    color: darkTheme ? Colors.white : Colors.black,
+                    color: darkTheme ? Colors.black : Colors.white,
                   ),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -475,6 +486,7 @@ class SettingsScreen extends StatelessWidget {
                         .primaryTextTheme
                         .titleMedium
                         ?.copyWith(
+                          color: darkTheme ? Colors.black : Colors.white,
                           overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.bold,
                         ),
@@ -483,6 +495,7 @@ class SettingsScreen extends StatelessWidget {
                     box.get('countryName', defaultValue: 'India'),
                     style:
                         Theme.of(context).primaryTextTheme.titleSmall?.copyWith(
+                              color: darkTheme ? Colors.black : Colors.white,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
                             ),
@@ -495,15 +508,17 @@ class SettingsScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: ExpansionTile(
-                    leading: Icon(CupertinoIcons.double_music_note,
-                        color: darkTheme ? Colors.white : Colors.black),
+                    leading: Icon(
+                      CupertinoIcons.double_music_note,
+                      color: darkTheme ? Colors.black : Colors.white,
+                    ),
                     collapsedBackgroundColor:
                         Theme.of(context).colorScheme.primary,
                     backgroundColor: Theme.of(context).colorScheme.primary,
-                    textColor: darkTheme ? Colors.white : Colors.black,
-                    iconColor: darkTheme ? Colors.white : Colors.black,
-                    collapsedIconColor: darkTheme ? Colors.white : Colors.black,
-                    collapsedTextColor: darkTheme ? Colors.white : Colors.black,
+                    textColor: darkTheme ? Colors.black : Colors.white,
+                    iconColor: darkTheme ? Colors.black : Colors.white,
+                    collapsedIconColor: darkTheme ? Colors.black : Colors.white,
+                    collapsedTextColor: darkTheme ? Colors.black : Colors.white,
                     title: Row(
                       children: [
                         Expanded(
@@ -513,6 +528,8 @@ class SettingsScreen extends StatelessWidget {
                                 .primaryTextTheme
                                 .titleMedium
                                 ?.copyWith(
+                                  color:
+                                      darkTheme ? Colors.black : Colors.white,
                                   overflow: TextOverflow.ellipsis,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -526,7 +543,12 @@ class SettingsScreen extends StatelessWidget {
                                           defaultValue: 'medium'))
                                   .toList()[0]['name'] ??
                               "Medium",
-                          style: Theme.of(context).primaryTextTheme.titleMedium,
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .titleMedium
+                              ?.copyWith(
+                                color: darkTheme ? Colors.black : Colors.white,
+                              ),
                         ),
                       ],
                     ),
@@ -540,6 +562,9 @@ class SettingsScreen extends StatelessWidget {
                                   .primaryTextTheme
                                   .titleMedium
                                   ?.copyWith(
+                                      color: darkTheme
+                                          ? Colors.black
+                                          : Colors.white,
                                       fontWeight: box.get('audioQuality',
                                                   defaultValue: 'medium') ==
                                               quality['value']
@@ -552,7 +577,7 @@ class SettingsScreen extends StatelessWidget {
                                 ? Icon(
                                     Icons.check_circle_rounded,
                                     color:
-                                        darkTheme ? Colors.white : Colors.black,
+                                        darkTheme ? Colors.black : Colors.white,
                                   )
                                 : null,
                             onTap: () {
@@ -589,13 +614,14 @@ class SettingsScreen extends StatelessWidget {
                         .primaryTextTheme
                         .titleMedium
                         ?.copyWith(
+                          color: darkTheme ? Colors.black : Colors.white,
                           overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
                   leading: Icon(
                     Icons.color_lens_rounded,
-                    color: darkTheme ? Colors.white : Colors.black,
+                    color: darkTheme ? Colors.black : Colors.white,
                   ),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -615,13 +641,14 @@ class SettingsScreen extends StatelessWidget {
                         .primaryTextTheme
                         .titleMedium
                         ?.copyWith(
+                          color: darkTheme ? Colors.black : Colors.white,
                           overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
                   leading: Icon(
                     Icons.person_rounded,
-                    color: darkTheme ? Colors.white : Colors.black,
+                    color: darkTheme ? Colors.black : Colors.white,
                   ),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),

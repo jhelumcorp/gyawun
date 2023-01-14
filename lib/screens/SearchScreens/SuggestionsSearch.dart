@@ -114,6 +114,7 @@ class _SearchSuggestionsState extends State<SearchSuggestions> {
                       itemBuilder: (context, index) {
                         String e = suggestions[index];
                         return ListTile(
+                          enableFeedback: false,
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 0),
                           visualDensity: VisualDensity.compact,

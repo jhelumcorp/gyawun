@@ -18,13 +18,13 @@ class TrackTile extends StatelessWidget {
     Track? song = Track.fromMap(track);
 
     return ListTile(
+      enableFeedback: false,
       onTap: () async {
         await context.read<MusicPlayer>().addNew(song);
       },
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(5),
         child: Image.network(
-          // 'https://vibeapi-sheikh-haziq.vercel.app/thumb/sd?id=${song.videoId}',
           song.thumbnails.first.url,
           width: 45,
           height: 45,

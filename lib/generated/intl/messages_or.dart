@@ -30,13 +30,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("ଅଡିଓ ଗୁଣବତ୍ତା"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("ବାତିଲ୍"),
         "Change_country": MessageLookupByLibrary.simpleMessage("ଦେଶ ବଦଳାନ୍ତୁ"),
+        "Dark": MessageLookupByLibrary.simpleMessage("ଅନ୍ଧାର"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("ଅନ୍ଧାର ଥିମ୍"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("ଗତିଶୀଳ ଥିମ୍"),
         "Experimental": MessageLookupByLibrary.simpleMessage("ପରୀକ୍ଷାମୂଳକ"),
         "High": MessageLookupByLibrary.simpleMessage("ଅଧିକ"),
         "Home": MessageLookupByLibrary.simpleMessage("ଗୃହ"),
         "Language": MessageLookupByLibrary.simpleMessage("ଭାଷା"),
+        "Light": MessageLookupByLibrary.simpleMessage("ଆଲୋକ"),
         "Low": MessageLookupByLibrary.simpleMessage("କମ୍"),
+        "Material_You_colors":
+            MessageLookupByLibrary.simpleMessage("ସାମଗ୍ରୀ ତୁମେ ରଙ୍ଗ କର |"),
         "Medium": MessageLookupByLibrary.simpleMessage("ମଧ୍ୟମ"),
         "My_Favorites":
             MessageLookupByLibrary.simpleMessage("ମୋର ପସନ୍ଦ ଗୁଡ଼ିକ"),
@@ -44,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ଏଠାରେ କିଛି ନାହିଁ"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("ବ୍ରାଉଜର ରେ ଖୋଲନ୍ତୁ"),
+        "Pitch_black": MessageLookupByLibrary.simpleMessage("ପିଚ୍ କଳା"),
         "Play_All": MessageLookupByLibrary.simpleMessage("ସମସ୍ତ ପ୍ଲେ କରନ୍ତୁ"),
         "Play_next": MessageLookupByLibrary.simpleMessage("ଏହାପରେ ଚଲାନ୍ତୁ"),
         "Playlists": MessageLookupByLibrary.simpleMessage("ପ୍ଲେଲିଷ୍ଟ୍ ଗୁଡ଼ିକ"),
@@ -67,9 +72,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("କିଛି ସନ୍ଧାନ କରନ୍ତୁ"),
         "Settings": MessageLookupByLibrary.simpleMessage("ସେଟିଂ"),
         "Songs": MessageLookupByLibrary.simpleMessage("ସଙ୍ଗୀତ"),
+        "System": MessageLookupByLibrary.simpleMessage("ସିଷ୍ଟମ୍"),
         "TROUBLESHOOTING":
             MessageLookupByLibrary.simpleMessage("ଅସୁବିଧା ବିଶ୍ଳେଷଣ ହେଉଛି"),
         "Theme": MessageLookupByLibrary.simpleMessage("ଥିମ୍"),
+        "Theme_Mode": MessageLookupByLibrary.simpleMessage("ଥିମ୍ ମୋଡ୍"),
         "Tracks": MessageLookupByLibrary.simpleMessage("ଟ୍ରାକ ଗୁଡ଼ିକ"),
         "Videos": MessageLookupByLibrary.simpleMessage("ଭିଡିଓଗୁଡିକ"),
         "View_source_code":

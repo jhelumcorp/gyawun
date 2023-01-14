@@ -39,5 +39,11 @@
     "REMOVE":"ΑΦΑΙΡΩ",
     "Remove_from_search_history":"Κατάργηση από το ιστορικό αναζήτησης;", 
     "Play_next":"Παίξτε το επόμενο",
-    "Videos":"Βίντεο"
+    "Videos":"Βίντεο",
+    "Theme_Mode":"Λειτουργία θέματος",
+    "System":"Σύστημα",
+    "Light":"Φως",
+    "Dark":"Σκοτάδι",
+    "Pitch_black":"Κατάμαυρο",
+    "Material_You_colors":"Υλικά εσείς χρώματα"
 }

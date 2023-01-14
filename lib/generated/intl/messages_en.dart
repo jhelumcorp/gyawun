@@ -31,18 +31,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "CANCEL": MessageLookupByLibrary.simpleMessage("CANCEL"),
         "Change_country":
             MessageLookupByLibrary.simpleMessage("Change Country"),
+        "Dark": MessageLookupByLibrary.simpleMessage("Dark"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Dark Theme"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Dynamic Theme"),
         "Experimental": MessageLookupByLibrary.simpleMessage("Experimental"),
         "High": MessageLookupByLibrary.simpleMessage("High"),
         "Home": MessageLookupByLibrary.simpleMessage("Home"),
         "Language": MessageLookupByLibrary.simpleMessage("Language"),
+        "Light": MessageLookupByLibrary.simpleMessage("Light"),
         "Low": MessageLookupByLibrary.simpleMessage("Low"),
+        "Material_You_colors":
+            MessageLookupByLibrary.simpleMessage("Material You colors"),
         "Medium": MessageLookupByLibrary.simpleMessage("Medium"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("My Favorites"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("Nothing Here"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Open in Browser"),
+        "Pitch_black": MessageLookupByLibrary.simpleMessage("Pitch black"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Play All"),
         "Play_next": MessageLookupByLibrary.simpleMessage("Play next"),
         "Playlists": MessageLookupByLibrary.simpleMessage("Playlists"),
@@ -66,9 +71,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Search something"),
         "Settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "Songs": MessageLookupByLibrary.simpleMessage("Songs"),
+        "System": MessageLookupByLibrary.simpleMessage("System"),
         "TROUBLESHOOTING":
             MessageLookupByLibrary.simpleMessage("TROUBLESHOOTING"),
         "Theme": MessageLookupByLibrary.simpleMessage("Theme"),
+        "Theme_Mode": MessageLookupByLibrary.simpleMessage("Theme Mode"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Tracks"),
         "Videos": MessageLookupByLibrary.simpleMessage("Videos"),
         "View_source_code":

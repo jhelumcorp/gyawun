@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
@@ -11,13 +12,8 @@ import 'package:vibe_music/widgets/MusicSlider.dart';
 
 class PlayerScreen extends StatefulWidget {
   const PlayerScreen({
-    required this.height,
-    required this.percentage,
     super.key,
   });
-
-  final double height;
-  final double percentage;
 
   @override
   State<PlayerScreen> createState() => _PlayerScreenState();
@@ -49,7 +45,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       valueListenable: Hive.box('settings').listenable(),
                       builder: (context, Box box, child) {
                         bool isDarkTheme =
-                            box.get('theme', defaultValue: 'light') == 'dark';
+                            Theme.of(context).brightness == Brightness.dark;
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -148,9 +144,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                                 favourite == null
                                                     ? CupertinoIcons.heart
                                                     : CupertinoIcons.heart_fill,
-                                                color: isDarkTheme
-                                                    ? Colors.white
-                                                    : Colors.black,
+                                                color: favourite == null
+                                                    ? (isDarkTheme
+                                                        ? Colors.white
+                                                        : Colors.black)
+                                                    : (isDarkTheme
+                                                        ? Colors.black
+                                                        : Colors.white),
                                               ));
                                         },
                                       ),
@@ -187,6 +187,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                         size: constraints.maxWidth > 30
                                             ? 30
                                             : constraints.maxWidth - 5,
+                                        color: player.shuffleModeEnabled
+                                            ? (isDarkTheme
+                                                ? Colors.black
+                                                : Colors.white)
+                                            : (isDarkTheme
+                                                ? Colors.white
+                                                : Colors.black),
                                       ),
                                     );
                                   }),
@@ -273,17 +280,19 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                                               5);
                                                 case ProcessingState.ready:
                                                   return Icon(
-                                                      player.playing
-                                                          ? Icons.pause_rounded
-                                                          : Icons
-                                                              .play_arrow_rounded,
-                                                      size: constraints
-                                                                  .maxWidth >
-                                                              35
-                                                          ? 35
-                                                          : constraints
-                                                                  .maxWidth -
-                                                              5);
+                                                    player.playing
+                                                        ? Icons.pause_rounded
+                                                        : Icons
+                                                            .play_arrow_rounded,
+                                                    size: constraints.maxWidth >
+                                                            35
+                                                        ? 35
+                                                        : constraints.maxWidth -
+                                                            5,
+                                                    color: (isDarkTheme
+                                                        ? Colors.black
+                                                        : Colors.white),
+                                                  );
                                               }
                                             }),
                                       );
@@ -334,6 +343,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                         size: constraints.maxWidth > 30
                                             ? 30
                                             : constraints.maxWidth - 5,
+                                        color: player.loopMode == LoopMode.one
+                                            ? (isDarkTheme
+                                                ? Colors.black
+                                                : Colors.white)
+                                            : (isDarkTheme
+                                                ? Colors.white
+                                                : Colors.black),
                                       ),
                                     );
                                   }),
@@ -386,7 +402,11 @@ class QueueScreen extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: Hive.box('settings').listenable(),
       builder: (context, Box box, child) {
-        bool isdarkTheme = box.get('theme', defaultValue: 'light') == 'dark';
+        var brightness = SchedulerBinding.instance.window.platformBrightness;
+        bool isDarkTheme = brightness == Brightness.dark;
+        bool darkTheme = box.get('theme', defaultValue: 'light') == 'system'
+            ? isDarkTheme
+            : box.get('theme', defaultValue: 'light') == 'dark';
         return Directionality(
           textDirection: box.get('textDirection', defaultValue: 'ltr') == 'rtl'
               ? TextDirection.rtl
@@ -432,6 +452,7 @@ class QueueScreen extends StatelessWidget {
                           ),
                         ),
                         child: ListTile(
+                          enableFeedback: false,
                           onTap: () {
                             player.seek(Duration.zero, index: index);
                             player.play();
@@ -442,7 +463,7 @@ class QueueScreen extends StatelessWidget {
                             child: Stack(
                               children: [
                                 Image.network(
-                                  'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
+                                  song.thumbnails.first.url,
                                   width: 50,
                                   height: 50,
                                 ),
@@ -479,7 +500,7 @@ class QueueScreen extends StatelessWidget {
                             index: index,
                             child: Icon(
                               Icons.drag_handle,
-                              color: isdarkTheme ? Colors.white : Colors.black,
+                              color: darkTheme ? Colors.white : Colors.black,
                             ),
                           ),
                         ),

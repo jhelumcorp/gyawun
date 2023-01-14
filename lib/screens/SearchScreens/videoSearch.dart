@@ -25,6 +25,7 @@ class _VideoSearchState extends State<VideoSearch> {
               children: context.watch<SearchProvider>().videos.map((track) {
                 Track? song = Track.fromMap(track);
                 return ListTile(
+                  enableFeedback: false,
                   dense: true,
                   onTap: () async {
                     await context.read<MusicPlayer>().addNew(song);

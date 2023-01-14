@@ -39,5 +39,11 @@
     "REMOVE":"제거하다",
     "Remove_from_search_history":"검색 기록에서 삭제하시겠습니까?", 
     "Play_next":"다음 플레이",
-    "Videos":"비디오"
+    "Videos":"비디오",
+    "Theme_Mode":"테마 모드",
+    "System":"체계",
+    "Light":"빛",
+    "Dark":"어두운",
+    "Pitch_black":"칠흑같이 검은색",
+    "Material_You_colors":"머티리얼 유 컬러"
 }

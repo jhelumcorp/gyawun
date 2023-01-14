@@ -39,5 +39,11 @@
     "REMOVE":"消除",
     "Remove_from_search_history":"从搜索历史中删除？", 
     "Play_next":"接下来播放",
-    "Videos":"影片"
+    "Videos":"影片",
+    "Theme_Mode":"主题模式",
+    "System":"系统",
+    "Light":"光",
+    "Dark":"黑暗的",
+    "Pitch_black":"漆黑",
+    "Material_You_colors":"材料你的颜色"
 }

@@ -31,18 +31,23 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Calidad de audio"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("CANCELAR"),
         "Change_country": MessageLookupByLibrary.simpleMessage("Cambiar pais"),
+        "Dark": MessageLookupByLibrary.simpleMessage("Oscuro"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Tema oscuro"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Tema dinámico"),
         "Experimental": MessageLookupByLibrary.simpleMessage("Experimental"),
         "High": MessageLookupByLibrary.simpleMessage("Alto"),
         "Home": MessageLookupByLibrary.simpleMessage("Casa"),
         "Language": MessageLookupByLibrary.simpleMessage("Idioma"),
+        "Light": MessageLookupByLibrary.simpleMessage("Ligero"),
         "Low": MessageLookupByLibrary.simpleMessage("Bajo"),
+        "Material_You_colors":
+            MessageLookupByLibrary.simpleMessage("Material Tus colores"),
         "Medium": MessageLookupByLibrary.simpleMessage("Medio"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("Mis favoritos"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("Nada aquí"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Abierto en el navegador"),
+        "Pitch_black": MessageLookupByLibrary.simpleMessage("tono negro"),
         "Play_All": MessageLookupByLibrary.simpleMessage("Jugar todo"),
         "Play_next": MessageLookupByLibrary.simpleMessage("jugar siguiente"),
         "Playlists":
@@ -66,9 +71,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "Search_something": MessageLookupByLibrary.simpleMessage("buscar algo"),
         "Settings": MessageLookupByLibrary.simpleMessage("Ajustes"),
         "Songs": MessageLookupByLibrary.simpleMessage("Canciones"),
+        "System": MessageLookupByLibrary.simpleMessage("Sistema"),
         "TROUBLESHOOTING":
             MessageLookupByLibrary.simpleMessage("SOLUCIÓN DE PROBLEMAS"),
         "Theme": MessageLookupByLibrary.simpleMessage("Temática"),
+        "Theme_Mode": MessageLookupByLibrary.simpleMessage("Modo de tema"),
         "Tracks": MessageLookupByLibrary.simpleMessage("Pistas"),
         "Videos": MessageLookupByLibrary.simpleMessage("Vídeos"),
         "View_source_code":

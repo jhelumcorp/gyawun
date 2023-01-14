@@ -39,5 +39,11 @@
     "REMOVE":"RETIRAR",
     "Remove_from_search_history":"¿Quitar del historial de búsqueda?", 
     "Play_next":"jugar siguiente",
-    "Videos":"Vídeos"
+    "Videos":"Vídeos",
+    "Theme_Mode":"Modo de tema",
+    "System":"Sistema",
+    "Light":"Ligero",
+    "Dark":"Oscuro",
+    "Pitch_black":"tono negro",
+    "Material_You_colors":"Material Tus colores"
 }

@@ -31,19 +31,24 @@ class MessageLookup extends MessageLookupByLibrary {
         "CANCEL": MessageLookupByLibrary.simpleMessage("منسوخ کریں"),
         "Change_country":
             MessageLookupByLibrary.simpleMessage("ملک تبدیل کیجئے"),
+        "Dark": MessageLookupByLibrary.simpleMessage("اندھیرا"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("ڈارک تھیم"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("متحرک تھیم"),
         "Experimental": MessageLookupByLibrary.simpleMessage("تجرباتی"),
         "High": MessageLookupByLibrary.simpleMessage("اعلی"),
         "Home": MessageLookupByLibrary.simpleMessage("گھر"),
         "Language": MessageLookupByLibrary.simpleMessage("زبان"),
+        "Light": MessageLookupByLibrary.simpleMessage("روشنی"),
         "Low": MessageLookupByLibrary.simpleMessage("کم"),
+        "Material_You_colors":
+            MessageLookupByLibrary.simpleMessage("مواد آپ رنگ"),
         "Medium": MessageLookupByLibrary.simpleMessage("درمیانہ"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("میرے پسندیدہ"),
         "Nothing_Here":
             MessageLookupByLibrary.simpleMessage("یہاں کچھ نہیں ہے"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("براؤزر میں کھولیں"),
+        "Pitch_black": MessageLookupByLibrary.simpleMessage("پچ سیاہ"),
         "Play_All": MessageLookupByLibrary.simpleMessage("سارے چلائیں"),
         "Play_next": MessageLookupByLibrary.simpleMessage("اگلا کھیلیں"),
         "Playlists": MessageLookupByLibrary.simpleMessage("پلے لسٹس"),
@@ -67,9 +72,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("کچھ تلاش کریں"),
         "Settings": MessageLookupByLibrary.simpleMessage("ترتیبات"),
         "Songs": MessageLookupByLibrary.simpleMessage("گانے"),
+        "System": MessageLookupByLibrary.simpleMessage("سسٹم"),
         "TROUBLESHOOTING":
             MessageLookupByLibrary.simpleMessage("خرابیوں کا سراغ لگانا"),
         "Theme": MessageLookupByLibrary.simpleMessage("خیالیہ"),
+        "Theme_Mode": MessageLookupByLibrary.simpleMessage("تھیم موڈ"),
         "Tracks": MessageLookupByLibrary.simpleMessage("ٹریکس"),
         "Videos": MessageLookupByLibrary.simpleMessage("ویڈیوز"),
         "View_source_code":
