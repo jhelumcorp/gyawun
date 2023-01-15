@@ -29,6 +29,7 @@ void main() async {
   await Hive.openBox('myfavourites');
   await Hive.openBox('settings');
   await Hive.openBox('search_history');
+  await Hive.openBox('song_history');
   await HomeApi.setCountry();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => MusicPlayer()),

@@ -41,76 +41,50 @@ class SearchHistory extends StatelessWidget {
                               .primaryTextTheme
                               .bodyLarge
                               ?.color),
-                      trailing: IconButton(
-                        onPressed: () {
-                          onTrailing != null ? onTrailing!(e) : () {};
-                        },
-                        icon: Icon(
-                            box.get('textDirection', defaultValue: 'ltr') ==
-                                    'rtl'
-                                ? CupertinoIcons.arrow_up_right
-                                : CupertinoIcons.arrow_up_left,
-                            color: Theme.of(context)
-                                .primaryTextTheme
-                                .bodyLarge
-                                ?.color),
+                      title: Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                if (onTap != null) {
+                                  onTap!(e);
+                                }
+                              },
+                              child: Text(
+                                e,
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .bodyLarge,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              box.delete(key);
+                            },
+                            icon: Icon(CupertinoIcons.xmark,
+                                color: Theme.of(context)
+                                    .primaryTextTheme
+                                    .bodyLarge
+                                    ?.color),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              onTrailing != null ? onTrailing!(e) : () {};
+                            },
+                            icon: Icon(
+                                box.get('textDirection', defaultValue: 'ltr') ==
+                                        'rtl'
+                                    ? CupertinoIcons.arrow_up_right
+                                    : CupertinoIcons.arrow_up_left,
+                                color: Theme.of(context)
+                                    .primaryTextTheme
+                                    .bodyLarge
+                                    ?.color),
+                          ),
+                        ],
                       ),
                       dense: true,
-                      title: Text(
-                        e,
-                        style: Theme.of(context).primaryTextTheme.bodyLarge,
-                      ),
-                      onLongPress: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Directionality(
-                                textDirection: direction,
-                                child: AlertDialog(
-                                  backgroundColor:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  title: Text(
-                                    e,
-                                    style: Theme.of(context)
-                                        .primaryTextTheme
-                                        .titleLarge,
-                                  ),
-                                  content: Text(
-                                    S.of(context).Remove_from_search_history,
-                                    style: Theme.of(context)
-                                        .primaryTextTheme
-                                        .bodyLarge,
-                                  ),
-                                  actions: [
-                                    MaterialButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(S.of(context).CANCEL,
-                                          style: Theme.of(context)
-                                              .primaryTextTheme
-                                              .bodyLarge),
-                                    ),
-                                    MaterialButton(
-                                      onPressed: () {
-                                        box.delete(key);
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(S.of(context).REMOVE,
-                                          style: Theme.of(context)
-                                              .primaryTextTheme
-                                              .bodyLarge),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            });
-                      },
-                      onTap: () {
-                        if (onTap != null) {
-                          onTap!(e);
-                        }
-                      },
                     );
                   },
                 ),

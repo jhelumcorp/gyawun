@@ -24,7 +24,7 @@ class MusicPlayer extends ChangeNotifier {
 
   PaletteGenerator? _color;
   ConcatenatingAudioSource? playlist = ConcatenatingAudioSource(
-    useLazyPreparation: true,
+    useLazyPreparation: false,
     shuffleOrder: DefaultShuffleOrder(),
     children: [],
   );
@@ -42,6 +42,7 @@ class MusicPlayer extends ChangeNotifier {
 
     _player.playerStateStream.listen((state) async {});
     _player.currentIndexStream.listen((event) {
+      addSongHistory();
       notifyListeners();
     });
     _player.sequenceStream.listen((event) {
@@ -56,7 +57,19 @@ class MusicPlayer extends ChangeNotifier {
     });
   }
 
-  init() async {}
+  addSongHistory() {
+    if (_player.sequenceState?.currentSource != null) {
+      String id = _player.sequenceState?.currentSource?.tag.id;
+      Box box = Hive.box('song_history');
+      Map? song = box.get(id);
+      song ??= _player.sequenceState?.currentSource?.tag.extras;
+      song?['timestamp'] = DateTime.now().millisecondsSinceEpoch;
+      song?['hits'] = song['hits'] != null ? (song['hits'] + 1) : 1;
+      if (song != null) {
+        box.put(id, song);
+      }
+    }
+  }
 
   get player => _player;
   get isInitialized => _initialised;
@@ -152,18 +165,19 @@ class MusicPlayer extends ChangeNotifier {
   }
 
   Future setPlayer() async {
-    await _player.stop();
-    playlist!.clear();
+    if (_player.playing) {
+      await _player.stop();
+    }
+    playlist?.clear();
     playlist = null;
     playlist = ConcatenatingAudioSource(
-      useLazyPreparation: true,
+      useLazyPreparation: false,
       shuffleOrder: DefaultShuffleOrder(),
       children: [],
     );
-    // _songs.clear();
 
     await _player.setAudioSource(playlist!,
-        initialIndex: 0, initialPosition: Duration.zero, preload: false);
+        initialIndex: 0, initialPosition: Duration.zero, preload: true);
   }
 
   addNew(Track newSong) async {
@@ -204,6 +218,7 @@ class MusicPlayer extends ChangeNotifier {
         ),
       ))
           .then((value) async {
+        addSongHistory();
         tempSong = null;
         _miniplayerController.animateToHeight(state: PanelState.MAX);
         notifyListeners();
@@ -310,7 +325,8 @@ class MusicPlayer extends ChangeNotifier {
 
     notifyListeners();
 
-    await playlist?.add(AudioSource.uri(
+    await playlist
+        ?.add(AudioSource.uri(
       await getAudioUri(newSong.videoId),
       tag: MediaItem(
         id: newSong.videoId,
@@ -320,7 +336,10 @@ class MusicPlayer extends ChangeNotifier {
         album: newSong.albums?.name,
         extras: newSong.toMap(),
       ),
-    ));
+    ))
+        .then((value) {
+      addSongHistory();
+    });
   }
 
   /// Change the songe position in playlist from one index to another.

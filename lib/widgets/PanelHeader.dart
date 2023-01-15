@@ -84,8 +84,7 @@ class PanelHeader extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(2),
                           child: CachedNetworkImage(
-                            imageUrl:
-                                'https://vibeapi-sheikh-haziq.vercel.app/thumb/sd?id=${song.videoId}',
+                            imageUrl: song.thumbnails.first.url,
                             width: 54,
                             height: 54,
                             fit: BoxFit.fill,
@@ -159,6 +158,14 @@ class PanelHeader extends StatelessWidget {
                                 }
                               }),
                         ),
+                        IconButton(
+                            onPressed: () {
+                              context.read<MusicPlayer>().next();
+                            },
+                            icon: Icon(
+                              Icons.skip_next_rounded,
+                              color: darkTheme ? Colors.white : Colors.black,
+                            ))
                       ],
                     ),
                   ),

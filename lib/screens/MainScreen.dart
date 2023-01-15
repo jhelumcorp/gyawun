@@ -55,7 +55,6 @@ class _MainScreenState extends State<MainScreen> {
                   Expanded(
                     child: Builder(builder: (context) {
                       return PageView(
-                        physics: const BouncingScrollPhysics(),
                         controller: _pageController,
                         onPageChanged: ((value) {
                           MiniplayerController miniplayerController =

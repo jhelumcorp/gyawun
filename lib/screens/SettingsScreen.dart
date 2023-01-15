@@ -1,10 +1,10 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/screens/AboutScreen.dart';
+import 'package:vibe_music/screens/HistoryScreen.dart';
 import 'package:vibe_music/screens/ThemeScreen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -621,6 +621,35 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   leading: Icon(
                     Icons.color_lens_rounded,
+                    color: darkTheme ? Colors.black : Colors.white,
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  tileColor: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: ListTile(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const HistoryScreen()));
+                  },
+                  title: Text(
+                    "History",
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .titleMedium
+                        ?.copyWith(
+                          color: darkTheme ? Colors.black : Colors.white,
+                          overflow: TextOverflow.ellipsis,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  leading: Icon(
+                    Icons.history_rounded,
                     color: darkTheme ? Colors.black : Colors.white,
                   ),
                   shape: RoundedRectangleBorder(

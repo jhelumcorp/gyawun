@@ -50,7 +50,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             SizedBox(
-                              height: size.width - 64,
+                              height:
+                                  size.width - 64 > 300 ? 300 : size.width - 64,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 32),
@@ -62,7 +63,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                       return Image.network(
                                         song.thumbnails.last.url,
                                         width: double.infinity,
-                                        fit: BoxFit.fill,
+                                        fit: BoxFit.cover,
                                       );
                                     },
                                     width: double.infinity,
