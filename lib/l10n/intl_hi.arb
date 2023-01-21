@@ -45,5 +45,15 @@
     "Light":"रोशनी",
     "Dark":"अँधेरा",
     "Pitch_black":"घोर अँधेरा",
-    "Material_You_colors":"सामग्री आप रंग"
+    "Material_You_colors":"सामग्री आप रंग",
+    "History":"इतिहास",
+    "Recently_played":"हाल ही में बजाया",
+    "Recommended":"अनुशंसित",
+    "Clear_search_history":"स्पष्ट इतिहास की खोज",
+    "Clear_song_history":"गीत इतिहास साफ़ करें",
+    "Confirm":"पुष्टि करें",
+    "Are_you_sure_to_delete_search_history":"क्या आप वाकई खोज इतिहास हटाना चाहते हैं",
+    "Are_you_sure_to_delete_song_history":"क्या आप वाकई गाने का इतिहास मिटाना चाहते हैं",
+    "YES":"हां",
+    "NO":"नहीं"
 }

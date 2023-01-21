@@ -45,5 +45,15 @@
     "Light":"روشنی",
     "Dark":"اندھیرا",
     "Pitch_black":"پچ سیاہ",
-    "Material_You_colors":"مواد آپ رنگ"
+    "Material_You_colors":"مواد آپ رنگ",
+    "History":"تاریخ",
+    "Recently_played":"حال ہی میں کھیلا گیا۔",
+    "Recommended":"تجویز کردہ",
+    "Clear_search_history":"تلاش کی ہسٹری کو مٹا دیں",
+    "Clear_song_history":"گانے کی تاریخ صاف کریں۔",
+    "Confirm":"تصدیق کریں۔",
+    "Are_you_sure_to_delete_search_history":"کیا آپ یقینی طور پر تلاش کی سرگزشت کو حذف کرنا چاہتے ہیں۔",
+    "Are_you_sure_to_delete_song_history":"کیا آپ گانے کی سرگزشت کو حذف کرنے کا یقین رکھتے ہیں؟",
+    "YES":"ہاں",
+    "NO":"نہیں"
 }

@@ -25,15 +25,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("关于"),
         "Add_to_favorites": MessageLookupByLibrary.simpleMessage("添加到收藏夹"),
         "Albums": MessageLookupByLibrary.simpleMessage("相册"),
+        "Are_you_sure_to_delete_search_history":
+            MessageLookupByLibrary.simpleMessage("您确定要删除搜索历史吗"),
+        "Are_you_sure_to_delete_song_history":
+            MessageLookupByLibrary.simpleMessage("您确定要删除歌曲历史记录吗"),
         "Artists": MessageLookupByLibrary.simpleMessage("艺术家"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("音质"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("取消"),
         "Change_country": MessageLookupByLibrary.simpleMessage("改变国家"),
+        "Clear_search_history": MessageLookupByLibrary.simpleMessage("清除搜索历史"),
+        "Clear_song_history": MessageLookupByLibrary.simpleMessage("清除歌曲历史记录"),
+        "Confirm": MessageLookupByLibrary.simpleMessage("确认"),
         "Dark": MessageLookupByLibrary.simpleMessage("黑暗的"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("深色主题"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("动态主题"),
         "Experimental": MessageLookupByLibrary.simpleMessage("实验性的"),
         "High": MessageLookupByLibrary.simpleMessage("高的"),
+        "History": MessageLookupByLibrary.simpleMessage("历史"),
         "Home": MessageLookupByLibrary.simpleMessage("家"),
         "Language": MessageLookupByLibrary.simpleMessage("语"),
         "Light": MessageLookupByLibrary.simpleMessage("光"),
@@ -41,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Material_You_colors": MessageLookupByLibrary.simpleMessage("材料你的颜色"),
         "Medium": MessageLookupByLibrary.simpleMessage("中等的"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("我最喜欢的"),
+        "NO": MessageLookupByLibrary.simpleMessage("不"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("这里没有什么"),
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage("在浏览器中打开"),
         "Pitch_black": MessageLookupByLibrary.simpleMessage("漆黑"),
@@ -49,6 +58,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "Playlists": MessageLookupByLibrary.simpleMessage("播放列表"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("消除"),
         "RTL": MessageLookupByLibrary.simpleMessage("右到左"),
+        "Recently_played": MessageLookupByLibrary.simpleMessage("最近播放"),
+        "Recommended": MessageLookupByLibrary.simpleMessage("推荐的"),
         "Remove_from_Queue": MessageLookupByLibrary.simpleMessage("从队列中移除"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("从收藏夹中删除"),
@@ -70,6 +81,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Tracks": MessageLookupByLibrary.simpleMessage("曲目"),
         "Videos": MessageLookupByLibrary.simpleMessage("影片"),
         "View_source_code": MessageLookupByLibrary.simpleMessage("查看源代码"),
+        "YES": MessageLookupByLibrary.simpleMessage("是的"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("添加到队列"),
         "github_redirect":
             MessageLookupByLibrary.simpleMessage("您将被重定向到 Github")

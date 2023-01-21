@@ -638,7 +638,7 @@ class SettingsScreen extends StatelessWidget {
                             builder: (_) => const HistoryScreen()));
                   },
                   title: Text(
-                    "History",
+                    S.of(context).History,
                     style: Theme.of(context)
                         .primaryTextTheme
                         .titleMedium

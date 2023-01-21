@@ -45,5 +45,15 @@
     "Light":"光",
     "Dark":"黑暗的",
     "Pitch_black":"漆黑",
-    "Material_You_colors":"材料你的颜色"
+    "Material_You_colors":"材料你的颜色",
+    "History":"历史",
+    "Recently_played":"最近播放",
+    "Recommended":"推荐的",
+    "Clear_search_history":"清除搜索历史",
+    "Clear_song_history":"清除歌曲历史记录",
+    "Confirm":"确认",
+    "Are_you_sure_to_delete_search_history":"您确定要删除搜索历史吗",
+    "Are_you_sure_to_delete_song_history":"您确定要删除歌曲历史记录吗",
+    "YES":"是的",
+    "NO":"不"
 }

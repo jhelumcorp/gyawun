@@ -26,15 +26,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("पसंदीदा में जोड़े"),
         "Albums": MessageLookupByLibrary.simpleMessage("एलबम"),
+        "Are_you_sure_to_delete_search_history":
+            MessageLookupByLibrary.simpleMessage(
+                "क्या आप वाकई खोज इतिहास हटाना चाहते हैं"),
+        "Are_you_sure_to_delete_song_history":
+            MessageLookupByLibrary.simpleMessage(
+                "क्या आप वाकई गाने का इतिहास मिटाना चाहते हैं"),
         "Artists": MessageLookupByLibrary.simpleMessage("कलाकार"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("ध्वनि गुणवत्ता"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("रद्द करना"),
         "Change_country": MessageLookupByLibrary.simpleMessage("देश बदलें"),
+        "Clear_search_history":
+            MessageLookupByLibrary.simpleMessage("स्पष्ट इतिहास की खोज"),
+        "Clear_song_history":
+            MessageLookupByLibrary.simpleMessage("गीत इतिहास साफ़ करें"),
+        "Confirm": MessageLookupByLibrary.simpleMessage("पुष्टि करें"),
         "Dark": MessageLookupByLibrary.simpleMessage("अँधेरा"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("डार्क थीम"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("गतिशील थीम"),
         "Experimental": MessageLookupByLibrary.simpleMessage("प्रयोगात्मक"),
         "High": MessageLookupByLibrary.simpleMessage("उच्च"),
+        "History": MessageLookupByLibrary.simpleMessage("इतिहास"),
         "Home": MessageLookupByLibrary.simpleMessage("होम पेज"),
         "Language": MessageLookupByLibrary.simpleMessage("भाषा"),
         "Light": MessageLookupByLibrary.simpleMessage("रोशनी"),
@@ -43,6 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("सामग्री आप रंग"),
         "Medium": MessageLookupByLibrary.simpleMessage("मध्यम"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("मेरे प्रिय"),
+        "NO": MessageLookupByLibrary.simpleMessage("नहीं"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("यहाँ कुछ नहीं"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("ब्राउज़र में खोलें"),
@@ -52,6 +65,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "Playlists": MessageLookupByLibrary.simpleMessage("प्लेलिस्ट"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("निकालना"),
         "RTL": MessageLookupByLibrary.simpleMessage("दाएं से बाएं"),
+        "Recently_played":
+            MessageLookupByLibrary.simpleMessage("हाल ही में बजाया"),
+        "Recommended": MessageLookupByLibrary.simpleMessage("अनुशंसित"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("कतार से हटाएं"),
         "Remove_from_favorites":
@@ -78,6 +94,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Videos": MessageLookupByLibrary.simpleMessage("वीडियो"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("स्रोत कोड देखें"),
+        "YES": MessageLookupByLibrary.simpleMessage("हां"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("क़तार में जोड़ें"),
         "github_redirect": MessageLookupByLibrary.simpleMessage(
             "आपको जीथब पर पुनर्निर्देशित किया जाएगा")

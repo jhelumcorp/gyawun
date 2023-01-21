@@ -45,5 +45,15 @@
     "Light":"Claro",
     "Dark":"Escuro",
     "Pitch_black":"Escuro como breu",
-    "Material_You_colors":"Material Você cores"
+    "Material_You_colors":"Material Você cores",
+    "History":"História",
+    "Recently_played":"Tocado recentemente",
+    "Recommended":"Recomendado",
+    "Clear_search_history":"Limpar histórico de pesquisa",
+    "Clear_song_history":"Limpar histórico de músicas",
+    "Confirm":"confirme",
+    "Are_you_sure_to_delete_search_history":"Tem certeza de que deseja excluir o histórico de pesquisa",
+    "Are_you_sure_to_delete_song_history":"Tem certeza de que deseja excluir o histórico de músicas",
+    "YES":"SIM",
+    "NO":"NÃO"
 }

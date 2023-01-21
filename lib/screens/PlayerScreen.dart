@@ -62,12 +62,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     errorBuilder: (context, error, stackTrace) {
                                       return Image.network(
                                         song.thumbnails.last.url,
-                                        width: double.infinity,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.contain,
                                       );
                                     },
-                                    width: double.infinity,
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.contain,
                                   ),
                                 ),
                               ),
@@ -256,12 +254,15 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                                 case ProcessingState.loading:
                                                   return CircularProgressIndicator(
                                                     color: isDarkTheme
-                                                        ? Colors.white
-                                                        : Colors.black,
+                                                        ? Colors.black
+                                                        : Colors.white,
                                                   );
                                                 case ProcessingState.completed:
                                                   return Icon(
                                                       Icons.play_arrow_rounded,
+                                                      color: isDarkTheme
+                                                          ? Colors.black
+                                                          : Colors.white,
                                                       size: constraints
                                                                   .maxWidth >
                                                               35
@@ -272,6 +273,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                                 case ProcessingState.idle:
                                                   return Icon(
                                                       Icons.play_arrow_rounded,
+                                                      color: isDarkTheme
+                                                          ? Colors.black
+                                                          : Colors.white,
                                                       size: constraints
                                                                   .maxWidth >
                                                               35

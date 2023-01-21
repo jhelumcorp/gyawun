@@ -26,15 +26,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("اضافة الى المفضلة"),
         "Albums": MessageLookupByLibrary.simpleMessage("ألبومات"),
+        "Are_you_sure_to_delete_search_history":
+            MessageLookupByLibrary.simpleMessage(
+                "هل أنت متأكد من حذف سجل البحث"),
+        "Are_you_sure_to_delete_song_history":
+            MessageLookupByLibrary.simpleMessage(
+                "هل أنت متأكد من حذف سجل الأغاني"),
         "Artists": MessageLookupByLibrary.simpleMessage("الفنانين"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("جودة الصوت"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("إلغاء"),
         "Change_country": MessageLookupByLibrary.simpleMessage("تغيير الدولة"),
+        "Clear_search_history":
+            MessageLookupByLibrary.simpleMessage("امسح البحث السابق"),
+        "Clear_song_history":
+            MessageLookupByLibrary.simpleMessage("مسح سجل الأغنية"),
+        "Confirm": MessageLookupByLibrary.simpleMessage("يتأكد"),
         "Dark": MessageLookupByLibrary.simpleMessage("داكن"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("مظهر داكن"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("موضوع ديناميكي"),
         "Experimental": MessageLookupByLibrary.simpleMessage("تجريبي"),
         "High": MessageLookupByLibrary.simpleMessage("عالٍ"),
+        "History": MessageLookupByLibrary.simpleMessage("تاريخ"),
         "Home": MessageLookupByLibrary.simpleMessage("منزل"),
         "Language": MessageLookupByLibrary.simpleMessage("اللغة"),
         "Light": MessageLookupByLibrary.simpleMessage("نور"),
@@ -43,6 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المواد أنت الألوان"),
         "Medium": MessageLookupByLibrary.simpleMessage("متوسط"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("مفضلتي"),
+        "NO": MessageLookupByLibrary.simpleMessage("رقم"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("لا شيء هنا"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("افتح في المتصفح"),
@@ -52,6 +65,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "Playlists": MessageLookupByLibrary.simpleMessage("قوائم التشغيل"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("إزالة"),
         "RTL": MessageLookupByLibrary.simpleMessage("من اليمين الى اليسار"),
+        "Recently_played": MessageLookupByLibrary.simpleMessage("لعبت مؤخرا"),
+        "Recommended": MessageLookupByLibrary.simpleMessage("موصى به"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("إزالة من قائمة الانتظار"),
         "Remove_from_favorites":
@@ -77,6 +92,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Videos": MessageLookupByLibrary.simpleMessage("أشرطة فيديو"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("عرض كود المصدر"),
+        "YES": MessageLookupByLibrary.simpleMessage("نعم"),
         "addToQueue":
             MessageLookupByLibrary.simpleMessage("أضف إلى قائمة الانتظار"),
         "github_redirect":

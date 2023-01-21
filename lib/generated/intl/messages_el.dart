@@ -26,15 +26,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Προσθήκη στα αγαπημένα"),
         "Albums": MessageLookupByLibrary.simpleMessage("Άλμπουμ"),
+        "Are_you_sure_to_delete_search_history":
+            MessageLookupByLibrary.simpleMessage(
+                "Είστε βέβαιοι ότι θα διαγράψετε το ιστορικό αναζήτησης"),
+        "Are_you_sure_to_delete_song_history":
+            MessageLookupByLibrary.simpleMessage(
+                "Είστε βέβαιοι ότι θα διαγράψετε το ιστορικό τραγουδιών"),
         "Artists": MessageLookupByLibrary.simpleMessage("Καλλιτέχνες"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Ποιότητα ήχου"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("ΜΑΤΑΙΩΣΗ"),
         "Change_country": MessageLookupByLibrary.simpleMessage("Αλλαγή χώρας"),
+        "Clear_search_history": MessageLookupByLibrary.simpleMessage(
+            "Εκκαθαριση ιστορικου αναζητησης"),
+        "Clear_song_history": MessageLookupByLibrary.simpleMessage(
+            "Διαγραφή ιστορικού τραγουδιού"),
+        "Confirm": MessageLookupByLibrary.simpleMessage("Επιβεβαιώνω"),
         "Dark": MessageLookupByLibrary.simpleMessage("Σκοτάδι"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Σκοτεινό θέμα"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Δυναμικό θέμα"),
         "Experimental": MessageLookupByLibrary.simpleMessage("Πειραματικό"),
         "High": MessageLookupByLibrary.simpleMessage("Υψηλή"),
+        "History": MessageLookupByLibrary.simpleMessage("Ιστορία"),
         "Home": MessageLookupByLibrary.simpleMessage("Αρχική σελίδα"),
         "Language": MessageLookupByLibrary.simpleMessage("Γλώσσα"),
         "Light": MessageLookupByLibrary.simpleMessage("Φως"),
@@ -44,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Medium": MessageLookupByLibrary.simpleMessage("Μέτρια"),
         "My_Favorites":
             MessageLookupByLibrary.simpleMessage("Τα αγαπημένα μου"),
+        "NO": MessageLookupByLibrary.simpleMessage("NEIN"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("Τίποτα εδώ"),
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage(
             "Άνοιγμα σε πρόγραμμα περιήγησης"),
@@ -55,6 +68,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "REMOVE": MessageLookupByLibrary.simpleMessage("ΑΦΑΙΡΩ"),
         "RTL":
             MessageLookupByLibrary.simpleMessage("Από δεξιά προς τα αριστερά"),
+        "Recently_played":
+            MessageLookupByLibrary.simpleMessage("Παίχτηκε πρόσφατα"),
+        "Recommended": MessageLookupByLibrary.simpleMessage("Συνιστάται"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("Κατάργηση από την ουρά"),
         "Remove_from_favorites":
@@ -83,6 +99,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Videos": MessageLookupByLibrary.simpleMessage("Βίντεο"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("Προβολή πηγαίου κώδικα"),
+        "YES": MessageLookupByLibrary.simpleMessage("ΝΑΙ"),
         "addToQueue":
             MessageLookupByLibrary.simpleMessage("Προσθήκη στην ουρά"),
         "github_redirect": MessageLookupByLibrary.simpleMessage(

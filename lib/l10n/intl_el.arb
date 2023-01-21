@@ -45,5 +45,15 @@
     "Light":"Φως",
     "Dark":"Σκοτάδι",
     "Pitch_black":"Κατάμαυρο",
-    "Material_You_colors":"Υλικά εσείς χρώματα"
+    "Material_You_colors":"Υλικά εσείς χρώματα",
+    "History":"Ιστορία",
+    "Recently_played":"Παίχτηκε πρόσφατα",
+    "Recommended":"Συνιστάται",
+    "Clear_search_history":"Εκκαθαριση ιστορικου αναζητησης",
+    "Clear_song_history":"Διαγραφή ιστορικού τραγουδιού",
+    "Confirm":"Επιβεβαιώνω",
+    "Are_you_sure_to_delete_search_history":"Είστε βέβαιοι ότι θα διαγράψετε το ιστορικό αναζήτησης",
+    "Are_you_sure_to_delete_song_history":"Είστε βέβαιοι ότι θα διαγράψετε το ιστορικό τραγουδιών",
+    "YES":"ΝΑΙ",
+    "NO":"NEIN"
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
@@ -39,7 +40,14 @@ class MusicPlayer extends ChangeNotifier {
     _isPlaying = _player.playing;
     _player.setAudioSource(playlist!,
         initialIndex: 0, initialPosition: Duration.zero, preload: true);
-
+    List recents = Hive.box('song_history').values.toList();
+    if (recents.isNotEmpty) {
+      recents.sort((a, b) => b["timestamp"].compareTo(a["timestamp"]));
+      List songs = recents
+          .getRange(0, recents.length > 10 ? 10 : recents.length)
+          .toList();
+      initializePlaylist(jsonDecode(jsonEncode(songs)));
+    }
     _player.playerStateStream.listen((state) async {});
     _player.currentIndexStream.listen((event) {
       addSongHistory();
@@ -290,6 +298,7 @@ class MusicPlayer extends ChangeNotifier {
       ),
     ))
         .then((value) async {
+      addSongHistory();
       tempSong = null;
       _miniplayerController.animateToHeight(state: PanelState.MAX);
       notifyListeners();
@@ -313,6 +322,58 @@ class MusicPlayer extends ChangeNotifier {
       }
     });
     // _miniplayerController.animateToHeight(state: PanelState.MAX);
+  }
+
+  initializePlaylist(List newSongs) async {
+    _cancelController.sink.add(true);
+    _cancelController = StreamController<bool>();
+    tempSong = Track.fromMap(newSongs[0]);
+    Track newSong = Track.fromMap(newSongs[0]);
+
+    PaletteGenerator? color = await generateColor(newSong.thumbnails.last.url);
+    newSong.colorPalette = ColorPalette(
+        darkMutedColor: color?.darkMutedColor?.color,
+        lightMutedColor: color?.lightMutedColor?.color);
+    tempSong = newSong;
+    await setPlayer();
+
+    _initialised = true;
+    notifyListeners();
+
+    await playlist
+        ?.add(AudioSource.uri(
+      await getAudioUri(newSong.videoId),
+      tag: MediaItem(
+        id: newSong.videoId,
+        title: newSong.title,
+        artUri: Uri.parse(newSong.thumbnails.last.url),
+        artist: newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
+        album: newSong.albums?.name,
+        extras: newSong.toMap(),
+      ),
+    ))
+        .then((value) async {
+      tempSong = null;
+      notifyListeners();
+      bool breakIt = false;
+      _cancelController.stream.first.then((cancelled) async {
+        if (cancelled) {
+          breakIt = true;
+        }
+      });
+      List nsongs = newSongs.sublist(1, newSongs.length);
+
+      for (Map<String, dynamic> nSong in nsongs) {
+        // If the loop has been cancelled, exit
+        if (breakIt) {
+          break;
+        }
+
+        // Add the item to the otherSongs list
+        Track ns = Track.fromMap(nSong);
+        await addToQUeue(ns);
+      }
+    });
   }
 
   Future addOneToQueue(Track newSong) async {
@@ -394,9 +455,9 @@ class MusicPlayer extends ChangeNotifier {
 
       List<AudioOnlyStreamInfo> audios = manifest.audioOnly.sortByBitrate();
 
-      int audioNumber = audioQuality == 'high'
+      int audioNumber = audioQuality == 'low'
           ? 0
-          : (audioQuality == 'low'
+          : (audioQuality == 'high'
               ? audios.length - 1
               : (audios.length / 2).floor());
 

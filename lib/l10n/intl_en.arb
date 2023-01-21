@@ -45,5 +45,15 @@
     "Light":"Light",
     "Dark":"Dark",
     "Pitch_black":"Pitch black",
-    "Material_You_colors":"Material You colors"
+    "Material_You_colors":"Material You colors",
+    "History":"History",
+    "Recently_played":"Recently played",
+    "Recommended":"Recommended",
+    "Clear_search_history":"Clear search history",
+    "Clear_song_history":"Clear song history",
+    "Confirm":"Confirm",
+    "Are_you_sure_to_delete_search_history":"Are you sure to delete search history",
+    "Are_you_sure_to_delete_song_history":"Are you sure to delete song history",
+    "YES":"YES",
+    "NO":"NO"
 }

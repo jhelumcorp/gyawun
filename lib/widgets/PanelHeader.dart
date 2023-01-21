@@ -140,10 +140,15 @@ class PanelHeader extends StatelessWidget {
                                 switch (state.processingState) {
                                   case ProcessingState.buffering:
                                   case ProcessingState.loading:
-                                  case ProcessingState.idle:
                                     return const CircularProgressIndicator();
+                                  case ProcessingState.idle:
                                   case ProcessingState.completed:
-                                    return const Icon(Icons.play_arrow);
+                                    return Icon(
+                                      Icons.play_arrow_rounded,
+                                      color: darkTheme
+                                          ? Colors.white
+                                          : Colors.black,
+                                    );
                                   case ProcessingState.ready:
                                     return Icon(
                                       player.playing

@@ -45,5 +45,15 @@
     "Light":"Lig",
     "Dark":"Donker",
     "Pitch_black":"Pikswart",
-    "Material_You_colors":"Materiaal Jy kleur"
+    "Material_You_colors":"Materiaal Jy kleur",
+    "History":"Geskiedenis",
+    "Recently_played":"Onlangs gespeel",
+    "Recommended":"Aanbeveel",
+    "Clear_search_history":"Vee soekgeskiedenis uit",
+    "Clear_song_history":"Vee liedgeskiedenis uit",
+    "Confirm":"Bevestig",
+    "Are_you_sure_to_delete_search_history":"Is jy seker om soekgeskiedenis uit te vee",
+    "Are_you_sure_to_delete_song_history":"Is jy seker om liedgeskiedenis uit te vee",
+    "YES":"JA",
+    "NO":"GEEN"
 }

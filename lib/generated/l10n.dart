@@ -519,6 +519,106 @@ class S {
       args: [],
     );
   }
+
+  /// `History`
+  String get History {
+    return Intl.message(
+      'History',
+      name: 'History',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recently played`
+  String get Recently_played {
+    return Intl.message(
+      'Recently played',
+      name: 'Recently_played',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recommended`
+  String get Recommended {
+    return Intl.message(
+      'Recommended',
+      name: 'Recommended',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear search history`
+  String get Clear_search_history {
+    return Intl.message(
+      'Clear search history',
+      name: 'Clear_search_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear song history`
+  String get Clear_song_history {
+    return Intl.message(
+      'Clear song history',
+      name: 'Clear_song_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get Confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'Confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure to delete search history`
+  String get Are_you_sure_to_delete_search_history {
+    return Intl.message(
+      'Are you sure to delete search history',
+      name: 'Are_you_sure_to_delete_search_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure to delete song history`
+  String get Are_you_sure_to_delete_song_history {
+    return Intl.message(
+      'Are you sure to delete song history',
+      name: 'Are_you_sure_to_delete_song_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `YES`
+  String get YES {
+    return Intl.message(
+      'YES',
+      name: 'YES',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `NO`
+  String get NO {
+    return Intl.message(
+      'NO',
+      name: 'NO',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

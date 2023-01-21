@@ -46,5 +46,15 @@
     "Light":"نور",
     "Dark":"داكن",
     "Pitch_black":"شديد السواد",
-    "Material_You_colors":"المواد أنت الألوان"
+    "Material_You_colors":"المواد أنت الألوان",
+    "History":"تاريخ",
+    "Recently_played":"لعبت مؤخرا",
+    "Recommended":"موصى به",
+    "Clear_search_history":"امسح البحث السابق",
+    "Clear_song_history":"مسح سجل الأغنية",
+    "Confirm":"يتأكد",
+    "Are_you_sure_to_delete_search_history":"هل أنت متأكد من حذف سجل البحث",
+    "Are_you_sure_to_delete_song_history":"هل أنت متأكد من حذف سجل الأغاني",
+    "YES":"نعم",
+    "NO":"رقم"
 }

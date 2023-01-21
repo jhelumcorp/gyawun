@@ -45,5 +45,15 @@
     "Light":"ଆଲୋକ",
     "Dark":"ଅନ୍ଧାର",
     "Pitch_black":"ପିଚ୍ କଳା",
-    "Material_You_colors":"ସାମଗ୍ରୀ ତୁମେ ରଙ୍ଗ କର |"
+    "Material_You_colors":"ସାମଗ୍ରୀ ତୁମେ ରଙ୍ଗ କର |",
+    "History":"ଇତିହାସ",
+    "Recently_played":"ସମ୍ପ୍ରତି ଖେଳାଯାଇଛି |",
+    "Recommended":"ପରାମର୍ଶିତ",
+    "Clear_search_history":"ସନ୍ଧାନ ଇତିହାସ ସଫା କରନ୍ତୁ |",
+    "Clear_song_history":"ଗୀତ ଇତିହାସ ସଫା କରନ୍ତୁ |",
+    "Confirm":"ନିଶ୍ଚିତ କରନ୍ତୁ |",
+    "Are_you_sure_to_delete_search_history":"ସନ୍ଧାନ ଇତିହାସ ବିଲୋପ କରିବାକୁ ଆପଣ ନିଶ୍ଚିତ କି?",
+    "Are_you_sure_to_delete_song_history":"ଗୀତ ଇତିହାସ ବିଲୋପ କରିବାକୁ ଆପଣ ନିଶ୍ଚିତ କି?",
+    "YES":"ହଁ",
+    "NO":"ନା"
 }

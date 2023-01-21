@@ -26,15 +26,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Voeg by gunstelinge"),
         "Albums": MessageLookupByLibrary.simpleMessage("Albums"),
+        "Are_you_sure_to_delete_search_history":
+            MessageLookupByLibrary.simpleMessage(
+                "Is jy seker om soekgeskiedenis uit te vee"),
+        "Are_you_sure_to_delete_song_history":
+            MessageLookupByLibrary.simpleMessage(
+                "Is jy seker om liedgeskiedenis uit te vee"),
         "Artists": MessageLookupByLibrary.simpleMessage("Kunstens"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Klankkwaliteit"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("KANSELLEER"),
         "Change_country": MessageLookupByLibrary.simpleMessage("Verander Land"),
+        "Clear_search_history":
+            MessageLookupByLibrary.simpleMessage("Vee soekgeskiedenis uit"),
+        "Clear_song_history":
+            MessageLookupByLibrary.simpleMessage("Vee liedgeskiedenis uit"),
+        "Confirm": MessageLookupByLibrary.simpleMessage("Bevestig"),
         "Dark": MessageLookupByLibrary.simpleMessage("Donker"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Donker Tema"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("Dynamiese Tema"),
         "Experimental": MessageLookupByLibrary.simpleMessage("Eksperimenteel"),
         "High": MessageLookupByLibrary.simpleMessage("Hoog"),
+        "History": MessageLookupByLibrary.simpleMessage("Geskiedenis"),
         "Home": MessageLookupByLibrary.simpleMessage("Tuis"),
         "Language": MessageLookupByLibrary.simpleMessage("Taal"),
         "Light": MessageLookupByLibrary.simpleMessage("Lig"),
@@ -43,6 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Materiaal Jy kleur"),
         "Medium": MessageLookupByLibrary.simpleMessage("Medium"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("My Gunstelinge"),
+        "NO": MessageLookupByLibrary.simpleMessage("GEEN"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("Niks hier"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Maak oop in blaaier"),
@@ -52,6 +65,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "Playlists": MessageLookupByLibrary.simpleMessage("Snitlyste"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("VERWYDER"),
         "RTL": MessageLookupByLibrary.simpleMessage("Res na links"),
+        "Recently_played":
+            MessageLookupByLibrary.simpleMessage("Onlangs gespeel"),
+        "Recommended": MessageLookupByLibrary.simpleMessage("Aanbeveel"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("Verwyder uit waglys"),
         "Remove_from_favorites":
@@ -78,6 +94,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Videos": MessageLookupByLibrary.simpleMessage("Video\'s"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("Bekyk bronkode"),
+        "YES": MessageLookupByLibrary.simpleMessage("JA"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("Voeg by waglys"),
         "github_redirect":
             MessageLookupByLibrary.simpleMessage("Jy sal na Github herlei word")

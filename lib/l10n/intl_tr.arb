@@ -45,5 +45,15 @@
     "Light":"Işık",
     "Dark":"Karanlık",
     "Pitch_black":"Zifiri karanlık",
-    "Material_You_colors":"Malzeme Siz renkler"
+    "Material_You_colors":"Malzeme Siz renkler",
+    "History":"Tarih",
+    "Recently_played":"Son oynatılan",
+    "Recommended":"Önerilen",
+    "Clear_search_history":"Arama geçmişini temizle",
+    "Clear_song_history":"Şarkı geçmişini temizle",
+    "Confirm":"Teyit etmek",
+    "Are_you_sure_to_delete_search_history":"Arama geçmişini silmek istediğinizden emin misiniz?",
+    "Are_you_sure_to_delete_song_history":"Şarkı geçmişini silmek istediğinizden emin misiniz?",
+    "YES":"EVET",
+    "NO":"HAYIR"
 }

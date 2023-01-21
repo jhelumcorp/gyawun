@@ -26,11 +26,22 @@ class MessageLookup extends MessageLookupByLibrary {
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Добавить в избранное"),
         "Albums": MessageLookupByLibrary.simpleMessage("Альбомы"),
+        "Are_you_sure_to_delete_search_history":
+            MessageLookupByLibrary.simpleMessage(
+                "Вы уверены, что хотите удалить историю поиска?"),
+        "Are_you_sure_to_delete_song_history":
+            MessageLookupByLibrary.simpleMessage(
+                "Вы уверены, что хотите удалить историю песен?"),
         "Artists": MessageLookupByLibrary.simpleMessage("Художники"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Качество звука"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("ОТМЕНИТЬ"),
         "Change_country":
             MessageLookupByLibrary.simpleMessage("Сменить страну"),
+        "Clear_search_history":
+            MessageLookupByLibrary.simpleMessage("Очистить историю поиска"),
+        "Clear_song_history":
+            MessageLookupByLibrary.simpleMessage("Очистить историю песен"),
+        "Confirm": MessageLookupByLibrary.simpleMessage("Подтверждать"),
         "Dark": MessageLookupByLibrary.simpleMessage("Темнота"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Темная тема"),
         "Dynamic_Theme":
@@ -38,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Experimental":
             MessageLookupByLibrary.simpleMessage("Экспериментальный"),
         "High": MessageLookupByLibrary.simpleMessage("Высокий"),
+        "History": MessageLookupByLibrary.simpleMessage("История"),
         "Home": MessageLookupByLibrary.simpleMessage("Дом"),
         "Language": MessageLookupByLibrary.simpleMessage("Язык"),
         "Light": MessageLookupByLibrary.simpleMessage("Свет"),
@@ -46,6 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Материал Вы цвета"),
         "Medium": MessageLookupByLibrary.simpleMessage("Середина"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("Мои любимые"),
+        "NO": MessageLookupByLibrary.simpleMessage("НЕТ"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("Здесь ничего"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Открыть в браузере"),
@@ -55,6 +68,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "Playlists": MessageLookupByLibrary.simpleMessage("Плейлисты"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("УДАЛИТЬ"),
         "RTL": MessageLookupByLibrary.simpleMessage("Справа налево"),
+        "Recently_played":
+            MessageLookupByLibrary.simpleMessage("Недавно играл"),
+        "Recommended": MessageLookupByLibrary.simpleMessage("рекомендуемые"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("Удалить из очереди"),
         "Remove_from_favorites":
@@ -83,6 +99,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Videos": MessageLookupByLibrary.simpleMessage("Ролики"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("Посмотреть исходный код"),
+        "YES": MessageLookupByLibrary.simpleMessage("ДА"),
         "addToQueue":
             MessageLookupByLibrary.simpleMessage("Добавить в очередь"),
         "github_redirect": MessageLookupByLibrary.simpleMessage(

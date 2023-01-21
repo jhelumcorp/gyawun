@@ -45,5 +45,15 @@
     "Light":"빛",
     "Dark":"어두운",
     "Pitch_black":"칠흑같이 검은색",
-    "Material_You_colors":"머티리얼 유 컬러"
+    "Material_You_colors":"머티리얼 유 컬러",
+    "History":"역사",
+    "Recently_played":"최근에 재생 된",
+    "Recommended":"추천",
+    "Clear_search_history":"검색 기록 지우기",
+    "Clear_song_history":"노래 기록 지우기",
+    "Confirm":"확인하다",
+    "Are_you_sure_to_delete_search_history":"검색 기록을 삭제하시겠습니까?",
+    "Are_you_sure_to_delete_song_history":"노래 기록을 삭제하시겠습니까?",
+    "YES":"예",
+    "NO":"아니요"
 }

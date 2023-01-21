@@ -45,5 +45,15 @@
     "Light":"Свет",
     "Dark":"Темнота",
     "Pitch_black":"Черный как смоль",
-    "Material_You_colors":"Материал Вы цвета"
+    "Material_You_colors":"Материал Вы цвета",
+    "History":"История",
+    "Recently_played":"Недавно играл",
+    "Recommended":"рекомендуемые",
+    "Clear_search_history":"Очистить историю поиска",
+    "Clear_song_history":"Очистить историю песен",
+    "Confirm":"Подтверждать",
+    "Are_you_sure_to_delete_search_history":"Вы уверены, что хотите удалить историю поиска?",
+    "Are_you_sure_to_delete_song_history":"Вы уверены, что хотите удалить историю песен?",
+    "YES":"ДА",
+    "NO":"НЕТ"
 }

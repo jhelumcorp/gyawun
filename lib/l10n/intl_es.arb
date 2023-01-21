@@ -45,5 +45,15 @@
     "Light":"Ligero",
     "Dark":"Oscuro",
     "Pitch_black":"tono negro",
-    "Material_You_colors":"Material Tus colores"
+    "Material_You_colors":"Material Tus colores",
+    "History":"Historia",
+    "Recently_played":"Recientemente jugado",
+    "Recommended":"Recomendado",
+    "Clear_search_history":"Limpiar historial de búsqueda",
+    "Clear_song_history":"Borrar historial de canciones",
+    "Confirm":"Confirmar",
+    "Are_you_sure_to_delete_search_history":"¿Estás seguro de eliminar el historial de búsqueda?",
+    "Are_you_sure_to_delete_song_history":"¿Estás seguro de eliminar el historial de la canción?",
+    "YES":"SI",
+    "NO":"NO"
 }

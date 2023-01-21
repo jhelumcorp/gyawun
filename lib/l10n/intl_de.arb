@@ -45,5 +45,15 @@
     "Light":"Hell",
     "Dark":"Dunkel",
     "Pitch_black":"Pechschwarz",
-    "Material_You_colors":"Material Sie Farben"
+    "Material_You_colors":"Material Sie Farben",
+    "History":"Geschichte",
+    "Recently_played":"Kürzlich gespielt",
+    "Recommended":"Empfohlen",
+    "Clear_search_history":"Suchverlauf löschen",
+    "Clear_song_history":"Löschen Sie den Songverlauf",
+    "Confirm":"Bestätigen",
+    "Are_you_sure_to_delete_search_history":"Möchten Sie den Suchverlauf wirklich löschen?",
+    "Are_you_sure_to_delete_song_history":"Möchten Sie den Songverlauf wirklich löschen?",
+    "YES":"JAWOHL",
+    "NO":"NEIN"
 }

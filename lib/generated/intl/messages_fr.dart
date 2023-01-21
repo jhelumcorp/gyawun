@@ -26,17 +26,29 @@ class MessageLookup extends MessageLookupByLibrary {
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Ajouter aux Favoris"),
         "Albums": MessageLookupByLibrary.simpleMessage("Albums"),
+        "Are_you_sure_to_delete_search_history":
+            MessageLookupByLibrary.simpleMessage(
+                "Voulez-vous vraiment supprimer l\'historique de recherche ?"),
+        "Are_you_sure_to_delete_song_history":
+            MessageLookupByLibrary.simpleMessage(
+                "Êtes-vous sûr de vouloir supprimer l\'historique des chansons ?"),
         "Artists": MessageLookupByLibrary.simpleMessage("Artistes"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("Qualité audio"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("ANNULER"),
         "Change_country":
             MessageLookupByLibrary.simpleMessage("Changer de pays"),
+        "Clear_search_history":
+            MessageLookupByLibrary.simpleMessage("Effacer l\'historique"),
+        "Clear_song_history": MessageLookupByLibrary.simpleMessage(
+            "Effacer l\'historique des chansons"),
+        "Confirm": MessageLookupByLibrary.simpleMessage("Confirmer"),
         "Dark": MessageLookupByLibrary.simpleMessage("Sombre"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("Thème sombre"),
         "Dynamic_Theme":
             MessageLookupByLibrary.simpleMessage("Thème dynamique"),
         "Experimental": MessageLookupByLibrary.simpleMessage("Expérimental"),
         "High": MessageLookupByLibrary.simpleMessage("Haut"),
+        "History": MessageLookupByLibrary.simpleMessage("Histoire"),
         "Home": MessageLookupByLibrary.simpleMessage("Domicile"),
         "Language": MessageLookupByLibrary.simpleMessage("Langue"),
         "Light": MessageLookupByLibrary.simpleMessage("Lumière"),
@@ -45,6 +57,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Matériel Tes couleurs"),
         "Medium": MessageLookupByLibrary.simpleMessage("Moyen"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("Mes favoris"),
+        "NO": MessageLookupByLibrary.simpleMessage("NON"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("Rien ici"),
         "Open_in_Browser":
             MessageLookupByLibrary.simpleMessage("Ouvrir dans le navigateur"),
@@ -54,6 +67,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "Playlists": MessageLookupByLibrary.simpleMessage("Listes de lecture"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("ÉLIMINER"),
         "RTL": MessageLookupByLibrary.simpleMessage("De droite à gauche"),
+        "Recently_played":
+            MessageLookupByLibrary.simpleMessage("Joué récemment"),
+        "Recommended": MessageLookupByLibrary.simpleMessage("Recommandé"),
         "Remove_from_Queue": MessageLookupByLibrary.simpleMessage(
             "Supprimer de la file d\'attente"),
         "Remove_from_favorites":
@@ -80,6 +96,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Videos": MessageLookupByLibrary.simpleMessage("Vidéos"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("Afficher le code source"),
+        "YES": MessageLookupByLibrary.simpleMessage("OUI"),
         "addToQueue":
             MessageLookupByLibrary.simpleMessage("Ajouter à la liste"),
         "github_redirect": MessageLookupByLibrary.simpleMessage(

@@ -45,5 +45,15 @@
     "Light":"光",
     "Dark":"暗い",
     "Pitch_black":"漆黒",
-    "Material_You_colors":"マテリアル・ユー・カラーズ"
+    "Material_You_colors":"マテリアル・ユー・カラーズ",
+    "History":"歴史",
+    "Recently_played":"最近再生しました",
+    "Recommended":"おすすめされた",
+    "Clear_search_history":"検索履歴をクリア",
+    "Clear_song_history":"曲の履歴を消去する",
+    "Confirm":"確認",
+    "Are_you_sure_to_delete_search_history":"検索履歴を削除してもよろしいですか",
+    "Are_you_sure_to_delete_song_history":"曲の履歴を削除してもよろしいですか",
+    "YES":"はい",
+    "NO":"番号"
 }

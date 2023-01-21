@@ -45,5 +45,15 @@
     "Light":"Lumière",
     "Dark":"Sombre",
     "Pitch_black":"Noir absolu",
-    "Material_You_colors":"Matériel Tes couleurs"
+    "Material_You_colors":"Matériel Tes couleurs",
+    "History":"Histoire",
+    "Recently_played":"Joué récemment",
+    "Recommended":"Recommandé",
+    "Clear_search_history":"Effacer l'historique",
+    "Clear_song_history":"Effacer l'historique des chansons",
+    "Confirm":"Confirmer",
+    "Are_you_sure_to_delete_search_history":"Voulez-vous vraiment supprimer l'historique de recherche ?",
+    "Are_you_sure_to_delete_song_history":"Êtes-vous sûr de vouloir supprimer l'historique des chansons ?",
+    "YES":"OUI",
+    "NO":"NON"
 }

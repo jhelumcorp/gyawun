@@ -14,6 +14,7 @@ import 'package:vibe_music/Models/Thumbnail.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:provider/provider.dart';
+import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/utils/showOptions.dart';
 import 'package:vibe_music/widgets/TrackTile.dart';
@@ -62,14 +63,17 @@ class _HomeScreenState extends State<HomeScreen>
       return List.empty();
     }
     boxList.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
-    boxList.sort((a, b) => b['hits'].compareTo(a['hits']));
+    List newList =
+        boxList.getRange(0, boxList.length > 20 ? 20 : boxList.length).toList();
+    newList.sort((a, b) => b['hits'].compareTo(a['hits']));
     math.Random rand = math.Random();
-    int index = rand.nextInt(boxList.length > 10 ? 10 : boxList.length);
+    int index = rand.nextInt(newList.length > 10 ? 10 : boxList.length);
     return await HomeApi.getWatchPlaylist(boxList[index]['videoId'], 20);
   }
 
   @override
   Widget build(BuildContext context) {
+    bool darkTheme = Theme.of(context).brightness == Brightness.dark;
     super.build(context);
     return Scaffold(
       appBar: AppBar(
@@ -202,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                       vertical: 8,
                                                       horizontal: 8),
                                               child: Text(
-                                                "Recently Played",
+                                                S.of(context).Recently_played,
                                                 style: Theme.of(context)
                                                     .primaryTextTheme
                                                     .titleLarge
@@ -214,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen>
                                               ),
                                             ),
                                             SizedBox(
-                                              height: 150,
+                                              height: 210,
                                               child: ListView.separated(
                                                 padding:
                                                     const EdgeInsets.symmetric(
@@ -235,7 +239,11 @@ class _HomeScreenState extends State<HomeScreen>
                                                   Track track =
                                                       Track.fromMap(item);
 
-                                                  return GestureDetector(
+                                                  return InkWell(
+                                                    onLongPress: () {
+                                                      showOptions(
+                                                          track, context);
+                                                    },
                                                     onTap: () {
                                                       context
                                                           .read<MusicPlayer>()
@@ -245,14 +253,44 @@ class _HomeScreenState extends State<HomeScreen>
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
-                                                      child: CachedNetworkImage(
-                                                        imageUrl: track
-                                                            .thumbnails
-                                                            .last
-                                                            .url,
-                                                        height: 150,
+                                                      child: Container(
+                                                        color: (darkTheme
+                                                                ? Colors.white
+                                                                : Colors.black)
+                                                            .withOpacity(0.2),
                                                         width: 150,
-                                                        fit: BoxFit.fill,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            CachedNetworkImage(
+                                                              imageUrl:
+                                                                  'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${track.videoId}',
+                                                              height: 150,
+                                                              width: 150,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Text(
+                                                                '${track.title} - ${track.artists.map((e) => e.name).toList().join(', ')}',
+                                                                maxLines: 2,
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .primaryTextTheme
+                                                                    .bodyLarge
+                                                                    ?.copyWith(
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   );
@@ -273,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 8, horizontal: 8),
                                     child: Text(
-                                      "Recommended",
+                                      S.of(context).Recommended,
                                       style: Theme.of(context)
                                           .primaryTextTheme
                                           .titleLarge

@@ -25,15 +25,24 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("정보"),
         "Add_to_favorites": MessageLookupByLibrary.simpleMessage("즐겨 찾기에 추가"),
         "Albums": MessageLookupByLibrary.simpleMessage("앨범"),
+        "Are_you_sure_to_delete_search_history":
+            MessageLookupByLibrary.simpleMessage("검색 기록을 삭제하시겠습니까?"),
+        "Are_you_sure_to_delete_song_history":
+            MessageLookupByLibrary.simpleMessage("노래 기록을 삭제하시겠습니까?"),
         "Artists": MessageLookupByLibrary.simpleMessage("아티스트"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("오디오 품질"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("취소"),
         "Change_country": MessageLookupByLibrary.simpleMessage("국가 변경"),
+        "Clear_search_history":
+            MessageLookupByLibrary.simpleMessage("검색 기록 지우기"),
+        "Clear_song_history": MessageLookupByLibrary.simpleMessage("노래 기록 지우기"),
+        "Confirm": MessageLookupByLibrary.simpleMessage("확인하다"),
         "Dark": MessageLookupByLibrary.simpleMessage("어두운"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("어두운 테마"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("동적 테마"),
         "Experimental": MessageLookupByLibrary.simpleMessage("실험적"),
         "High": MessageLookupByLibrary.simpleMessage("높음"),
+        "History": MessageLookupByLibrary.simpleMessage("역사"),
         "Home": MessageLookupByLibrary.simpleMessage("홈"),
         "Language": MessageLookupByLibrary.simpleMessage("언어"),
         "Light": MessageLookupByLibrary.simpleMessage("빛"),
@@ -42,6 +51,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("머티리얼 유 컬러"),
         "Medium": MessageLookupByLibrary.simpleMessage("중간"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("내가 좋아하는 것들"),
+        "NO": MessageLookupByLibrary.simpleMessage("아니요"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("여기 아무것도"),
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage("브라우저에서 열기"),
         "Pitch_black": MessageLookupByLibrary.simpleMessage("칠흑같이 검은색"),
@@ -50,6 +60,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "Playlists": MessageLookupByLibrary.simpleMessage("재생목록"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("제거하다"),
         "RTL": MessageLookupByLibrary.simpleMessage("오른쪽에서 왼쪽으로"),
+        "Recently_played": MessageLookupByLibrary.simpleMessage("최근에 재생 된"),
+        "Recommended": MessageLookupByLibrary.simpleMessage("추천"),
         "Remove_from_Queue": MessageLookupByLibrary.simpleMessage("대기열에서 제거"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("즐겨 찾기에서 삭제하기"),
@@ -71,6 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Tracks": MessageLookupByLibrary.simpleMessage("트랙"),
         "Videos": MessageLookupByLibrary.simpleMessage("비디오"),
         "View_source_code": MessageLookupByLibrary.simpleMessage("소스 코드 보기"),
+        "YES": MessageLookupByLibrary.simpleMessage("예"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("대기열에 추가"),
         "github_redirect":
             MessageLookupByLibrary.simpleMessage("Github로 리디렉션됩니다.")

@@ -25,15 +25,24 @@ class MessageLookup extends MessageLookupByLibrary {
         "About": MessageLookupByLibrary.simpleMessage("アプリについて"),
         "Add_to_favorites": MessageLookupByLibrary.simpleMessage("お気に入りに追加"),
         "Albums": MessageLookupByLibrary.simpleMessage("アルバム"),
+        "Are_you_sure_to_delete_search_history":
+            MessageLookupByLibrary.simpleMessage("検索履歴を削除してもよろしいですか"),
+        "Are_you_sure_to_delete_song_history":
+            MessageLookupByLibrary.simpleMessage("曲の履歴を削除してもよろしいですか"),
         "Artists": MessageLookupByLibrary.simpleMessage("アーティスト"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("オーディオ品質"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("キャンセル"),
         "Change_country": MessageLookupByLibrary.simpleMessage("国を変更"),
+        "Clear_search_history":
+            MessageLookupByLibrary.simpleMessage("検索履歴をクリア"),
+        "Clear_song_history": MessageLookupByLibrary.simpleMessage("曲の履歴を消去する"),
+        "Confirm": MessageLookupByLibrary.simpleMessage("確認"),
         "Dark": MessageLookupByLibrary.simpleMessage("暗い"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("ダークテーマ"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("ダイナミックテーマ"),
         "Experimental": MessageLookupByLibrary.simpleMessage("実験的"),
         "High": MessageLookupByLibrary.simpleMessage("高"),
+        "History": MessageLookupByLibrary.simpleMessage("歴史"),
         "Home": MessageLookupByLibrary.simpleMessage("ホーム"),
         "Language": MessageLookupByLibrary.simpleMessage("言語"),
         "Light": MessageLookupByLibrary.simpleMessage("光"),
@@ -42,6 +51,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("マテリアル・ユー・カラーズ"),
         "Medium": MessageLookupByLibrary.simpleMessage("中"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("私のお気に入り"),
+        "NO": MessageLookupByLibrary.simpleMessage("番号"),
         "Nothing_Here": MessageLookupByLibrary.simpleMessage("ここには何もない"),
         "Open_in_Browser": MessageLookupByLibrary.simpleMessage("ブラウザで開く"),
         "Pitch_black": MessageLookupByLibrary.simpleMessage("漆黒"),
@@ -50,6 +60,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "Playlists": MessageLookupByLibrary.simpleMessage("プレイリスト"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("削除する"),
         "RTL": MessageLookupByLibrary.simpleMessage("右から左"),
+        "Recently_played": MessageLookupByLibrary.simpleMessage("最近再生しました"),
+        "Recommended": MessageLookupByLibrary.simpleMessage("おすすめされた"),
         "Remove_from_Queue": MessageLookupByLibrary.simpleMessage("キューから削除"),
         "Remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("お気に入りから削除"),
@@ -71,6 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Tracks": MessageLookupByLibrary.simpleMessage("トラック"),
         "Videos": MessageLookupByLibrary.simpleMessage("動画"),
         "View_source_code": MessageLookupByLibrary.simpleMessage("ソースコードを表示"),
+        "YES": MessageLookupByLibrary.simpleMessage("はい"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("キューに追加"),
         "github_redirect":
             MessageLookupByLibrary.simpleMessage("Github にリダイレクトされます")

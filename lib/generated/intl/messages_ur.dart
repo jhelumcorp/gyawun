@@ -26,16 +26,28 @@ class MessageLookup extends MessageLookupByLibrary {
         "Add_to_favorites":
             MessageLookupByLibrary.simpleMessage("پسندیدہ میں شامل کریں"),
         "Albums": MessageLookupByLibrary.simpleMessage("البمز"),
+        "Are_you_sure_to_delete_search_history":
+            MessageLookupByLibrary.simpleMessage(
+                "کیا آپ یقینی طور پر تلاش کی سرگزشت کو حذف کرنا چاہتے ہیں۔"),
+        "Are_you_sure_to_delete_song_history":
+            MessageLookupByLibrary.simpleMessage(
+                "کیا آپ گانے کی سرگزشت کو حذف کرنے کا یقین رکھتے ہیں؟"),
         "Artists": MessageLookupByLibrary.simpleMessage("فنکار"),
         "Audio_Quality": MessageLookupByLibrary.simpleMessage("آڈیو کوالٹی"),
         "CANCEL": MessageLookupByLibrary.simpleMessage("منسوخ کریں"),
         "Change_country":
             MessageLookupByLibrary.simpleMessage("ملک تبدیل کیجئے"),
+        "Clear_search_history":
+            MessageLookupByLibrary.simpleMessage("تلاش کی ہسٹری کو مٹا دیں"),
+        "Clear_song_history":
+            MessageLookupByLibrary.simpleMessage("گانے کی تاریخ صاف کریں۔"),
+        "Confirm": MessageLookupByLibrary.simpleMessage("تصدیق کریں۔"),
         "Dark": MessageLookupByLibrary.simpleMessage("اندھیرا"),
         "Dark_Theme": MessageLookupByLibrary.simpleMessage("ڈارک تھیم"),
         "Dynamic_Theme": MessageLookupByLibrary.simpleMessage("متحرک تھیم"),
         "Experimental": MessageLookupByLibrary.simpleMessage("تجرباتی"),
         "High": MessageLookupByLibrary.simpleMessage("اعلی"),
+        "History": MessageLookupByLibrary.simpleMessage("تاریخ"),
         "Home": MessageLookupByLibrary.simpleMessage("گھر"),
         "Language": MessageLookupByLibrary.simpleMessage("زبان"),
         "Light": MessageLookupByLibrary.simpleMessage("روشنی"),
@@ -44,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("مواد آپ رنگ"),
         "Medium": MessageLookupByLibrary.simpleMessage("درمیانہ"),
         "My_Favorites": MessageLookupByLibrary.simpleMessage("میرے پسندیدہ"),
+        "NO": MessageLookupByLibrary.simpleMessage("نہیں"),
         "Nothing_Here":
             MessageLookupByLibrary.simpleMessage("یہاں کچھ نہیں ہے"),
         "Open_in_Browser":
@@ -54,6 +67,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "Playlists": MessageLookupByLibrary.simpleMessage("پلے لسٹس"),
         "REMOVE": MessageLookupByLibrary.simpleMessage("ہٹائیں"),
         "RTL": MessageLookupByLibrary.simpleMessage("دائیں سے بائیں"),
+        "Recently_played":
+            MessageLookupByLibrary.simpleMessage("حال ہی میں کھیلا گیا۔"),
+        "Recommended": MessageLookupByLibrary.simpleMessage("تجویز کردہ"),
         "Remove_from_Queue":
             MessageLookupByLibrary.simpleMessage("قطار سے ہٹا دیں"),
         "Remove_from_favorites":
@@ -81,6 +97,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Videos": MessageLookupByLibrary.simpleMessage("ویڈیوز"),
         "View_source_code":
             MessageLookupByLibrary.simpleMessage("سورس کوڈ دیکھیں"),
+        "YES": MessageLookupByLibrary.simpleMessage("ہاں"),
         "addToQueue":
             MessageLookupByLibrary.simpleMessage("قطار میں شامل کریں"),
         "github_redirect": MessageLookupByLibrary.simpleMessage(
