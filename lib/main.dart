@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -20,7 +19,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isAndroid) {
     await JustAudioBackground.init(
-      androidNotificationIcon: 'drawable/app_icon',
       androidNotificationChannelId: 'com.ryanhzeise.bg_demo.channel.audio',
       androidNotificationChannelName: 'Audio playback',
       androidNotificationOngoing: false,
@@ -50,9 +48,7 @@ class MyApp extends StatelessWidget {
           valueListenable: Hive.box('settings').listenable(),
           builder: (context, Box box, child) {
             String locale = box.get('language_code', defaultValue: 'en');
-            var brightness =
-                SchedulerBinding.instance.window.platformBrightness;
-            bool isDarkTheme = brightness == Brightness.dark;
+
             return MaterialApp(
               navigatorKey: mainNavigatorKey,
               debugShowCheckedModeBanner: false,
