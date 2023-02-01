@@ -23,7 +23,6 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
         ? const Center(child: CircularProgressIndicator())
         : ListView.builder(
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.all(18),
             itemCount: context.watch<SearchProvider>().playlists.length,
             itemBuilder: (context, index) {
               Map playlist = context.watch<SearchProvider>().playlists[index];
@@ -31,7 +30,7 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
                 enableFeedback: false,
                 onTap: () {
                   Navigator.pushNamed(context, '/search/playlist',
-                      arguments: {'playlistId': playlist['browseId']});
+                      arguments: {'playlistId': playlist['playlistId']});
                 },
                 title: Row(
                   children: [
@@ -39,8 +38,8 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
                       borderRadius: BorderRadius.circular(5),
                       child: Image.network(
                         playlist['thumbnails'].last['url'],
-                        height: 100,
                         width: 100,
+                        height: 100,
                         fit: BoxFit.fill,
                         errorBuilder: ((context, error, stackTrace) {
                           return Image.asset(
@@ -68,20 +67,24 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
                                       overflow: TextOverflow.ellipsis,
                                       fontSize: 16),
                             ),
-                            Text(
-                              playlist['author'],
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromARGB(255, 93, 92, 92)),
-                            ),
-                            Text(
-                              playlist['itemCount'] + ' ' + S.of(context).Songs,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromARGB(255, 93, 92, 92)),
-                            ),
+                            if (playlist['author'] != null)
+                              Text(
+                                playlist['author']['name'],
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Color.fromARGB(255, 93, 92, 92)),
+                              ),
+                            if (playlist['itemCount'] != null)
+                              Text(
+                                playlist['itemCount'].toString() +
+                                    ' ' +
+                                    S.of(context).Songs,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Color.fromARGB(255, 93, 92, 92)),
+                              ),
                           ],
                         ),
                       ),

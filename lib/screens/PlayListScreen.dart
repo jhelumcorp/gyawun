@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vibe_music/data/YTMusic/ytmusic.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
@@ -33,8 +37,9 @@ class _PlayListScreenState extends State<PlayListScreen> {
       });
     } else {
       HomeApi.getPlaylist(widget.playlistId).then((Map value) {
+        log(value.toString());
         setState(() {
-          playlist = value;
+          playlist = jsonDecode(jsonEncode(value));
           playlist?['tracks']
               .removeWhere((element) => element['videoId'] == null);
           loading = false;

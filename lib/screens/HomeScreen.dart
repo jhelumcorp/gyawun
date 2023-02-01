@@ -54,6 +54,12 @@ class _HomeScreenState extends State<HomeScreen>
       body = home['body'];
       recommendations = recommend;
       isLoading = false;
+      if (recommendationsController.hasClients) {
+        recommendationsController.jumpTo(0);
+      }
+      if (songsController.hasClients) {
+        songsController.jumpTo(0);
+      }
     });
   }
 

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:vibe_music/data/YTMusic/ytmusic.dart';
 import 'package:vibe_music/data/home1.dart';
+import 'package:async/async.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/widgets/search_history.dart';
 
@@ -15,6 +17,7 @@ class SearchSuggestions extends StatefulWidget {
 
 class _SearchSuggestionsState extends State<SearchSuggestions> {
   TextEditingController textEditingController = TextEditingController();
+  CancelableOperation? cancelableOperation;
   List suggestions = [];
 
   @override
@@ -27,9 +30,17 @@ class _SearchSuggestionsState extends State<SearchSuggestions> {
   getSuggestions() async {
     if (mounted) {
       setState(() {});
-      HomeApi()
-          .getSearchSuggestions(query: textEditingController.text)
-          .then((value) {
+      // HomeApi()
+      //     .getSearchSuggestions(query: textEditingController.text)
+      //     .then((value) {
+      //   if (mounted) {
+      //     setState(() {
+      //       suggestions = value;
+      //     });
+      //   }
+      // });
+
+      YTMUSIC.suggestions(textEditingController.text).then((value) {
         if (mounted) {
           setState(() {
             suggestions = value;

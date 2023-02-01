@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
+import 'package:vibe_music/data/YTMusic/ytmusic.dart';
 import 'package:vibe_music/data/home1.dart';
 
 class SearchProvider extends ChangeNotifier {
@@ -37,8 +41,11 @@ class SearchProvider extends ChangeNotifier {
 
   searchSongs(query) async {
     if (!_songsLoaded) {
-      HomeApi.searchSongs(query).then((value) {
-        _songs = value;
+      //  HomeApi.searchSongs(query)
+      YTMUSIC.search(query, filter: 'songs').then((value) {
+        List songs = jsonDecode(jsonEncode(value));
+
+        _songs = songs;
         _songsLoaded = true;
         notifyListeners();
       });
@@ -47,8 +54,8 @@ class SearchProvider extends ChangeNotifier {
 
   searchVideos(query) async {
     if (!_videosLoaded) {
-      HomeApi.searchVideos(query).then((value) {
-        _videos = value;
+      YTMUSIC.search(query, filter: 'videos').then((value) {
+        _videos = jsonDecode(jsonEncode(value));
         _videosLoaded = true;
         notifyListeners();
       });
@@ -57,8 +64,8 @@ class SearchProvider extends ChangeNotifier {
 
   searchArtists(query) async {
     if (!_artistsLoaded) {
-      HomeApi.searchArtists(query).then((value) {
-        _artists = value;
+      YTMUSIC.search(query, filter: 'artists').then((value) {
+        _artists = jsonDecode(jsonEncode(value));
         _artistsLoaded = true;
         notifyListeners();
       });
@@ -68,7 +75,7 @@ class SearchProvider extends ChangeNotifier {
   searchAlbums(query) async {
     if (!_albumsLoaded) {
       HomeApi.searchAlbums(query).then((value) {
-        _albums = value;
+        _albums = jsonDecode(jsonEncode(value));
         _albumsLoaded = true;
         notifyListeners();
       });
@@ -77,8 +84,8 @@ class SearchProvider extends ChangeNotifier {
 
   searchPlaylists(query) async {
     if (!_playlistsLoaded) {
-      HomeApi.searchPlaylists(query).then((value) {
-        _playlists = value;
+      YTMUSIC.search(query, filter: 'playlists').then((value) {
+        _playlists = jsonDecode(jsonEncode(value));
         _playlistsLoaded = true;
         notifyListeners();
       });

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/providers/SearchProvider.dart';
@@ -47,6 +49,15 @@ class _ArtistsSearchState extends State<ArtistsSearch> {
                         .titleMedium
                         ?.copyWith(overflow: TextOverflow.ellipsis),
                   ),
+                  subtitle: artist['subscribers'] != null
+                      ? Text(
+                          '${artist['subscribers']} Subscribers',
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 93, 92, 92),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      : null,
                 );
               },
             ).toList()),
