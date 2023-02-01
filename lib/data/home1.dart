@@ -17,7 +17,7 @@ class HomeApi {
         if (response.statusCode == 200) {
           Map data = jsonDecode(utf8.decode(response.bodyBytes));
           String countryCode = data['countryCode'];
-          String countryName = data['India'];
+          String countryName = data['country'];
           await box.put('countryCode', countryCode);
           await box.put('countryName', countryName);
         }
