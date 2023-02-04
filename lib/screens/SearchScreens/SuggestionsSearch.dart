@@ -30,15 +30,6 @@ class _SearchSuggestionsState extends State<SearchSuggestions> {
   getSuggestions() async {
     if (mounted) {
       setState(() {});
-      // HomeApi()
-      //     .getSearchSuggestions(query: textEditingController.text)
-      //     .then((value) {
-      //   if (mounted) {
-      //     setState(() {
-      //       suggestions = value;
-      //     });
-      //   }
-      // });
 
       YTMUSIC.suggestions(textEditingController.text).then((value) {
         if (mounted) {

@@ -36,8 +36,7 @@ class _PlayListScreenState extends State<PlayListScreen> {
         });
       });
     } else {
-      HomeApi.getPlaylist(widget.playlistId).then((Map value) {
-        log(value.toString());
+      YTMUSIC.getPlaylistDetails(widget.playlistId).then((value) {
         setState(() {
           playlist = jsonDecode(jsonEncode(value));
           playlist?['tracks']

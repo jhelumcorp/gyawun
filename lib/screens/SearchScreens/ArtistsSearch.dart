@@ -51,7 +51,7 @@ class _ArtistsSearchState extends State<ArtistsSearch> {
                   ),
                   subtitle: artist['subscribers'] != null
                       ? Text(
-                          '${artist['subscribers']} Subscribers',
+                          artist['subscribers'],
                           style: const TextStyle(
                             color: Color.fromARGB(255, 93, 92, 92),
                             overflow: TextOverflow.ellipsis,

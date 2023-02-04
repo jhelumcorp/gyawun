@@ -74,7 +74,7 @@ class SearchProvider extends ChangeNotifier {
 
   searchAlbums(query) async {
     if (!_albumsLoaded) {
-      HomeApi.searchAlbums(query).then((value) {
+      YTMUSIC.search(query, filter: 'albums').then((value) {
         _albums = jsonDecode(jsonEncode(value));
         _albumsLoaded = true;
         notifyListeners();

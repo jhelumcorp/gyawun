@@ -42,8 +42,8 @@ class _AlbumSearchState extends State<AlbumSearch> {
                       borderRadius: BorderRadius.circular(5),
                       child: Image.network(
                         album['thumbnails'].last['url'],
-                        height: 45,
-                        width: 45,
+                        height: 60,
+                        width: 60,
                         fit: BoxFit.fill,
                         errorBuilder: ((context, error, stackTrace) {
                           return Image.asset(
@@ -71,13 +71,14 @@ class _AlbumSearchState extends State<AlbumSearch> {
                                       overflow: TextOverflow.ellipsis,
                                       fontSize: 16),
                             ),
-                            Text(
-                              album['artists'].first['name'],
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromARGB(255, 93, 92, 92)),
-                            )
+                            if (album['artists'].isNotEmpty)
+                              Text(
+                                album['artists'].first['name'],
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Color.fromARGB(255, 93, 92, 92)),
+                              )
                           ],
                         ),
                       ),

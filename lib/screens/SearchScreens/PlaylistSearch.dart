@@ -30,7 +30,7 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
                 enableFeedback: false,
                 onTap: () {
                   Navigator.pushNamed(context, '/search/playlist',
-                      arguments: {'playlistId': playlist['playlistId']});
+                      arguments: {'playlistId': playlist['browseId']});
                 },
                 title: Row(
                   children: [
@@ -77,9 +77,7 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
                               ),
                             if (playlist['itemCount'] != null)
                               Text(
-                                playlist['itemCount'].toString() +
-                                    ' ' +
-                                    S.of(context).Songs,
+                                playlist['itemCount'].toString(),
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                     fontSize: 14,

@@ -96,7 +96,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                                     )),
                                             if (song.artists.isNotEmpty)
                                               Text(
-                                                song.artists.first.name,
+                                                song.artists
+                                                    .map((e) => e.name)
+                                                    .toList()
+                                                    .join(', '),
                                                 style: const TextStyle(
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w900,
@@ -496,7 +499,10 @@ class QueueScreen extends StatelessWidget {
                           ),
                           subtitle: song.artists.isNotEmpty
                               ? Text(
-                                  song.artists.first.name,
+                                  song.artists
+                                      .map((e) => e.name)
+                                      .toList()
+                                      .join(', '),
                                   style: const TextStyle(
                                       color: Color.fromARGB(255, 93, 92, 92)),
                                 )

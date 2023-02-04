@@ -158,7 +158,7 @@ class Search extends YTMService {
         String type = "";
 
         if (filter != null) {
-          type = filter as String;
+          type = filter;
         } else {
           type = ctx['title']['runs'][0]['text'].toLowerCase();
         }
@@ -173,127 +173,215 @@ class Search extends YTMService {
             .contains(type)) {
           type = 'album';
         }
-        Map result = {
-          'type': type.toLowerCase(),
-          // 'data': a['flexColumns']?[1]
-          //     ['musicResponsiveListItemFlexColumnRenderer']['text']['runs'],
-          'thumbnails': a['thumbnail']['musicThumbnailRenderer']['thumbnail']
-              ['thumbnails']
-        };
+        // Map result = {
+        //   'type': type.toLowerCase(),
+        //   // 'data': a['flexColumns']?[1]
+        //   //     ['musicResponsiveListItemFlexColumnRenderer']['text']['runs'],
+        //   'thumbnails': a['thumbnail']['musicThumbnailRenderer']['thumbnail']
+        //       ['thumbnails']
+        // };
 
-        if (type != 'artist') {
-          result['title'] = a['flexColumns'][0]
-                  ['musicResponsiveListItemFlexColumnRenderer']['text']['runs']
-              [0]['text'];
-        } else {
-          result['artist'] = a['flexColumns'][0]
-                  ['musicResponsiveListItemFlexColumnRenderer']['text']['runs']
-              [0]['text'];
-        }
+        // if (type != 'artist') {
+        //   result['title'] = a['flexColumns'][0]
+        //           ['musicResponsiveListItemFlexColumnRenderer']['text']['runs']
+        //       [0]['text'];
+        // } else {
+        //   result['artist'] = a['flexColumns'][0]
+        //           ['musicResponsiveListItemFlexColumnRenderer']['text']['runs']
+        //       [0]['text'];
+        // }
         List data = a['flexColumns'][1]
             ['musicResponsiveListItemFlexColumnRenderer']['text']['runs'];
 
-        result['artists'] = [];
-        result['album'] = null;
-        if (type == 'playlist') {
-          result['itemCount'] = data.last['text'];
-        }
-        // JsonEncoder encoder = const JsonEncoder.withIndent('  ');
-        // String prettyprint = encoder.convert();
-        // log(prettyprint);
-        for (Map run in data) {
-          if (run['navigationEndpoint']?['browseEndpoint']
-                      ?['browseEndpointContextSupportedConfigs']
-                  ?['browseEndpointContextMusicConfig']?['pageType'] ==
-              'MUSIC_PAGE_TYPE_ARTIST') {
-            result['artists'].add({
-              'name': run['text'],
-              'browseId': run['navigationEndpoint']?['browseEndpoint']
-                  ?['browseId'],
-            });
-          }
+        // result['artists'] = [];
+        // result['album'] = null;
+        // if (type == 'playlist') {
+        //   result['itemCount'] = data.last['text'];
+        // }
 
-          if (run['navigationEndpoint']?['browseEndpoint']
-                      ?['browseEndpointContextSupportedConfigs']
-                  ?['browseEndpointContextMusicConfig']?['pageType'] ==
-              'MUSIC_PAGE_TYPE_ALBUM') {
-            result['album'] = {
-              'name': run['text'],
-              'browseId': run['navigationEndpoint']?['browseEndpoint']
-                  ?['browseId'],
-            };
-          }
-          if (run['navigationEndpoint']?['browseEndpoint']
-                      ?['browseEndpointContextSupportedConfigs']
-                  ?['browseEndpointContextMusicConfig']?['pageType'] ==
-              'MUSIC_PAGE_TYPE_USER_CHANNEL') {
-            result['author'] = {
-              'name': run['text'],
-              'browseId': run['navigationEndpoint']?['browseEndpoint']
-                  ?['browseId'],
-            };
-          }
-          if (run['text'].contains('views')) {
-            result['views'] = run['text'].split(' ')[0];
-          }
+        // for (Map run in data) {
+        //   if (run['navigationEndpoint']?['browseEndpoint']
+        //               ?['browseEndpointContextSupportedConfigs']
+        //           ?['browseEndpointContextMusicConfig']?['pageType'] ==
+        //       'MUSIC_PAGE_TYPE_ARTIST') {
+        //     result['artists'].add({
+        //       'name': run['text'],
+        //       'browseId': run['navigationEndpoint']?['browseEndpoint']
+        //           ?['browseId'],
+        //     });
+        //   }
+
+        //   if (run['navigationEndpoint']?['browseEndpoint']
+        //               ?['browseEndpointContextSupportedConfigs']
+        //           ?['browseEndpointContextMusicConfig']?['pageType'] ==
+        //       'MUSIC_PAGE_TYPE_ALBUM') {
+        //     result['album'] = {
+        //       'name': run['text'],
+        //       'browseId': run['navigationEndpoint']?['browseEndpoint']
+        //           ?['browseId'],
+        //     };
+        //   }
+        //   if (run['navigationEndpoint']?['browseEndpoint']
+        //               ?['browseEndpointContextSupportedConfigs']
+        //           ?['browseEndpointContextMusicConfig']?['pageType'] ==
+        //       'MUSIC_PAGE_TYPE_USER_CHANNEL') {
+        //     result['author'] = {
+        //       'name': run['text'],
+        //       'browseId': run['navigationEndpoint']?['browseEndpoint']
+        //           ?['browseId'],
+        //     };
+        //   }
+        //   if (run['text'].contains('views')) {
+        //     result['views'] = run['text'].split(' ')[0];
+        //   }
+        // }
+        // if (type == 'song' || type == 'video') {
+        //   result['duration'] = data.last['text'];
+        //   result['videoId'] = a['menu']['menuRenderer']['items'][0]
+        //           ['menuNavigationItemRenderer']['navigationEndpoint']
+        //       ['watchEndpoint']['videoId'];
+        //   result['radioId'] = 'RDAMVM${result['videoId']}';
+        // } else if (type == 'album') {
+        //   result['year'] = data.last['text'];
+        //   result['playlistId'] = a['menu']['menuRenderer']['items'][0]
+        //           ['menuNavigationItemRenderer']['navigationEndpoint']
+        //       ['watchPlaylistEndpoint']['playlistId'];
+        // } else if (type == 'artist') {
+        //   result['playlistId'] = a['menu']['menuRenderer']['items'][0]
+        //           ['menuNavigationItemRenderer']['navigationEndpoint']
+        //       ['watchPlaylistEndpoint']?['playlistId'];
+
+        //   for (Map item in a['menu']?['menuRenderer']?['items']) {
+        //     // log(item.toString());
+        //     if (item['menuNavigationItemRenderer']?['icon']?['iconType'] ==
+        //         'MIX') {
+        //       result['radioId'] = item['menuNavigationItemRenderer']
+        //           ['navigationEndpoint']['watchPlaylistEndpoint']['playlistId'];
+        //     }
+        //   }
+        //   result['browseId'] =
+        //       a['navigationEndpoint']['browseEndpoint']['browseId'];
+        //   for (Map run in data) {
+        //     if (run['text'].contains('subscribers')) {
+        //       result['subscribers'] = run['text'].split(' ')[0];
+        //     }
+        //   }
+        // } else if (type == 'playlist') {
+        //   result['playlistId'] = a['menu']['menuRenderer']['items'][0]
+        //           ['menuNavigationItemRenderer']['navigationEndpoint']
+        //       ['watchPlaylistEndpoint']['playlistId'];
+        //   for (Map run in data) {
+        //     if (run['navigationEndpoint']?['browseEndpoint']
+        //                 ?['browseEndpointContextSupportedConfigs']
+        //             ?['browseEndpointContextMusicConfig']?['pageType'] ==
+        //         'MUSIC_PAGE_TYPE_USER_CHANNEL') {
+        //       result['browseId'] =
+        //           run['navigationEndpoint']?['browseEndpoint']?['browseId'];
+        //     } else if (run['text'].contains('songs')) {
+        //       result['itemCount'] =
+        //           int.parse(run['text'].split(' ')[0].replaceAll(',', ''));
+        //     }
+        //   }
+        // }
+
+        //
+
+        Map res = {
+          'type': type,
+          'artists': [],
+          'album': {},
+        };
+        if (type != 'artist') {
+          res['title'] = a['flexColumns'][0]
+                  ['musicResponsiveListItemFlexColumnRenderer']['text']['runs']
+              [0]['text'];
         }
-        if (type == 'song' || type == 'video') {
-          result['duration'] = data.last['text'];
-          result['videoId'] = a['menu']['menuRenderer']['items'][0]
-                  ['menuNavigationItemRenderer']['navigationEndpoint']
-              ['watchEndpoint']['videoId'];
-          result['radioId'] = 'RDAMVM${result['videoId']}';
+        if (type == 'artist') {
+          res['artist'] = a['flexColumns'][0]
+                  ['musicResponsiveListItemFlexColumnRenderer']['text']['runs']
+              [0]['text'];
+          res['subscribers'] = data.last['text'];
         } else if (type == 'album') {
-          result['year'] = data.last['text'];
-          result['playlistId'] = a['menu']['menuRenderer']['items'][0]
-                  ['menuNavigationItemRenderer']['navigationEndpoint']
-              ['watchPlaylistEndpoint']['playlistId'];
-        } else if (type == 'artist') {
-          result['playlistId'] = a['menu']['menuRenderer']['items'][0]
-                  ['menuNavigationItemRenderer']['navigationEndpoint']
-              ['watchPlaylistEndpoint']?['playlistId'];
-
-          for (Map item in a['menu']?['menuRenderer']?['items']) {
-            // log(item.toString());
-            if (item['menuNavigationItemRenderer']?['icon']?['iconType'] ==
-                'MIX') {
-              result['radioId'] = item['menuNavigationItemRenderer']
-                  ['navigationEndpoint']['watchPlaylistEndpoint']['playlistId'];
-            }
-          }
-          result['browseId'] =
-              a['navigationEndpoint']['browseEndpoint']['browseId'];
-          for (Map run in data) {
-            if (run['text'].contains('subscribers')) {
-              result['subscribers'] = run['text'].split(' ')[0];
-            }
-          }
+          res['type'] = a['flexColumns'][1]
+                  ['musicResponsiveListItemFlexColumnRenderer']['text']['runs']
+              [0]['text'];
         } else if (type == 'playlist') {
-          result['playlistId'] = a['menu']['menuRenderer']['items'][0]
-                  ['menuNavigationItemRenderer']['navigationEndpoint']
-              ['watchPlaylistEndpoint']['playlistId'];
-          for (Map run in data) {
+          res['itemCount'] = data.last['text'];
+        } else if (type == 'song' || type == 'video') {
+          res['artists'] = [];
+          res['album'] = {};
+        }
+
+        if (['song', 'video'].contains(type)) {
+          res['videoId'] = nav(a, [
+            'overlay',
+            'musicItemThumbnailOverlayRenderer',
+            'content',
+            'musicPlayButtonRenderer',
+            'playNavigationEndpoint',
+            'watchEndpoint',
+            'videoId'
+          ]);
+          res['videoType'] = nav(a, [
+            'overlay',
+            'musicItemThumbnailOverlayRenderer',
+            'content',
+            'musicPlayButtonRenderer',
+            'playNavigationEndpoint',
+            'watchEndpoint',
+            'watchEndpointMusicSupportedConfigs',
+            'watchEndpointMusicConfig',
+            'musicVideoType'
+          ]);
+          res['duration'] = data.last['text'];
+          res['radioId'] = 'RDAMVM${res['videoId']}';
+        }
+        res['thumbnails'] =
+            a['thumbnail']['musicThumbnailRenderer']['thumbnail']['thumbnails'];
+
+        for (Map run in data) {
+          if (['song', 'video', 'album'].contains(type)) {
             if (run['navigationEndpoint']?['browseEndpoint']
                         ?['browseEndpointContextSupportedConfigs']
                     ?['browseEndpointContextMusicConfig']?['pageType'] ==
-                'MUSIC_PAGE_TYPE_USER_CHANNEL') {
-              result['browseId'] =
-                  run['navigationEndpoint']?['browseEndpoint']?['browseId'];
-            } else if (run['text'].contains('songs')) {
-              result['itemCount'] =
-                  int.parse(run['text'].split(' ')[0].replaceAll(',', ''));
+                'MUSIC_PAGE_TYPE_ARTIST') {
+              res['artists'].add({
+                'name': run['text'],
+                'browseId': run['navigationEndpoint']?['browseEndpoint']
+                    ?['browseId'],
+              });
+            }
+            if (run['navigationEndpoint']?['browseEndpoint']
+                        ?['browseEndpointContextSupportedConfigs']
+                    ?['browseEndpointContextMusicConfig']?['pageType'] ==
+                'MUSIC_PAGE_TYPE_ALBUM') {
+              res['album'] = {
+                'name': run['text'],
+                'browseId': run['navigationEndpoint']?['browseEndpoint']
+                    ?['browseId'],
+              };
+            }
+          }
+          if (['artist', 'album', 'playlist'].contains(type)) {
+            // log(a['menu'].toString());
+
+            if (res['browseId'] == null &&
+                a['navigationEndpoint']['browseEndpoint']['browseId'] != null) {
+              res['browseId'] =
+                  a['navigationEndpoint']['browseEndpoint']['browseId'];
             }
           }
         }
+
         // type = type.toLowerCase();
         // JsonEncoder encoder = const JsonEncoder.withIndent('  ');
         // String prettyprint = encoder.convert(result);
-        if ((result['type'] == 'album' ||
-                result['type'] == 'song' ||
-                result['type'] == 'video') &&
-            result['artists'].isEmpty) {
+        if ((res['type'] == 'album' ||
+                res['type'] == 'song' ||
+                res['type'] == 'video') &&
+            res['artists'].isEmpty) {
         } else {
-          searchResults.add(result);
+          searchResults.add(res);
         }
       });
     }

@@ -34,6 +34,7 @@ class MusicPlayer extends ChangeNotifier {
     _player = AudioPlayer(
       audioPipeline: AudioPipeline(androidAudioEffects: [_loudnessEnhancer]),
     );
+    _player.setSkipSilenceEnabled(true);
     _loudnessEnhancer.setEnabled(true);
     _loudnessEnhancer.setTargetGain(0);
     _player.setVolume(1);

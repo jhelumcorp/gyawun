@@ -10,6 +10,6 @@ class YTMUSIC {
           filter: filter, scope: scope, ignoreSpelling: ignoreSpelling);
   static Future suggestions(query) =>
       Suggestions().getSearchSuggestions(query: query);
-  static getPlaylistDetails(playlistId) =>
+  static Future getPlaylistDetails(playlistId) =>
       Playlist().getPlaylistDetails(playlistId);
 }
