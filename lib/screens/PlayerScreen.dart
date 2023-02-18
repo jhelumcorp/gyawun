@@ -58,7 +58,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5),
                                   child: Image.network(
-                                    'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
+                                    'https://vibeapi-sheikh-haziq.vercel.app/thumb/uhd?id=${song.videoId}',
                                     errorBuilder: (context, error, stackTrace) {
                                       return Image.network(
                                         song.thumbnails.last.url,
@@ -410,11 +410,7 @@ class QueueScreen extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: Hive.box('settings').listenable(),
       builder: (context, Box box, child) {
-        var brightness = SchedulerBinding.instance.window.platformBrightness;
-        bool isDarkTheme = brightness == Brightness.dark;
-        bool darkTheme = box.get('theme', defaultValue: 'light') == 'system'
-            ? isDarkTheme
-            : box.get('theme', defaultValue: 'light') == 'dark';
+        bool darkTheme = Theme.of(context).brightness == Brightness.dark;
         return Directionality(
           textDirection: box.get('textDirection', defaultValue: 'ltr') == 'rtl'
               ? TextDirection.rtl
