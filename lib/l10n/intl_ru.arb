@@ -55,5 +55,10 @@
     "Are_you_sure_to_delete_search_history":"Вы уверены, что хотите удалить историю поиска?",
     "Are_you_sure_to_delete_song_history":"Вы уверены, что хотите удалить историю песен?",
     "YES":"ДА",
-    "NO":"НЕТ"
+    "NO":"НЕТ",
+    "Update":"Обновлять",
+    "OKAY":"ХОРОШО",
+    "DOWNLOAD":"Загружать",
+    "New_Update_Available":"Доступно новое обновление",
+    "Already_updated":"Vibe Music уже актуальна."
 }

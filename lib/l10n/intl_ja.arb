@@ -55,5 +55,10 @@
     "Are_you_sure_to_delete_search_history":"検索履歴を削除してもよろしいですか",
     "Are_you_sure_to_delete_song_history":"曲の履歴を削除してもよろしいですか",
     "YES":"はい",
-    "NO":"番号"
+    "NO":"番号",
+    "Update":"更新",
+    "OKAY":"大丈夫です",
+    "DOWNLOAD":"ダウンロード",
+    "New_Update_Available":"利用可能な新しいアップデート",
+    "Already_updated":"バイブミュージックはすでに最新です。"
 }

@@ -55,5 +55,10 @@
     "Are_you_sure_to_delete_search_history":"کیا آپ یقینی طور پر تلاش کی سرگزشت کو حذف کرنا چاہتے ہیں۔",
     "Are_you_sure_to_delete_song_history":"کیا آپ گانے کی سرگزشت کو حذف کرنے کا یقین رکھتے ہیں؟",
     "YES":"ہاں",
-    "NO":"نہیں"
+    "NO":"نہیں",
+    "Update":"تازہ کاری",
+    "OKAY":"ٹھیک",
+    "DOWNLOAD":"ڈاؤن لوڈ",
+    "New_Update_Available":"نئی تازہ کاری دستیاب ہے",
+    "Already_updated":"وائب میوزک پہلے ہی تازہ ترین ہے۔"
 }

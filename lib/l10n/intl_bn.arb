@@ -55,5 +55,10 @@
     "Are_you_sure_to_delete_search_history":"আপনি অনুসন্ধান ইতিহাস মুছে ফেলার বিষয়ে নিশ্চিত",
     "Are_you_sure_to_delete_song_history":"আপনি গানের ইতিহাস মুছে ফেলার বিষয়ে নিশ্চিত?",
     "YES":"হ্যাঁ",
-    "NO":"না"
+    "NO":"না",
+    "Update":"আধুনিকীকরণ",
+    "OKAY":"ঠিক আছে",
+    "DOWNLOAD":"ডাউনলোড",
+    "New_Update_Available":"নতুন আপডেট সুলভ",
+    "Already_updated":"ভাইব মিউজিক ইতিমধ্যে আপ টু ডেট।"
 }

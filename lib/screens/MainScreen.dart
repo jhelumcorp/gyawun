@@ -17,6 +17,8 @@ import 'package:vibe_music/screens/SearchScreen.dart';
 import 'package:vibe_music/screens/SettingsScreen.dart';
 import 'package:vibe_music/widgets/PanelHeader.dart';
 
+import '../utils/checkUpdate.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -33,6 +35,11 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    checkUpdate().then((isUpdate) {
+      if (isUpdate) {
+        showUpdate(context);
+      }
+    });
   }
 
   @override
@@ -188,7 +195,7 @@ class HomeTab extends StatelessWidget {
               return MaterialPageRoute(
                   builder: (_) => PlayListScreen(
                         playlistId: args['playlistId'],
-                        isAlbum: args['isAlbum'] != null ? true : false,
+                        isAlbum: args['isAlbum'] ?? false,
                       ));
             case '/home/artist':
               Map<String, dynamic> args =

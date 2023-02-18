@@ -55,5 +55,10 @@
     "Are_you_sure_to_delete_search_history":"Είστε βέβαιοι ότι θα διαγράψετε το ιστορικό αναζήτησης",
     "Are_you_sure_to_delete_song_history":"Είστε βέβαιοι ότι θα διαγράψετε το ιστορικό τραγουδιών",
     "YES":"ΝΑΙ",
-    "NO":"NEIN"
+    "NO":"NEIN",
+    "Update":"Ενημερώνω",
+    "OKAY":"ΕΝΤΆΞΕΙ",
+    "DOWNLOAD":"Καταφόρτωση",
+    "New_Update_Available":"Διαθέσιμη νέα ενημέρωση",
+    "Already_updated":"Η μουσική Vibe είναι ήδη ενημερωμένη."
 }

@@ -1,5 +1,5 @@
+import 'dart:developer';
 import 'dart:io';
-import 'dart:js';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
@@ -41,9 +41,9 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    showUpdate(context);
     Track? song = context.watch<MusicPlayer>().song;
 
     return DynamicColorBuilder(

@@ -55,5 +55,10 @@
     "Are_you_sure_to_delete_search_history":"Möchten Sie den Suchverlauf wirklich löschen?",
     "Are_you_sure_to_delete_song_history":"Möchten Sie den Songverlauf wirklich löschen?",
     "YES":"JAWOHL",
-    "NO":"NEIN"
+    "NO":"NEIN",
+    "Update":"Aktualisieren",
+    "OKAY":"OKAY",
+    "DOWNLOAD":"Herunterladen",
+    "New_Update_Available":"Neues Update verfügbar",
+    "Already_updated":"Vibe Music ist bereits auf dem neuesten Stand."
 }

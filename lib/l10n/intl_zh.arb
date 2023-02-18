@@ -55,5 +55,10 @@
     "Are_you_sure_to_delete_search_history":"您确定要删除搜索历史吗",
     "Are_you_sure_to_delete_song_history":"您确定要删除歌曲历史记录吗",
     "YES":"是",
-    "NO":"否"
+    "NO":"否",
+    "Update":"更新",
+    "OKAY":"好",
+    "DOWNLOAD":"下载",
+    "New_Update_Available":"新更新可用",
+    "Already_updated":"Vibe Music已经是最新的。"
 }

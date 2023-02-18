@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibe_music/generated/l10n.dart';
+import 'package:vibe_music/utils/constants.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -101,7 +102,7 @@ class AboutScreen extends StatelessWidget {
                                 Theme.of(context).primaryTextTheme.titleLarge,
                           ),
                           Text(
-                            '0.7.1',
+                            version,
                             style: Theme.of(context).primaryTextTheme.bodyLarge,
                           )
                         ],

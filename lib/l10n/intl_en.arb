@@ -55,5 +55,10 @@
     "Are_you_sure_to_delete_search_history":"Are you sure to delete search history",
     "Are_you_sure_to_delete_song_history":"Are you sure to delete song history",
     "YES":"YES",
-    "NO":"NO"
+    "NO":"NO",
+    "Update":"Update",
+    "OKAY":"OKAY",
+    "DOWNLOAD":"Download",
+    "New_Update_Available":"New Update Available",
+    "Already_updated":"Vibe Music is already up to date."
 }

@@ -1,7 +1,7 @@
 name: vibe_music
 description: A new Flutter project.
 publish_to: 'none' 
-version: 0.7.1+7
+version: 0.8.1+8
 
 environment:
   sdk: '>=2.18.5 <3.0.0'

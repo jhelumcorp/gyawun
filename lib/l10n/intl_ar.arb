@@ -56,5 +56,10 @@
     "Are_you_sure_to_delete_search_history":"هل أنت متأكد من حذف سجل البحث",
     "Are_you_sure_to_delete_song_history":"هل أنت متأكد من حذف سجل الأغاني",
     "YES":"نعم",
-    "NO":"رقم"
+    "NO":"رقم",
+    "Update":"تحديث",
+    "OKAY":"حسنًا",
+    "DOWNLOAD":"تحميل",
+    "New_Update_Available":"تحديث جديد متاح",
+    "Already_updated":"فايب ميوزيك محدثة بالفعل."
 }

@@ -55,5 +55,10 @@
     "Are_you_sure_to_delete_search_history":"Arama geçmişini silmek istediğinizden emin misiniz?",
     "Are_you_sure_to_delete_song_history":"Şarkı geçmişini silmek istediğinizden emin misiniz?",
     "YES":"EVET",
-    "NO":"HAYIR"
+    "NO":"HAYIR",
+    "Update":"Güncelleştirmek",
+    "OKAY":"TAMAM",
+    "DOWNLOAD":"İndirmek",
+    "New_Update_Available":"Yeni Güncelleme Kullanılabilir",
+    "Already_updated":"Vibe Music zaten güncel."
 }

@@ -55,5 +55,10 @@
     "Are_you_sure_to_delete_search_history":"검색 기록을 삭제하시겠습니까?",
     "Are_you_sure_to_delete_song_history":"노래 기록을 삭제하시겠습니까?",
     "YES":"예",
-    "NO":"아니요"
+    "NO":"아니요",
+    "Update":"업데이트",
+    "OKAY":"그래",
+    "DOWNLOAD":"다운로드",
+    "New_Update_Available":"새 업데이트 사용 가능",
+    "Already_updated":"바이브 뮤직은 이미 최신 상태입니다."
 }

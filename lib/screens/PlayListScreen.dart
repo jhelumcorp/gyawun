@@ -26,10 +26,12 @@ class _PlayListScreenState extends State<PlayListScreen> {
   @override
   void initState() {
     super.initState();
+
     if (widget.isAlbum) {
       HomeApi.getAlbum(widget.playlistId).then((Map value) {
         setState(() {
           playlist = value;
+
           playlist?['tracks']
               .removeWhere((element) => element['videoId'] == null);
           loading = false;

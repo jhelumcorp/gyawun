@@ -6,6 +6,7 @@ import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/screens/AboutScreen.dart';
 import 'package:vibe_music/screens/HistoryScreen.dart';
 import 'package:vibe_music/screens/ThemeScreen.dart';
+import 'package:vibe_music/utils/checkUpdate.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -657,6 +658,51 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   leading: Icon(
                     Icons.history_rounded,
+                    color: darkTheme ? Colors.black : Colors.white,
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  tileColor: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: ListTile(
+                  onTap: () {
+                    showAlert(
+                        context,
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [CircularProgressIndicator()]));
+
+                    checkUpdate().then((isUpdate) {
+                      Navigator.pop(context);
+                      if (isUpdate) {
+                        showUpdate(context);
+                      } else {
+                        showAlert(
+                            context,
+                            Text(S.of(context).Already_updated,
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .bodyMedium),
+                            cancellable: false);
+                      }
+                    });
+                  },
+                  title: Text(
+                    S.of(context).Update,
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .titleMedium
+                        ?.copyWith(
+                          color: darkTheme ? Colors.black : Colors.white,
+                          overflow: TextOverflow.ellipsis,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  leading: Icon(
+                    Icons.update_rounded,
                     color: darkTheme ? Colors.black : Colors.white,
                   ),
                   shape: RoundedRectangleBorder(
