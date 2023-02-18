@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:js';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/providers/SearchProvider.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/screens/MainScreen.dart';
+import 'package:vibe_music/utils/checkUpdate.dart';
 import 'package:vibe_music/utils/navigator.dart';
 import 'generated/l10n.dart';
 
@@ -30,6 +32,7 @@ void main() async {
   await Hive.openBox('search_history');
   await Hive.openBox('song_history');
   await HomeApi.setCountry();
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => MusicPlayer()),
     ChangeNotifierProvider(create: (_) => SearchProvider())
@@ -40,6 +43,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    showUpdate(context);
     Track? song = context.watch<MusicPlayer>().song;
 
     return DynamicColorBuilder(
