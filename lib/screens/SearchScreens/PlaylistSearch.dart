@@ -29,7 +29,7 @@ class _PlaylistSearchState extends State<PlaylistSearch> {
               return ListTile(
                 enableFeedback: false,
                 onTap: () {
-                  Navigator.pushNamed(context, '/search/playlist',
+                  Navigator.pushNamed(context, '/playlist',
                       arguments: {'playlistId': playlist['browseId']});
                 },
                 title: Row(

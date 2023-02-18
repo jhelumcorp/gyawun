@@ -31,7 +31,7 @@ class _ArtistsSearchState extends State<ArtistsSearch> {
                   enableFeedback: false,
                   contentPadding: const EdgeInsets.all(8),
                   onTap: () async {
-                    Navigator.pushNamed(context, '/search/artist', arguments: {
+                    Navigator.pushNamed(context, '/home/artist', arguments: {
                       'browseId': artist['browseId'],
                       'imageUrl': artist['thumbnails'].last['url'],
                       'name': artist['artist'],

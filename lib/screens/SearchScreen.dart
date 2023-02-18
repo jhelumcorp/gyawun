@@ -13,14 +13,15 @@ import 'package:vibe_music/screens/SearchScreens/videoSearch.dart';
 import 'package:vibe_music/utils/navigator.dart';
 import 'package:vibe_music/widgets/search_history.dart';
 
+import '../data/YTMusic/ytmusic.dart';
+
 class AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false;
 }
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({this.searchQuery = "", super.key});
-  final String searchQuery;
+  const SearchScreen({super.key});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -29,8 +30,10 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen>
     with AutomaticKeepAliveClientMixin<SearchScreen>, TickerProviderStateMixin {
   TextEditingController textEditingController = TextEditingController();
+  FocusNode focusNode = FocusNode();
   TabController? tabController;
   bool loading = false;
+  bool submitted = false;
   List songs = [];
   List artists = [];
   List playlists = [];
@@ -40,6 +43,7 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   void initState() {
     super.initState();
+    focusNode.requestFocus();
     tabController = TabController(
       length: 5,
       vsync: this,
@@ -49,7 +53,11 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   search(value) {
+    focusNode.unfocus();
     if (value != null) {
+      setState(() {
+        submitted = true;
+      });
       context.read<SearchProvider>().refresh();
       textEditingController.text = value;
       Box box = Hive.box('search_history');
@@ -62,19 +70,20 @@ class _SearchScreenState extends State<SearchScreen>
     setState(() {});
   }
 
-  openSearch() {
-    mainNavigatorKey.currentState
-        ?.push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          SearchSuggestions(
-        query: textEditingController.text,
-      ),
-      transitionDuration: Duration.zero,
-      reverseTransitionDuration: Duration.zero,
-    ))
-        .then((value) {
-      search(value);
-    });
+  getSuggestions() async {
+    if (mounted) {
+      setState(() {
+        submitted = false;
+      });
+
+      YTMUSIC.suggestions(textEditingController.text).then((value) {
+        if (mounted) {
+          setState(() {
+            suggestions = value;
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -86,6 +95,7 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    bool darkTheme = Theme.of(context).brightness == Brightness.dark;
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, '/');
@@ -95,7 +105,13 @@ class _SearchScreenState extends State<SearchScreen>
         length: 5,
         child: Scaffold(
           appBar: AppBar(
-            leading: const Icon(Icons.search_rounded),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              color: darkTheme ? Colors.white : Colors.black,
+            ),
             actions: textEditingController.text.trim().isNotEmpty
                 ? [
                     Padding(
@@ -118,9 +134,7 @@ class _SearchScreenState extends State<SearchScreen>
             backgroundColor: Colors.transparent,
             elevation: 0,
             title: TextField(
-              onTap: () {
-                openSearch();
-              },
+              focusNode: focusNode,
               style: Theme.of(context).primaryTextTheme.titleLarge,
               decoration: InputDecoration(
                   hintText: S.of(context).Search_something,
@@ -128,13 +142,20 @@ class _SearchScreenState extends State<SearchScreen>
                     borderSide: BorderSide.none,
                   )),
               textInputAction: TextInputAction.search,
-              enableInteractiveSelection: false,
-              focusNode: AlwaysDisabledFocusNode(),
+              onChanged: (text) {
+                getSuggestions();
+              },
+              onSubmitted: (text) {
+                search(text);
+              },
               controller: textEditingController,
             ),
-            bottom: textEditingController.text.trim().isEmpty
-                ? null
-                : TabBar(
+          ),
+          body: Column(
+            children: [
+              if (textEditingController.text.trim().isNotEmpty && submitted)
+                Material(
+                  child: TabBar(
                     controller: tabController,
                     enableFeedback: false,
                     overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -158,8 +179,11 @@ class _SearchScreenState extends State<SearchScreen>
                             style: tabController?.index == 0
                                 ? Theme.of(context)
                                     .primaryTextTheme
-                                    .displaySmall
-                                : null,
+                                    .displaySmall!
+                                : TextStyle(
+                                    color: darkTheme
+                                        ? Colors.white
+                                        : Colors.black),
                           ),
                         ),
                       ),
@@ -179,7 +203,10 @@ class _SearchScreenState extends State<SearchScreen>
                                 ? Theme.of(context)
                                     .primaryTextTheme
                                     .displaySmall
-                                : null,
+                                : TextStyle(
+                                    color: darkTheme
+                                        ? Colors.white
+                                        : Colors.black),
                           ),
                         ),
                       ),
@@ -199,7 +226,10 @@ class _SearchScreenState extends State<SearchScreen>
                                 ? Theme.of(context)
                                     .primaryTextTheme
                                     .displaySmall
-                                : null,
+                                : TextStyle(
+                                    color: darkTheme
+                                        ? Colors.white
+                                        : Colors.black),
                           ),
                         ),
                       ),
@@ -219,7 +249,10 @@ class _SearchScreenState extends State<SearchScreen>
                                 ? Theme.of(context)
                                     .primaryTextTheme
                                     .displaySmall
-                                : null,
+                                : TextStyle(
+                                    color: darkTheme
+                                        ? Colors.white
+                                        : Colors.black),
                           ),
                         ),
                       ),
@@ -239,41 +272,104 @@ class _SearchScreenState extends State<SearchScreen>
                                 ? Theme.of(context)
                                     .primaryTextTheme
                                     .displaySmall
-                                : null,
+                                : TextStyle(
+                                    color: darkTheme
+                                        ? Colors.white
+                                        : Colors.black),
                           ),
                         ),
                       ),
                     ],
                   ),
-          ),
-          body: textEditingController.text.trim().isEmpty
-              ? SearchHistory(
-                  onTap: (value) {
-                    search(value);
-                  },
-                  onTrailing: (e) {
-                    setState(() {
-                      textEditingController.text = e;
-                      openSearch();
-                    });
-                  },
-                )
-              : Column(
-                  children: [
-                    Expanded(
-                      child: TabBarView(
-                        controller: tabController,
-                        children: [
-                          SongsSearch(query: textEditingController.text),
-                          VideoSearch(query: textEditingController.text),
-                          ArtistsSearch(query: textEditingController.text),
-                          AlbumSearch(query: textEditingController.text),
-                          PlaylistSearch(query: textEditingController.text)
-                        ],
-                      ),
-                    ),
-                  ],
                 ),
+              Expanded(
+                child: textEditingController.text.trim().isEmpty
+                    ? SearchHistory(
+                        onTap: (value) {
+                          search(value);
+                        },
+                        onTrailing: (e) {
+                          setState(() {
+                            textEditingController.text = e;
+                            submitted = false;
+                          });
+                        },
+                      )
+                    : submitted
+                        ? Column(
+                            children: [
+                              Expanded(
+                                child: TabBarView(
+                                  controller: tabController,
+                                  children: [
+                                    SongsSearch(
+                                        query: textEditingController.text),
+                                    VideoSearch(
+                                        query: textEditingController.text),
+                                    ArtistsSearch(
+                                        query: textEditingController.text),
+                                    AlbumSearch(
+                                        query: textEditingController.text),
+                                    PlaylistSearch(
+                                        query: textEditingController.text)
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        : ValueListenableBuilder(
+                            valueListenable: Hive.box('settings').listenable(),
+                            builder: (context, Box box, child) {
+                              return ListView.builder(
+                                padding: const EdgeInsets.all(16),
+                                itemCount: suggestions.length,
+                                itemBuilder: (context, index) {
+                                  String e = suggestions[index];
+                                  return ListTile(
+                                    enableFeedback: false,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 0),
+                                    visualDensity: VisualDensity.compact,
+                                    leading: Icon(Icons.search,
+                                        color: Theme.of(context)
+                                            .primaryTextTheme
+                                            .bodyLarge
+                                            ?.color),
+                                    trailing: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          textEditingController.text = e;
+                                          submitted = false;
+                                        });
+                                      },
+                                      icon: Icon(
+                                          box.get('textDirection',
+                                                      defaultValue: 'ltr') ==
+                                                  'rtl'
+                                              ? CupertinoIcons.arrow_up_right
+                                              : CupertinoIcons.arrow_up_left,
+                                          color: Theme.of(context)
+                                              .primaryTextTheme
+                                              .bodyLarge
+                                              ?.color),
+                                    ),
+                                    dense: true,
+                                    title: Text(
+                                      e,
+                                      style: Theme.of(context)
+                                          .primaryTextTheme
+                                          .bodyLarge,
+                                    ),
+                                    onTap: () {
+                                      search(e);
+                                    },
+                                  );
+                                },
+                              );
+                            }),
+              ),
+            ],
+          ),
         ),
       ),
     );

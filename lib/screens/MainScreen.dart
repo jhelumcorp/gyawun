@@ -82,25 +82,8 @@ class _MainScreenState extends State<MainScreen> {
                                         'rtl'
                                     ? TextDirection.rtl
                                     : TextDirection.ltr,
-                            child: SearchTab(
-                              navigatorKey: _searchNavigatorKey,
-                            ),
-                          ),
-                          Directionality(
-                            textDirection:
-                                box.get('textDirection', defaultValue: 'ltr') ==
-                                        'rtl'
-                                    ? TextDirection.rtl
-                                    : TextDirection.ltr,
                             child: const FavouriteScreen(),
                           ),
-                          Directionality(
-                              textDirection: box.get('textDirection',
-                                          defaultValue: 'ltr') ==
-                                      'rtl'
-                                  ? TextDirection.rtl
-                                  : TextDirection.ltr,
-                              child: const SettingsScreen()),
                         ],
                       );
                     }),
@@ -148,33 +131,11 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 NavigationDestination(
                   icon: Icon(
-                    Icons.search_outlined,
-                    color: darkTheme ? Colors.white : Colors.black,
-                  ),
-                  selectedIcon: Icon(
-                    Icons.search_rounded,
-                    color: darkTheme ? Colors.black : Colors.white,
-                  ),
-                  label: S.of(context).Search,
-                ),
-                NavigationDestination(
-                  icon: Icon(
                     CupertinoIcons.heart,
                     color: darkTheme ? Colors.white : Colors.black,
                   ),
                   selectedIcon: Icon(
                     CupertinoIcons.heart_fill,
-                    color: darkTheme ? Colors.black : Colors.white,
-                  ),
-                  label: S.of(context).Settings,
-                ),
-                NavigationDestination(
-                  icon: Icon(
-                    Icons.settings_outlined,
-                    color: darkTheme ? Colors.white : Colors.black,
-                  ),
-                  selectedIcon: Icon(
-                    Icons.settings_rounded,
                     color: darkTheme ? Colors.black : Colors.white,
                   ),
                   label: S.of(context).Settings,
@@ -227,61 +188,9 @@ class HomeTab extends StatelessWidget {
               return MaterialPageRoute(
                   builder: (_) => PlayListScreen(
                         playlistId: args['playlistId'],
-                        isAlbum: args['isAlbum'],
+                        isAlbum: args['isAlbum'] != null ? true : false,
                       ));
             case '/home/artist':
-              Map<String, dynamic> args =
-                  settings.arguments as Map<String, dynamic>;
-              return MaterialPageRoute(
-                  builder: (_) => ArtistScreen(
-                        browseId: args['browseId'],
-                        imageUrl: args['imageUrl'],
-                        name: args['name'],
-                      ));
-            default:
-              return MaterialPageRoute(builder: (_) => const Text("data"));
-          }
-        },
-      ),
-    );
-  }
-}
-
-class SearchTab extends StatelessWidget {
-  const SearchTab({
-    Key? key,
-    required GlobalKey<NavigatorState> navigatorKey,
-  })  : _navigatorKey = navigatorKey,
-        super(key: key);
-
-  final GlobalKey<NavigatorState> _navigatorKey;
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_navigatorKey.currentState!.canPop() &&
-            _navigatorKey.currentState != null) {
-          _navigatorKey.currentState?.pop();
-          return false;
-        }
-        return true;
-      },
-      child: Navigator(
-        key: _navigatorKey,
-        onGenerateRoute: (settings) {
-          switch (settings.name) {
-            case '/':
-              return MaterialPageRoute(builder: (_) => const SearchScreen());
-            case '/search/playlist':
-              Map<String, dynamic> args =
-                  settings.arguments as Map<String, dynamic>;
-              return MaterialPageRoute(
-                  builder: (_) => PlayListScreen(
-                        playlistId: args['playlistId'],
-                        isAlbum: args['isAlbum'] ?? false,
-                      ));
-            case '/search/artist':
               Map<String, dynamic> args =
                   settings.arguments as Map<String, dynamic>;
               return MaterialPageRoute(

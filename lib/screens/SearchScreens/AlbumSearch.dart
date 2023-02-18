@@ -31,7 +31,7 @@ class _AlbumSearchState extends State<AlbumSearch> {
               return ListTile(
                 enableFeedback: false,
                 onTap: () {
-                  Navigator.pushNamed(context, '/search/playlist', arguments: {
+                  Navigator.pushNamed(context, '/playlist', arguments: {
                     'playlistId': album['browseId'],
                     'isAlbum': true
                   });

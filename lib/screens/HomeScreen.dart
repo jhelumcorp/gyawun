@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:vibe_music/Models/Artist.dart';
@@ -16,6 +17,10 @@ import 'package:vibe_music/data/home1.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/screens/SearchScreen.dart';
+
+import 'package:vibe_music/screens/SettingsScreen.dart';
+import 'package:vibe_music/utils/navigator.dart';
 import 'package:vibe_music/utils/showOptions.dart';
 import 'package:vibe_music/widgets/TrackTile.dart';
 
@@ -83,7 +88,55 @@ class _HomeScreenState extends State<HomeScreen>
     super.build(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Vibe Music"),
+        title: SafeArea(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => SearchScreen()));
+            },
+            child: Container(
+              height: 50,
+              margin: const EdgeInsets.only(bottom: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                  color: (darkTheme ? Colors.white : Colors.black)
+                      .withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.search_rounded,
+                    size: 26,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Vibe Music",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: (darkTheme ? Colors.white : Colors.black)
+                          .withOpacity(0.7),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              mainNavigatorKey.currentState!.push(
+                CupertinoPageRoute(
+                  builder: (_) => const SettingsScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.settings_outlined),
+            color: darkTheme ? Colors.white : Colors.black,
+          )
+        ],
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -96,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen>
             : RefreshIndicator(
                 onRefresh: getHomeData,
                 child: SingleChildScrollView(
+                  padding: EdgeInsets.only(top: 8),
                   child: SafeArea(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
