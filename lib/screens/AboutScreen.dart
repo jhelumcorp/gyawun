@@ -33,7 +33,7 @@ class AboutScreen extends StatelessWidget {
       {
         'icon': FontAwesomeIcons.discord,
         'title': 'Discord',
-        'link': 'https://discord.gg/wZREMmMR4R',
+        'link': 'http://discord.gg/YtxYgGSYwN',
         'subtitle': S.of(context).Open_in_Browser
       },
     ];
