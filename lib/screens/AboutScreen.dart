@@ -30,6 +30,12 @@ class AboutScreen extends StatelessWidget {
         'link': 'https://www.instagram.com/rohan__rashid/',
         'subtitle': S.of(context).Open_in_Browser
       },
+      {
+        'icon': FontAwesomeIcons.discord,
+        'title': 'Discord',
+        'link': 'https://discord.gg/wZREMmMR4R',
+        'subtitle': S.of(context).Open_in_Browser
+      },
     ];
 
     List troubleshooting = [
