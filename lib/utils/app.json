@@ -1,6 +1,6 @@
 {
     "stable":{
-        "version":"0.8.1 beta",
+        "version":"0.8.1",
         "code":"00801",
         "id":8,
         "url":"https://github.com/sheikhhaziq/vibemusic/releases/latest"
@@ -9,6 +9,6 @@
         "version":"0.9.0 beta",
         "code":"00900",
         "id":9,
-        "url":""
+        "url":"https://github.com/sheikhhaziq/vibemusic/releases/tag/v0.6.0-beta.2"
     }
 }
