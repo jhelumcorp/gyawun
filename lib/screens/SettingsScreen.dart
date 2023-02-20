@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/screens/AboutScreen.dart';
 import 'package:vibe_music/screens/HistoryScreen.dart';
@@ -675,10 +678,10 @@ class SettingsScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const [CircularProgressIndicator()]));
 
-                    checkUpdate().then((isUpdate) {
+                    checkUpdate().then((details) {
                       Navigator.pop(context);
-                      if (isUpdate) {
-                        showUpdate(context);
+                      if (details['isUpdate']) {
+                        showUpdate(context, details['url']);
                       } else {
                         showAlert(
                             context,

@@ -35,9 +35,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    checkUpdate().then((isUpdate) {
-      if (isUpdate) {
-        showUpdate(context);
+    checkUpdate().then((details) {
+      if (details['isUpdate']) {
+        showUpdate(context, details['url']);
       }
     });
   }

@@ -1,20 +1,30 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vibe_music/utils/constants.dart';
 
 import '../generated/l10n.dart';
 
-Future<bool> checkUpdate() async {
+Future<Map> checkUpdate() async {
   Response res = await get(Uri.parse(
       "https://raw.githubusercontent.com/sheikhhaziq/vibemusic/main/lib/utils/app.json"));
   Map data = jsonDecode(res.body);
-  return int.parse(data['stable']['code']) > versionCode;
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  String type = packageInfo.packageName;
+  int version = int.parse(packageInfo.buildNumber);
+
+  Map details = data[type.contains('beta') ? 'beta' : 'stable'];
+  log(version.toString());
+  log(details.toString());
+
+  bool isUpdate = details['id'] > version;
+  return {'isUpdate': isUpdate, 'url': details['url']};
 }
 
-showUpdate(BuildContext context) {
+showUpdate(BuildContext context, String url) {
   showDialog(
     context: context,
     builder: (context) {
@@ -36,8 +46,7 @@ showUpdate(BuildContext context) {
           MaterialButton(
             onPressed: () {
               launchUrl(
-                Uri.parse(
-                    "https://github.com/sheikhhaziq/vibemusic/releases/latest"),
+                Uri.parse(url),
                 mode: LaunchMode.externalApplication,
               );
             },

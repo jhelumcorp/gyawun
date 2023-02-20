@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:file_support/file_support.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -9,6 +10,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
+import 'package:vibe_music/providers/DownloadProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/providers/SearchProvider.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
@@ -31,12 +33,18 @@ void main() async {
   await Hive.openBox('settings');
   await Hive.openBox('search_history');
   await Hive.openBox('song_history');
+  await Hive.openBox('downloads');
   await HomeApi.setCountry();
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => MusicPlayer()),
-    ChangeNotifierProvider(create: (_) => SearchProvider())
+    ChangeNotifierProvider(create: (_) => SearchProvider()),
+    ChangeNotifierProvider(create: (_) => DownloadManager()),
   ], child: const MyApp()));
+
+  DownloadManager().requestPermission().then((value) {
+    log(value.toString());
+  });
 }
 
 class MyApp extends StatelessWidget {

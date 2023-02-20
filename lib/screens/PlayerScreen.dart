@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/generated/l10n.dart';
+import 'package:vibe_music/providers/DownloadProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/widgets/MusicSlider.dart';
 
@@ -364,22 +364,72 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 ),
                               ],
                             ),
-                            ListTile(
-                              onTap: (() {
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return QueueScreen(
-                                        song: song, /*songs: songs*/
-                                      );
-                                    });
-                              }),
-                              title: Icon(
-                                CupertinoIcons.music_note_list,
-                                color:
-                                    isDarkTheme ? Colors.white : Colors.black,
-                              ),
-                            )
+                            ValueListenableBuilder(
+                                valueListenable:
+                                    Hive.box('downloads').listenable(),
+                                builder: (context, Box box, child) {
+                                  Map? item = box.get(song.videoId);
+                                  double val = item?['progress'] ?? 0.00;
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 32),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            showModalBottomSheet(
+                                                context: context,
+                                                builder: (context) {
+                                                  return QueueScreen(
+                                                    song: song, /*songs: songs*/
+                                                  );
+                                                });
+                                          },
+                                          icon: Icon(
+                                            CupertinoIcons.music_note_list,
+                                            color: isDarkTheme
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                        item == null
+                                            ? IconButton(
+                                                onPressed: () {
+                                                  context
+                                                      .read<DownloadManager>()
+                                                      .download(song);
+                                                },
+                                                icon: Icon(
+                                                    Icons.download_rounded,
+                                                    size: 32,
+                                                    color: isDarkTheme
+                                                        ? Colors.white
+                                                        : Colors.black),
+                                              )
+                                            : item['status'] == 'done'
+                                                ? Icon(
+                                                    Icons.download_done_rounded,
+                                                    size: 32,
+                                                    color: isDarkTheme
+                                                        ? Colors.white
+                                                        : Colors.black)
+                                                : CircularProgressIndicator(
+                                                    value: val / 100,
+                                                    color: isDarkTheme
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                    backgroundColor:
+                                                        (isDarkTheme
+                                                                ? Colors.white
+                                                                : Colors.black)
+                                                            .withOpacity(0.4),
+                                                  )
+                                      ],
+                                    ),
+                                  );
+                                })
                           ],
                         );
                       },
