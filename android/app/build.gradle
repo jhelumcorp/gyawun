@@ -44,7 +44,7 @@ android {
     }
 
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs +=  'src/main/kotlin'
     }
 
     defaultConfig {
@@ -64,7 +64,7 @@ android {
        release {
            keyAlias keystoreProperties['keyAlias']
            keyPassword keystoreProperties['keyPassword']
-           storeFile file(keystoreProperties['storeFile'])
+           storeFile file('key.jks')
            storePassword keystoreProperties['storePassword']
        }
    }
