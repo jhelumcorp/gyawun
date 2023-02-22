@@ -7,8 +7,13 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../generated/l10n.dart';
+import 'connectivity.dart';
 
 Future<Map> checkUpdate() async {
+  bool connectivity = await isConnectivity();
+  if (!connectivity) {
+    return {'isUpdate': false, 'url': ''};
+  }
   Response res = await get(Uri.parse(
       "https://raw.githubusercontent.com/sheikhhaziq/vibemusic/main/lib/utils/app.json"));
   Map data = jsonDecode(res.body);

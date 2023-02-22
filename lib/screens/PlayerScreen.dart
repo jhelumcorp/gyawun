@@ -8,6 +8,7 @@ import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/DownloadProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/utils/file.dart';
 import 'package:vibe_music/widgets/MusicSlider.dart';
 
 class PlayerScreen extends StatefulWidget {
@@ -58,10 +59,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5),
                                   child: Image.network(
-                                    'https://vibeapi-sheikh-haziq.vercel.app/thumb/uhd?id=${song.videoId}',
+                                    'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
                                     errorBuilder: (context, error, stackTrace) {
-                                      return Image.network(
-                                        song.thumbnails.last.url,
+                                      return Image.asset(
+                                        "assets/images/song.png",
                                         fit: BoxFit.contain,
                                       );
                                     },
@@ -409,12 +410,19 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                                         : Colors.black),
                                               )
                                             : item['status'] == 'done'
-                                                ? Icon(
-                                                    Icons.download_done_rounded,
-                                                    size: 32,
-                                                    color: isDarkTheme
-                                                        ? Colors.white
-                                                        : Colors.black)
+                                                ? IconButton(
+                                                    onPressed: () async {
+                                                      await deleteFile(
+                                                          song.videoId);
+                                                    },
+                                                    icon: Icon(
+                                                        Icons
+                                                            .download_done_rounded,
+                                                        size: 32,
+                                                        color: isDarkTheme
+                                                            ? Colors.white
+                                                            : Colors.black),
+                                                  )
                                                 : CircularProgressIndicator(
                                                     value: val / 100,
                                                     color: isDarkTheme
@@ -520,6 +528,13 @@ class QueueScreen extends StatelessWidget {
                                   song.thumbnails.first.url,
                                   width: 50,
                                   height: 50,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Image.asset(
+                                    "assets/images/song.png",
+                                    width: 50,
+                                    fit: BoxFit.fill,
+                                    height: 50,
+                                  ),
                                 ),
                                 if (player.currentIndex == index)
                                   Container(

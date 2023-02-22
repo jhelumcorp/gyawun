@@ -13,27 +13,29 @@ dependencies:
 
   cupertino_icons: ^1.0.5
   youtube_explode_dart: ^1.12.3
-  provider: ^6.0.4
+  provider: ^6.0.5
   just_audio: ^0.9.31
   just_audio_background: ^0.0.1-beta.9
-  google_fonts: ^3.0.1
+  google_fonts: ^4.0.3
   palette_generator: ^0.3.3+2
   intl: ^0.17.0
   miniplayer: ^1.0.1
   carousel_slider: ^4.2.1
   cached_network_image: ^3.2.3
-  dynamic_color: ^1.5.4
-  font_awesome_flutter: ^10.3.0
-  url_launcher: ^6.1.7
+  dynamic_color: ^1.6.2
+  font_awesome_flutter: ^10.4.0
+  url_launcher: ^6.1.9
   expandable_page_view: ^1.0.17
   country_picker: ^2.0.19
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  share_plus: ^6.3.0
+  share_plus: ^6.3.1
   file_support: ^1.0.6
   permission_handler: ^10.2.0
   external_path: ^1.0.3
   package_info_plus: ^3.0.3
+  flutter_swipe_action_cell: ^3.1.0
+  connectivity_plus: ^3.0.3
 
 
 dev_dependencies:

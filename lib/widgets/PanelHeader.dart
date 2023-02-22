@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
@@ -83,15 +82,15 @@ class PanelHeader extends StatelessWidget {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(2),
-                          child: CachedNetworkImage(
-                            imageUrl: song.thumbnails.first.url,
+                          child: Image.network(
+                            song.thumbnails.first.url,
                             width: 54,
                             height: 54,
                             fit: BoxFit.fill,
-                            errorWidget: (context, error, stackTrace) {
-                              return Image.network(
-                                song.thumbnails.last.url,
-                                width: double.infinity,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                "assets/images/song.png",
+                                width: 50,
                                 fit: BoxFit.fill,
                               );
                             },

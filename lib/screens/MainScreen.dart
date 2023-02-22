@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/screens/ArtistScreen.dart';
+import 'package:vibe_music/screens/DownloadScreen.dart';
 import 'package:vibe_music/screens/FavouriteScreen.dart';
 import 'package:vibe_music/screens/HomeScreen.dart';
 import 'package:vibe_music/screens/PlayListScreen.dart';
@@ -30,7 +31,6 @@ class _MainScreenState extends State<MainScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   int _pageIndex = 0;
   final _homeNavigatorKey = GlobalKey<NavigatorState>();
-  final _searchNavigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -91,6 +91,14 @@ class _MainScreenState extends State<MainScreen> {
                                     : TextDirection.ltr,
                             child: const FavouriteScreen(),
                           ),
+                          Directionality(
+                            textDirection:
+                                box.get('textDirection', defaultValue: 'ltr') ==
+                                        'rtl'
+                                    ? TextDirection.rtl
+                                    : TextDirection.ltr,
+                            child: const DownloadScreen(),
+                          ),
                         ],
                       );
                     }),
@@ -143,6 +151,17 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   selectedIcon: Icon(
                     CupertinoIcons.heart_fill,
+                    color: darkTheme ? Colors.black : Colors.white,
+                  ),
+                  label: S.of(context).Settings,
+                ),
+                NavigationDestination(
+                  icon: Icon(
+                    CupertinoIcons.download_circle,
+                    color: darkTheme ? Colors.white : Colors.black,
+                  ),
+                  selectedIcon: Icon(
+                    CupertinoIcons.download_circle_fill,
                     color: darkTheme ? Colors.black : Colors.white,
                   ),
                   label: S.of(context).Settings,

@@ -1,8 +1,6 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:file_support/file_support.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -15,7 +13,6 @@ import 'package:vibe_music/providers/MusicPlayer.dart';
 import 'package:vibe_music/providers/SearchProvider.dart';
 import 'package:vibe_music/providers/ThemeProvider.dart';
 import 'package:vibe_music/screens/MainScreen.dart';
-import 'package:vibe_music/utils/checkUpdate.dart';
 import 'package:vibe_music/utils/navigator.dart';
 import 'generated/l10n.dart';
 
@@ -25,7 +22,7 @@ void main() async {
     await JustAudioBackground.init(
       androidNotificationChannelId: 'com.ryanhzeise.bg_demo.channel.audio',
       androidNotificationChannelName: 'Audio playback',
-      androidNotificationOngoing: false,
+      androidNotificationOngoing: true,
     );
   }
   await Hive.initFlutter();
@@ -42,9 +39,7 @@ void main() async {
     ChangeNotifierProvider(create: (_) => DownloadManager()),
   ], child: const MyApp()));
 
-  DownloadManager().requestPermission().then((value) {
-    log(value.toString());
-  });
+  DownloadManager().requestPermission();
 }
 
 class MyApp extends StatelessWidget {

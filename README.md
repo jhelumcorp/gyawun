@@ -42,8 +42,8 @@
 - [x] Change direction from right to left
 - [x] Search Suggestions
 - [x] Save history locally
+- [x] Download songs locally
 - [ ] Save playlist
-- [ ] Download songs locally
 
 ## Installation
 

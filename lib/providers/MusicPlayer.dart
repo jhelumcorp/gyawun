@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
@@ -9,7 +12,10 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
 import 'package:vibe_music/utils/colors.dart';
+import 'package:vibe_music/utils/file.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+
+import '../utils/connectivity.dart';
 
 YoutubeExplode _youtubeExplode = YoutubeExplode();
 
@@ -18,7 +24,7 @@ class MusicPlayer extends ChangeNotifier {
   AudioPlayer _player = AudioPlayer();
   bool _initialised = false;
   bool _isPlaying = false;
-
+  bool _isOnline = false;
   Track? tempSong;
   final MiniplayerController _miniplayerController = MiniplayerController();
   StreamController<bool> _cancelController = StreamController<bool>();
@@ -31,6 +37,14 @@ class MusicPlayer extends ChangeNotifier {
   );
 
   MusicPlayer() {
+    isConnectivity().then((value) {
+      _isOnline = value;
+    });
+
+    Connectivity().onConnectivityChanged.listen((connectivity) {
+      _isOnline = connectivity == ConnectivityResult.mobile ||
+          connectivity == ConnectivityResult.wifi;
+    });
     _player = AudioPlayer(
       audioPipeline: AudioPipeline(androidAudioEffects: [_loudnessEnhancer]),
     );
@@ -82,12 +96,13 @@ class MusicPlayer extends ChangeNotifier {
 
   get player => _player;
   get isInitialized => _initialised;
+  get isOnline => _isOnline;
   AndroidLoudnessEnhancer get loudnessEnhancer => _loudnessEnhancer;
 
   get miniplayerController => _miniplayerController;
-  Track? get song => _player.sequenceState?.currentSource?.tag.extras == null
+  Track? get song => _player.sequenceState?.currentSource?.tag?.extras == null
       ? tempSong
-      : Track.fromMap(_player.sequenceState?.currentSource?.tag.extras);
+      : Track.fromMap(_player.sequenceState?.currentSource?.tag?.extras);
 
   get songs =>
       _player.sequence?.map((e) => Track.fromMap(e.tag.extras)).toList() ?? [];
@@ -107,7 +122,8 @@ class MusicPlayer extends ChangeNotifier {
     if (exists) {
       return;
     }
-    PaletteGenerator? color = await generateColor(newSong.thumbnails.last.url);
+    PaletteGenerator? color =
+        _isOnline ? await generateColor(newSong.thumbnails.last.url) : null;
     newSong.colorPalette = ColorPalette(
         darkMutedColor: color?.darkMutedColor?.color,
         lightMutedColor: color?.lightMutedColor?.color);
@@ -190,7 +206,7 @@ class MusicPlayer extends ChangeNotifier {
   }
 
   addNew(Track newSong) async {
-    if (newSong.videoId == _player.sequenceState?.currentSource?.tag.id) {
+    if (newSong.videoId == _player.sequenceState?.currentSource?.tag?.id) {
       _miniplayerController.animateToHeight(state: PanelState.MAX);
       return;
     }
@@ -219,9 +235,11 @@ class MusicPlayer extends ChangeNotifier {
         tag: MediaItem(
           id: newSong.videoId,
           title: newSong.title,
-          artUri: Uri.parse(newSong.thumbnails.last.url),
-          artist:
-              newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
+          artUri: Uri.parse(
+              'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${newSong.videoId}'),
+          artist: newSong.artists.isNotEmpty
+              ? newSong.artists.map((e) => e.name).join(', ')
+              : null,
           album: newSong.albums?.name,
           extras: newSong.toMap(),
         ),
@@ -245,13 +263,9 @@ class MusicPlayer extends ChangeNotifier {
             }
           });
           for (Map<String, dynamic> track in tracks) {
-            // If the loop has been cancelled, exit
-
             if (breakIt) {
               break;
             }
-
-            // Add the item to the otherSongs list
 
             track['thumbnails'] = track['thumbnail'];
             Track tr = Track.fromMap(track);
@@ -266,13 +280,74 @@ class MusicPlayer extends ChangeNotifier {
     }
   }
 
+  playOne(a) async {
+    File file = File(a['path']);
+    if (!(await file.exists())) {
+      await deleteFile(a['videoId']);
+      return true;
+    }
+    Track newSong = Track.fromMap(a);
+
+    if (newSong.videoId == _player.sequenceState?.currentSource?.tag?.id) {
+      _miniplayerController.animateToHeight(state: PanelState.MAX);
+      return;
+    }
+    _cancelController.sink.add(true);
+    _cancelController = StreamController<bool>();
+    try {
+      bool connectivity = await isConnectivity();
+      PaletteGenerator? color = connectivity
+          ? await generateColor(newSong.thumbnails.last.url)
+          : null;
+      newSong.colorPalette = ColorPalette(
+          darkMutedColor: color?.darkMutedColor?.color,
+          lightMutedColor: color?.lightMutedColor?.color);
+      tempSong = newSong;
+      await setPlayer();
+
+      _initialised = true;
+      notifyListeners();
+
+      _player.play().then((value) {
+        notifyListeners();
+        _miniplayerController.animateToHeight(state: PanelState.MAX);
+      });
+      log(connectivity.toString());
+      await playlist
+          ?.add(AudioSource.uri(
+        file.uri,
+        tag: MediaItem(
+          id: newSong.videoId,
+          title: newSong.title,
+          artUri: connectivity ? Uri.parse(newSong.thumbnails.last.url) : null,
+          artist:
+              newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
+          album: newSong.albums?.name,
+          extras: newSong.toMap(),
+        ),
+      ))
+          .then((value) async {
+        addSongHistory();
+        tempSong = null;
+        _miniplayerController.animateToHeight(state: PanelState.MAX);
+        notifyListeners();
+      });
+
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return true;
+    }
+  }
+
   Future addPlayList(List newSongs) async {
     _cancelController.sink.add(true);
     _cancelController = StreamController<bool>();
     tempSong = Track.fromMap(newSongs[0]);
     Track newSong = Track.fromMap(newSongs[0]);
-
-    PaletteGenerator? color = await generateColor(newSong.thumbnails.last.url);
+    bool connectivity = await isConnectivity();
+    PaletteGenerator? color =
+        connectivity ? await generateColor(newSong.thumbnails.last.url) : null;
     newSong.colorPalette = ColorPalette(
         darkMutedColor: color?.darkMutedColor?.color,
         lightMutedColor: color?.lightMutedColor?.color);
@@ -285,14 +360,13 @@ class MusicPlayer extends ChangeNotifier {
       _miniplayerController.animateToHeight(state: PanelState.MAX);
     });
     notifyListeners();
-
     await playlist
         ?.add(AudioSource.uri(
       await getAudioUri(newSong.videoId),
       tag: MediaItem(
         id: newSong.videoId,
         title: newSong.title,
-        artUri: Uri.parse(newSong.thumbnails.last.url),
+        artUri: connectivity ? Uri.parse(newSong.thumbnails.last.url) : null,
         artist: newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
         album: newSong.albums?.name,
         extras: newSong.toMap(),
@@ -317,12 +391,10 @@ class MusicPlayer extends ChangeNotifier {
           break;
         }
 
-        // Add the item to the otherSongs list
         Track ns = Track.fromMap(nSong);
         await addToQUeue(ns);
       }
     });
-    // _miniplayerController.animateToHeight(state: PanelState.MAX);
   }
 
   initializePlaylist(List newSongs) async {
@@ -331,7 +403,9 @@ class MusicPlayer extends ChangeNotifier {
     tempSong = Track.fromMap(newSongs[0]);
     Track newSong = Track.fromMap(newSongs[0]);
 
-    PaletteGenerator? color = await generateColor(newSong.thumbnails.last.url);
+    bool connectivity = await isConnectivity();
+    PaletteGenerator? color =
+        connectivity ? await generateColor(newSong.thumbnails.last.url) : null;
     newSong.colorPalette = ColorPalette(
         darkMutedColor: color?.darkMutedColor?.color,
         lightMutedColor: color?.lightMutedColor?.color);
@@ -347,7 +421,7 @@ class MusicPlayer extends ChangeNotifier {
       tag: MediaItem(
         id: newSong.videoId,
         title: newSong.title,
-        artUri: Uri.parse(newSong.thumbnails.last.url),
+        artUri: connectivity ? Uri.parse(newSong.thumbnails.last.url) : null,
         artist: newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
         album: newSong.albums?.name,
         extras: newSong.toMap(),
@@ -406,11 +480,12 @@ class MusicPlayer extends ChangeNotifier {
 
   /// Change the songe position in playlist from one index to another.
 
-  moveTo(index, newIndex) async {
+  Future moveTo(index, newIndex) async {
     // Track song = _songs.removeAt(index);
     // _songs.insertAll(newIndex, [song]);
     await playlist?.move(index, newIndex);
     notifyListeners();
+    return true;
   }
 
   removeAt(index) async {
@@ -448,6 +523,15 @@ class MusicPlayer extends ChangeNotifier {
 
   static Future<Uri> getAudioUri(String videoId) async {
     Box box = Hive.box('settings');
+    Map? download = Hive.box('downloads').get(videoId);
+    if (download != null && download['path'] != null) {
+      File file = File(download['path']);
+      if (await file.exists()) {
+        return file.uri;
+      } else {
+        Hive.box('downloads').delete(videoId);
+      }
+    }
     String audioQuality = box.get("audioQuality", defaultValue: 'medium');
     String audioUrl = '';
     try {

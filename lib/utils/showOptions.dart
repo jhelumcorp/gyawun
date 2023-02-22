@@ -6,6 +6,9 @@ import 'package:share_plus/share_plus.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/utils/file.dart';
+
+import '../providers/DownloadProvider.dart';
 
 showOptions(Track song, context) {
   showCupertinoModalPopup(
@@ -14,8 +17,7 @@ showOptions(Track song, context) {
         return ValueListenableBuilder(
           valueListenable: Hive.box('settings').listenable(),
           builder: (context, Box box, child) {
-            bool isDarkTheme =
-                box.get('theme', defaultValue: 'light') == 'dark';
+            bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
             return CupertinoActionSheet(
               actions: [
                 Material(
@@ -117,6 +119,48 @@ showOptions(Track song, context) {
                                   overflow: TextOverflow.ellipsis,
                                   fontSize: 16),
                         ),
+                      ),
+                    );
+                  },
+                ),
+                ValueListenableBuilder(
+                  valueListenable: Hive.box('downloads').listenable(),
+                  builder: (context, Box box, child) {
+                    Map? download = box.get(song.videoId);
+                    return Material(
+                      child: ListTile(
+                        onTap: () {
+                          if (download == null) {
+                            context.read<DownloadManager>().download(song);
+                          } else if (download['progress'] == 100) {
+                            deleteFile(song.videoId);
+                          }
+                          Navigator.pop(context);
+                        },
+                        title: Text(
+                          download == null
+                              ? "Download"
+                              : (download['progress'] < 100
+                                  ? "Downloading"
+                                  : "Delete"),
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .titleMedium
+                              ?.copyWith(
+                                  overflow: TextOverflow.ellipsis,
+                                  fontSize: 16),
+                        ),
+                        trailing: (download != null &&
+                                download['progress'] < 100)
+                            ? CircularProgressIndicator(
+                                color:
+                                    isDarkTheme ? Colors.white : Colors.black,
+                                backgroundColor:
+                                    (isDarkTheme ? Colors.white : Colors.black)
+                                        .withOpacity(0.4),
+                                value: download['progress'] / 100,
+                              )
+                            : null,
                       ),
                     );
                   },
