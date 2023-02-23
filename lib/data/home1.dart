@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
+import 'package:vibe_music/Models/HomeModel.dart';
 
 Box box = Hive.box('settings');
 
@@ -82,43 +83,7 @@ class HomeApi {
         return element['itemSectionRenderer']['contents'][0]['shelfRenderer'];
       }).toList();
 
-      final List finalResult = shelfRenderer.map((element) {
-        if (element['title']['runs'][0]['text'].trim() !=
-            'Highlights from Global Citizen Live') {
-          return {
-            'title': element['title']['runs'][0]['text'],
-            'playlists': element['title']['runs'][0]['text'].trim() ==
-                        'Charts' ||
-                    element['title']['runs'][0]['text'].trim() == 'Classements'
-                ? formatChartItems(
-                    element['content']['horizontalListRenderer']['items']
-                        as List,
-                  )
-                : element['title']['runs'][0]['text']
-                            .toString()
-                            .contains('Music Videos') ||
-                        element['title']['runs'][0]['text']
-                            .toString()
-                            .contains('Nouveaux clips') ||
-                        element['title']['runs'][0]['text']
-                            .toString()
-                            .contains('En Musique Avec Moi') ||
-                        element['title']['runs'][0]['text']
-                            .toString()
-                            .contains('Performances Uniques')
-                    ? formatVideoItems(
-                        element['content']['horizontalListRenderer']['items']
-                            as List,
-                      )
-                    : formatItems(
-                        element['content']['horizontalListRenderer']['items']
-                            as List,
-                      ),
-          };
-        } else {
-          return null;
-        }
-      }).toList();
+      final List<HomeModel> finalResult = _finalResult(shelfRenderer);
 
       final List finalHeadResult = formatHeadItems(headResult);
       finalResult.removeWhere((element) => element == null);
@@ -128,6 +93,64 @@ class HomeApi {
       log('Error in getMusicHome: $e');
       return {};
     }
+  }
+
+  /*
+   * Gets the final list of playlists sorted by the name of each iterated item,
+   * this list contains the url of the video and playlists of each horizontal 
+   * column reflected in Youtube.
+   */
+  List<HomeModel> _finalResult(List shelfRenderer) {
+    var data = <HomeModel>[];
+
+    try {
+      for (var element in shelfRenderer) {
+        HomeModel homeModel = HomeModel(title: "", playlist: []);
+
+        if (element['title']['runs'][0]['text'].trim() !=
+            'Highlights from Global Citizen Live') {
+          homeModel.title = element['title']['runs'][0]['text'].toString();
+
+          if (element['content']['horizontalListRenderer']['items'][0]
+                      ['gridPlaylistRenderer'] !=
+                  null &&
+              element['content']['horizontalListRenderer']['items'][0]
+                          ['gridPlaylistRenderer']['shortBylineText']['runs'][0]
+                      ['text']
+                  .toString()
+                  .trim()
+                  .toLowerCase()
+                  .contains('chart')) {
+            //Lists YouTube Music Global Charts.
+            homeModel.playlist = formatChartItems(
+                element['content']['horizontalListRenderer']['items']);
+            data.add(homeModel);
+          }
+
+          if (element['content']['horizontalListRenderer']['items'][0]
+                  ['gridVideoRenderer'] !=
+              null) {
+            //The video playlist is added.
+            homeModel.playlist = formatVideoItems(
+                element['content']['horizontalListRenderer']['items']);
+            data.add(homeModel);
+          }
+
+          if (element['content']['horizontalListRenderer']['items'][0]
+                  ['compactStationRenderer'] !=
+              null) {
+            //Lists other than videos or video playlists are added.
+            homeModel.playlist = formatItems(
+                element['content']['horizontalListRenderer']['items']);
+            data.add(homeModel);
+          }
+        }
+      }
+    } catch (e) {
+      return <HomeModel>[];
+    }
+
+    return data;
   }
 
   List formatChartItems(List itemsList) {
