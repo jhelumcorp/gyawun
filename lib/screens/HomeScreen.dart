@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:vibe_music/Models/Artist.dart';
+import 'package:vibe_music/Models/HomeModel.dart';
 import 'package:vibe_music/Models/Thumbnail.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
@@ -36,15 +37,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin<HomeScreen> {
   List? head = [];
-  List? body = [];
+  List<HomeModel> body = [];
   List recommendations = [];
   bool isLoading = true;
-  PageController songsController = PageController(
-    viewportFraction: 0.9,
-  );
-  PageController recommendationsController = PageController(
-    viewportFraction: 0.9,
-  );
   @override
   void initState() {
     super.initState();
@@ -67,12 +62,6 @@ class _HomeScreenState extends State<HomeScreen>
       body = home['body'];
       recommendations = recommend;
       isLoading = false;
-      if (recommendationsController.hasClients) {
-        recommendationsController.jumpTo(0);
-      }
-      if (songsController.hasClients) {
-        songsController.jumpTo(0);
-      }
     });
   }
 
@@ -432,8 +421,10 @@ class _HomeScreenState extends State<HomeScreen>
                                                 ),
                                               ),
                                               ExpandablePageView(
-                                                controller:
-                                                    recommendationsController,
+                                                controller: PageController(
+                                                  initialPage: 0,
+                                                  viewportFraction: 0.9,
+                                                ),
                                                 padEnds: false,
                                                 children: [
                                                   Column(
@@ -527,9 +518,8 @@ class _HomeScreenState extends State<HomeScreen>
                                           ),
                                         if (body != null && body!.isNotEmpty)
                                           ...body!.map((item) {
-                                            String title = item['title'];
-                                            List content =
-                                                item['playlists'] as List;
+                                            String title = item.title;
+                                            List content = item.playlists;
                                             bool areSongs = content.isNotEmpty
                                                 ? content.first['videoId'] !=
                                                     null
@@ -572,7 +562,11 @@ class _HomeScreenState extends State<HomeScreen>
                                                         if (areSongs)
                                                           ExpandablePageView(
                                                             controller:
-                                                                songsController,
+                                                                PageController(
+                                                              initialPage: 0,
+                                                              viewportFraction:
+                                                                  0.9,
+                                                            ),
                                                             padEnds: false,
                                                             children: [
                                                               Column(
