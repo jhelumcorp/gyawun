@@ -40,12 +40,6 @@ class _HomeScreenState extends State<HomeScreen>
   List<HomeModel> body = [];
   List recommendations = [];
   bool isLoading = true;
-  PageController songsController = PageController(
-    viewportFraction: 0.9,
-  );
-  PageController recommendationsController = PageController(
-    viewportFraction: 0.9,
-  );
   @override
   void initState() {
     super.initState();
@@ -68,12 +62,6 @@ class _HomeScreenState extends State<HomeScreen>
       body = home['body'];
       recommendations = recommend;
       isLoading = false;
-      if (recommendationsController.hasClients) {
-        recommendationsController.jumpTo(0);
-      }
-      if (songsController.hasClients) {
-        songsController.jumpTo(0);
-      }
     });
   }
 
@@ -433,8 +421,10 @@ class _HomeScreenState extends State<HomeScreen>
                                                 ),
                                               ),
                                               ExpandablePageView(
-                                                controller:
-                                                    recommendationsController,
+                                                controller: PageController(
+                                                  initialPage: 0,
+                                                  viewportFraction: 0.9,
+                                                ),
                                                 padEnds: false,
                                                 children: [
                                                   Column(
@@ -572,7 +562,11 @@ class _HomeScreenState extends State<HomeScreen>
                                                         if (areSongs)
                                                           ExpandablePageView(
                                                             controller:
-                                                                songsController,
+                                                                PageController(
+                                                              initialPage: 0,
+                                                              viewportFraction:
+                                                                  0.9,
+                                                            ),
                                                             padEnds: false,
                                                             children: [
                                                               Column(
