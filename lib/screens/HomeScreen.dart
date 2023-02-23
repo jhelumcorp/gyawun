@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:vibe_music/Models/Artist.dart';
+import 'package:vibe_music/Models/HomeModel.dart';
 import 'package:vibe_music/Models/Thumbnail.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/data/home1.dart';
@@ -36,7 +37,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin<HomeScreen> {
   List? head = [];
-  List? body = [];
+  List<HomeModel> body = [];
   List recommendations = [];
   bool isLoading = true;
   PageController songsController = PageController(
@@ -527,9 +528,8 @@ class _HomeScreenState extends State<HomeScreen>
                                           ),
                                         if (body != null && body!.isNotEmpty)
                                           ...body!.map((item) {
-                                            String title = item['title'];
-                                            List content =
-                                                item['playlists'] as List;
+                                            String title = item.title;
+                                            List content = item.playlists;
                                             bool areSongs = content.isNotEmpty
                                                 ? content.first['videoId'] !=
                                                     null
