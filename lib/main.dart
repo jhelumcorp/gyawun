@@ -38,8 +38,6 @@ void main() async {
     ChangeNotifierProvider(create: (_) => SearchProvider()),
     ChangeNotifierProvider(create: (_) => DownloadManager()),
   ], child: const MyApp()));
-
-  DownloadManager().requestPermission();
 }
 
 class MyApp extends StatelessWidget {

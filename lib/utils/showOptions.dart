@@ -6,11 +6,13 @@ import 'package:share_plus/share_plus.dart';
 import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/providers/TD.dart';
 import 'package:vibe_music/utils/file.dart';
 
 import '../providers/DownloadProvider.dart';
 
 showOptions(Track song, context) {
+  bool darkTheme = Theme.of(context).brightness == Brightness.dark;
   showCupertinoModalPopup(
       context: context,
       builder: (context) {
@@ -126,23 +128,33 @@ showOptions(Track song, context) {
                 ValueListenableBuilder(
                   valueListenable: Hive.box('downloads').listenable(),
                   builder: (context, Box box, child) {
+                    ChunkedDownloader? dl = context
+                        .watch<DownloadManager>()
+                        .getManager(song.videoId);
+                    Map? item =
+                        context.watch<DownloadManager>().getSong(song.videoId);
                     Map? download = box.get(song.videoId);
                     return Material(
                       child: ListTile(
                         onTap: () {
-                          if (download == null) {
-                            context.read<DownloadManager>().download(song);
-                          } else if (download['progress'] == 100) {
+                          if (download != null) {
                             deleteFile(song.videoId);
+                          } else if (dl == null) {
+                            context.read<DownloadManager>().download(song);
+                          } else {
+                            if (dl.paused) {
+                              dl.resume();
+                            } else {
+                              dl.pause();
+                            }
                           }
-                          Navigator.pop(context);
                         },
                         title: Text(
-                          download == null
-                              ? "Download"
-                              : (download['progress'] < 100
-                                  ? "Downloading"
-                                  : "Delete"),
+                          download != null
+                              ? "Delete"
+                              : (dl == null
+                                  ? "Download"
+                                  : (dl.paused ? "Resume" : "Pause")),
                           style: Theme.of(context)
                               .primaryTextTheme
                               .titleMedium
@@ -150,17 +162,40 @@ showOptions(Track song, context) {
                                   overflow: TextOverflow.ellipsis,
                                   fontSize: 16),
                         ),
-                        trailing: (download != null &&
-                                download['progress'] < 100)
-                            ? CircularProgressIndicator(
-                                color:
-                                    isDarkTheme ? Colors.white : Colors.black,
-                                backgroundColor:
-                                    (isDarkTheme ? Colors.white : Colors.black)
-                                        .withOpacity(0.4),
-                                value: download['progress'] / 100,
+                        trailing: download != null
+                            ? Icon(
+                                Icons.delete,
+                                color: darkTheme ? Colors.white : Colors.black,
                               )
-                            : null,
+                            : (item == null
+                                ? null
+                                : Stack(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Icon(
+                                          dl != null && dl.paused
+                                              ? Icons.play_arrow
+                                              : Icons.pause,
+                                          color: darkTheme
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                      CircularProgressIndicator(
+                                        value: item['progress'] != null
+                                            ? (item['progress'] / 100)
+                                            : null,
+                                        color: darkTheme
+                                            ? Colors.white
+                                            : Colors.black,
+                                        backgroundColor: (darkTheme
+                                                ? Colors.white
+                                                : Colors.black)
+                                            .withOpacity(0.4),
+                                      )
+                                    ],
+                                  )),
                       ),
                     );
                   },

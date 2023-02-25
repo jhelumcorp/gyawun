@@ -131,6 +131,7 @@ class _MainScreenState extends State<MainScreen> {
               );
             }),
             bottomNavigationBar: NavigationBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               height: 60,
               destinations: [
                 NavigationDestination(

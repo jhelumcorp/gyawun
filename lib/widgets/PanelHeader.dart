@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -82,19 +84,26 @@ class PanelHeader extends StatelessWidget {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(2),
-                          child: Image.network(
-                            song.thumbnails.first.url,
-                            width: 54,
-                            height: 54,
-                            fit: BoxFit.fill,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                "assets/images/song.png",
-                                width: 50,
-                                fit: BoxFit.fill,
-                              );
-                            },
-                          ),
+                          child: song.art != null
+                              ? Image.file(
+                                  File(song.art!),
+                                  width: 54,
+                                  height: 54,
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.network(
+                                  song.thumbnails.first.url,
+                                  width: 54,
+                                  height: 54,
+                                  fit: BoxFit.fill,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      "assets/images/song.png",
+                                      width: 50,
+                                      fit: BoxFit.fill,
+                                    );
+                                  },
+                                ),
                         ),
                         const SizedBox(width: 8),
                         Expanded(

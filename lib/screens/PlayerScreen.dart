@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -8,6 +10,7 @@ import 'package:vibe_music/Models/Track.dart';
 import 'package:vibe_music/generated/l10n.dart';
 import 'package:vibe_music/providers/DownloadProvider.dart';
 import 'package:vibe_music/providers/MusicPlayer.dart';
+import 'package:vibe_music/providers/TD.dart';
 import 'package:vibe_music/utils/file.dart';
 import 'package:vibe_music/widgets/MusicSlider.dart';
 
@@ -29,6 +32,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   Widget build(BuildContext context) {
     Track? song = context.watch<MusicPlayer>().song;
+    Map? item =
+        song?.videoId != null ? Hive.box('downloads').get(song!.videoId) : null;
     AudioPlayer player = context.watch<MusicPlayer>().player;
     Size size = MediaQuery.of(context).size;
 
@@ -58,16 +63,19 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     const EdgeInsets.symmetric(horizontal: 32),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5),
-                                  child: Image.network(
-                                    'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Image.asset(
-                                        "assets/images/song.png",
-                                        fit: BoxFit.contain,
-                                      );
-                                    },
-                                    fit: BoxFit.contain,
-                                  ),
+                                  child: item != null && item['art'] != null
+                                      ? Image.file(File(item['art']))
+                                      : Image.network(
+                                          'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}',
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Image.asset(
+                                              "assets/images/song.png",
+                                              fit: BoxFit.contain,
+                                            );
+                                          },
+                                          fit: BoxFit.contain,
+                                        ),
                                 ),
                               ),
                             ),
@@ -371,6 +379,12 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 builder: (context, Box box, child) {
                                   Map? item = box.get(song.videoId);
                                   double val = item?['progress'] ?? 0.00;
+                                  Map? downloading = context
+                                      .watch<DownloadManager>()
+                                      .getSong(song.videoId);
+                                  ChunkedDownloader? dl = context
+                                      .watch<DownloadManager>()
+                                      .getManager(song.videoId);
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 32),
@@ -395,45 +409,77 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                                 : Colors.black,
                                           ),
                                         ),
-                                        item == null
-                                            ? IconButton(
-                                                onPressed: () {
-                                                  context
-                                                      .read<DownloadManager>()
-                                                      .download(song);
-                                                },
-                                                icon: Icon(
-                                                    Icons.download_rounded,
-                                                    size: 32,
-                                                    color: isDarkTheme
-                                                        ? Colors.white
-                                                        : Colors.black),
-                                              )
-                                            : item['status'] == 'done'
+                                        item != null
+                                            ? Icon(Icons.download_done_rounded,
+                                                size: 32,
+                                                color: isDarkTheme
+                                                    ? Colors.white
+                                                    : Colors.black)
+                                            : (downloading != null
                                                 ? IconButton(
-                                                    onPressed: () async {
-                                                      await deleteFile(
-                                                          song.videoId);
+                                                    onPressed: () {
+                                                      if (dl?.paused != null) {
+                                                        dl!.paused
+                                                            ? dl.resume()
+                                                            : dl.pause();
+                                                      }
+                                                    },
+                                                    icon: Stack(
+                                                      children: [
+                                                        CircularProgressIndicator(
+                                                          value: downloading[
+                                                                      'progress'] !=
+                                                                  null
+                                                              ? (downloading[
+                                                                      'progress'] /
+                                                                  100)
+                                                              : null,
+                                                          color: isDarkTheme
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                          backgroundColor:
+                                                              (isDarkTheme
+                                                                      ? Colors
+                                                                          .white
+                                                                      : Colors
+                                                                          .black)
+                                                                  .withOpacity(
+                                                                      0.4),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(6.0),
+                                                          child: Icon(
+                                                            dl?.paused !=
+                                                                        null &&
+                                                                    dl!.paused
+                                                                ? Icons
+                                                                    .play_arrow_rounded
+                                                                : Icons
+                                                                    .pause_rounded,
+                                                            color: isDarkTheme
+                                                                ? Colors.white
+                                                                : Colors.black,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  )
+                                                : IconButton(
+                                                    onPressed: () {
+                                                      context
+                                                          .read<
+                                                              DownloadManager>()
+                                                          .download(song);
                                                     },
                                                     icon: Icon(
-                                                        Icons
-                                                            .download_done_rounded,
+                                                        Icons.download_rounded,
                                                         size: 32,
                                                         color: isDarkTheme
                                                             ? Colors.white
                                                             : Colors.black),
-                                                  )
-                                                : CircularProgressIndicator(
-                                                    value: val / 100,
-                                                    color: isDarkTheme
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                    backgroundColor:
-                                                        (isDarkTheme
-                                                                ? Colors.white
-                                                                : Colors.black)
-                                                            .withOpacity(0.4),
-                                                  )
+                                                  ))
                                       ],
                                     ),
                                   );
@@ -524,18 +570,25 @@ class QueueScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(5),
                             child: Stack(
                               children: [
-                                Image.network(
-                                  song.thumbnails.first.url,
-                                  width: 50,
-                                  height: 50,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Image.asset(
-                                    "assets/images/song.png",
-                                    width: 50,
-                                    fit: BoxFit.fill,
-                                    height: 50,
-                                  ),
-                                ),
+                                song.art != null
+                                    ? Image.file(
+                                        File(song.art!),
+                                        width: 50,
+                                        height: 50,
+                                      )
+                                    : Image.network(
+                                        song.thumbnails.first.url,
+                                        width: 50,
+                                        height: 50,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                Image.asset(
+                                          "assets/images/song.png",
+                                          width: 50,
+                                          fit: BoxFit.fill,
+                                          height: 50,
+                                        ),
+                                      ),
                                 if (player.currentIndex == index)
                                   Container(
                                     color: Colors.black.withOpacity(0.7),

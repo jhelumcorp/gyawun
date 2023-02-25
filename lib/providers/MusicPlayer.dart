@@ -213,8 +213,9 @@ class MusicPlayer extends ChangeNotifier {
     _cancelController.sink.add(true);
     _cancelController = StreamController<bool>();
     try {
-      PaletteGenerator? color =
-          await generateColor(newSong.thumbnails.last.url);
+      PaletteGenerator? color = newSong.art != null
+          ? await generateColor(newSong.art, local: true)
+          : await generateColor(newSong.thumbnails.last.url);
       newSong.colorPalette = ColorPalette(
           darkMutedColor: color?.darkMutedColor?.color,
           lightMutedColor: color?.lightMutedColor?.color);
@@ -235,8 +236,9 @@ class MusicPlayer extends ChangeNotifier {
         tag: MediaItem(
           id: newSong.videoId,
           title: newSong.title,
-          artUri: Uri.parse(
-              'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${newSong.videoId}'),
+          artUri: newSong.art != null
+              ? File(newSong.art!).uri
+              : Uri.parse(newSong.thumbnails.last.url),
           artist: newSong.artists.isNotEmpty
               ? newSong.artists.map((e) => e.name).join(', ')
               : null,
@@ -296,9 +298,9 @@ class MusicPlayer extends ChangeNotifier {
     _cancelController = StreamController<bool>();
     try {
       bool connectivity = await isConnectivity();
-      PaletteGenerator? color = connectivity
-          ? await generateColor(newSong.thumbnails.last.url)
-          : null;
+      PaletteGenerator? color = newSong.art != null
+          ? await generateColor(newSong.art, local: true)
+          : await generateColor(newSong.thumbnails.last.url);
       newSong.colorPalette = ColorPalette(
           darkMutedColor: color?.darkMutedColor?.color,
           lightMutedColor: color?.lightMutedColor?.color);
@@ -319,7 +321,9 @@ class MusicPlayer extends ChangeNotifier {
         tag: MediaItem(
           id: newSong.videoId,
           title: newSong.title,
-          artUri: connectivity ? Uri.parse(newSong.thumbnails.last.url) : null,
+          artUri: newSong.art != null
+              ? File(newSong.art!).uri
+              : Uri.parse(newSong.thumbnails.last.url),
           artist:
               newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
           album: newSong.albums?.name,
@@ -345,9 +349,9 @@ class MusicPlayer extends ChangeNotifier {
     _cancelController = StreamController<bool>();
     tempSong = Track.fromMap(newSongs[0]);
     Track newSong = Track.fromMap(newSongs[0]);
-    bool connectivity = await isConnectivity();
-    PaletteGenerator? color =
-        connectivity ? await generateColor(newSong.thumbnails.last.url) : null;
+    PaletteGenerator? color = newSong.art != null
+        ? await generateColor(newSong.art, local: true)
+        : await generateColor(newSong.thumbnails.last.url);
     newSong.colorPalette = ColorPalette(
         darkMutedColor: color?.darkMutedColor?.color,
         lightMutedColor: color?.lightMutedColor?.color);
@@ -366,7 +370,9 @@ class MusicPlayer extends ChangeNotifier {
       tag: MediaItem(
         id: newSong.videoId,
         title: newSong.title,
-        artUri: connectivity ? Uri.parse(newSong.thumbnails.last.url) : null,
+        artUri: newSong.art != null
+            ? File(newSong.art!).uri
+            : Uri.parse(newSong.thumbnails.last.url),
         artist: newSong.artists.isNotEmpty ? newSong.artists.first.name : null,
         album: newSong.albums?.name,
         extras: newSong.toMap(),

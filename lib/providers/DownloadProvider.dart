@@ -1,67 +1,101 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:file_support/file_support.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vibe_music/providers/TD.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import '../Models/Track.dart';
+import 'package:http/http.dart';
 
 class DownloadManager extends ChangeNotifier {
   Map items = {};
+  Map<String, ChunkedDownloader> managers = {};
   String path = "/storage/emulated/0/Music/";
 
   getSong(videoId) => items[videoId];
+  ChunkedDownloader? getManager(videoId) => managers[videoId];
+  get getSongs => items.values.toList();
 
   Future<bool> requestPermission() async {
-    bool status = await requestStoragePermission();
-    bool manage = await requestManagePermission();
-    return status && manage;
-  }
+    PermissionStatus status = await Permission.storage.status;
+    if (status.isGranted) {
+      return true;
+    }
+    if (status.isDenied) {
+      await [
+        Permission.storage,
+      ].request();
+    }
+    status = await Permission.storage.status;
+    if (status.isGranted) {
+      return true;
+    }
+    log('Request permanently denied');
+    await openAppSettings();
+    status = await Permission.storage.status;
 
-  Future<bool> requestStoragePermission() async {
-    Permission status = Permission.storage;
-    if (await status.isGranted) {
-      return true;
-    }
-    PermissionStatus permissionStatus = await status.request();
-    if (permissionStatus.isGranted) {
-      return true;
-    }
-    return false;
-  }
-
-  Future<bool> requestManagePermission() async {
-    Permission status = Permission.manageExternalStorage;
-    if (await status.isGranted) {
-      return true;
-    }
-    PermissionStatus permissionStatus = await status.request();
-    if (permissionStatus.isGranted) {
-      return true;
-    }
-    return false;
+    return Permission.storage.status.isGranted;
   }
 
   download(Track song) async {
-    bool permission = await requestPermission();
-    if (permission == false) {
-      return false;
+    items[song.videoId] = {
+      ...song.toMap(),
+      'progress': null,
+      'status': 'starting'
+    };
+    notifyListeners();
+    bool isGranted = await requestPermission();
+    if (!isGranted) {
+      items.remove(song.videoId);
+      notifyListeners();
+      return;
+    }
+    String appPath = (await getApplicationSupportDirectory()).path;
+
+    String filePath = '$path${song.title}.mp3';
+    String artPath = '$appPath/${song.title}.jpg';
+    Box box = Hive.box('downloads');
+
+    Map stream = await getAudioUri(song.videoId) ?? {};
+    String? url = stream['url'];
+    if (url == null) {
+      items.remove(song.videoId);
+      return;
+    }
+    try {
+      await File(filePath)
+          .create(recursive: true)
+          .then((value) => filePath = value.path);
+      await File(artPath)
+          .create(recursive: true)
+          .then((value) => artPath = value.path);
+    } catch (e) {
+      log(e.toString());
+      await [
+        Permission.manageExternalStorage,
+      ].request();
+      await File(filePath)
+          .create(recursive: true)
+          .then((value) => filePath = value.path);
+      await File(artPath)
+          .create(recursive: true)
+          .then((value) => artPath = value.path);
     }
 
-    Box box = Hive.box('downloads');
-    box.put(song.videoId,
-        {...song.toMap(), 'progress': 0.00, 'status': 'starting'});
-    Map stream = await getAudioUri(song.videoId) ?? {};
-    String url = stream['url'];
-
-    await ChunkedDownloader(
+    managers[song.videoId] = await ChunkedDownloader(
       url: url,
       path: path,
       title: song.title,
       extension: 'mp3',
       chunkSize: 1024 * 64,
-      onError: (error) {
+      onError: (error) async {
         log(error.toString());
+        await File(filePath).delete();
+        await File(artPath).delete();
+        items.remove(song.videoId);
+        managers.remove(song.videoId);
       },
       onProgress: (received, total, speed) {
         double p0 = (received / total) * 100;
@@ -69,22 +103,54 @@ class DownloadManager extends ChangeNotifier {
         if (p0 == 100) {
           status = 'done';
         }
-        box.put(
-          song.videoId,
-          {...song.toMap(), 'progress': p0, 'status': status},
-        );
+        items[song.videoId] = {
+          ...song.toMap(),
+          'progress': p0,
+          'status': status
+        };
+        notifyListeners();
       },
       onDone: (file) async {
+        Response res = await get(Uri.parse(
+            'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}'));
+        await File(artPath).writeAsBytes(res.bodyBytes);
         if (file != null) {
           box.put(
             song.videoId,
             {
               ...song.toMap(),
-              'progress': 100.00,
-              'status': 'done',
-              'path': file.path
+              'path': file.path,
+              'art': artPath,
+              'timestamp': DateTime.now().millisecondsSinceEpoch
             },
           );
+          items.remove(song.videoId);
+          managers.remove(song.videoId);
+          notifyListeners();
+        }
+      },
+      onPause: () {
+        notifyListeners();
+      },
+      onResume: () {
+        notifyListeners();
+      },
+      onCancel: () async {
+        if (items[song.videoId] != null) {
+          items.remove(song.videoId);
+        }
+        if (managers[song.videoId] != null) {
+          managers.remove(song.videoId);
+        }
+        try {
+          await File(artPath).delete();
+        } catch (err) {
+          log(err.toString());
+        }
+        try {
+          await File(filePath).delete();
+        } catch (err) {
+          log(err.toString());
         }
       },
     ).start();
@@ -98,7 +164,6 @@ class DownloadManager extends ChangeNotifier {
       YoutubeExplode _youtubeExplode = YoutubeExplode();
       final StreamManifest manifest =
           await _youtubeExplode.videos.streamsClient.getManifest(videoId);
-
       List<AudioStreamInfo> audios = manifest.audioOnly.sortByBitrate();
 
       int audioNumber = audioQuality == 'low'

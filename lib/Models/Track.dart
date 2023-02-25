@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
-// import 'package:palette_generator/palette_generator.dart';
 
 import 'package:vibe_music/Models/Album.dart';
 import 'package:vibe_music/Models/Artist.dart';
@@ -15,6 +14,8 @@ class Track {
   List<Thumbnail> thumbnails;
   List<Artist> artists;
   Album? albums;
+  String? path;
+  String? art;
   ColorPalette? colorPalette;
   Track({
     required this.title,
@@ -22,6 +23,8 @@ class Track {
     required this.thumbnails,
     required this.artists,
     this.albums,
+    this.path,
+    this.art,
     this.colorPalette,
   });
 
@@ -31,6 +34,8 @@ class Track {
     List<Thumbnail>? thumbnails,
     List<Artist>? artists,
     Album? albums,
+    String? path,
+    String? art,
     ColorPalette? colorPalette,
   }) {
     return Track(
@@ -39,6 +44,8 @@ class Track {
       thumbnails: thumbnails ?? this.thumbnails,
       artists: artists ?? this.artists,
       albums: albums ?? this.albums,
+      path: path ?? this.path,
+      art: art ?? this.art,
       colorPalette: colorPalette ?? this.colorPalette,
     );
   }
@@ -50,6 +57,8 @@ class Track {
       'thumbnails': thumbnails.map((x) => x.toMap()).toList(),
       'artists': artists.map((x) => x.toMap()).toList(),
       'albums': albums?.toMap(),
+      'path': path,
+      'art': art,
       'colorPalette': colorPalette?.toMap(),
     };
   }
@@ -72,6 +81,8 @@ class Track {
           ? Album.fromMap(map['albums'] as Map<String, dynamic>)
           : null,
       colorPalette: ColorPalette.fromMap(map['colorPalette'] ?? {}),
+      path: map['path'] != null ? map['path'] as String : null,
+      art: map['art'] != null ? map['art'] as String : null,
     );
   }
 
@@ -82,7 +93,7 @@ class Track {
 
   @override
   String toString() {
-    return 'Track(title: $title, videoId: $videoId, thumbnails: $thumbnails, artists: $artists, albums: $albums, colorPalette: $colorPalette)';
+    return 'Track(title: $title, videoId: $videoId, thumbnails: $thumbnails, artists: $artists, albums: $albums, path: $path, art: $art, colorPalette: $colorPalette)';
   }
 
   @override
@@ -94,6 +105,8 @@ class Track {
         listEquals(other.thumbnails, thumbnails) &&
         listEquals(other.artists, artists) &&
         other.albums == albums &&
+        other.path == path &&
+        other.art == art &&
         other.colorPalette == colorPalette;
   }
 
@@ -104,6 +117,8 @@ class Track {
         thumbnails.hashCode ^
         artists.hashCode ^
         albums.hashCode ^
+        path.hashCode ^
+        art.hashCode ^
         colorPalette.hashCode;
   }
 }
