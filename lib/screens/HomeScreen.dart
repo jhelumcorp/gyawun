@@ -516,8 +516,8 @@ class _HomeScreenState extends State<HomeScreen>
                                               ),
                                             ],
                                           ),
-                                        if (body != null && body!.isNotEmpty)
-                                          ...body!.map((item) {
+                                        if (body != null && body.isNotEmpty)
+                                          ...body.map((item) {
                                             String title = item.title;
                                             List content = item.playlists;
                                             bool areSongs = content.isNotEmpty
