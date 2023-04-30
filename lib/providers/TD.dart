@@ -87,7 +87,7 @@ class ChunkedDownloader {
       var response = httpClient.send(request);
 
       // Open file
-      File file = File('$path/$title.$extension');
+      File file = File('$path$title.$extension');
 
       stream = response.asStream().listen(null);
       stream?.onData((http.StreamedResponse r) async {

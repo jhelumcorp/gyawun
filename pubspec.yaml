@@ -1,7 +1,7 @@
 name: vibe_music
 description: A new Flutter project.
 publish_to: 'none' 
-version: 0.9.1+10
+version: 0.9.2+11
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
@@ -36,7 +36,7 @@ dependencies:
   package_info_plus: ^3.0.3
   flutter_swipe_action_cell: ^3.1.0
   connectivity_plus: ^3.0.3
-  audiotagger: ^2.2.1
+  device_info_plus: ^8.1.0
 
 
 dev_dependencies:

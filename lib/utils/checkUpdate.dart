@@ -14,12 +14,16 @@ Future<Map> checkUpdate() async {
   if (!connectivity) {
     return {'isUpdate': false, 'url': ''};
   }
+
   Response res = await get(Uri.parse(
       "https://raw.githubusercontent.com/sheikhhaziq/vibemusic/main/lib/utils/app.json"));
+
   Map data = jsonDecode(res.body);
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String type = packageInfo.packageName.contains('beta') ? 'beta' : 'stable';
+
   int version = int.parse(packageInfo.buildNumber);
+
   Map details = data[type];
 
   bool isUpdate = details['id'] > version;

@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_support/file_support.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vibe_music/providers/TD.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -20,23 +23,30 @@ class DownloadManager extends ChangeNotifier {
 
   Future<bool> requestPermission() async {
     PermissionStatus status = await Permission.storage.status;
-    if (status.isGranted) {
-      return true;
-    }
     if (status.isDenied) {
-      await [
-        Permission.storage,
-      ].request();
-    }
-    status = await Permission.storage.status;
-    if (status.isGranted) {
-      return true;
-    }
-    log('Request permanently denied');
-    await openAppSettings();
-    status = await Permission.storage.status;
+      log('Request denied');
 
-    return Permission.storage.status.isGranted;
+      await Permission.storage.request();
+    }
+    status = await Permission.storage.status;
+    if (status.isDenied) {
+      await Permission.manageExternalStorage.request();
+    }
+    status = await Permission.manageExternalStorage.status;
+
+    if (status.isPermanentlyDenied) {
+      log('Request permanently denied');
+      await openAppSettings();
+    }
+    bool manage = await Permission.manageExternalStorage.status.isGranted;
+    bool storage = await Permission.storage.status.isGranted;
+    return storage || manage;
+  }
+
+  isAndroidT() async {
+    DeviceInfoPlugin dip = DeviceInfoPlugin();
+    AndroidDeviceInfo info = await dip.androidInfo;
+    return info.version.sdkInt >= 33;
   }
 
   download(Track song) async {
@@ -54,11 +64,15 @@ class DownloadManager extends ChangeNotifier {
     }
     String appPath = (await getApplicationSupportDirectory()).path;
 
-    String filePath = '$path${song.title}.mp3';
+    Map stream = await getAudioUri(song.videoId) ?? {};
+    final RegExp avoid = RegExp(r'[\.\\\*\:\"\?#/;\|]');
+    String filePath =
+        '$path${song.title.replaceAll(avoid, "")}.${stream['extension']}';
     String artPath = '$appPath/${song.title}.jpg';
     Box box = Hive.box('downloads');
 
-    Map stream = await getAudioUri(song.videoId) ?? {};
+    // items.remove(song.videoId);
+    // return;
     String? url = stream['url'];
     if (url == null) {
       items.remove(song.videoId);
@@ -87,8 +101,8 @@ class DownloadManager extends ChangeNotifier {
     managers[song.videoId] = await ChunkedDownloader(
       url: url,
       path: path,
-      title: song.title,
-      extension: 'mp3',
+      title: song.title.replaceAll(avoid, ""),
+      extension: stream['extension'],
       chunkSize: 1024 * 64,
       onError: (error) async {
         log(error.toString());
@@ -114,6 +128,7 @@ class DownloadManager extends ChangeNotifier {
         Response res = await get(Uri.parse(
             'https://vibeapi-sheikh-haziq.vercel.app/thumb/hd?id=${song.videoId}'));
         await File(artPath).writeAsBytes(res.bodyBytes);
+
         if (file != null) {
           box.put(
             song.videoId,
@@ -157,26 +172,35 @@ class DownloadManager extends ChangeNotifier {
   }
 
   static Future<Map?> getAudioUri(String videoId) async {
-    Box box = Hive.box('settings');
-    String audioQuality = box.get("audioQuality", defaultValue: 'medium');
+    // Box box = Hive.box('settings');
+    // String audioQuality = box.get("audioQuality", defaultValue: 'medium');
     String audioUrl = '';
     try {
-      YoutubeExplode _youtubeExplode = YoutubeExplode();
+      YoutubeExplode youtubeExplode = YoutubeExplode();
       final StreamManifest manifest =
-          await _youtubeExplode.videos.streamsClient.getManifest(videoId);
-      List<AudioStreamInfo> audios = manifest.audioOnly.sortByBitrate();
+          await youtubeExplode.videos.streamsClient.getManifest(videoId);
 
-      int audioNumber = audioQuality == 'low'
-          ? 0
-          : (audioQuality == 'high'
-              ? audios.length - 1
-              : (audios.length / 2).floor());
-      var item = audios[audioNumber];
-
-      audioUrl = audios[audioNumber].url.toString();
-      String extension = item.container.name;
+      audioUrl = manifest.audioOnly
+          .where((element) => element.audioCodec.contains('opus'))
+          .toList()
+          .sortByBitrate()[0]
+          .url
+          .toString();
+      String extension = 'mp3';
 
       return {'url': audioUrl, 'extension': extension};
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Map?> getNewUrl(id) async {
+    try {
+      Response res = await get(
+          Uri.parse("https://api.mrmonterrosa.site/ytdown/v1/?id=$id"));
+      Map body = jsonDecode(res.body);
+      String url = body['data']?['formats']?['mp3']?[0]?['url'];
+      return {'url': url, 'extension': 'mp3'};
     } catch (e) {
       return null;
     }
