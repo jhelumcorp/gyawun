@@ -1,108 +1,80 @@
-import 'dart:io';
-
+import 'package:al_downloader/al_downloader.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:get_it/get_it.dart';
+import 'package:gyavun/providers/audio_handler.dart';
+import 'package:gyavun/providers/media_manager.dart';
+import 'package:gyavun/providers/theme_manager.dart';
+import 'package:gyavun/ui/themes/dark.dart';
+import 'package:gyavun/ui/themes/light.dart';
+import 'package:gyavun/utils/router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:just_audio_background/just_audio_background.dart';
+import 'package:metadata_god/metadata_god.dart';
+
 import 'package:provider/provider.dart';
-import 'package:vibe_music/Models/Track.dart';
-import 'package:vibe_music/data/home1.dart';
-import 'package:vibe_music/providers/DownloadProvider.dart';
-import 'package:vibe_music/providers/MusicPlayer.dart';
-import 'package:vibe_music/providers/SearchProvider.dart';
-import 'package:vibe_music/providers/ThemeProvider.dart';
-import 'package:vibe_music/screens/MainScreen.dart';
-import 'package:vibe_music/utils/navigator.dart';
-import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isAndroid) {
-    await JustAudioBackground.init(
-      androidNotificationChannelId: 'com.ryanhzeise.bg_demo.channel.audio',
-      androidNotificationChannelName: 'Audio playback',
-      androidNotificationOngoing: true,
-    );
-  }
+  MetadataGod.initialize();
+  ALDownloader.initialize();
   await Hive.initFlutter();
-  await Hive.openBox('myfavourites');
   await Hive.openBox('settings');
-  await Hive.openBox('search_history');
-  await Hive.openBox('song_history');
   await Hive.openBox('downloads');
-  await HomeApi.setCountry();
+  await Hive.openBox('favorites');
+  await Hive.openBox('songHistory');
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => MusicPlayer()),
-    ChangeNotifierProvider(create: (_) => SearchProvider()),
-    ChangeNotifierProvider(create: (_) => DownloadManager()),
-  ], child: const MyApp()));
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.edgeToEdge,
+    overlays: [SystemUiOverlay.top],
+  );
+  await FlutterDisplayMode.setHighRefreshRate();
+
+  GetIt.I.registerSingleton<AudioHandler>(await initAudioService());
+  MediaManager mediaManager = MediaManager();
+  ThemeManager themeManager = ThemeManager();
+  GetIt.I.registerSingleton(mediaManager);
+  GetIt.I.registerSingleton(themeManager);
+
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => themeManager),
+      ChangeNotifierProvider(create: (context) => mediaManager),
+    ],
+    child: const MainApp(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatefulWidget {
+  const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    Track? song = context.watch<MusicPlayer>().song;
-
-    return DynamicColorBuilder(
-      builder: (lightDynamic, darkDynamic) {
-        return ValueListenableBuilder(
-          valueListenable: Hive.box('settings').listenable(),
-          builder: (context, Box box, child) {
-            String locale = box.get('language_code', defaultValue: 'en');
-
-            return MaterialApp(
-              navigatorKey: mainNavigatorKey,
-              debugShowCheckedModeBanner: false,
-              title: 'Vibe Music',
-              localizationsDelegates: const [
-                S.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: S.delegate.supportedLocales,
-              locale: Locale(locale),
-              theme: lightTheme(
-                  lightDynamic, box, song?.colorPalette?.darkMutedColor),
-              darkTheme: darkTheme(
-                  darkDynamic, box, song?.colorPalette?.lightMutedColor),
-              themeMode: box.get('theme', defaultValue: 'system') == 'dark'
-                  ? ThemeMode.dark
-                  : box.get('theme', defaultValue: 'system') == 'light'
-                      ? ThemeMode.light
-                      : ThemeMode.system,
-              home: const Directionality(
-                textDirection: TextDirection.ltr,
-                child: MainScreen(),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
+  State<MainApp> createState() => _MainAppState();
 }
 
-MaterialColor createMaterialColor(Color color) {
-  List strengths = <double>[.05];
-  Map<int, Color> swatch = {};
-  final int r = color.red, g = color.green, b = color.blue;
+class _MainAppState extends State<MainApp> {
+  @override
+  Widget build(BuildContext context) {
+    ThemeManager themeManager = context.watch<ThemeManager>();
 
-  for (int i = 1; i < 10; i++) {
-    strengths.add(0.1 * i);
+    return DynamicColorBuilder(builder: (lightScheme, darkScheme) {
+      return GestureDetector(
+        onTapDown: (details) => FocusManager.instance.primaryFocus?.unfocus(),
+        child: MaterialApp.router(
+          title: 'Gyavun',
+          theme: themeManager.isMaterialTheme && lightScheme != null
+              ? materialLightTheme(lightScheme.primary)
+              : themeManager.getLightTheme,
+          darkTheme: themeManager.isMaterialTheme && darkScheme != null
+              ? materialDarkTheme(darkScheme.primary)
+              : themeManager.getDarkTheme,
+          themeMode: themeManager.themeMode,
+          routerConfig: router,
+          debugShowCheckedModeBanner: false,
+        ),
+      );
+    });
   }
-  for (var strength in strengths) {
-    final double ds = 0.5 - strength;
-    swatch[(strength * 1000).round()] = Color.fromRGBO(
-      r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-      g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-      b + ((ds < 0 ? b : (255 - b)) * ds).round(),
-      1,
-    );
-  }
-  return MaterialColor(color.value, swatch);
 }

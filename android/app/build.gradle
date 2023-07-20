@@ -31,7 +31,8 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 android {
-    compileSdkVersion 33
+    namespace "com.webyte.gyavun"
+    compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -48,18 +49,16 @@ android {
     }
 
     defaultConfig {
-        multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.webyte.vibe_music.beta"
+        applicationId "com.webyte.gyavun"
         // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
+        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 19
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
-
     signingConfigs {
        release {
            keyAlias keystoreProperties['keyAlias']
@@ -68,11 +67,13 @@ android {
            storePassword keystoreProperties['storePassword']
        }
    }
-   buildTypes {
-       release {
-           signingConfig signingConfigs.release
-       }
-   }
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.release
+        }
+    }
 }
 
 flutter {
@@ -80,5 +81,5 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
