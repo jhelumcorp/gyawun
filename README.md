@@ -7,7 +7,15 @@
     <a href="https://github.com/sheikhhaziq/gyavun/commits"><img src="https://img.shields.io/github/commits-since/sheikhhaziq/gyavun/latest?style=flat" alt="Commits since latest release" /></a>
     <a href="https://github.com/sheikhhaziq/gyavun/commits"><img src="https://img.shields.io/github/commit-activity/m/sheikhhaziq/gyavun?color=g" alt="Commits per month" /></a>
     <a href="https://github.com/sheikhhaziq/gyavun/releases/latest"><img src="https://img.shields.io/github/release-date/sheikhhaziq/gyavun" alt="Last release" /></a>
+
+  
+  
+  <a href="https://t.me/gyavun"><img src="https://img.shields.io/badge/Join_us_on_Telegram-8a2be2" alt="Telergram" height="50"/></a>
+
+
     
+    
+
 
 </div>
 
