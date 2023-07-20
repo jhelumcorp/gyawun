@@ -451,7 +451,7 @@ class _NameAndControlsState extends State<NameAndControls> {
                   ],
                 ),
                 widget.song == null
-                    ? SizedBox()
+                    ? const SizedBox()
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -506,7 +506,7 @@ class _NameAndControlsState extends State<NameAndControls> {
             ),
           ),
           widget.song == null
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : SlidingUpPanel(
                   controller: widget.panelController,
                   color: Theme.of(context).scaffoldBackgroundColor,
