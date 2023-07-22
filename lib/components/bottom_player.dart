@@ -71,7 +71,7 @@ class BottomPlayer extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                               child: song.extras?['offline'] == true
                                   ? Image.file(
-                                      File(song.extras!['image']),
+                                      File.fromUri(song.artUri!),
                                       height: 50,
                                       width: 50,
                                       fit: BoxFit.fill,

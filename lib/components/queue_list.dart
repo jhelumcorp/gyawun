@@ -104,8 +104,15 @@ class QueueView extends StatelessWidget {
             child: Stack(
               children: [
                 songItem.extras?['offline'] == true
-                    ? Image.file(File.fromUri(songItem.artUri!),
-                        width: 50, height: 50, fit: BoxFit.fill)
+                    ? Image.file(
+                        File.fromUri(songItem.artUri!),
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.fill,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const SizedBox();
+                        },
+                      )
                     : CachedNetworkImage(
                         imageUrl: songItem.artUri.toString(),
                         width: 50,

@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:gyavun/api/extensions.dart';
 import 'package:gyavun/api/nav.dart';
+import 'package:gyavun/utils/downlod.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 
@@ -297,7 +299,11 @@ class YtMusicService {
           ]) as List;
           // Logger.root.info('Looping child elements of "$title"');
           int count = 0;
-          String type = '';
+          String type = (filter != null
+                  ? filter.substring(0, filter.length - 1)
+                  : subtitleList[0]['text'])
+              .toString()
+              .toLowerCase();
           String album = '';
           String artist = '';
           String views = '';
@@ -306,15 +312,58 @@ class YtMusicService {
           String year = '';
           String countSongs = '';
           String subscribers = '';
+          Map details = {
+            'title': title,
+            'image': images.first.toString().replaceAll(
+                'w60-h60', type == "artist" ? 'w400-h400' : 'w300-h300'),
+            'images': images,
+            'type': (filter != null
+                    ? filter.substring(0, filter.length - 1)
+                    : subtitleList[0]['text'])
+                .toString()
+                .toLowerCase(),
+            'artists': [],
+            'provider': 'youtube'
+          };
+          // pprint(subtitleList);
           for (final element in subtitleList) {
+            // pprint(element);
+            Map browseEndpoint = {
+              'type': element['navigationEndpoint']?['browseEndpoint']
+                      ?['browseEndpointContextSupportedConfigs']
+                  ?['browseEndpointContextMusicConfig']?['pageType'],
+              'id': element['navigationEndpoint']?['browseEndpoint']
+                  ?['browseId'],
+            };
+            if (browseEndpoint['type'] == 'MUSIC_PAGE_TYPE_ARTIST') {
+              details['artists'].add({
+                'name': element['text'],
+                'id': browseEndpoint['id'],
+              });
+            } else if (browseEndpoint['type'] == 'MUSIC_PAGE_TYPE_ALBUM') {
+              details['album'] = element['text'];
+              details['albumId'] = browseEndpoint['id'];
+            } else if (element['text'].toString().contains(':') &&
+                element['text'].toString().split(':')[0].isNumeric()) {
+              details['duration'] = element['text'];
+            } else if (element['text'].toString().contains('views')) {
+              details['views'] =
+                  element['text'].toString().replaceAll('views', '').trim();
+            } else if (element['text'].toString().length == 4 &&
+                element['text'].toString().isNumeric()) {
+              details['year'] = int.parse(element['text']);
+            } else if (element['text'].toString().contains('subscribers')) {
+              details['subscribers'] = element['text']
+                  .toString()
+                  .replaceAll('subscribers', '')
+                  .trim();
+            }
+
             // ignore: use_string_buffers
             subtitle += element['text'].toString();
             if (element['text'].trim() == '•') {
               count++;
             } else {
-              if (count == 0) {
-                type += element['text'].toString();
-              }
               if (count == 1) {
                 if (sectionTitle == 'Artists') {
                   subscribers += element['text'].toString();
@@ -343,34 +392,52 @@ class YtMusicService {
               }
             }
           }
-          final List idNav = (type == 'Song' || type == 'Video')
-              ? [
-                  'musicResponsiveListItemRenderer',
-                  'playlistItemData',
-                  'videoId'
-                ]
-              : [
-                  'musicResponsiveListItemRenderer',
-                  'navigationEndpoint',
-                  'browseEndpoint',
-                  'browseId'
-                ];
+
+          final List idNav =
+              (details['type'] == 'song' || details['type'] == 'video')
+                  ? [
+                      'musicResponsiveListItemRenderer',
+                      'playlistItemData',
+                      'videoId'
+                    ]
+                  : [
+                      'musicResponsiveListItemRenderer',
+                      'navigationEndpoint',
+                      'browseEndpoint',
+                      'browseId'
+                    ];
           final String id = nav(childItem, idNav).toString();
-          sectionSearchResults.add({
-            'id': id,
-            'type': type,
-            'title': title,
-            'artist': type == 'Artist' ? title : artist,
-            'album': album,
-            'duration': duration,
-            'views': views,
-            'year': year,
-            'countSongs': countSongs,
-            'subtitle': subtitle,
-            'image': images.first,
-            'images': images,
-            'subscribers': subscribers,
-          });
+          details['id'] = 'youtube$id';
+          details['subtitle'] = details['artists'].isNotEmpty
+              ? details['artists'].map((e) => e['name']).join(',')
+              : '';
+          details['artist'] = details['artists'].isNotEmpty
+              ? details['artists'].map((e) => e['name']).join(',')
+              : '';
+          details['subtitle'] = subtitle;
+          if (details['type'] == 'song' || details['type'] == 'video') {
+            details['url'] = await getSongUrl(id);
+          }
+
+          // pprint(details);
+          // pprint(childItem);
+          // sectionSearchResults.add({
+          //   'id': 'youtube$id',
+          //   'type': type,
+          //   'title': title,
+          //   'artist': type == 'Artist' ? title : artist,
+          //   'album': album,
+          //   'duration': duration,
+          //   'views': views,
+          //   'year': year,
+          //   'countSongs': countSongs,
+          //   'subtitle': subtitle,
+          //   'image': images.first,
+          //   'images': images,
+          //   'subscribers': subscribers,
+          //   'provider': 'youtube'
+          // });
+          sectionSearchResults.add(details);
         }
         if (sectionSearchResults.isNotEmpty) {
           searchResults.add({
@@ -613,7 +680,7 @@ class YtMusicService {
           }
         }
         songResults.add({
-          'id': id,
+          'id': 'youtube$id',
           'type': 'song',
           'title': title,
           'artist': artist,
@@ -624,12 +691,13 @@ class YtMusicService {
           'album': album,
           'duration': duration,
           'subtitle': subtitle,
-          'image': image,
+          'image': image.replaceAll('w60-h60', 'w300-h300'),
           'perma_url': 'https://www.youtube.com/watch?v=$id',
-          'url': 'https://www.youtube.com/watch?v=$id',
+          'url': await getSongUrl(id),
           'release_date': '',
           'album_id': '',
           'expire_at': '0',
+          'provider': 'youtube',
         });
       }
       return {
@@ -676,13 +744,13 @@ class YtMusicService {
           [];
       final List<Map> songResults = [];
       for (final item in finalResults) {
-        final String id = nav(item, mrlirPlaylistId).toString();
-        final String image = nav(item, [
+        final String? id = nav(item, mrlirPlaylistId);
+        final String? image = nav(item, [
           mRLIR,
           ...thumbnails,
           0,
           'url',
-        ]).toString();
+        ]);
         final String title = nav(item, [
           mRLIR,
           'flexColumns',
@@ -690,6 +758,7 @@ class YtMusicService {
           mRLIFCR,
           ...textRunText,
         ]).toString();
+
         final List subtitleList = nav(item, [
               mRLIR,
               'flexColumns',
@@ -708,6 +777,7 @@ class YtMusicService {
         year = '';
         for (final element in subtitleList) {
           // ignore: use_string_buffers
+          log('message');
           subtitle += element['text'].toString();
           if (element['text'].trim() == '•') {
             count++;
@@ -728,24 +798,27 @@ class YtMusicService {
             }
           }
         }
-        songResults.add({
-          'id': id,
-          'type': 'song',
-          'title': title,
-          'artist': artist,
-          'genre': 'YouTube',
-          'language': 'YouTube',
-          'year': year,
-          'album_artist': albumArtist,
-          'album': album,
-          'duration': duration,
-          'subtitle': subtitle,
-          'image': image,
-          'perma_url': 'https://www.youtube.com/watch?v=$id',
-          'url': 'https://www.youtube.com/watch?v=$id',
-          'release_date': '',
-          'album_id': '',
-        });
+        if (id != null) {
+          songResults.add({
+            'id': 'youtube$id',
+            'type': 'song',
+            'title': title,
+            'artist': artist,
+            'genre': 'YouTube',
+            'language': 'YouTube',
+            'year': year,
+            'album_artist': albumArtist,
+            'album': album,
+            'duration': duration,
+            'subtitle': subtitle,
+            'image': image ?? 'https://img.youtube.com/vi/$id/mqdefault.jpg',
+            'perma_url': 'https://www.youtube.com/watch?v=$id',
+            'url': await getSongUrl(id),
+            'release_date': '',
+            'album_id': '',
+            'provider': 'youtube'
+          });
+        }
       }
       return {
         'songs': songResults,
@@ -853,7 +926,7 @@ class YtMusicService {
           }
         }
         songResults.add({
-          'id': id,
+          'id': 'youtube$id',
           'type': 'song',
           'title': title,
           'artist': artist,
@@ -864,11 +937,12 @@ class YtMusicService {
           'album': album,
           'duration': duration,
           'subtitle': subtitle,
-          'image': image,
+          'image': image.replaceAll('w60-h60', 'w300-h300'),
           'perma_url': 'https://www.youtube.com/watch?v=$id',
-          'url': 'https://www.youtube.com/watch?v=$id',
+          'url': await getSongUrl(id),
           'release_date': '',
           'album_id': '',
+          'provider': 'youtube'
         });
       }
       return {
@@ -886,80 +960,126 @@ class YtMusicService {
     }
   }
 
-  // Future<List<String>> getWatchPlaylist({
-  //   String? videoId,
-  //   String? playlistId,
-  //   int limit = 25,
-  //   bool radio = false,
-  //   bool shuffle = false,
-  // }) async {
-  //   if (headers == null) {
-  //     await init();
-  //   }
-  //   try {
-  //     final body = Map.from(context!);
-  //     body['enablePersistentPlaylistPanel'] = true;
-  //     body['isAudioOnly'] = true;
-  //     body['tunerSettingValue'] = 'AUTOMIX_SETTING_NORMAL';
+  Future<List<Map>> getWatchPlaylist({
+    String? videoId,
+    String? playlistId,
+    int limit = 25,
+    bool radio = false,
+    bool shuffle = false,
+  }) async {
+    if (headers == null) {
+      await init();
+    }
+    try {
+      final body = Map.from(context!);
+      body['enablePersistentPlaylistPanel'] = true;
+      body['isAudioOnly'] = true;
+      body['tunerSettingValue'] = 'AUTOMIX_SETTING_NORMAL';
 
-  //     if (videoId == null && playlistId == null) {
-  //       return [];
-  //     }
-  //     if (videoId != null) {
-  //       body['videoId'] = videoId;
-  //       playlistId ??= 'RDAMVM$videoId';
-  //       if (!(radio || shuffle)) {
-  //         body['watchEndpointMusicSupportedConfigs'] = {
-  //           'watchEndpointMusicConfig': {
-  //             'hasPersistentPlaylistPanel': true,
-  //             'musicVideoType': 'MUSIC_VIDEO_TYPE_ATV;',
-  //           }
-  //         };
-  //       }
-  //     }
-  //     // bool is_playlist = false;
+      if (videoId == null && playlistId == null) {
+        return [];
+      }
+      if (videoId != null) {
+        body['videoId'] = videoId;
+        playlistId ??= 'RDAMVM$videoId';
+        if (!(radio || shuffle)) {
+          body['watchEndpointMusicSupportedConfigs'] = {
+            'watchEndpointMusicConfig': {
+              'hasPersistentPlaylistPanel': true,
+              'musicVideoType': 'MUSIC_VIDEO_TYPE_ATV;',
+            }
+          };
+        }
+      }
+      // bool is_playlist = false;
 
-  //     body['playlistId'] = playlistIdTrimmer(playlistId!);
-  //     // is_playlist = body['playlistId'].toString().startsWith('PL') ||
-  //     //     body['playlistId'].toString().startsWith('OLA');
+      body['playlistId'] = playlistIdTrimmer(playlistId!);
+      // is_playlist = body['playlistId'].toString().startsWith('PL') ||
+      //     body['playlistId'].toString().startsWith('OLA');
 
-  //     if (shuffle) body['params'] = 'wAEB8gECKAE%3D';
-  //     if (radio) body['params'] = 'wAEB';
-  //     final Map response = await sendRequest(endpoints['next']!, body, headers);
-  //     final Map results = nav(response, [
-  //           'contents',
-  //           'singleColumnMusicWatchNextResultsRenderer',
-  //           'tabbedRenderer',
-  //           'watchNextTabbedResultsRenderer',
-  //           'tabs',
-  //           0,
-  //           'tabRenderer',
-  //           'content',
-  //           'musicQueueRenderer',
-  //           'content',
-  //           'playlistPanelRenderer',
-  //         ]) as Map? ??
-  //         {};
-  //     final playlist = (results['contents'] as List<dynamic>).where(
-  //       (x) =>
-  //           nav(x, ['playlistPanelVideoRenderer', ...navigationPlaylistId]) !=
-  //           null,
-  //     );
-  //     int count = 0;
-  //     final List<String> songResults = [];
-  //     for (final item in playlist) {
-  //       if (count > 0) {
-  //         final String id =
-  //             nav(item, ['playlistPanelVideoRenderer', 'videoId']).toString();
-  //         songResults.add(id);
-  //       } else {
-  //         count++;
-  //       }
-  //     }
-  //     return songResults;
-  //   } catch (e) {
-  //     Logger.root.severe('Error in ytmusic getWatchPlaylist', e);
-  //     return [];
-  //   }
-  // }
+      if (shuffle) body['params'] = 'wAEB8gECKAE%3D';
+      if (radio) body['params'] = 'wAEB';
+      final Map response = await sendRequest(endpoints['next']!, body, headers);
+      dynamic contents = nav(response, [
+        'contents',
+        'singleColumnMusicWatchNextResultsRenderer',
+        'tabbedRenderer',
+        'watchNextTabbedResultsRenderer',
+        'tabs',
+        0,
+        'tabRenderer',
+        'content',
+        'musicQueueRenderer',
+        'content',
+        'playlistPanelRenderer',
+        'contents'
+      ]);
+      List<Map> allResults = [];
+      for (var element in contents) {
+        Map item = element["playlistPanelVideoRenderer"];
+        String title = nav(item, ['title', 'runs', 0, 'text']);
+        List artists = [];
+        String album = "";
+        String albumId = "";
+        int year = 0;
+
+        item['longBylineText']['runs'].forEach((e) {
+          Map? browseEndpoint = e?['navigationEndpoint']?['browseEndpoint'];
+          // pprint(browseEndpoint);
+          String? pageType =
+              browseEndpoint?['browseEndpointContextSupportedConfigs']
+                  ?['browseEndpointContextMusicConfig']?['pageType'];
+          if (pageType == "MUSIC_PAGE_TYPE_ARTIST") {
+            artists.add({'name': e['text'], 'id': browseEndpoint?['browseId']});
+          } else if (pageType == "MUSIC_PAGE_TYPE_ALBUM") {
+            album = e['text'];
+            albumId = browseEndpoint?['browseId'];
+          } else if (e['text'].toString().length == 4 &&
+              e['text'].toString().isNumeric()) {
+            year = int.parse(e['text']);
+          }
+        });
+        Map details = {
+          'id': 'youtube${item["videoId"]}',
+          'title': title,
+          'artists': artists,
+          'artist': artists.map((e) => e['name']).join(','),
+          'album': album,
+          'albumId': albumId,
+          'year': year,
+          'image': item['thumbnail']['thumbnails']
+              .first['url']
+              .toString()
+              .replaceAll('w60-h60', 'w300-h300'),
+          'images': item['thumbnail']['thumbnails'],
+          'duration': item['lengthText']['runs'][0]['text'],
+          'provider': 'youtube',
+          'url': await getSongUrl('youtube${item["videoId"]}')
+        };
+
+        allResults.add(details);
+      }
+      allResults.removeAt(0);
+      return allResults;
+    } catch (e) {
+      Logger.root.severe('Error in ytmusic getWatchPlaylist', e);
+      return [];
+    }
+  }
+}
+
+String playlistIdTrimmer(String playlistId) {
+  if (playlistId.startsWith('VL')) {
+    return playlistId.substring(2);
+  } else {
+    return playlistId;
+  }
+}
+
+String playlistIdExtender(String playlistId) {
+  if (playlistId.startsWith('VL')) {
+    return playlistId;
+  } else {
+    return 'VL$playlistId';
+  }
 }

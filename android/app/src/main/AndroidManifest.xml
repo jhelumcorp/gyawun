@@ -17,10 +17,11 @@
     <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE"/>
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
     <application
-        android:label="Gyavun"
+        android:label="Gyawun"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:appCategory="audio">
+        android:appCategory="audio"
+        android:usesCleartextTraffic="true">
         
         <activity
             android:name="com.ryanheise.audioservice.AudioServiceActivity"

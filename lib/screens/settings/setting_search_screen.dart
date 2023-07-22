@@ -5,19 +5,19 @@ import 'package:gyavun/components/color_icon.dart';
 import 'package:gyavun/screens/settings/data_lists.dart';
 import 'package:gyavun/ui/text_styles.dart';
 
-class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({super.key});
+class SettingSearchScreen extends StatelessWidget {
+  const SettingSearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("History", style: mediumTextStyle(context, bold: false)),
+        title: Text("Search", style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
       body: ListView(
         children: [
-          ...historySettingDatalist.map((e) {
+          ...searchSettingDatalist.map((e) {
             return ListTile(
               title: Text(
                 e.title,

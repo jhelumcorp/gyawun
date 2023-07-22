@@ -48,48 +48,34 @@ showSongOptions(BuildContext context, Map<String, dynamic> song,
       actions: [
         CupertinoActionSheetAction(
           onPressed: () {
-            context
-                .read<MediaManager>()
-                .playNext(song)
-                .then((value) => Navigator.pop(context))
-                .then(
-                  (value) =>
-                      ShowSnackBar().showSnackBar(context, 'Added to queue'),
-                );
+            Navigator.pop(context);
+            ShowSnackBar().showSnackBar(context, 'Added to queue');
+            context.read<MediaManager>().playNext(song);
           },
           child: const Text("Play Next"),
         ),
         CupertinoActionSheetAction(
           onPressed: () {
-            context
-                .read<MediaManager>()
-                .addItems([song])
-                .then((value) => Navigator.pop(context))
-                .then((value) =>
-                    ShowSnackBar().showSnackBar(context, 'Added to queue'));
+            Navigator.pop(context);
+            ShowSnackBar().showSnackBar(context, 'Added to queue');
+            context.read<MediaManager>().addItems([song]);
           },
           child: const Text("Add To Queue"),
         ),
         CupertinoActionSheetAction(
           onPressed: () {
-            togglefavorite(song).then((value) => Navigator.pop(context)).then(
-                (value) => ShowSnackBar().showSnackBar(
-                    context,
-                    isfavorite(song['id'])
-                        ? "Added to Favorites"
-                        : "Removed from Favorites"));
+            Navigator.pop(context);
+            ShowSnackBar().showSnackBar(
+                context,
+                isfavorite(song['id'])
+                    ? "Added to Favorites"
+                    : "Removed from Favorites");
+            togglefavorite(song);
           },
           child: Text(isfavorite(song['id'])
               ? "Remove from Favorites"
               : "Add to Favorites"),
         ),
-        // CupertinoActionSheetAction(
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //     showAddToPlaylist(context, song);
-        //   },
-        //   child: const Text("Add to Playlist"),
-        // ),
       ],
     ),
   );

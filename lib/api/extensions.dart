@@ -7,6 +7,10 @@ extension StringExtension on String {
     }
   }
 
+  bool isNumeric() {
+    return double.tryParse(this) != null;
+  }
+
   String unescape() {
     return replaceAll('&amp;', '&')
         .replaceAll('&#039;', "'")

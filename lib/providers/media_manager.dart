@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gyavun/api/api.dart';
+import 'package:gyavun/api/ytmusic.dart';
 import 'package:gyavun/providers/audio_handler.dart';
 import 'package:gyavun/utils/downlod.dart';
 import 'package:gyavun/utils/history.dart';
@@ -174,7 +176,11 @@ class MediaManager extends ChangeNotifier {
 
   Future<void> addItems(List mediaItems) async {
     List<MediaItem> items = [];
+
     await Future.forEach(mediaItems, (element) async {
+      if (element['id'] == null) {
+        return;
+      }
       MediaItem p = await processSong(element);
       if (_audioHandler.queue.value
           .where((el) => el.id == p.id)
@@ -211,10 +217,20 @@ class MediaManager extends ChangeNotifier {
     currentSong = songs[initialIndex];
     _audioHandler.play();
     if (mediaItems.length < 10 && autoFetch) {
-      List s = await SaavnAPI().getReco(mediaItems[initialIndex]['id']);
+      List s = [];
+      if (mediaItems[initialIndex]['provider'] == 'youtube') {
+        s = await YtMusicService().getWatchPlaylist(
+            videoId: mediaItems[initialIndex]['id']
+                .toString()
+                .replaceAll('youtube', ''));
+      } else {
+        s = await SaavnAPI().getReco(mediaItems[initialIndex]['id']);
+      }
       addItems(s);
     }
   }
+
+  Future<void> addAndPlayYoutube(List mediaItems) async {}
 
   Future<void> playRadio(item) async {
     String? stationId = await SaavnAPI().createRadio(

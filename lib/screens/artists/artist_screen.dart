@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gyavun/api/api.dart';
 import 'package:gyavun/api/image_resolution_modifier.dart';
+import 'package:gyavun/api/ytmusic.dart';
 import 'package:gyavun/providers/media_manager.dart';
 import 'package:gyavun/screens/lists/list_screen.dart';
 import 'package:gyavun/ui/text_styles.dart';
@@ -182,23 +183,30 @@ class _ArtistScreenState extends State<ArtistScreen> {
     );
   }
 
-  fetchArtist() {
+  fetchArtist() async {
     setState(() {
       loading = true;
     });
-    SaavnAPI()
-        .fetchArtistSongs(artistToken: widget.artist['artistToken'])
-        .then((value) {
-      List<Map<String, dynamic>> items = [];
+    if (widget.artist['provider'] == 'youtube') {
+      Map<String, dynamic> artist = await YtMusicService().getArtistDetails(
+          widget.artist['id'].toString().replaceAll('youtube', ''));
+
+      results.add({
+        'title': 'Songs',
+        'items': artist['songs'],
+      });
+    } else {
+      Map<String, List<dynamic>> value = await SaavnAPI()
+          .fetchArtistSongs(artistToken: widget.artist['artistToken']);
+
       value.forEach((key, value) {
-        items.add({
+        results.add({
           'title': key,
           'items': value,
         });
       });
-      results = items;
-      loading = false;
-      setState(() {});
-    });
+    }
+    loading = false;
+    setState(() {});
   }
 }

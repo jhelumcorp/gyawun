@@ -1,4 +1,4 @@
-package com.webyte.gyavun
+package com.webyte.gyawun
 
 import io.flutter.embedding.android.FlutterActivity
 
