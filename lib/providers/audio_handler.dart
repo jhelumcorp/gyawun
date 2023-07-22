@@ -38,6 +38,7 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
       ConcatenatingAudioSource(children: []);
 
   MyAudioHandler() {
+    GetIt.I.registerSingleton<AudioPlayer>(_player);
     _loadEmptyPlaylist();
     _notifyAudioHandlerAboutPlaybackEvents();
     _listenForDurationChanges();
@@ -51,6 +52,7 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
   Future<void> _loadEmptyPlaylist() async {
     try {
       await _player.setAudioSource(_playlist);
+
       _player.setPreferredPeakBitRate(320);
     } catch (e) {
       debugPrint("Error: $e");

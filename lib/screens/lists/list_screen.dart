@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:gyavun/api/api.dart';
 import 'package:gyavun/api/extensions.dart';
+import 'package:gyavun/api/ytmusic.dart';
 import 'package:gyavun/components/playlist_album_header.dart';
 import 'package:gyavun/providers/media_manager.dart';
 import 'package:gyavun/ui/colors.dart';
@@ -31,6 +30,7 @@ class _ListScreenState extends State<ListScreen> {
   @override
   void initState() {
     super.initState();
+    // pprint(widget.list);
     loading = true;
     fetchSongs();
   }
@@ -134,7 +134,6 @@ class _ListScreenState extends State<ListScreen> {
                             borderRadius: BorderRadius.circular(20)),
                         onTap: () {
                           int index = songs.indexOf(song);
-                          log(index.toString());
                           mediaManager.addAndPlay(songs, initialIndex: index);
                         },
                         onLongPress: () =>
@@ -168,11 +167,24 @@ class _ListScreenState extends State<ListScreen> {
   fetchSongs() async {
     List list = [];
     if (widget.list['type'] == 'playlist') {
-      Map songMap = await SaavnAPI().fetchPlaylistSongs(widget.list['id']);
-      list = songMap['songs'];
+      if (widget.list['provider'] == 'youtube') {
+        Map songMap = await YtMusicService().getPlaylistDetails(
+            widget.list['id'].toString().replaceAll('youtube', ''));
+        list = songMap['songs'];
+      } else {
+        Map songMap = await SaavnAPI().fetchPlaylistSongs(widget.list['id']);
+        list = songMap['songs'];
+      }
     } else if (widget.list['type'] == 'album') {
-      Map songMap = await SaavnAPI().fetchAlbumSongs(widget.list['id']);
-      list = songMap['songs'];
+      if (widget.list['provider'] == 'youtube') {
+        Map<dynamic, dynamic> songMap = await YtMusicService().getAlbumDetails(
+            widget.list['id'].toString().replaceAll('youtube', ''));
+
+        list = songMap['songs'];
+      } else {
+        Map songMap = await SaavnAPI().fetchAlbumSongs(widget.list['id']);
+        list = songMap['songs'];
+      }
     } else if (widget.list['type'] == 'mix') {
       Map songMap = await SaavnAPI().getSongFromToken(
           widget.list['perma_url'].toString().split('/').last, 'mix',
@@ -188,6 +200,11 @@ class _ListScreenState extends State<ListScreen> {
             .substring(0, e['url'].toString().lastIndexOf('.') + 4);
         return e;
       }).toList();
+    } else if (widget.list['type'] == 'single') {
+      Map<dynamic, dynamic> songMap = await YtMusicService().getAlbumDetails(
+          widget.list['id'].toString().replaceAll('youtube', ''));
+      // pprint(songMap);
+      list = songMap['songs'];
     }
     songs = list;
     copySongs = List.from(list);

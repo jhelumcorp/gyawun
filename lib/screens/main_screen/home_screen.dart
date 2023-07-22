@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen>
                 borderRadius: BorderRadius.circular(35),
                 borderSide: BorderSide.none,
               ),
-              hintText: 'Search Gyavun',
+              hintText: 'Search Gyawun',
               prefixIcon: const Icon(Icons.search),
             ),
           ),

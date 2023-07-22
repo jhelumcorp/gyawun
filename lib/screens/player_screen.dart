@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
-import 'dart:developer' as d;
+// import 'dart:developer' as d;
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -74,7 +74,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(EvaIcons.chevronDownOutline))
                 : null,
-            title: Text("Gyavun", style: textStyle(context, bold: false)),
+            title: Text("Gyawun", style: textStyle(context, bold: false)),
             centerTitle: true,
             actions: song != null
                 ? [
@@ -198,23 +198,28 @@ class _ArtWorkState extends State<ArtWork> {
                       context.read<MediaManager>().next();
                     }
                   },
-                  child: Hero(
-                    tag: "playerPoster",
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: widget.song?.extras?['offline'] == true
-                          ? Image.file(
-                              File(widget.song?.extras!['image']),
-                              width: width,
-                              height: width,
-                            )
-                          : CachedNetworkImage(
-                              imageUrl:
-                                  getImageUrl(widget.song?.artUri.toString()),
-                              width: width,
-                              height: width,
-                            ),
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Hero(
+                        tag: "playerPoster",
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: widget.song?.extras?['offline'] == true
+                              ? Image.file(
+                                  File.fromUri(widget.song!.artUri!),
+                                  width: width,
+                                  fit: BoxFit.contain,
+                                )
+                              : CachedNetworkImage(
+                                  imageUrl: getImageUrl(
+                                      widget.song?.artUri.toString()),
+                                  width: width,
+                                  fit: BoxFit.contain,
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 back: ClipRRect(
@@ -223,15 +228,17 @@ class _ArtWorkState extends State<ArtWork> {
                     children: [
                       widget.song?.extras?['offline'] == true
                           ? Image.file(
-                              File(widget.song?.extras!['image']),
+                              File.fromUri(widget.song!.artUri!),
                               width: width,
                               height: width,
+                              fit: BoxFit.fill,
                             )
                           : CachedNetworkImage(
                               imageUrl:
                                   getImageUrl(widget.song?.artUri.toString()),
                               width: width,
                               height: width,
+                              fit: BoxFit.fill,
                             ),
                       BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -256,7 +263,7 @@ class _ArtWorkState extends State<ArtWork> {
                             width: width,
                             height: width,
                             child: fetchedLyrics
-                                ? lyrMap['type'] == 'text'
+                                ? lyricsModel == null
                                     ? SingleChildScrollView(
                                         child: Text(
                                           '\n${lyrMap['lyrics']}\n',
@@ -314,19 +321,23 @@ class _ArtWorkState extends State<ArtWork> {
           id: song.id,
           title: song.title,
           artist: song.artist ?? "",
-          saavnHas: song.extras?['offline'] == true
+          saavnHas: song.extras?['offline'] == null
               ? false
-              : bool.parse(song.extras?['has_lyrics'] ?? false),
+              : bool.parse(song.extras?['offline'].toString() ?? 'false')
+                  ? false
+                  : bool.parse(song.extras?['has_lyrics'] ?? false),
         )
         .then((value) {
       lyrMap = value;
       lyricsModel = LyricsModelBuilder.create()
           .bindLyricToMain(lyrMap['lyrics'])
           .getModel();
-      d.log(lyrMap.toString());
-      setState(() {
-        fetchedLyrics = true;
-      });
+
+      if (mounted) {
+        setState(() {
+          fetchedLyrics = true;
+        });
+      }
     });
   }
 }
@@ -460,6 +471,7 @@ class _NameAndControlsState extends State<NameAndControls> {
                                   Hive.box('downloads').listenable(),
                               builder: (context, box, child) {
                                 Map? item = box.get(widget.song?.id);
+
                                 return item != null
                                     ? item['status'] == 'pending'
                                         ? ProgressStatus(

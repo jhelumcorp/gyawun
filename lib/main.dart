@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:al_downloader/al_downloader.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:dynamic_color/dynamic_color.dart';
@@ -8,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:gyavun/providers/audio_handler.dart';
 import 'package:gyavun/providers/media_manager.dart';
 import 'package:gyavun/providers/theme_manager.dart';
+import 'package:gyavun/services/server.dart';
 import 'package:gyavun/ui/themes/dark.dart';
 import 'package:gyavun/ui/themes/light.dart';
 import 'package:gyavun/utils/router.dart';
@@ -55,6 +58,23 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
+  late HttpServer httpServer;
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  init() async {
+    httpServer = await startServer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    httpServer.close();
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeManager themeManager = context.watch<ThemeManager>();

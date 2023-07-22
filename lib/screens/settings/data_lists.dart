@@ -4,6 +4,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:get_it/get_it.dart';
 import 'package:gyavun/api/extensions.dart';
 import 'package:gyavun/models/setting_item.dart';
 import 'package:gyavun/providers/media_manager.dart';
@@ -14,6 +15,8 @@ import 'package:gyavun/utils/format_duration.dart';
 import 'package:gyavun/utils/snackbar.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_cache/just_audio_cache.dart';
 import 'package:provider/provider.dart';
 
 Box box = Hive.box('settings');
@@ -24,7 +27,7 @@ List<SettingItem> allDataLists = [
     ...themesSettingDataList,
     ...playbackSettingDataList,
     ...downloadSettingDatalist,
-    ...historySettingDatalist,
+    ...searchSettingDatalist,
   ]..sort((a, b) => a.title.compareTo(b.title)),
   ...List.from(mainSettingDataList)..sort((a, b) => a.title.compareTo(b.title)),
 ];
@@ -94,11 +97,11 @@ List<SettingItem> mainSettingDataList = [
     location: '/settings/download',
   ),
   SettingItem(
-    title: "History",
-    icon: Icons.history,
+    title: "Search",
+    icon: Icons.search,
     color: Colors.accents[5],
     hasNavigation: true,
-    location: '/settings/history',
+    location: '/settings/search',
   )
 ];
 List<SettingItem> appLayoutSettingDataList = [
@@ -291,6 +294,88 @@ List<SettingItem> playbackSettingDataList = [
       );
     },
   ),
+  SettingItem(
+    title: "Youtube Streaming Quality",
+    trailing: (context) {
+      Stream<BoxEvent> event = box.watch(key: 'youtubeStreamingQuality');
+      return StreamBuilder(
+        stream: event,
+        builder: (context, snapshot) => DropdownButton2<String>(
+            style: textStyle(context, bold: false).copyWith(fontSize: 16),
+            underline: const SizedBox(),
+            value: snapshot.data?.value ??
+                box.get('youtubeStreamingQuality', defaultValue: 'Medium'),
+            dropdownStyleData: DropdownStyleData(
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            ),
+            iconStyleData: const IconStyleData(icon: Icon(EvaIcons.arrowDown)),
+            items: youtubeAudioQualities
+                .map(
+                  (e) => DropdownMenuItem(value: e, child: Text(e)),
+                )
+                .toList(),
+            onChanged: (value) {
+              if (value == null) return;
+              box.put('youtubeStreamingQuality', value);
+            }),
+      );
+    },
+  ),
+  SettingItem(
+      title: 'Enable Playback history',
+      onTap: (context) async {
+        bool isEnabled = box.get('playbackHistory', defaultValue: true);
+        await box.put('playbackHistory', !isEnabled);
+      },
+      trailing: (context) {
+        return ValueListenableBuilder(
+          valueListenable: box.listenable(keys: ['playbackHistory']),
+          builder: (context, value, child) {
+            bool isEnabled = value.get('playbackHistory', defaultValue: true);
+            return CupertinoSwitch(
+                value: isEnabled,
+                onChanged: (val) async {
+                  await value.put('playbackHistory', val);
+                });
+          },
+        );
+      },
+      subtitle: 'Recommeddations are based on the playback history.'),
+  SettingItem(
+      title: 'Delete Playback history',
+      onTap: (context) async {
+        await deletePlaybackHistory(context);
+      },
+      subtitle: 'Recommeddations are based on the playback history.'),
+  SettingItem(
+    title: 'Enable Playback Cache',
+    onTap: (context) async {
+      bool isEnabled = box.get('playbackCache', defaultValue: true);
+      await box.put('playbackCache', !isEnabled);
+    },
+    trailing: (context) {
+      return ValueListenableBuilder(
+        valueListenable: box.listenable(keys: ['playbackCache']),
+        builder: (context, value, child) {
+          bool isEnabled = value.get('playbackCache', defaultValue: true);
+          return CupertinoSwitch(
+            value: isEnabled,
+            onChanged: (val) async {
+              await value.put('playbackCache', val);
+            },
+          );
+        },
+      );
+    },
+  ),
+  SettingItem(
+    title: 'Clear playback Cache',
+    onTap: (context) async {
+      await clearPlaybackCache(context);
+    },
+  )
+  // 'playbackCache'
 ];
 
 List<SettingItem> downloadSettingDatalist = [
@@ -322,35 +407,66 @@ List<SettingItem> downloadSettingDatalist = [
       );
     },
   ),
+  SettingItem(
+    title: "Youtube Download Quality",
+    trailing: (context) {
+      Stream<BoxEvent> event = box.watch(key: 'youtubeDownloadQuality');
+      return StreamBuilder(
+        stream: event,
+        builder: (context, snapshot) => DropdownButton2<String>(
+            style: textStyle(context, bold: false).copyWith(fontSize: 16),
+            underline: const SizedBox(),
+            value: snapshot.data?.value ??
+                box.get('youtubeDownloadQuality', defaultValue: 'Medium'),
+            dropdownStyleData: DropdownStyleData(
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            ),
+            iconStyleData: const IconStyleData(icon: Icon(EvaIcons.arrowDown)),
+            items: youtubeAudioQualities
+                .map(
+                  (e) => DropdownMenuItem(value: e, child: Text(e)),
+                )
+                .toList(),
+            onChanged: (value) {
+              if (value == null) return;
+              box.put('youtubeDownloadQuality', value);
+            }),
+      );
+    },
+  ),
 ];
 
-List<SettingItem> historySettingDatalist = [
+List<SettingItem> searchSettingDatalist = [
   SettingItem(
-      title: 'Enable Playback history',
-      onTap: (context) async {
-        bool isEnabled = box.get('playbackHistory', defaultValue: true);
-        await box.put('playbackHistory', !isEnabled);
-      },
-      trailing: (context) {
-        return ValueListenableBuilder(
-          valueListenable: box.listenable(keys: ['playbackHistory']),
-          builder: (context, value, child) {
-            bool isEnabled = value.get('playbackHistory', defaultValue: true);
-            return CupertinoSwitch(
-                value: isEnabled,
-                onChanged: (val) async {
-                  await value.put('playbackHistory', val);
-                });
-          },
-        );
-      },
-      subtitle: 'Recommeddations are based on the playback history.'),
-  SettingItem(
-      title: 'Delete Playback history',
-      onTap: (context) async {
-        await deletePlaybackHistory(context);
-      },
-      subtitle: 'Recommeddations are based on the playback history.')
+    title: "Default search Provider",
+    trailing: (context) {
+      Stream<BoxEvent> event = box.watch(key: 'searchProvider');
+      return StreamBuilder(
+        stream: event,
+        builder: (context, snapshot) => DropdownButton2<String>(
+            style: textStyle(context, bold: false).copyWith(fontSize: 16),
+            underline: const SizedBox(),
+            value: snapshot.data?.value ??
+                box.get('searchProvider', defaultValue: 'saavn'),
+            dropdownStyleData: DropdownStyleData(
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            ),
+            iconStyleData: const IconStyleData(icon: Icon(EvaIcons.arrowDown)),
+            items: ['saavn', 'youtube']
+                .map(
+                  (e) =>
+                      DropdownMenuItem(value: e, child: Text(e.capitalize())),
+                )
+                .toList(),
+            onChanged: (value) {
+              if (value == null) return;
+              box.put('searchProvider', value);
+            }),
+      );
+    },
+  ),
 ];
 
 List<ThemeMode> dropdownItems = [
@@ -378,6 +494,7 @@ List<String> langs = [
   "Assamese",
 ];
 List<int> audioQualities = [96, 160, 320];
+List<String> youtubeAudioQualities = ['Low', 'Medium', 'High'];
 
 Future<void> deletePlaybackHistory(BuildContext context) async {
   showCupertinoDialog(
@@ -398,6 +515,33 @@ Future<void> deletePlaybackHistory(BuildContext context) async {
                 .then((value) => Navigator.pop(context))
                 .then((value) => ShowSnackBar().showSnackBar(
                     context, 'Playback History Deleted.',
+                    duration: const Duration(seconds: 2)));
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+clearPlaybackCache(context) async {
+  showCupertinoDialog(
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
+      title: const Text('Confirm'),
+      content: const Text('Are you sure you want to clear playback cache'),
+      actions: [
+        CupertinoDialogAction(
+          child: const Text('No'),
+          onPressed: () => Navigator.pop(context),
+        ),
+        CupertinoDialogAction(
+          child: const Text('Yes'),
+          onPressed: () async {
+            await GetIt.I<AudioPlayer>()
+                .clearCache()
+                .then((value) => Navigator.pop(context))
+                .then((value) => ShowSnackBar().showSnackBar(
+                    context, 'Playback Cache Deleted.',
                     duration: const Duration(seconds: 2)));
           },
         ),

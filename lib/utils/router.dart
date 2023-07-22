@@ -13,7 +13,7 @@ import 'package:gyavun/screens/playlists/playlists_screen.dart';
 import 'package:gyavun/screens/search/main_search.dart';
 import 'package:gyavun/screens/settings/app_layout.dart';
 import 'package:gyavun/screens/settings/download_screen.dart';
-import 'package:gyavun/screens/settings/history_screen.dart';
+import 'package:gyavun/screens/settings/setting_search_screen.dart';
 import 'package:gyavun/screens/settings/playback_screent.dart';
 import 'package:gyavun/screens/settings/setting_screen.dart';
 import 'package:gyavun/screens/settings/theme_screen.dart';
@@ -123,9 +123,9 @@ List<StatefulShellBranch> branches = [
                   const CupertinoPage(child: PlaybackScreen()),
             ),
             GoRoute(
-              path: 'history',
+              path: 'search',
               pageBuilder: (context, state) =>
-                  const CupertinoPage(child: HistoryScreen()),
+                  const CupertinoPage(child: SettingSearchScreen()),
             ),
             GoRoute(
               path: 'download',
