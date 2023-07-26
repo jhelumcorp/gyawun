@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gyavun/providers/media_manager.dart';
+import 'package:gyawun/providers/media_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 

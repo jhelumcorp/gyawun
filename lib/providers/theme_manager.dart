@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gyavun/ui/colors.dart' as ui_colors;
-import 'package:gyavun/ui/themes/dark.dart';
-import 'package:gyavun/ui/themes/light.dart';
+import 'package:gyawun/api/extensions.dart';
+import 'package:gyawun/ui/colors.dart' as ui_colors;
+import 'package:gyawun/ui/themes/dark.dart';
+import 'package:gyawun/ui/themes/light.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 Box box = Hive.box('settings');
@@ -22,6 +23,7 @@ class ThemeManager extends ChangeNotifier {
   bool _isRightToLeftDirection =
       box.get('isRightToLeftDirection', defaultValue: false);
   List<String> _languages = box.get('languages', defaultValue: ["English"]);
+  String _language = box.get('language', defaultValue: 'en');
 
   ThemeManager() {
     init();
@@ -34,6 +36,30 @@ class ThemeManager extends ChangeNotifier {
   bool get isMaterialTheme => _isMaterialTheme;
   bool get isRightToLeftDirection => _isRightToLeftDirection;
   List<String> get languages => _languages;
+  List<Map<String, dynamic>> get supportedLanguages => [
+        {'code': 'ar', 'name': 'arabic'},
+        {'code': 'en', 'name': 'english'},
+        {'code': 'es', 'name': 'spanish'},
+        {'code': 'fr', 'name': 'french'},
+        {'code': 'de', 'name': 'german'},
+        {'code': 'hi', 'name': 'hindi'},
+        {'code': 'ja', 'name': 'japanese'},
+        {'code': 'ko', 'name': 'korean'},
+        {'code': 'ru', 'name': 'russian'},
+        {'code': 'tr', 'name': 'turkish'},
+        {'code': 'ur', 'name': 'urdu'},
+        {'code': 'zh', 'name': 'chinese'},
+      ];
+  Map<String, dynamic> get language => {
+        'code': _language.toLowerCase(),
+        'name': supportedLanguages
+            .where((element) =>
+                element['code'].toString().toLowerCase() ==
+                _language.toLowerCase())
+            .first['name']
+            .toString()
+            .capitalize()
+      };
 
   ThemeData get getLightTheme => lightTheme(_accentColor);
 
@@ -83,6 +109,12 @@ class ThemeManager extends ChangeNotifier {
   toggleTextDirection() {
     _isRightToLeftDirection = !isRightToLeftDirection;
     box.put('isRightToLeftDirection', _isRightToLeftDirection);
+    notifyListeners();
+  }
+
+  Future<void> setLanguage(String code) async {
+    box.put('language', code);
+    _language = code;
     notifyListeners();
   }
 

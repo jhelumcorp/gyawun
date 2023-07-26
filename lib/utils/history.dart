@@ -1,7 +1,6 @@
 import 'package:get_it/get_it.dart';
+import 'package:gyawun/utils/playback_cache.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_cache/just_audio_cache.dart';
 
 Future<void> addSongHistory(Map song) async {
   bool isPlaybackCache =
@@ -9,9 +8,9 @@ Future<void> addSongHistory(Map song) async {
   Map? isDownloaded = Hive.box('downloads').get(song['id']);
   if (isPlaybackCache && isDownloaded == null) {
     bool isLocal =
-        await GetIt.I<AudioPlayer>().existedInLocal(url: song['url']);
+        await GetIt.I<PlaybackCache>().existedInLocal(url: song['url']);
     if (!isLocal) {
-      GetIt.I<AudioPlayer>().cacheFile(url: song['url']);
+      GetIt.I<PlaybackCache>().cacheFile(url: song['url']);
     }
   }
   bool isEnabled =

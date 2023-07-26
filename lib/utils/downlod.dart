@@ -1,10 +1,12 @@
-import 'dart:collection';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:al_downloader/al_downloader.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:get_it/get_it.dart';
+import 'package:gyawun/utils/playback_cache.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
@@ -95,6 +97,14 @@ Future<bool> checkAndRequestPermissions() async {
       await openAppSettings();
     }
   }
+  if (Platform.isAndroid) {
+    AndroidDeviceInfo info = await DeviceInfoPlugin().androidInfo;
+
+    if (await Permission.manageExternalStorage.isDenied &&
+        info.version.sdkInt == 29) {
+      await Permission.manageExternalStorage.request();
+    }
+  }
 
   return await Permission.storage.isGranted || await Permission.audio.isGranted;
 }
@@ -130,14 +140,29 @@ Future<MediaItem> processSong(Map song) async {
       song['url'] =
           song['url'].toString().replaceAll('_96', '_$streamingQuality');
     }
-    mediaItem = MediaItem(
-      id: song['id'],
-      title: song['title'],
-      album: song['album'],
-      artUri: Uri.parse(song['image']),
-      artist: song['artist'],
-      extras: Map.from(song),
-    );
+    String? cacheFile =
+        await GetIt.I<PlaybackCache>().getFile(url: song['url']);
+    if (cacheFile != null) {
+      song['url'] = cacheFile;
+      song['offline'] = true;
+      mediaItem = MediaItem(
+        id: song['id'],
+        title: song['title'],
+        album: song['album'],
+        artUri: Uri.parse(song['image']),
+        artist: song['artist'],
+        extras: Map.from(song),
+      );
+    } else {
+      mediaItem = MediaItem(
+        id: song['id'],
+        title: song['title'],
+        album: song['album'],
+        artUri: Uri.parse(song['image']),
+        artist: song['artist'],
+        extras: Map.from(song),
+      );
+    }
   }
 
   return mediaItem;
@@ -192,7 +217,8 @@ Future<void> downloadYoutubeSong(MediaItem song, String path) async {
   String id = song.id.replaceFirst('youtube', '');
   StreamManifest manifest = await yt.videos.streamsClient.getManifest(id);
   int qualityIndex = 0;
-  UnmodifiableListView<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly;
+  List<AudioOnlyStreamInfo> streamInfos =
+      manifest.audioOnly.sortByBitrate().reversed.toList();
   String quality = (Hive.box('settings')
           .get('youtubeDownloadQuality', defaultValue: 'Medium'))
       .toString()

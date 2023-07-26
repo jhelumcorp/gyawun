@@ -1,4 +1,4 @@
-name: gyavun
+name: gyawun
 description: Flutter application for streaming music from Jio Saavn
 publish_to: 'none'
 version: 0.9.4+13
@@ -7,12 +7,15 @@ environment:
   sdk: '>=3.0.2 <4.0.0'
 
 dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:    
+    sdk: flutter
   audio_service: ^0.18.10
   audio_video_progress_bar: ^1.0.1
   dart_des: ^1.0.2
   eva_icons_flutter: ^3.1.0
-  flutter:
-    sdk: flutter
+
   get_it: ^7.6.0
   go_router: ^8.2.0
   google_fonts: any
@@ -41,7 +44,12 @@ dependencies:
   youtube_explode_dart: ^1.12.4
   palette_generator: ^0.3.3+2
   change_app_package_name: ^1.1.0
-  just_audio_cache: ^0.1.1
+  auto_size_text: ^3.0.0
+  skeletons: ^0.0.3
+  country_picker: ^2.0.20
+  intl: any
+  device_info_plus: ^9.0.2
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -50,3 +58,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+flutter_intl:
+  enabled: true
+  localizely:
+    project_id: ne378iii

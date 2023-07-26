@@ -4,11 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyavun/api/extensions.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/downlod.dart';
-import 'package:gyavun/utils/option_menu.dart';
+import 'package:gyawun/api/extensions.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/downlod.dart';
+import 'package:gyawun/utils/option_menu.dart';
 import 'package:provider/provider.dart';
 
 class SearchTile extends StatelessWidget {
@@ -38,11 +38,12 @@ class SearchTile extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       leading: ClipRRect(
           borderRadius: BorderRadius.circular(
-              item['type'].toString().capitalize() == 'Artist' ||
-                      item['type'].toString().capitalize() == 'Profile'
-                  ? 30
-                  : 8),
-          child: CachedNetworkImage(imageUrl: item['image'], height: 50)),
+              item['type'].toString().capitalize() == 'Artist' ? 30 : 8),
+          child: CachedNetworkImage(
+            imageUrl: item['image'],
+            height: 50,
+            width: item['type'] == 'video' ? 80 : 50,
+          )),
       title: Text(
         item['title'],
         style: subtitleTextStyle(context, bold: true),

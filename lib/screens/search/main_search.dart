@@ -1,13 +1,13 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:gyavun/api/api.dart';
-import 'package:gyavun/api/extensions.dart';
-import 'package:gyavun/api/ytmusic.dart';
-import 'package:gyavun/components/search_tile.dart';
-import 'package:gyavun/ui/colors.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/enums.dart';
+import 'package:gyawun/api/api.dart';
+import 'package:gyawun/api/extensions.dart';
+import 'package:gyawun/api/ytmusic.dart';
+import 'package:gyawun/components/search_tile.dart';
+import 'package:gyawun/ui/colors.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/enums.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class MainSearchScreen extends StatefulWidget {
@@ -138,25 +138,28 @@ class _MainSearchScreenState extends State<MainSearchScreen>
                       : SingleChildScrollView(
                           padding: const EdgeInsets.all(8),
                           child: Column(
-                            children: sections.map((e) {
-                              if (items[e] != null) {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      e,
-                                      style: textStyle(context).copyWith(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                    ),
-                                    ...items[e].map((item) {
-                                      return SearchTile(item: item);
-                                    }).toList(),
-                                  ],
-                                );
-                              }
-                              return const SizedBox.shrink();
-                            }).toList(),
+                            children: items
+                                .map((key, val) {
+                                  return MapEntry(
+                                      key,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            key,
+                                            style: textStyle(context).copyWith(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                          ),
+                                          ...val.map((item) {
+                                            return SearchTile(item: item);
+                                          }).toList(),
+                                        ],
+                                      ));
+                                })
+                                .values
+                                .toList(),
                           ),
                         ),
             ),
@@ -186,19 +189,29 @@ class _MainSearchScreenState extends State<MainSearchScreen>
         await SaavnAPI().fetchSongSearchResults(searchQuery: query, count: 5);
     List<Map<dynamic, dynamic>> searchResults =
         await SaavnAPI().fetchSearchResults(query);
-    Map<dynamic, dynamic> results = searchResults[0];
-    results['Songs'] = songSearchResults['songs'];
-    items = results;
+    Map<dynamic, dynamic> results = {
+      'Songs': songSearchResults['songs'],
+      ...searchResults[0],
+    };
+    Map newResults = {};
+    for (String key in sections) {
+      if (results[key] != null) {
+        newResults[key] = results[key];
+      }
+    }
+
+    items = newResults;
   }
 
   searchYoutube(String query) async {
     items = {};
-    List<Map<dynamic, dynamic>> res = await YtMusicService().search(
-      query,
-    );
+    List<Map<dynamic, dynamic>> res = await YtMusicService().search(query);
+
     Map results = {};
     for (var element in res) {
-      results[element['title'].toString().capitalize()] = element['items'];
+      List l = element['items'];
+      if (l.any((element) => element['type'] == 'profile')) continue;
+      results[element['title'].toString().capitalize()] = l;
     }
     // pprint(res);
     items = results;

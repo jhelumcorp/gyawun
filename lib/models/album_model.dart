@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:gyavun/models/artist_model.dart';
+import 'package:gyawun/models/artist_model.dart';
 
 class Album {
   String id;

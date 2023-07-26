@@ -1,5 +1,5 @@
-import 'package:gyavun/api/api.dart';
-import 'package:gyavun/api/ytmusic.dart';
+import 'package:gyawun/api/api.dart';
+import 'package:gyawun/api/ytmusic.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 Future<List> getRecomendations() async {

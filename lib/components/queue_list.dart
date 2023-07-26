@@ -4,9 +4,9 @@ import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/ui/colors.dart';
-import 'package:gyavun/ui/text_styles.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/ui/colors.dart';
+import 'package:gyawun/ui/text_styles.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
@@ -103,7 +103,8 @@ class QueueView extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             child: Stack(
               children: [
-                songItem.extras?['offline'] == true
+                songItem.extras?['offline'] == true &&
+                        !songItem.artUri.toString().startsWith('http')
                     ? Image.file(
                         File.fromUri(songItem.artUri!),
                         width: 50,

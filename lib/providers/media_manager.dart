@@ -4,12 +4,12 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyavun/api/api.dart';
-import 'package:gyavun/api/ytmusic.dart';
-import 'package:gyavun/providers/audio_handler.dart';
-import 'package:gyavun/utils/downlod.dart';
-import 'package:gyavun/utils/history.dart';
-import 'package:gyavun/utils/lyrics.dart';
+import 'package:gyawun/api/api.dart';
+import 'package:gyawun/api/ytmusic.dart';
+import 'package:gyawun/providers/audio_handler.dart';
+import 'package:gyawun/utils/downlod.dart';
+import 'package:gyawun/utils/history.dart';
+import 'package:gyawun/utils/lyrics.dart';
 import 'package:just_audio/just_audio.dart';
 
 class MediaManager extends ChangeNotifier {
@@ -116,9 +116,12 @@ class MediaManager extends ChangeNotifier {
 
   void _listenToChangesInSong() async {
     _audioHandler.mediaItem.listen((mediaItem) {
-      currentSong = mediaItem;
-      index =
-          mediaItem != null ? _audioHandler.queue.value.indexOf(mediaItem) : 0;
+      if (currentSong != mediaItem) {
+        currentSong = mediaItem;
+        index = mediaItem != null
+            ? _audioHandler.queue.value.indexOf(mediaItem)
+            : 0;
+      }
     });
   }
 

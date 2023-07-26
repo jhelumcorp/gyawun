@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gyavun/components/play_button.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/screens/player_screen.dart';
-import 'package:gyavun/ui/text_styles.dart';
+import 'package:gyawun/components/play_button.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/screens/player_screen.dart';
+import 'package:gyawun/ui/text_styles.dart';
 import 'package:provider/provider.dart';
 
 class BottomPlayer extends StatelessWidget {
@@ -69,7 +69,10 @@ class BottomPlayer extends StatelessWidget {
                             tag: "playerPoster",
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: song.extras?['offline'] == true
+                              child: song.extras?['offline'] == true &&
+                                      !song.artUri
+                                          .toString()
+                                          .startsWith('https')
                                   ? Image.file(
                                       File.fromUri(song.artUri!),
                                       height: 50,
@@ -106,7 +109,7 @@ class BottomPlayer extends StatelessWidget {
                                   child: Material(
                                     color: Colors.transparent,
                                     child: Text(
-                                      song.artist!,
+                                      song.artist ?? song.extras!['subtitle'],
                                       style: smallTextStyle(context),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,

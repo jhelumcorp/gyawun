@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:gyavun/components/search_tile.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/downlod.dart';
+import 'package:gyawun/components/search_tile.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/downlod.dart';
 import 'package:hive_flutter/adapters.dart';
+
+import '../generated/l10n.dart';
 
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({super.key});
@@ -11,7 +15,8 @@ class DownloadsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Downloads', style: mediumTextStyle(context, bold: false)),
+        title: Text(S.of(context).downloads,
+            style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
       body: ValueListenableBuilder(
@@ -23,16 +28,29 @@ class DownloadsScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return items[index]['status'] == 'done'
                   ? FutureBuilder(
-                      future: getImageUri(items[index]['id']),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return DownloadTile(
-                            items: List.from(items),
-                            index: index,
-                            image: snapshot.data!,
-                          );
+                      future: File(items[index]['path']).exists(),
+                      builder: (context, snaps) {
+                        if (snaps.hasData && snaps.data!) {
+                          return FutureBuilder(
+                              future: getImageUri(items[index]['id']),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return DownloadTile(
+                                    items: List.from(items),
+                                    index: index,
+                                    image: snapshot.data!,
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  box.delete(box.keyAt(index));
+                                }
+                                return const SizedBox();
+                              });
                         }
-                        if (snapshot.hasError) {
+                        if (snaps.hasError) {
+                          deleteSong(
+                              key: box.keyAt(index),
+                              path: items[index]['path']);
                           box.delete(box.keyAt(index));
                         }
                         return const SizedBox();

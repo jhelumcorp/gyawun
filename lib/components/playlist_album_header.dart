@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gyavun/api/image_resolution_modifier.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/get_subtitle.dart';
+import 'package:gyawun/api/image_resolution_modifier.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/get_subtitle.dart';
 import 'package:provider/provider.dart';
 
 class PlaylistAlbumHeader extends StatelessWidget {

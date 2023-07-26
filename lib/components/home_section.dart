@@ -1,35 +1,39 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyavun/api/image_resolution_modifier.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/ui/colors.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/option_menu.dart';
-import 'package:gyavun/utils/snackbar.dart';
+import 'package:gyawun/api/image_resolution_modifier.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/ui/colors.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/option_menu.dart';
+import 'package:gyawun/utils/snackbar.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 class HomeSection extends StatefulWidget {
   const HomeSection({
     super.key,
-    required this.item,
+    required this.sectionIitem,
   });
-  final Map item;
+  final Map sectionIitem;
 
   @override
   State<HomeSection> createState() => _HomeSectionState();
 }
 
 class _HomeSectionState extends State<HomeSection> {
-  List sectionSongs = [];
-  late List songs;
+  List sectionitems = [];
+  late List items;
 
   @override
   void initState() {
     super.initState();
-    songs = widget.item['songs'];
-    sectionSongs = songs.where((element) => element['type'] == 'song').toList();
+    items = widget.sectionIitem['items'];
+    sectionitems = items
+        .where((element) =>
+            element['type'] == 'song' || element['type'] == 'video')
+        .toList();
   }
 
   @override
@@ -40,7 +44,7 @@ class _HomeSectionState extends State<HomeSection> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Text(widget.item['title'],
+          child: Text(widget.sectionIitem['title'],
               style: textStyle(context, bold: true)
                   .copyWith(color: Theme.of(context).colorScheme.primary)),
         ),
@@ -52,15 +56,15 @@ class _HomeSectionState extends State<HomeSection> {
             cacheExtent: null,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             scrollDirection: Axis.horizontal,
-            itemCount: songs.length,
+            itemCount: items.length,
             itemBuilder: (context, index) {
-              Map song = songs[index];
+              Map song = items[index];
 
               return GestureDetector(
                 onTap: () {
-                  if (song['type'] == 'song') {
-                    context.read<MediaManager>().addAndPlay(sectionSongs,
-                        initialIndex: sectionSongs.indexOf(song));
+                  if (song['type'] == 'song' || song['type'] == 'video') {
+                    context.read<MediaManager>().addAndPlay(sectionitems,
+                        initialIndex: sectionitems.indexOf(song));
                   } else if (song['type'] == 'radio_station') {
                     ShowSnackBar().showSnackBar(
                       context,
@@ -78,7 +82,9 @@ class _HomeSectionState extends State<HomeSection> {
                   }
                 },
                 child: SizedBox(
-                  width: 150,
+                  width: song['type'] == 'chart' || song['type'] == 'video'
+                      ? 250
+                      : 150,
                   child: Column(
                     children: [
                       ClipRRect(
@@ -87,12 +93,18 @@ class _HomeSectionState extends State<HomeSection> {
                         child: CachedNetworkImage(
                           imageUrl: getImageUrl(song['image']),
                           height: 150,
-                          width: 150,
+                          width:
+                              song['type'] == 'chart' || song['type'] == 'video'
+                                  ? 250
+                                  : 150,
                           fit: BoxFit.fill,
                           errorWidget: (context, url, error) {
                             return Container(
                               height: 150,
-                              width: 150,
+                              width: song['type'] == 'chart' ||
+                                      song['type'] == 'video'
+                                  ? 250
+                                  : 150,
                               decoration: BoxDecoration(
                                 color: darkGreyColor.withAlpha(50),
                                 borderRadius: BorderRadius.circular(
@@ -112,13 +124,18 @@ class _HomeSectionState extends State<HomeSection> {
                       ),
                       const SizedBox(height: 5),
                       SizedBox(
-                        width: 150,
+                        width:
+                            song['type'] == 'chart' || song['type'] == 'video'
+                                ? 250
+                                : 150,
                         child: Center(
-                          child: Text(
+                          child: AutoSizeText(
                             song['title'],
                             style: customTextStyle(context,
                                     bold: false, fontSize: 14)
-                                .copyWith(height: 1.3),
+                                .copyWith(height: 1.2),
+                            minFontSize: 10,
+                            maxFontSize: 16,
                             overflow: TextOverflow.clip,
                             maxLines: 2,
                           ),

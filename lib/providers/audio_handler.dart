@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/utils/history.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/utils/history.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 

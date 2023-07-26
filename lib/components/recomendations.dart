@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/option_menu.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/option_menu.dart';
 import 'package:provider/provider.dart';
+
+import '../generated/l10n.dart';
 
 class Recomendations extends StatelessWidget {
   const Recomendations({
@@ -19,7 +21,7 @@ class Recomendations extends StatelessWidget {
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Text('Recomended',
+          child: Text(S.of(context).recommended,
               style: textStyle(context, bold: true)
                   .copyWith(color: Theme.of(context).colorScheme.primary)),
         ),
@@ -58,9 +60,10 @@ class Recomendations extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(
                                       item['type'] == 'artist' ? 30 : 8),
                                   child: CachedNetworkImage(
-                                      imageUrl: item['image'],
-                                      height: 50,
-                                      width: 50)),
+                                    imageUrl: item['image'],
+                                    height: 50,
+                                    width: item['type'] == 'video' ? 80 : 50,
+                                  )),
                               title: Text(
                                 item['title'],
                                 style: subtitleTextStyle(context, bold: true),

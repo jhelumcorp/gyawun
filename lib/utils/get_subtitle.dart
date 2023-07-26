@@ -1,4 +1,4 @@
-import 'package:gyavun/api/extensions.dart';
+import 'package:gyawun/api/extensions.dart';
 
 String getSubTitle(Map item) {
   final type = item['type'];

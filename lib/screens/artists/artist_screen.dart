@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gyavun/api/api.dart';
-import 'package:gyavun/api/image_resolution_modifier.dart';
-import 'package:gyavun/api/ytmusic.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/screens/lists/list_screen.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/option_menu.dart';
+import 'package:gyawun/api/api.dart';
+import 'package:gyawun/api/image_resolution_modifier.dart';
+import 'package:gyawun/api/ytmusic.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/screens/lists/list_screen.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/option_menu.dart';
 import 'package:provider/provider.dart';
 
 class ArtistScreen extends StatefulWidget {

@@ -2,21 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyavun/providers/theme_manager.dart';
-import 'package:gyavun/screens/artists/artist_screen.dart';
-import 'package:gyavun/screens/download_screen.dart';
-import 'package:gyavun/screens/lists/list_screen.dart';
-import 'package:gyavun/screens/main_screen.dart';
-import 'package:gyavun/screens/main_screen/home_screen.dart';
-import 'package:gyavun/screens/playlists/favorites_details.dart';
-import 'package:gyavun/screens/playlists/playlists_screen.dart';
-import 'package:gyavun/screens/search/main_search.dart';
-import 'package:gyavun/screens/settings/app_layout.dart';
-import 'package:gyavun/screens/settings/download_screen.dart';
-import 'package:gyavun/screens/settings/setting_search_screen.dart';
-import 'package:gyavun/screens/settings/playback_screent.dart';
-import 'package:gyavun/screens/settings/setting_screen.dart';
-import 'package:gyavun/screens/settings/theme_screen.dart';
+import 'package:gyawun/providers/theme_manager.dart';
+import 'package:gyawun/screens/artists/artist_screen.dart';
+import 'package:gyawun/screens/download_screen.dart';
+import 'package:gyawun/screens/lists/list_screen.dart';
+import 'package:gyawun/screens/main_screen.dart';
+import 'package:gyawun/screens/main_screen/home_screen.dart';
+import 'package:gyawun/screens/playlists/favorites_details.dart';
+import 'package:gyawun/screens/playlists/playlists_screen.dart';
+import 'package:gyawun/screens/search/main_search.dart';
+import 'package:gyawun/screens/settings/app_layout.dart';
+import 'package:gyawun/screens/settings/download_screen.dart';
+import 'package:gyawun/screens/settings/history_screen.dart';
+import 'package:gyawun/screens/settings/playback_screent.dart';
+import 'package:gyawun/screens/settings/providers_screen.dart';
+import 'package:gyawun/screens/settings/setting_screen.dart';
+import 'package:gyawun/screens/settings/theme_screen.dart';
 
 PageController pageController = PageController();
 GoRouter router = GoRouter(
@@ -123,9 +124,14 @@ List<StatefulShellBranch> branches = [
                   const CupertinoPage(child: PlaybackScreen()),
             ),
             GoRoute(
-              path: 'search',
+              path: 'history',
               pageBuilder: (context, state) =>
-                  const CupertinoPage(child: SettingSearchScreen()),
+                  const CupertinoPage(child: HistoryScreen()),
+            ),
+            GoRoute(
+              path: 'providers',
+              pageBuilder: (context, state) =>
+                  const CupertinoPage(child: ProvidersScreen()),
             ),
             GoRoute(
               path: 'download',

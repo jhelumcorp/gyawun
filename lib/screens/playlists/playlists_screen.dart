@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyavun/ui/colors.dart';
-import 'package:gyavun/ui/text_styles.dart';
+import 'package:gyawun/ui/colors.dart';
+import 'package:gyawun/ui/text_styles.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconsax/iconsax.dart';
+
+import '../../generated/l10n.dart';
 
 class PlaylistsScreen extends StatelessWidget {
   const PlaylistsScreen({super.key});
@@ -12,7 +14,8 @@ class PlaylistsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Playlists', style: mediumTextStyle(context, bold: false)),
+        title: Text(S.of(context).playlists,
+            style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
       body: ListView(

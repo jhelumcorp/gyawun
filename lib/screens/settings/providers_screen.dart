@@ -1,27 +1,30 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyavun/components/color_icon.dart';
-import 'package:gyavun/screens/settings/data_lists.dart';
-import 'package:gyavun/ui/text_styles.dart';
+import 'package:gyawun/components/color_icon.dart';
+import 'package:gyawun/screens/settings/data_lists.dart';
 
-class SettingSearchScreen extends StatelessWidget {
-  const SettingSearchScreen({super.key});
+import '../../generated/l10n.dart';
+import '../../ui/text_styles.dart';
+
+class ProvidersScreen extends StatelessWidget {
+  const ProvidersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Search", style: mediumTextStyle(context, bold: false)),
+        title: Text(S.of(context).serviceProviders,
+            style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
       body: ListView(
         children: [
-          ...searchSettingDatalist.map((e) {
+          ...providersSettingDatalist.map((e) {
             return ListTile(
               title: Text(
                 e.title,
-                style: textStyle(context).copyWith(fontSize: 16),
+                style: textStyle(context, bold: false).copyWith(fontSize: 16),
               ),
               leading: (e.color != null && e.icon != null)
                   ? ColorIcon(

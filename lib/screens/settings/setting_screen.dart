@@ -1,11 +1,15 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyavun/screens/settings/data_lists.dart';
+import 'package:gyawun/providers/theme_manager.dart';
+import 'package:gyawun/screens/settings/data_lists.dart';
 
-import 'package:gyavun/components/color_icon.dart';
-import 'package:gyavun/ui/colors.dart';
-import 'package:gyavun/ui/text_styles.dart';
+import 'package:gyawun/components/color_icon.dart';
+import 'package:gyawun/ui/colors.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:provider/provider.dart';
+
+import '../../generated/l10n.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -27,7 +31,8 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings', style: mediumTextStyle(context, bold: false)),
+        title: Text(S.of(context).settings,
+            style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
       body: ListView(
@@ -54,7 +59,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   borderRadius: BorderRadius.circular(35),
                   borderSide: BorderSide.none,
                 ),
-                hintText: 'Search Settings',
+                hintText: S.of(context).searchSettings,
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: searchController.text.trim().isNotEmpty
                     ? GestureDetector(
@@ -70,8 +75,8 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
           ...(searchText == ""
-                  ? mainSettingDataList
-                  : allDataLists
+                  ? mainSettingDataList(context)
+                  : allDataLists(context)
                       .where((element) => element.title
                           .toLowerCase()
                           .contains(searchText.toLowerCase()))
@@ -80,7 +85,7 @@ class _SettingScreenState extends State<SettingScreen> {
             return ListTile(
               title: Text(
                 e.title,
-                style: textStyle(context).copyWith(fontSize: 16),
+                style: textStyle(context, bold: false).copyWith(fontSize: 16),
               ),
               leading: (e.color != null && e.icon != null)
                   ? ColorIcon(
@@ -91,8 +96,10 @@ class _SettingScreenState extends State<SettingScreen> {
               trailing: e.trailing != null
                   ? e.trailing!(context)
                   : (e.hasNavigation
-                      ? const Icon(
-                          EvaIcons.chevronRight,
+                      ? Icon(
+                          context.watch<ThemeManager>().isRightToLeftDirection
+                              ? EvaIcons.chevronLeft
+                              : EvaIcons.chevronRight,
                           size: 30,
                         )
                       : null),
