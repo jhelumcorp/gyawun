@@ -43,22 +43,20 @@ dependencies:
   path_provider: ^2.0.15
   youtube_explode_dart: ^1.12.4
   palette_generator: ^0.3.3+2
-  change_app_package_name: ^1.1.0
+
   auto_size_text: ^3.0.0
   skeletons: ^0.0.3
   country_picker: ^2.0.20
   intl: any
-  device_info_plus: ^9.0.2
   shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  change_app_package_name: ^1.1.0
 
 flutter:
   uses-material-design: true
 flutter_intl:
   enabled: true
-  localizely:
-    project_id: ne378iii

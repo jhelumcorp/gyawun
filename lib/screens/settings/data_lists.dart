@@ -273,6 +273,11 @@ List<SettingItem> themesSettingDataList(BuildContext context) => [
 
 List<SettingItem> playbackSettingDataList(BuildContext context) => [
       SettingItem(
+        title: 'Loudess and Equilizer',
+        hasNavigation: true,
+        location: '/settings/playback/equilizer',
+      ),
+      SettingItem(
           title: S.of(context).languages,
           trailing: (context) {
             return MaterialButton(
@@ -391,14 +396,14 @@ List<SettingItem> playbackSettingDataList(BuildContext context) => [
       SettingItem(
         title: S.of(context).enablePlaybackCache,
         onTap: (context) async {
-          bool isEnabled = box.get('playbackCache', defaultValue: true);
+          bool isEnabled = box.get('playbackCache', defaultValue: false);
           await box.put('playbackCache', !isEnabled);
         },
         trailing: (context) {
           return ValueListenableBuilder(
             valueListenable: box.listenable(keys: ['playbackCache']),
             builder: (context, value, child) {
-              bool isEnabled = value.get('playbackCache', defaultValue: true);
+              bool isEnabled = value.get('playbackCache', defaultValue: false);
               return CupertinoSwitch(
                 value: isEnabled,
                 onChanged: (val) async {

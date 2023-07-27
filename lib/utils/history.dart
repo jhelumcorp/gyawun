@@ -4,7 +4,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 Future<void> addSongHistory(Map song) async {
   bool isPlaybackCache =
-      Hive.box('settings').get('playbackCache', defaultValue: true);
+      Hive.box('settings').get('playbackCache', defaultValue: false);
+
   Map? isDownloaded = Hive.box('downloads').get(song['id']);
   if (isPlaybackCache && isDownloaded == null) {
     bool isLocal =

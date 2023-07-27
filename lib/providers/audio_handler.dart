@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gyawun/providers/media_manager.dart';
 import 'package:gyawun/utils/history.dart';
+import 'package:gyawun/utils/playback_cache.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -33,12 +34,27 @@ extension AudioHandlerExtension on AudioHandler {
 }
 
 class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
-  final AudioPlayer _player = AudioPlayer();
+  final _equalizer = AndroidEqualizer();
+  final _loudnessEnhancer = AndroidLoudnessEnhancer();
+  AndroidEqualizerParameters? _equalizerParams;
+
+  late AudioPlayer _player;
   final ConcatenatingAudioSource _playlist =
       ConcatenatingAudioSource(children: []);
 
   MyAudioHandler() {
+    final AudioPipeline pipeline = AudioPipeline(
+      androidAudioEffects: [
+        _equalizer,
+        _loudnessEnhancer,
+      ],
+    );
+    _player = AudioPlayer(audioPipeline: pipeline);
     GetIt.I.registerSingleton<AudioPlayer>(_player);
+    GetIt.I.registerSingleton<AndroidEqualizer>(_equalizer);
+    GetIt.I.registerSingleton<AndroidLoudnessEnhancer>(_loudnessEnhancer);
+
+    _loadEquilizer();
     _loadEmptyPlaylist();
     _notifyAudioHandlerAboutPlaybackEvents();
     _listenForDurationChanges();
@@ -46,6 +62,29 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
     _listenForSequenceStateChanges();
     box.listenable().addListener(() {
       _notifyAudioHandlerAboutPlaybackEvents();
+    });
+  }
+
+  _loadEquilizer() async {
+    await _equalizer.setEnabled(Hive.box('settings')
+        .get('equalizerEnabled', defaultValue: false) as bool);
+    await _loudnessEnhancer.setEnabled(Hive.box('settings')
+        .get('loudnessEnabled', defaultValue: false) as bool);
+
+    await _loudnessEnhancer
+        .setTargetGain(Hive.box('settings').get('loudness', defaultValue: 0.0));
+    _equalizer.parameters.then((value) async {
+      _equalizerParams ??= value;
+
+      final List<AndroidEqualizerBand> bands = _equalizerParams!.bands;
+      await Future.forEach(
+        bands,
+        (e) {
+          final gain = Hive.box('settings')
+              .get('equalizerBand${e.index}', defaultValue: 0.5) as double;
+          _equalizerParams!.bands[e.index].setGain(gain);
+        },
+      );
     });
   }
 
@@ -147,8 +186,9 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
   @override
   Future<void> addQueueItems(List<MediaItem> mediaItems) async {
     // manage Just Audio
-    final audioSource = mediaItems.map(_createAudioSource);
-    _playlist.addAll(audioSource.toList());
+
+    Future.forEach(mediaItems,
+        (element) async => _playlist.add(await _createAudioSource(element)));
 
     // notify system
     final newQueue = queue.value..addAll(mediaItems);
@@ -158,7 +198,7 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
   @override
   Future<void> addQueueItem(MediaItem mediaItem) async {
     // manage Just Audio
-    final audioSource = _createAudioSource(mediaItem);
+    final audioSource = await _createAudioSource(mediaItem);
     _playlist.add(audioSource);
 
     // notify system
@@ -166,9 +206,11 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
     queue.add(newQueue);
   }
 
-  UriAudioSource _createAudioSource(MediaItem mediaItem) {
+  Future<UriAudioSource> _createAudioSource(MediaItem mediaItem) async {
+    String? u =
+        await GetIt.I<PlaybackCache>().getFile(url: mediaItem.extras!['url']);
     return AudioSource.uri(
-      Uri.parse(mediaItem.extras!['url'] as String),
+      Uri.parse(u ?? mediaItem.extras!['url'] as String),
       tag: mediaItem,
     );
   }

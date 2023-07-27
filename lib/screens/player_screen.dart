@@ -25,6 +25,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import './../api/extensions.dart';
+import 'settings/equalizer_screen.dart';
 
 class PlayerScreen extends StatefulWidget {
   const PlayerScreen({
@@ -44,6 +46,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   PanelController panelController = PanelController();
   double progress = 0;
   Uri? arturi;
+  List<String> menuItems = ['equilizer'];
 
   @override
   Widget build(BuildContext context) {
@@ -78,10 +81,25 @@ class _PlayerScreenState extends State<PlayerScreen> {
             actions: song != null
                 ? [
                     IconButton(
-                        onPressed: () {
-                          flipCardController.toggleCard();
-                        },
-                        icon: const Icon(Icons.lyrics_rounded))
+                      onPressed: () {
+                        flipCardController.toggleCard();
+                      },
+                      icon: const Icon(Icons.lyrics_rounded),
+                    ),
+                    PopupMenuButton(
+                      onSelected: menuSelected,
+                      icon: const Icon(Icons.more_vert),
+                      itemBuilder: (BuildContext context) {
+                        return menuItems
+                            .map(
+                              (item) => PopupMenuItem(
+                                value: item,
+                                child: Text(item.capitalize()),
+                              ),
+                            )
+                            .toList();
+                      },
+                    ),
                   ]
                 : null,
           ),
@@ -130,6 +148,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
             }),
           )),
     );
+  }
+
+  menuSelected(String item) {
+    switch (item) {
+      case 'equilizer':
+        Navigator.push(context,
+            MaterialPageRoute(builder: (_) => const EqualizerScreen()));
+        break;
+      default:
+        Navigator.pop(context);
+        break;
+    }
   }
 }
 

@@ -4,9 +4,6 @@ import 'dart:typed_data';
 
 import 'package:al_downloader/al_downloader.dart';
 import 'package:audio_service/audio_service.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:get_it/get_it.dart';
-import 'package:gyawun/utils/playback_cache.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
@@ -91,22 +88,17 @@ Future<bool> checkAndRequestPermissions() async {
   if (await Permission.audio.status.isDenied &&
       await Permission.storage.status.isDenied) {
     await [Permission.audio, Permission.storage].request();
-
+    await Permission.manageExternalStorage.request();
     if (await Permission.audio.status.isDenied &&
-        await Permission.storage.status.isDenied) {
+        await Permission.storage.status.isDenied &&
+        await Permission.manageExternalStorage.isDenied) {
       await openAppSettings();
     }
   }
-  if (Platform.isAndroid) {
-    AndroidDeviceInfo info = await DeviceInfoPlugin().androidInfo;
 
-    if (await Permission.manageExternalStorage.isDenied &&
-        info.version.sdkInt == 29) {
-      await Permission.manageExternalStorage.request();
-    }
-  }
-
-  return await Permission.storage.isGranted || await Permission.audio.isGranted;
+  return await Permission.storage.isGranted ||
+      await Permission.audio.isGranted ||
+      await Permission.manageExternalStorage.isGranted;
 }
 
 Future<MediaItem> processSong(Map song) async {
@@ -140,29 +132,15 @@ Future<MediaItem> processSong(Map song) async {
       song['url'] =
           song['url'].toString().replaceAll('_96', '_$streamingQuality');
     }
-    String? cacheFile =
-        await GetIt.I<PlaybackCache>().getFile(url: song['url']);
-    if (cacheFile != null) {
-      song['url'] = cacheFile;
-      song['offline'] = true;
-      mediaItem = MediaItem(
-        id: song['id'],
-        title: song['title'],
-        album: song['album'],
-        artUri: Uri.parse(song['image']),
-        artist: song['artist'],
-        extras: Map.from(song),
-      );
-    } else {
-      mediaItem = MediaItem(
-        id: song['id'],
-        title: song['title'],
-        album: song['album'],
-        artUri: Uri.parse(song['image']),
-        artist: song['artist'],
-        extras: Map.from(song),
-      );
-    }
+
+    mediaItem = MediaItem(
+      id: song['id'],
+      title: song['title'],
+      album: song['album'],
+      artUri: Uri.parse(song['image']),
+      artist: song['artist'],
+      extras: Map.from(song),
+    );
   }
 
   return mediaItem;

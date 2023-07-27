@@ -122,7 +122,7 @@ packages:
     source: hosted
     version: "1.0.2"
   change_app_package_name:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: change_app_package_name
       sha256: f9ebaf68a4b5a68c581492579bb68273c523ef325fbf9ce2f1b57fb136ad023b
@@ -193,22 +193,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
-  device_info_plus:
-    dependency: "direct main"
-    description:
-      name: device_info_plus
-      sha256: "2c35b6d1682b028e42d07b3aee4b98fa62996c10bc12cb651ec856a80d6a761b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.0.2"
-  device_info_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: device_info_plus_platform_interface
-      sha256: d3b01d5868b50ae571cd1dc6e502fc94d956b665756180f7b16ead09e836fd64
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.0.0"
   dropdown_button2:
     dependency: "direct main"
     description:
@@ -986,14 +970,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.3"
-  win32_registry:
-    dependency: transitive
-    description:
-      name: win32_registry
-      sha256: e4506d60b7244251bc59df15656a3093501c37fb5af02105a944d73eb95be4c9
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   xdg_directories:
     dependency: transitive
     description:

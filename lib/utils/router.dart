@@ -13,6 +13,7 @@ import 'package:gyawun/screens/playlists/playlists_screen.dart';
 import 'package:gyawun/screens/search/main_search.dart';
 import 'package:gyawun/screens/settings/app_layout.dart';
 import 'package:gyawun/screens/settings/download_screen.dart';
+import 'package:gyawun/screens/settings/equalizer_screen.dart';
 import 'package:gyawun/screens/settings/history_screen.dart';
 import 'package:gyawun/screens/settings/playback_screent.dart';
 import 'package:gyawun/screens/settings/providers_screen.dart';
@@ -119,10 +120,16 @@ List<StatefulShellBranch> branches = [
                   const CupertinoPage(child: ThemeScreen()),
             ),
             GoRoute(
-              path: 'playback',
-              pageBuilder: (context, state) =>
-                  const CupertinoPage(child: PlaybackScreen()),
-            ),
+                path: 'playback',
+                pageBuilder: (context, state) =>
+                    const CupertinoPage(child: PlaybackScreen()),
+                routes: [
+                  GoRoute(
+                    path: 'equilizer',
+                    pageBuilder: (context, state) =>
+                        const CupertinoPage(child: EqualizerScreen()),
+                  ),
+                ]),
             GoRoute(
               path: 'history',
               pageBuilder: (context, state) =>

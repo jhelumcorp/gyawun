@@ -50,6 +50,7 @@ class PlaybackCache extends ChangeNotifier {
     String dir = path ?? (await _openDir()).path;
     var files = await Directory(dir).list(recursive: true).toList();
     var dirSize = files.fold(0, (int sum, file) => sum + file.statSync().size);
+
     String csize = '${(dirSize / 1024 / 1024).toStringAsFixed(2)} MBs';
     cachesize.value = csize;
     notifyListeners();
