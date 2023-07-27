@@ -1,9 +1,10 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyavun/components/color_icon.dart';
-import 'package:gyavun/screens/settings/data_lists.dart';
-import 'package:gyavun/ui/text_styles.dart';
+import 'package:gyawun/components/color_icon.dart';
+import 'package:gyawun/generated/l10n.dart';
+import 'package:gyawun/screens/settings/data_lists.dart';
+import 'package:gyawun/ui/text_styles.dart';
 
 class ThemeScreen extends StatelessWidget {
   const ThemeScreen({super.key});
@@ -12,16 +13,17 @@ class ThemeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Theme", style: mediumTextStyle(context, bold: false)),
+        title: Text(S.of(context).theme,
+            style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
       body: ListView(
         children: [
-          ...themesSettingDataList.map((e) {
+          ...themesSettingDataList(context).map((e) {
             return ListTile(
               title: Text(
                 e.title,
-                style: textStyle(context).copyWith(fontSize: 16),
+                style: textStyle(context, bold: false).copyWith(fontSize: 16),
               ),
               leading: (e.color != null && e.icon != null)
                   ? ColorIcon(

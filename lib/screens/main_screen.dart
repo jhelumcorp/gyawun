@@ -1,10 +1,11 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyavun/components/bottom_player.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/screens/player_screen.dart';
-import 'package:gyavun/ui/text_styles.dart';
+import 'package:gyawun/components/bottom_player.dart';
+import 'package:gyawun/generated/l10n.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/screens/player_screen.dart';
+import 'package:gyawun/ui/text_styles.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +42,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
                       NavigationRailDestination(
                         icon: const Icon(EvaIcons.homeOutline),
                         label: Text(
-                          'Home',
+                          S.of(context).home,
                           style: smallTextStyle(context, bold: false),
                         ),
                       ),
@@ -49,7 +50,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
                         selectedIcon: const Icon(Iconsax.music_playlist5),
                         icon: const Icon(Iconsax.music_playlist),
                         label: Text(
-                          'Playlists',
+                          S.of(context).playlists,
                           style: smallTextStyle(context, bold: false),
                         ),
                       ),
@@ -57,7 +58,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
                         selectedIcon: const Icon(EvaIcons.download),
                         icon: const Icon(EvaIcons.downloadOutline),
                         label: Text(
-                          'Downloads',
+                          S.of(context).downloads,
                           style: smallTextStyle(context, bold: false),
                         ),
                       ),
@@ -65,7 +66,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
                         selectedIcon: const Icon(Iconsax.setting),
                         icon: const Icon(Iconsax.setting),
                         label: Text(
-                          'Settings',
+                          S.of(context).settings,
                           style: smallTextStyle(context, bold: false),
                         ),
                       )
@@ -90,26 +91,26 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
               labelBehavior:
                   NavigationDestinationLabelBehavior.onlyShowSelected,
               selectedIndex: navigationShell.currentIndex,
-              destinations: const [
+              destinations: [
                 NavigationDestination(
-                  selectedIcon: Icon(EvaIcons.home),
-                  icon: Icon(EvaIcons.homeOutline),
-                  label: 'Home',
+                  selectedIcon: const Icon(EvaIcons.home),
+                  icon: const Icon(EvaIcons.homeOutline),
+                  label: S.of(context).home,
                 ),
                 NavigationDestination(
-                  selectedIcon: Icon(Iconsax.music_playlist5),
-                  icon: Icon(Iconsax.music_playlist),
-                  label: 'Playlists',
+                  selectedIcon: const Icon(Iconsax.music_playlist5),
+                  icon: const Icon(Iconsax.music_playlist),
+                  label: S.of(context).playlists,
                 ),
                 NavigationDestination(
-                  selectedIcon: Icon(EvaIcons.download),
-                  icon: Icon(EvaIcons.downloadOutline),
-                  label: 'Downloads',
+                  selectedIcon: const Icon(EvaIcons.download),
+                  icon: const Icon(EvaIcons.downloadOutline),
+                  label: S.of(context).downloads,
                 ),
                 NavigationDestination(
-                  selectedIcon: Icon(Iconsax.setting),
-                  icon: Icon(Iconsax.setting),
-                  label: 'Settings',
+                  selectedIcon: const Icon(Iconsax.setting),
+                  icon: const Icon(Iconsax.setting),
+                  label: S.of(context).settings,
                 )
               ],
               onDestinationSelected: _goBranch,

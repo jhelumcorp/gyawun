@@ -1,12 +1,15 @@
 <div align="center">
     <img src="./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="128" height="128" style="display: block; margin: 0 auto"/>
     <h1>Gyawun (Formerly Vibe Music)</h1>
-    <p>A Flutter application for streaming music from Jio Saavn</p>
+    <p>A Flutter application for streaming music from Jio Saavn and YouTube Music</p>
     <img src="https://visitor-badge.glitch.me/badge?page_id=sheikhhaziq.visitor-badge-gyawun&left_color=red&right_color=green" />
     <a href="https://github.com/sheikhhaziq/gyavyn/releases/latest"><img src="https://img.shields.io/github/v/release/sheikhhaziq/gyawun?style=flat" alt="Latest release" /></a>
     <a href="https://github.com/sheikhhaziq/gyawun/commits"><img src="https://img.shields.io/github/commits-since/sheikhhaziq/gyawun/latest?style=flat" alt="Commits since latest release" /></a>
     <a href="https://github.com/sheikhhaziq/gyawun/commits"><img src="https://img.shields.io/github/commit-activity/m/sheikhhaziq/gyawun?color=g" alt="Commits per month" /></a>
     <a href="https://github.com/sheikhhaziq/gyawun/releases/latest"><img src="https://img.shields.io/github/release-date/sheikhhaziq/gyawun" alt="Last release" /></a>
+
+## Beta versions will  be released only on telegram.
+
 
   
   
@@ -36,20 +39,21 @@
 </p>
 
 ## Features / TODO
-- [x] Play (almost) any song with high quality from Jio Saavn
+- [x] Play (almost) any song with high quality from Jio Saavn and YouTube Music
 - [x] Background playback
 - [x] Search for Songs, Artists and Playlists
 - [x] Reorder songs in playlist or queue
 - [x] Dark Mode
 - [x] Change Audio Quality
-- [x] Material You theme
+- [x] Material You colors
 - [x] Dynamic theme support
 - [x] Add to favorites
 - [x] Change direction from right to left
 - [x] Save history locally
 - [x] Download songs locally
-- [ ] support for other Music Providers
-- [ ] Multiple Language Support
+- [x] Playback Cache
+- [x] support for other Music Providers(YouTube Music)
+- [x] Multiple Language Support(Partially)
 - [ ] Save playlist
 
 ## Installation

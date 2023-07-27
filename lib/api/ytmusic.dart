@@ -1,11 +1,23 @@
 import 'dart:convert';
-import 'dart:developer';
-
-import 'package:gyavun/api/extensions.dart';
-import 'package:gyavun/api/nav.dart';
-import 'package:gyavun/utils/downlod.dart';
+import 'package:gyawun/api/extensions.dart';
+import 'package:gyawun/api/functions.dart';
+import 'package:gyawun/api/nav.dart';
+import 'package:gyawun/utils/downlod.dart';
+import 'package:gyawun/utils/pprint.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
+
+Map types = {
+  'MUSIC_VIDEO_TYPE_OMV': 'video',
+  'MUSIC_VIDEO_TYPE_UGC': 'video',
+  'MUSIC_VIDEO_TYPE_OFFICIAL_SOURCE_MUSIC': 'video',
+  'MUSIC_VIDEO_TYPE_ATV': 'song',
+  'şarkı': 'song',
+  'profil': 'profile',
+  'oynatma listesi': 'playlist',
+  'sanatçı': 'artist',
+};
 
 class YtMusicService {
   static const ytmDomain = 'music.youtube.com';
@@ -54,6 +66,8 @@ class YtMusicService {
   YtMusicService._internal();
 
   Map<String, String> initializeHeaders() {
+    //Get country data
+
     return {
       'user-agent': userAgent,
       'accept': '*/*',
@@ -61,7 +75,9 @@ class YtMusicService {
       'content-type': 'application/json',
       'content-encoding': 'gzip',
       'origin': httpsYtmDomain,
-      'cookie': 'CONSENT=YES+1'
+      'cookie': 'CONSENT=YES+1',
+      'Accept-Language':
+          Hive.box('settings').get('language', defaultValue: 'en'),
     };
   }
 
@@ -101,10 +117,10 @@ class YtMusicService {
   }
 
   Future<Map> sendRequest(
-    String endpoint,
-    Map body,
-    Map<String, String>? headers,
-  ) async {
+      String endpoint, Map body, Map<String, String>? headers,
+      {Map? params}) async {
+    params ??= {};
+    params.addAll(ytmParams);
     final Uri uri = Uri.https(ytmDomain, baseApiEndpoint + endpoint, ytmParams);
     final response = await post(uri, headers: headers, body: jsonEncode(body));
     if (response.statusCode == 200) {
@@ -202,12 +218,91 @@ class YtMusicService {
   }
 
   Future<void> init() async {
+    //Get country data
+    String? countryCode = Hive.box('settings').get('locationCode');
+    if (countryCode == null) {
+      try {
+        final response = await get(Uri.parse('http://ip-api.com/json'));
+        if (response.statusCode == 200) {
+          Map data = jsonDecode(utf8.decode(response.bodyBytes));
+          String countryCode = data['countryCode'];
+          String countryName = data['country'];
+          await Hive.box('settings').put('locationCode', countryCode);
+          await Hive.box('settings').put('locationName', countryName);
+        }
+      } catch (err) {
+        await Hive.box('settings').put('locationCode', 'IN');
+        await Hive.box('settings').put('locationName', 'India');
+      }
+    }
     headers = initializeHeaders();
     if (!headers!.containsKey('X-Goog-Visitor-Id')) {
       headers!['X-Goog-Visitor-Id'] = await getVisitorId(headers) ?? '';
     }
     context = initializeContext();
-    context!['context']['client']['hl'] = 'en';
+  }
+
+  initLanguage() async {
+    context!['context']['client']['hl'] =
+        Hive.box('settings').get('language', defaultValue: 'en');
+    context!['context']['client']['gl'] =
+        Hive.box('settings').get('locationCode', defaultValue: 'IN');
+  }
+
+  Future<Map<String, List>> getMusicHome() async {
+    final Uri link = Uri.https('www.youtube.com', '/music', {
+      'hl': Hive.box('settings').get('language', defaultValue: 'en'),
+      'gl': Hive.box('settings').get('locationCode', defaultValue: 'IN')
+    });
+    try {
+      final Response response = await get(link);
+      if (response.statusCode != 200) {
+        return {};
+      }
+      final String searchResults =
+          RegExp(r'(\"contents\":{.*?}),\"metadata\"', dotAll: true)
+              .firstMatch(response.body)![1]!;
+      final Map data = json.decode('{$searchResults}') as Map;
+
+      final List result = data['contents']['twoColumnBrowseResultsRenderer']
+              ['tabs'][0]['tabRenderer']['content']['sectionListRenderer']
+          ['contents'] as List;
+
+      final List headResult = data['header']['carouselHeaderRenderer']
+          ['contents'][0]['carouselItemRenderer']['carouselItems'] as List;
+
+      final List shelfRenderer = result.map((element) {
+        return element['itemSectionRenderer']['contents'][0]['shelfRenderer'];
+      }).toList();
+
+      final List finalResult = [];
+
+      for (Map element in shelfRenderer) {
+        String title = element['title']['runs'][0]['text'].trim();
+
+        List playlistItems = await formatHomeSections(
+            element['content']['horizontalListRenderer']['items']);
+
+        if (playlistItems.isNotEmpty) {
+          finalResult.add({
+            'title': title,
+            'items': playlistItems,
+          });
+        } else {
+          Logger.root.severe(
+            "got null in getMusicHome for '${element['title']['runs'][0]['text']}'",
+          );
+        }
+      }
+
+      final List finalHeadResult = formatHeadItems(headResult);
+      finalResult.removeWhere((element) => element == null);
+
+      return {'body': finalResult, 'head': finalHeadResult};
+    } catch (e) {
+      Logger.root.severe('Error in getMusicHome: $e');
+      return {};
+    }
   }
 
   Future<List<Map>> search(
@@ -219,6 +314,8 @@ class YtMusicService {
     if (headers == null) {
       await init();
     }
+    await initLanguage();
+
     try {
       final body = Map.from(context!);
       body['query'] = query;
@@ -297,15 +394,20 @@ class YtMusicService {
             'text',
             'runs'
           ]) as List;
+
           // Logger.root.info('Looping child elements of "$title"');
           int count = 0;
-          String type = (filter != null
-                  ? filter.substring(0, filter.length - 1)
-                  : subtitleList[0]['text'])
-              .toString()
-              .toLowerCase();
-          String album = '';
-          String artist = '';
+          String type = types[(filter != null
+                      ? filter.substring(0, filter.length - 1)
+                      : subtitleList[0]['text'])
+                  .toString()
+                  .toLowerCase()] ??
+              (filter != null
+                      ? filter.substring(0, filter.length - 1)
+                      : subtitleList[0]['text'])
+                  .toString()
+                  .toLowerCase();
+
           String views = '';
           String duration = '';
           String subtitle = '';
@@ -314,18 +416,13 @@ class YtMusicService {
           String subscribers = '';
           Map details = {
             'title': title,
-            'image': images.first.toString().replaceAll(
-                'w60-h60', type == "artist" ? 'w400-h400' : 'w300-h300'),
+            'image': images.first.toString().replaceAll('w60-h60', 'w400-h400'),
             'images': images,
-            'type': (filter != null
-                    ? filter.substring(0, filter.length - 1)
-                    : subtitleList[0]['text'])
-                .toString()
-                .toLowerCase(),
+            'type': type,
             'artists': [],
             'provider': 'youtube'
           };
-          // pprint(subtitleList);
+
           for (final element in subtitleList) {
             // pprint(element);
             Map browseEndpoint = {
@@ -346,17 +443,6 @@ class YtMusicService {
             } else if (element['text'].toString().contains(':') &&
                 element['text'].toString().split(':')[0].isNumeric()) {
               details['duration'] = element['text'];
-            } else if (element['text'].toString().contains('views')) {
-              details['views'] =
-                  element['text'].toString().replaceAll('views', '').trim();
-            } else if (element['text'].toString().length == 4 &&
-                element['text'].toString().isNumeric()) {
-              details['year'] = int.parse(element['text']);
-            } else if (element['text'].toString().contains('subscribers')) {
-              details['subscribers'] = element['text']
-                  .toString()
-                  .replaceAll('subscribers', '')
-                  .trim();
             }
 
             // ignore: use_string_buffers
@@ -367,17 +453,8 @@ class YtMusicService {
               if (count == 1) {
                 if (sectionTitle == 'Artists') {
                   subscribers += element['text'].toString();
-                } else {
-                  if (element['text'].toString().trim() == '&') {
-                    artist += ', ';
-                  } else {
-                    artist += element['text'].toString();
-                  }
-                }
+                } else {}
               } else if (count == 2) {
-                if (sectionTitle == 'Songs') {
-                  album += element['text'].toString();
-                }
                 if (sectionTitle == 'Videos') {
                   views += element['text'].toString();
                 }
@@ -408,35 +485,17 @@ class YtMusicService {
                     ];
           final String id = nav(childItem, idNav).toString();
           details['id'] = 'youtube$id';
-          details['subtitle'] = details['artists'].isNotEmpty
-              ? details['artists'].map((e) => e['name']).join(',')
-              : '';
-          details['artist'] = details['artists'].isNotEmpty
-              ? details['artists'].map((e) => e['name']).join(',')
-              : '';
+          details['artist'] =
+              details['artists'].map((e) => e['name']).join(',').toString();
           details['subtitle'] = subtitle;
+          details['views'] = views;
+          details['year'] = year;
+          details['countSongs'] = countSongs;
+          details['duration'] = duration;
+          details['subscribers'] = subscribers;
           if (details['type'] == 'song' || details['type'] == 'video') {
             details['url'] = await getSongUrl(id);
           }
-
-          // pprint(details);
-          // pprint(childItem);
-          // sectionSearchResults.add({
-          //   'id': 'youtube$id',
-          //   'type': type,
-          //   'title': title,
-          //   'artist': type == 'Artist' ? title : artist,
-          //   'album': album,
-          //   'duration': duration,
-          //   'views': views,
-          //   'year': year,
-          //   'countSongs': countSongs,
-          //   'subtitle': subtitle,
-          //   'image': images.first,
-          //   'images': images,
-          //   'subscribers': subscribers,
-          //   'provider': 'youtube'
-          // });
           sectionSearchResults.add(details);
         }
         if (sectionSearchResults.isNotEmpty) {
@@ -462,6 +521,8 @@ class YtMusicService {
     if (headers == null) {
       await init();
     }
+    await initLanguage();
+
     try {
       final body = Map.from(context!);
       body['input'] = query;
@@ -504,6 +565,8 @@ class YtMusicService {
     if (headers == null) {
       await init();
     }
+    await initLanguage();
+
     try {
       signatureTimestamp = signatureTimestamp ?? getDatestamp() - 1;
       final body = Map.from(context!);
@@ -558,6 +621,8 @@ class YtMusicService {
     if (headers == null) {
       await init();
     }
+    await initLanguage();
+
     try {
       final browseId =
           playlistId.startsWith('VL') ? playlistId : 'VL$playlistId';
@@ -565,6 +630,7 @@ class YtMusicService {
       body['browseId'] = browseId;
       final Map response =
           await sendRequest(endpoints['browse']!, body, headers);
+
       final String? heading = nav(response, [
         'header',
         'musicDetailHeaderRenderer',
@@ -615,8 +681,8 @@ class YtMusicService {
             'contents'
           ]) as List? ??
           [];
-      final List<Map> songResults = [];
-      for (final item in finalResults) {
+      List<Map> songResults = [];
+      await Future.forEach(finalResults, (item) async {
         final String id = nav(item, [
           'musicResponsiveListItemRenderer',
           'playlistItemData',
@@ -639,8 +705,25 @@ class YtMusicService {
           'text',
           'runs',
           0,
-          'text'
+          'text',
         ]).toString();
+
+        String type = types[nav(item, [
+              'musicResponsiveListItemRenderer',
+              'flexColumns',
+              0,
+              'musicResponsiveListItemFlexColumnRenderer',
+              'text',
+              'runs',
+              0,
+              'navigationEndpoint',
+              'watchEndpoint',
+              'watchEndpointMusicSupportedConfigs',
+              'watchEndpointMusicConfig',
+              'musicVideoType'
+            ])] ??
+            'video';
+
         final List subtitleList = nav(item, [
           'musicResponsiveListItemRenderer',
           'flexColumns',
@@ -649,6 +732,7 @@ class YtMusicService {
           'text',
           'runs'
         ]) as List;
+
         int count = 0;
         String year = '';
         String album = '';
@@ -657,7 +741,7 @@ class YtMusicService {
         String duration = '';
         String subtitle = '';
         year = '';
-        for (final element in subtitleList) {
+        await Future.forEach(subtitleList, (element) {
           // ignore: use_string_buffers
           subtitle += element['text'].toString();
           if (element['text'].trim() == '•') {
@@ -678,10 +762,11 @@ class YtMusicService {
               duration += element['text'].toString();
             }
           }
-        }
-        songResults.add({
+        });
+
+        Map d = {
           'id': 'youtube$id',
-          'type': 'song',
+          'type': type,
           'title': title,
           'artist': artist,
           'genre': 'YouTube',
@@ -691,15 +776,18 @@ class YtMusicService {
           'album': album,
           'duration': duration,
           'subtitle': subtitle,
-          'image': image.replaceAll('w60-h60', 'w300-h300'),
+          'image': image.replaceAll('w60-h60', 'w400-h400'),
           'perma_url': 'https://www.youtube.com/watch?v=$id',
-          'url': await getSongUrl(id),
+          'url': await getSongUrl('youtube$id'),
           'release_date': '',
           'album_id': '',
           'expire_at': '0',
           'provider': 'youtube',
-        });
-      }
+        };
+
+        songResults.add(d);
+      });
+
       return {
         'songs': songResults,
         'name': heading,
@@ -711,14 +799,72 @@ class YtMusicService {
       };
     } catch (e) {
       Logger.root.severe('Error in ytmusic getPlaylistDetails', e);
-      return {};
+      return {'songs': []};
     }
+  }
+
+  Future getHomes() async {
+    if (headers == null) {
+      await init();
+    }
+    await initLanguage();
+    try {
+      final body = Map.from(context!);
+      body['browseId'] = "FEmusic_home";
+      final Map response =
+          await sendRequest(endpoints['browse']!, body, headers);
+      final data = nav(response, [
+        'contents',
+        'singleColumnBrowseResultsRenderer',
+        'tabs',
+        0,
+        'tabRenderer'
+      ]);
+      final sectionListRenderer = nav(data, ['content', 'sectionListRenderer']);
+
+      // sectionListRenderer['contents'].forEach((element) {
+      //   // if (element['musicTastebuilderShelfRenderer']) return;
+      //   final ctx = element['musicCarouselShelfRenderer'] ??
+      //       element['musicImmersiveCarouselShelfRenderer'];
+      //   ctx['contents'].forEach((item) {
+      //     // pprint(item);
+      //   });
+      // });
+
+      if (sectionListRenderer['continuations'] != null) {
+        await getContinuation(
+            endpoints['browse']!,
+            sectionListRenderer['continuations'][0]['nextContinuationData']
+                ['continuation'],
+            sectionListRenderer['continuations'][0]['nextContinuationData']
+                ['clickTrackingParams']);
+      }
+    } catch (e) {
+      Logger.root.severe('Error in ytmusic home', e);
+    }
+  }
+
+  Future getContinuation(endpoint, cToken, itct) async {
+    Map body = Map.from(context!);
+
+    body['browseId'] = "FEmusic_home";
+
+    Map params = {
+      'ctoken': cToken,
+      'continuation': cToken,
+      'itct': itct,
+    };
+    // pprint(cToken);
+    final response = await sendRequest(endpoint, body, headers, params: params);
+    pprint(response);
   }
 
   Future<Map> getAlbumDetails(String albumId) async {
     if (headers == null) {
       await init();
     }
+    await initLanguage();
+
     try {
       final body = Map.from(context!);
       body['browseId'] = albumId;
@@ -776,8 +922,6 @@ class YtMusicService {
         String subtitle = '';
         year = '';
         for (final element in subtitleList) {
-          // ignore: use_string_buffers
-          log('message');
           subtitle += element['text'].toString();
           if (element['text'].trim() == '•') {
             count++;
@@ -839,6 +983,7 @@ class YtMusicService {
     if (headers == null) {
       await init();
     }
+    await initLanguage();
     String artistId = id;
     if (artistId.startsWith('MPLA')) {
       artistId = artistId.substring(4);
@@ -937,7 +1082,7 @@ class YtMusicService {
           'album': album,
           'duration': duration,
           'subtitle': subtitle,
-          'image': image.replaceAll('w60-h60', 'w300-h300'),
+          'image': image.replaceAll('w60-h60', 'w400-h400'),
           'perma_url': 'https://www.youtube.com/watch?v=$id',
           'url': await getSongUrl(id),
           'release_date': '',
@@ -970,6 +1115,7 @@ class YtMusicService {
     if (headers == null) {
       await init();
     }
+    await initLanguage();
     try {
       final body = Map.from(context!);
       body['enablePersistentPlaylistPanel'] = true;
@@ -1022,7 +1168,10 @@ class YtMusicService {
         String album = "";
         String albumId = "";
         int year = 0;
-
+        String type = types[item['navigationEndpoint']['watchEndpoint']
+                    ['watchEndpointMusicSupportedConfigs']
+                ['watchEndpointMusicConfig']['musicVideoType']] ??
+            '';
         item['longBylineText']['runs'].forEach((e) {
           Map? browseEndpoint = e?['navigationEndpoint']?['browseEndpoint'];
           // pprint(browseEndpoint);
@@ -1042,6 +1191,7 @@ class YtMusicService {
         Map details = {
           'id': 'youtube${item["videoId"]}',
           'title': title,
+          'type': type,
           'artists': artists,
           'artist': artists.map((e) => e['name']).join(','),
           'album': album,
@@ -1050,7 +1200,7 @@ class YtMusicService {
           'image': item['thumbnail']['thumbnails']
               .first['url']
               .toString()
-              .replaceAll('w60-h60', 'w300-h300'),
+              .replaceAll('w60-h60', 'w400-h400'),
           'images': item['thumbnail']['thumbnails'],
           'duration': item['lengthText']['runs'][0]['text'],
           'provider': 'youtube',

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyavun/api/api.dart';
-import 'package:gyavun/api/format.dart';
-import 'package:gyavun/components/home_section.dart';
-import 'package:gyavun/components/recently_played.dart';
-import 'package:gyavun/components/recomendations.dart';
-import 'package:gyavun/ui/colors.dart';
-import 'package:gyavun/utils/recomendations.dart';
+import 'package:gyawun/api/api.dart';
+import 'package:gyawun/api/format.dart';
+import 'package:gyawun/api/ytmusic.dart';
+import 'package:gyawun/components/home_section.dart';
+import 'package:gyawun/components/recently_played.dart';
+import 'package:gyawun/components/recomendations.dart';
+import 'package:gyawun/ui/colors.dart';
+import 'package:gyawun/utils/recomendations.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../components/skeletons/home_page.dart';
+import '../../generated/l10n.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen>
   List songs = [];
   List recomendedSongs = [];
   double tileHeight = 0;
+  bool loading = true;
 
   @override
   void initState() {
@@ -47,31 +53,44 @@ class _HomeScreenState extends State<HomeScreen>
                 borderRadius: BorderRadius.circular(35),
                 borderSide: BorderSide.none,
               ),
-              hintText: 'Search Gyawun',
+              hintText: S.of(context).searchGyawun,
               prefixIcon: const Icon(Icons.search),
             ),
           ),
         ),
         centerTitle: true,
       ),
-      body: RefreshIndicator(
-        onRefresh: () => fetchAllData(),
-        child: ListView(
-          children: [
-            if (recomendedSongs.isNotEmpty)
-              Recomendations(recomendedSongs: recomendedSongs),
-            const RecentlyPlayed(),
-            ...songs.map((item) => HomeSection(item: item)).toList()
-          ],
-        ),
-      ),
+      body: loading
+          ? const HomePageSkeleton()
+          : RefreshIndicator(
+              onRefresh: () => fetchAllData(),
+              child: ListView(
+                children: [
+                  if (recomendedSongs.isNotEmpty)
+                    Recomendations(recomendedSongs: recomendedSongs),
+                  const RecentlyPlayed(),
+                  ...songs
+                      .map((item) => HomeSection(sectionIitem: item))
+                      .toList()
+                ],
+              ),
+            ),
     );
   }
 
   fetchAllData() async {
+    setState(() {
+      loading = true;
+      recomendedSongs = [];
+      songs = [];
+    });
+    // await YtMusicService().getHomes();
     recomendedSongs = await getRecomendations();
     songs = await fetchHomeData();
-    setState(() {});
+
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -79,17 +98,26 @@ class _HomeScreenState extends State<HomeScreen>
 }
 
 Future<List> fetchHomeData() async {
-  Map<dynamic, dynamic> data = await SaavnAPI().fetchHomePageData();
-  Map<dynamic, dynamic> formatedData =
-      await FormatResponse.formatPromoLists(data);
-  Map modules = formatedData['modules'];
+  String provider =
+      Hive.box('settings').get('homescreenProvider', defaultValue: 'saavn');
 
   List tiles = [];
-  modules.forEach((key, value) {
-    tiles.add({
-      'title': value['title'],
-      'songs': formatedData[key],
+  if (provider == 'youtube') {
+    Map<String, dynamic> a = await YtMusicService().getMusicHome();
+    tiles = a['body'];
+    // pprint(a['body']);
+  } else {
+    Map<dynamic, dynamic> data = await SaavnAPI().fetchHomePageData();
+    Map<dynamic, dynamic> formatedData =
+        await FormatResponse.formatPromoLists(data);
+    Map modules = formatedData['modules'];
+    modules.forEach((key, value) {
+      tiles.add({
+        'title': value['title'],
+        'items': formatedData[key],
+      });
     });
-  });
+  }
+
   return tiles;
 }

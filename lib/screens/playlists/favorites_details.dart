@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/option_menu.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/option_menu.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 

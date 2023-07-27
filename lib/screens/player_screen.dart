@@ -12,19 +12,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lyric/lyrics_reader.dart';
 import 'package:flutter_lyric/lyrics_reader_model.dart';
 import 'package:flutter_progress_status/flutter_progress_status.dart';
-import 'package:gyavun/api/image_resolution_modifier.dart';
-import 'package:gyavun/components/play_button.dart';
-import 'package:gyavun/components/queue_list.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/ui/colors.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/downlod.dart';
-import 'package:gyavun/utils/option_menu.dart';
+import 'package:gyawun/api/image_resolution_modifier.dart';
+import 'package:gyawun/components/play_button.dart';
+import 'package:gyawun/components/queue_list.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/ui/colors.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/downlod.dart';
+import 'package:gyawun/utils/option_menu.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import './../api/extensions.dart';
+import 'settings/equalizer_screen.dart';
 
 class PlayerScreen extends StatefulWidget {
   const PlayerScreen({
@@ -44,6 +46,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   PanelController panelController = PanelController();
   double progress = 0;
   Uri? arturi;
+  List<String> menuItems = ['equilizer'];
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +66,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
         return true;
       },
       child: Scaffold(
-          resizeToAvoidBottomInset: false,
           backgroundColor:
               Theme.of(context).colorScheme.surfaceTint.withAlpha(30),
           appBar: AppBar(
@@ -79,10 +81,25 @@ class _PlayerScreenState extends State<PlayerScreen> {
             actions: song != null
                 ? [
                     IconButton(
-                        onPressed: () {
-                          flipCardController.toggleCard();
-                        },
-                        icon: const Icon(Icons.lyrics_rounded))
+                      onPressed: () {
+                        flipCardController.toggleCard();
+                      },
+                      icon: const Icon(Icons.lyrics_rounded),
+                    ),
+                    PopupMenuButton(
+                      onSelected: menuSelected,
+                      icon: const Icon(Icons.more_vert),
+                      itemBuilder: (BuildContext context) {
+                        return menuItems
+                            .map(
+                              (item) => PopupMenuItem(
+                                value: item,
+                                child: Text(item.capitalize()),
+                              ),
+                            )
+                            .toList();
+                      },
+                    ),
                   ]
                 : null,
           ),
@@ -131,6 +148,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
             }),
           )),
     );
+  }
+
+  menuSelected(String item) {
+    switch (item) {
+      case 'equilizer':
+        Navigator.push(context,
+            MaterialPageRoute(builder: (_) => const EqualizerScreen()));
+        break;
+      default:
+        Navigator.pop(context);
+        break;
+    }
   }
 }
 
@@ -205,7 +234,10 @@ class _ArtWorkState extends State<ArtWork> {
                         tag: "playerPoster",
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: widget.song?.extras?['offline'] == true
+                          child: widget.song?.extras?['offline'] == true &&
+                                  !widget.song!.artUri
+                                      .toString()
+                                      .startsWith('https')
                               ? Image.file(
                                   File.fromUri(widget.song!.artUri!),
                                   width: width,
@@ -226,7 +258,10 @@ class _ArtWorkState extends State<ArtWork> {
                   borderRadius: BorderRadius.circular(8),
                   child: Stack(
                     children: [
-                      widget.song?.extras?['offline'] == true
+                      widget.song?.extras?['offline'] == true &&
+                              !widget.song!.artUri
+                                  .toString()
+                                  .startsWith('https')
                           ? Image.file(
                               File.fromUri(widget.song!.artUri!),
                               width: width,
@@ -413,51 +448,54 @@ class _NameAndControlsState extends State<NameAndControls> {
                           smallTextStyle(context).color!.withOpacity(0.3),
                       onSeek: (value) => mediaManager.seek(value),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
+                    Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                mediaManager.shuffle();
+                              },
+                              icon: Icon(
+                                Iconsax.shuffle,
+                                color: mediaManager.isShuffleModeEnabled
+                                    ? Theme.of(context).primaryColor
+                                    : null,
+                              )),
+                          IconButton(
+                              onPressed: () {
+                                mediaManager.previous();
+                              },
+                              icon: const Icon(Iconsax.previous)),
+                          const Hero(
+                            tag: "playerPlayButton",
+                            child: PlayButton(
+                              size: 40,
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                mediaManager.next();
+                              },
+                              icon: const Icon(Iconsax.next)),
+                          IconButton(
                             onPressed: () {
-                              mediaManager.shuffle();
+                              mediaManager.loop();
                             },
                             icon: Icon(
-                              Iconsax.shuffle,
-                              color: mediaManager.isShuffleModeEnabled
-                                  ? Theme.of(context).primaryColor
-                                  : null,
-                            )),
-                        IconButton(
-                            onPressed: () {
-                              mediaManager.previous();
-                            },
-                            icon: const Icon(Iconsax.previous)),
-                        const Hero(
-                          tag: "playerPlayButton",
-                          child: PlayButton(
-                            size: 40,
+                              mediaManager.loopState == LoopState.off
+                                  ? Iconsax.repeate_music
+                                  : mediaManager.loopState == LoopState.all
+                                      ? Iconsax.repeate_music5
+                                      : Iconsax.repeate_one,
+                              color: mediaManager.loopState == LoopState.off
+                                  ? null
+                                  : Theme.of(context).primaryColor,
+                            ),
                           ),
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              mediaManager.next();
-                            },
-                            icon: const Icon(Iconsax.next)),
-                        IconButton(
-                          onPressed: () {
-                            mediaManager.loop();
-                          },
-                          icon: Icon(
-                            mediaManager.loopState == LoopState.off
-                                ? Iconsax.repeate_music
-                                : mediaManager.loopState == LoopState.all
-                                    ? Iconsax.repeate_music5
-                                    : Iconsax.repeate_one,
-                            color: mediaManager.loopState == LoopState.off
-                                ? null
-                                : Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),

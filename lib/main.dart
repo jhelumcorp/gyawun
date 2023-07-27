@@ -6,14 +6,17 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyavun/providers/audio_handler.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/providers/theme_manager.dart';
-import 'package:gyavun/services/server.dart';
-import 'package:gyavun/ui/themes/dark.dart';
-import 'package:gyavun/ui/themes/light.dart';
-import 'package:gyavun/utils/router.dart';
+import 'package:gyawun/generated/l10n.dart';
+import 'package:gyawun/providers/audio_handler.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/providers/theme_manager.dart';
+import 'package:gyawun/services/server.dart';
+import 'package:gyawun/ui/themes/dark.dart';
+import 'package:gyawun/ui/themes/light.dart';
+import 'package:gyawun/utils/playback_cache.dart';
+import 'package:gyawun/utils/router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:metadata_god/metadata_god.dart';
 
@@ -40,6 +43,7 @@ void main() async {
   ThemeManager themeManager = ThemeManager();
   GetIt.I.registerSingleton(mediaManager);
   GetIt.I.registerSingleton(themeManager);
+  GetIt.I.registerSingleton(PlaybackCache());
 
   runApp(MultiProvider(
     providers: [
@@ -83,7 +87,15 @@ class _MainAppState extends State<MainApp> {
       return GestureDetector(
         onTapDown: (details) => FocusManager.instance.primaryFocus?.unfocus(),
         child: MaterialApp.router(
-          title: 'Gyavun',
+          title: 'Gyawun',
+          locale: Locale(themeManager.language['code']),
+          localizationsDelegates: const [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
           theme: themeManager.isMaterialTheme && lightScheme != null
               ? materialLightTheme(lightScheme.primary)
               : themeManager.getLightTheme,

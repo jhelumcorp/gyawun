@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:gyavun/utils/spotify.dart';
+import 'package:gyawun/utils/spotify.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 

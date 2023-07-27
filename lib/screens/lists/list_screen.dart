@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:gyavun/api/api.dart';
-import 'package:gyavun/api/extensions.dart';
-import 'package:gyavun/api/ytmusic.dart';
-import 'package:gyavun/components/playlist_album_header.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/ui/colors.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/option_menu.dart';
+import 'package:gyawun/api/api.dart';
+import 'package:gyawun/api/extensions.dart';
+import 'package:gyawun/api/ytmusic.dart';
+import 'package:gyawun/components/playlist_album_header.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/ui/colors.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/option_menu.dart';
 import 'package:provider/provider.dart';
 
 class ListScreen extends StatefulWidget {
@@ -144,9 +144,9 @@ class _ListScreenState extends State<ListScreen> {
                             children: [
                               CachedNetworkImage(
                                   imageUrl: song['image'],
-                                  width: 50,
+                                  width: song['type'] == 'video' ? 80 : 50,
                                   height: 50,
-                                  fit: BoxFit.fill),
+                                  fit: BoxFit.contain),
                             ],
                           ),
                         ),
@@ -166,7 +166,7 @@ class _ListScreenState extends State<ListScreen> {
 
   fetchSongs() async {
     List list = [];
-    if (widget.list['type'] == 'playlist') {
+    if (widget.list['type'] == 'playlist' || widget.list['type'] == 'chart') {
       if (widget.list['provider'] == 'youtube') {
         Map songMap = await YtMusicService().getPlaylistDetails(
             widget.list['id'].toString().replaceAll('youtube', ''));

@@ -2,9 +2,9 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:gyavun/api/image_resolution_modifier.dart';
+import 'package:gyawun/api/image_resolution_modifier.dart';
 
-import 'package:gyavun/models/album_model.dart';
+import 'package:gyawun/models/album_model.dart';
 
 class SongTrack {
   String id;

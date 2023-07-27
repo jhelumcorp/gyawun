@@ -1,9 +1,11 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyavun/components/color_icon.dart';
-import 'package:gyavun/screens/settings/data_lists.dart';
-import 'package:gyavun/ui/text_styles.dart';
+import 'package:gyawun/components/color_icon.dart';
+import 'package:gyawun/screens/settings/data_lists.dart';
+import 'package:gyawun/ui/text_styles.dart';
+
+import '../../generated/l10n.dart';
 
 class DownloadScreen extends StatelessWidget {
   const DownloadScreen({super.key});
@@ -12,16 +14,17 @@ class DownloadScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Download", style: mediumTextStyle(context, bold: false)),
+        title: Text(S.of(context).download,
+            style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
       body: ListView(
         children: [
-          ...downloadSettingDatalist.map((e) {
+          ...downloadSettingDatalist(context).map((e) {
             return ListTile(
               title: Text(
                 e.title,
-                style: textStyle(context).copyWith(fontSize: 16),
+                style: textStyle(context, bold: false).copyWith(fontSize: 16),
               ),
               leading: (e.color != null && e.icon != null)
                   ? ColorIcon(

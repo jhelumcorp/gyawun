@@ -1,6 +1,4 @@
-import 'dart:collection';
 import 'dart:io';
-
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 YoutubeExplode yt = YoutubeExplode();
@@ -16,7 +14,8 @@ Future<HttpServer> startServer() async {
     int qualityIndex = 0;
 
     StreamManifest manifest = await yt.videos.streamsClient.getManifest(id);
-    UnmodifiableListView<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly;
+    List<AudioOnlyStreamInfo> streamInfos =
+        manifest.audioOnly.sortByBitrate().reversed.toList();
     if (quality == 'low') {
       qualityIndex = 0;
     } else if (quality == 'medium') {

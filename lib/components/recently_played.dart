@@ -1,17 +1,20 @@
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gyavun/api/image_resolution_modifier.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/ui/colors.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/downlod.dart';
-import 'package:gyavun/utils/option_menu.dart';
+import 'package:gyawun/api/image_resolution_modifier.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/ui/colors.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/downlod.dart';
+import 'package:gyawun/utils/option_menu.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
+
+import '../generated/l10n.dart';
 
 class RecentlyPlayed extends StatelessWidget {
   const RecentlyPlayed({
@@ -33,7 +36,7 @@ class RecentlyPlayed extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text("Recently Played",
+                    child: Text(S.of(context).recentlyPlayed,
                         style: textStyle(context, bold: true).copyWith(
                             color: Theme.of(context).colorScheme.primary)),
                   ),
@@ -61,30 +64,43 @@ class RecentlyPlayed extends StatelessWidget {
                                     showSongOptions(context, Map.from(mapSong));
                                   },
                                   child: SizedBox(
-                                    width: 150,
+                                    width: song.extras!['type'] == 'video'
+                                        ? 250
+                                        : 150,
                                     child: Column(
                                       children: [
                                         ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          child: song.extras!['offline'] == true
+                                          child: song.extras!['offline'] ==
+                                                      true &&
+                                                  !song.artUri
+                                                      .toString()
+                                                      .startsWith('http')
                                               ? Image.file(
                                                   File.fromUri(song.artUri!),
                                                   height: 150,
-                                                  width: 150,
-                                                  fit: BoxFit.fill,
+                                                  fit: BoxFit.fitHeight,
+                                                  errorBuilder: (context, error,
+                                                      stackTrace) {
+                                                    return CachedNetworkImage(
+                                                      imageUrl: getImageUrl(song
+                                                          .artUri
+                                                          .toString()),
+                                                      height: 150,
+                                                      fit: BoxFit.fitHeight,
+                                                    );
+                                                  },
                                                 )
                                               : CachedNetworkImage(
                                                   imageUrl: getImageUrl(
                                                       song.artUri.toString()),
                                                   height: 150,
-                                                  width: 150,
-                                                  fit: BoxFit.fill,
+                                                  fit: BoxFit.fitHeight,
                                                   errorWidget:
                                                       (context, url, error) {
                                                     return Container(
                                                       height: 150,
-                                                      width: 150,
                                                       decoration: BoxDecoration(
                                                         color: darkGreyColor
                                                             .withAlpha(50),
@@ -100,10 +116,11 @@ class RecentlyPlayed extends StatelessWidget {
                                                 ),
                                         ),
                                         const SizedBox(height: 5),
-                                        SizedBox(
-                                          width: 150,
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8),
                                           child: Center(
-                                            child: Text(
+                                            child: AutoSizeText(
                                               song.title,
                                               style: smallTextStyle(context,
                                                   bold: true),

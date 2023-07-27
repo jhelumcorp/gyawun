@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:gyavun/providers/media_manager.dart';
-import 'package:gyavun/ui/text_styles.dart';
-import 'package:gyavun/utils/snackbar.dart';
+import 'package:flutter/material.dart';
+import 'package:gyawun/providers/media_manager.dart';
+import 'package:gyawun/screens/settings/equalizer_screen.dart';
+import 'package:gyawun/ui/text_styles.dart';
+import 'package:gyawun/utils/snackbar.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +48,14 @@ showSongOptions(BuildContext context, Map<String, dynamic> song,
         ],
       ),
       actions: [
+        CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const EqualizerScreen()));
+          },
+          child: const Text("Equilizer"),
+        ),
         CupertinoActionSheetAction(
           onPressed: () {
             Navigator.pop(context);

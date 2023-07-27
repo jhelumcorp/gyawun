@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
@@ -89,14 +88,17 @@ Future<bool> checkAndRequestPermissions() async {
   if (await Permission.audio.status.isDenied &&
       await Permission.storage.status.isDenied) {
     await [Permission.audio, Permission.storage].request();
-
+    await Permission.manageExternalStorage.request();
     if (await Permission.audio.status.isDenied &&
-        await Permission.storage.status.isDenied) {
+        await Permission.storage.status.isDenied &&
+        await Permission.manageExternalStorage.isDenied) {
       await openAppSettings();
     }
   }
 
-  return await Permission.storage.isGranted || await Permission.audio.isGranted;
+  return await Permission.storage.isGranted ||
+      await Permission.audio.isGranted ||
+      await Permission.manageExternalStorage.isGranted;
 }
 
 Future<MediaItem> processSong(Map song) async {
@@ -130,6 +132,7 @@ Future<MediaItem> processSong(Map song) async {
       song['url'] =
           song['url'].toString().replaceAll('_96', '_$streamingQuality');
     }
+
     mediaItem = MediaItem(
       id: song['id'],
       title: song['title'],
@@ -192,7 +195,8 @@ Future<void> downloadYoutubeSong(MediaItem song, String path) async {
   String id = song.id.replaceFirst('youtube', '');
   StreamManifest manifest = await yt.videos.streamsClient.getManifest(id);
   int qualityIndex = 0;
-  UnmodifiableListView<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly;
+  List<AudioOnlyStreamInfo> streamInfos =
+      manifest.audioOnly.sortByBitrate().reversed.toList();
   String quality = (Hive.box('settings')
           .get('youtubeDownloadQuality', defaultValue: 'Medium'))
       .toString()

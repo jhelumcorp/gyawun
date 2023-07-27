@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dart_des/dart_des.dart';
-import 'package:gyavun/api/api.dart';
-import 'package:gyavun/api/extensions.dart';
-import 'package:gyavun/api/image_resolution_modifier.dart';
+import 'package:gyawun/api/api.dart';
+import 'package:gyawun/api/extensions.dart';
+import 'package:gyawun/api/image_resolution_modifier.dart';
 import 'package:logging/logging.dart';
 
 // ignore: avoid_classes_with_only_static_members
