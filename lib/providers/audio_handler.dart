@@ -186,10 +186,10 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
   @override
   Future<void> addQueueItems(List<MediaItem> mediaItems) async {
     // manage Just Audio
-
-    Future.forEach(mediaItems,
-        (element) async => _playlist.add(await _createAudioSource(element)));
-
+    List<UriAudioSource> items = [];
+    await Future.forEach(mediaItems,
+        (element) async => items.add(await _createAudioSource(element)));
+    _playlist.addAll(items);
     // notify system
     final newQueue = queue.value..addAll(mediaItems);
     queue.add(newQueue);

@@ -213,6 +213,7 @@ class MediaManager extends ChangeNotifier {
     if (_audioHandler.queue.value.isNotEmpty) {
       await _audioHandler.clear();
     }
+    index = initialIndex;
     await addSongHistory(mediaItems[initialIndex]);
     await addItems(mediaItems);
 
