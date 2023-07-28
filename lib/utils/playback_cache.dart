@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -71,10 +72,10 @@ class PlaybackCache extends ChangeNotifier {
         return null;
       }
     } on IOException catch (e) {
-      print('Error occurs while downloading file: $e');
+      Logger.root.info('Error occurs while downloading file: $e');
       return null;
     } catch (e) {
-      print(e);
+      Logger.root.info(e);
       return null;
     }
   }
