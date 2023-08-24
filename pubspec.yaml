@@ -1,7 +1,7 @@
 name: gyawun
 description: Flutter application for streaming music from Jio Saavn
 publish_to: 'none'
-version: 0.9.4+13
+version: 0.9.5+14
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
@@ -41,7 +41,7 @@ dependencies:
   metadata_god: ^0.5.0
   flutter_progress_status: ^0.0.3
   path_provider: ^2.0.15
-  youtube_explode_dart: ^1.12.4
+  youtube_explode_dart: ^2.0.2
   palette_generator: ^0.3.3+2
 
   auto_size_text: ^3.0.0

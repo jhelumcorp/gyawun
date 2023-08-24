@@ -60,7 +60,8 @@ class _HomeSectionState extends State<HomeSection> {
             itemBuilder: (context, index) {
               Map song = items[index];
 
-              return GestureDetector(
+              return InkWell(
+                focusColor: Colors.white,
                 onTap: () {
                   if (song['type'] == 'song' || song['type'] == 'video') {
                     context.read<MediaManager>().addAndPlay(sectionitems,

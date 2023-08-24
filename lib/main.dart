@@ -84,8 +84,10 @@ class _MainAppState extends State<MainApp> {
     ThemeManager themeManager = context.watch<ThemeManager>();
 
     return DynamicColorBuilder(builder: (lightScheme, darkScheme) {
-      return GestureDetector(
-        onTapDown: (details) => FocusManager.instance.primaryFocus?.unfocus(),
+      return Shortcuts(
+        shortcuts: <LogicalKeySet, Intent>{
+          LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent(),
+        },
         child: MaterialApp.router(
           title: 'Gyawun',
           locale: Locale(themeManager.language['code']),
