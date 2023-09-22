@@ -19,7 +19,7 @@ class ThemeManager extends ChangeNotifier {
   Color _accentColor =
       Color(box.get('accentColor', defaultValue: ui_colors.accentColor.value));
   bool _isPitchBlack = box.get('isPitchBlack', defaultValue: false);
-  bool _isMaterialTheme = box.get('isMaterialTheme', defaultValue: false);
+  bool _isMaterialTheme = box.get('isMaterialTheme', defaultValue: true);
   bool _isRightToLeftDirection =
       box.get('isRightToLeftDirection', defaultValue: false);
   List<String> _languages = box.get('languages', defaultValue: ["English"]);

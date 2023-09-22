@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -43,18 +44,24 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
       ConcatenatingAudioSource(children: []);
 
   MyAudioHandler() {
-    final AudioPipeline pipeline = AudioPipeline(
-      androidAudioEffects: [
-        _equalizer,
-        _loudnessEnhancer,
-      ],
-    );
-    _player = AudioPlayer(audioPipeline: pipeline);
+    if (Platform.isAndroid) {
+      final AudioPipeline pipeline = AudioPipeline(
+        androidAudioEffects: [
+          _equalizer,
+          _loudnessEnhancer,
+        ],
+      );
+      _player = AudioPlayer(audioPipeline: pipeline);
+    } else {
+      _player = AudioPlayer();
+    }
     GetIt.I.registerSingleton<AudioPlayer>(_player);
     GetIt.I.registerSingleton<AndroidEqualizer>(_equalizer);
     GetIt.I.registerSingleton<AndroidLoudnessEnhancer>(_loudnessEnhancer);
 
-    _loadEquilizer();
+    if (Platform.isAndroid) {
+      _loadEquilizer();
+    }
     _loadEmptyPlaylist();
     _notifyAudioHandlerAboutPlaybackEvents();
     _listenForDurationChanges();

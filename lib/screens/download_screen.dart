@@ -11,6 +11,15 @@ import '../generated/l10n.dart';
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({super.key});
 
+  Future<bool> exist(String path, String k) async {
+    File file = File(path);
+    bool exists = await file.exists();
+    if (!exists) {
+      await deleteSong(key: k, path: path);
+    }
+    return exists;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +37,7 @@ class DownloadsScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return items[index]['status'] == 'done'
                   ? FutureBuilder(
-                      future: File(items[index]['path']).exists(),
+                      future: exist(items[index]['path'], items[index]['id']),
                       builder: (context, snaps) {
                         if (snaps.hasData && snaps.data!) {
                           return FutureBuilder(
@@ -41,17 +50,8 @@ class DownloadsScreen extends StatelessWidget {
                                     image: snapshot.data!,
                                   );
                                 }
-                                if (snapshot.hasError) {
-                                  box.delete(box.keyAt(index));
-                                }
                                 return const SizedBox();
                               });
-                        }
-                        if (snaps.hasError) {
-                          deleteSong(
-                              key: box.keyAt(index),
-                              path: items[index]['path']);
-                          box.delete(box.keyAt(index));
                         }
                         return const SizedBox();
                       })

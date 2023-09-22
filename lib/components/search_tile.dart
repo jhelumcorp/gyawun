@@ -2,12 +2,10 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun/api/extensions.dart';
 import 'package:gyawun/providers/media_manager.dart';
 import 'package:gyawun/ui/text_styles.dart';
-import 'package:gyawun/utils/downlod.dart';
 import 'package:gyawun/utils/option_menu.dart';
 import 'package:provider/provider.dart';
 
@@ -74,53 +72,43 @@ class DownloadTile extends StatelessWidget {
   Widget build(BuildContext context) {
     Map song = items[index];
 
-    return SwipeActionCell(
-        key: Key(index.toString()),
-        trailingActions: [
-          SwipeAction(
-              onTap: (CompletionHandler handler) async {
-                await handler(true);
-                await deleteSong(key: song['id'], path: song['path']);
-              },
-              title: "Delete")
-        ],
-        child: ListTile(
-          onTap: () {
-            context.read<MediaManager>().addAndPlay(
-                items.map((e) => {'id': e['id']}).toList(),
-                initialIndex: index,
-                autoFetch: false);
+    return ListTile(
+      onTap: () {
+        context.read<MediaManager>().addAndPlay(
+            items.map((e) => {'id': e['id']}).toList(),
+            initialIndex: index,
+            autoFetch: false);
+      },
+      onLongPress: () async => showSongOptions(context, {
+        'id': song['id'],
+        'title': song['title'],
+        'artist': song['artist'],
+        'album': song['album'],
+        'url': song['path'],
+        'image': image.path,
+        'offline': true,
+      }),
+      title: Text(
+        song['title'],
+        style: subtitleTextStyle(context, bold: true),
+        maxLines: 1,
+      ),
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.file(
+          File.fromUri(image),
+          height: 50,
+          width: 50,
+          errorBuilder: (context, error, stackTrace) {
+            return Image.network(song['image']);
           },
-          onLongPress: () async => showSongOptions(context, {
-            'id': song['id'],
-            'title': song['title'],
-            'artist': song['artist'],
-            'album': song['album'],
-            'url': song['path'],
-            'image': image.path,
-            'offline': true,
-          }),
-          title: Text(
-            song['title'],
-            style: subtitleTextStyle(context, bold: true),
-            maxLines: 1,
-          ),
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.file(
-              File.fromUri(image),
-              height: 50,
-              width: 50,
-              errorBuilder: (context, error, stackTrace) {
-                return Image.network(song['image']);
-              },
-            ),
-          ),
-          subtitle: Text(
-            song['artist'],
-            style: smallTextStyle(context),
-            maxLines: 1,
-          ),
-        ));
+        ),
+      ),
+      subtitle: Text(
+        song['artist'],
+        style: smallTextStyle(context),
+        maxLines: 1,
+      ),
+    );
   }
 }

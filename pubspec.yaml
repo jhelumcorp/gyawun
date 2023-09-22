@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 0.9.5+14
 
 environment:
-  sdk: '>=3.0.2 <4.0.0'
+  sdk: '>=3.1.2 <4.0.0'
 
 dependencies:
   flutter:
@@ -15,7 +15,6 @@ dependencies:
   audio_video_progress_bar: ^1.0.1
   dart_des: ^1.0.2
   eva_icons_flutter: ^3.1.0
-
   get_it: ^7.6.0
   go_router: ^8.2.0
   google_fonts: any
@@ -31,24 +30,26 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   flutter_colorpicker: ^1.0.3
-  dropdown_button2: ^2.1.4
+  dropdown_button2: ^2.3.9
   cached_network_image: ^3.2.3
   dynamic_color: ^1.6.5
   flutter_lyric: ^2.0.4+6
   flip_card: ^0.7.0
   permission_handler: ^10.4.1
-  al_downloader: ^1.7.4
-  metadata_god: ^0.5.0
+
   flutter_progress_status: ^0.0.3
   path_provider: ^2.0.15
   youtube_explode_dart: ^2.0.2
-  palette_generator: ^0.3.3+2
-
   auto_size_text: ^3.0.0
   skeletons: ^0.0.3
   country_picker: ^2.0.20
   intl: any
   shared_preferences: ^2.2.0
+  audio_tagger:
+    git:
+      url: https://github.com/SongTube/audio_tagger
+      ref: main
+  just_audio_mpv: ^0.1.7
 
 dev_dependencies:
   flutter_test:

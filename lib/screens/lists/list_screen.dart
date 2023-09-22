@@ -64,7 +64,7 @@ class _ListScreenState extends State<ListScreen> {
             Text(
               'Songs',
               style: textStyle(context, bold: true)
-                  .copyWith(color: Theme.of(context).primaryColor),
+                  .copyWith(color: Theme.of(context).colorScheme.primary),
             ),
             SizedBox(
               height: 30,

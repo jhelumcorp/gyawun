@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:al_downloader/al_downloader.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +17,14 @@ import 'package:gyawun/ui/themes/light.dart';
 import 'package:gyawun/utils/playback_cache.dart';
 import 'package:gyawun/utils/router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:metadata_god/metadata_god.dart';
+// import 'package:metadata_god/metadata_god.dart';
 
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MetadataGod.initialize();
-  ALDownloader.initialize();
+  // MetadataGod.initialize();
+  // ALDownloader.initialize();
   await Hive.initFlutter();
   await Hive.openBox('settings');
   await Hive.openBox('downloads');
@@ -36,7 +35,9 @@ void main() async {
     SystemUiMode.edgeToEdge,
     overlays: [SystemUiOverlay.top],
   );
-  await FlutterDisplayMode.setHighRefreshRate();
+  if (Platform.isAndroid) {
+    await FlutterDisplayMode.setHighRefreshRate();
+  }
 
   GetIt.I.registerSingleton<AudioHandler>(await initAudioService());
   MediaManager mediaManager = MediaManager();
@@ -98,11 +99,11 @@ class _MainAppState extends State<MainApp> {
             GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: S.delegate.supportedLocales,
-          theme: themeManager.isMaterialTheme && lightScheme != null
-              ? materialLightTheme(lightScheme.primary)
+          theme: themeManager.isMaterialTheme && darkScheme != null
+              ? materialLightTheme(darkScheme.primary)
               : themeManager.getLightTheme,
-          darkTheme: themeManager.isMaterialTheme && darkScheme != null
-              ? materialDarkTheme(darkScheme.primary)
+          darkTheme: themeManager.isMaterialTheme && lightScheme != null
+              ? materialDarkTheme(lightScheme.primary)
               : themeManager.getDarkTheme,
           themeMode: themeManager.themeMode,
           routerConfig: router,

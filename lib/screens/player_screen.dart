@@ -22,7 +22,6 @@ import 'package:gyawun/utils/downlod.dart';
 import 'package:gyawun/utils/option_menu.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import './../api/extensions.dart';
@@ -600,42 +599,3 @@ class _NameAndControlsState extends State<NameAndControls> {
     );
   }
 }
-
-Future<PaletteGenerator> getImageColor(Uri uri) async {
-  return uri.toString().startsWith('http')
-      ? await PaletteGenerator.fromImageProvider(NetworkImage(uri.toString()))
-      : await PaletteGenerator.fromImageProvider(FileImage(File.fromUri(uri)));
-}
-
-
-
-// Container(
-//                     decoration: BoxDecoration(
-//                       color: Theme.of(context).scaffoldBackgroundColor,
-//                       borderRadius: const BorderRadius.only(
-//                           topLeft: Radius.circular(20),
-//                           topRight: Radius.circular(20)),
-//                     ),
-//                     height: 75,
-//                     width: width,
-//                     child: Padding(
-//                       padding: const EdgeInsets.symmetric(
-//                           horizontal: 16, vertical: 16),
-//                       child: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.center,
-//                         children: [
-//                           Container(
-//                             height: 5,
-//                             width: 50,
-//                             decoration: BoxDecoration(
-//                               color: greyColor,
-//                               borderRadius: BorderRadius.circular(20),
-//                             ),
-//                           ),
-//                           const SizedBox(height: 8),
-//                           Text("Next Up",
-//                               style: textStyle(context, bold: true)),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
