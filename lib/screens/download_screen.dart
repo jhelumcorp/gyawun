@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gyawun/components/search_tile.dart';
 import 'package:gyawun/ui/text_styles.dart';
 import 'package:gyawun/utils/downlod.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../generated/l10n.dart';
 
