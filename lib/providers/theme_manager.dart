@@ -45,7 +45,7 @@ class ThemeManager extends ChangeNotifier {
         {'code': 'hi', 'name': 'hindi'},
         // {'code': 'ja', 'name': 'japanese'},
         // {'code': 'ko', 'name': 'korean'},
-        // {'code': 'ru', 'name': 'russian'},
+        {'code': 'ru', 'name': 'russian'},
         {'code': 'tr', 'name': 'turkish'},
         {'code': 'ur', 'name': 'urdu'},
         // {'code': 'zh', 'name': 'chinese'},

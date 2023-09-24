@@ -85,6 +85,25 @@
   "deletePlaybackHistoryDialogText":"Are you sure you want to delete Playback History.",
   "@deletePlaybackHistoryDialogText":{},
 
+  "about":"About",
+  "@about":{},
+  "name":"Name",
+  "@name":{},
+  "version":"Version",
+  "@version":{},
+  "developer":"Developer",
+  "@developer":{},
+  "sheikhhaziq":"Sheikh Haziq",
+  "@sheikhhaziq":{},
+  "contributors":"Contributors",
+  "@contributors":{},
+  "sourceCode":"Source Code",
+  "@sourceCode":{},
+  "bugReport":"Bug Report",
+  "@bugReport":{},
+  "featureRequest":"Feature Request",
+  "@featureRequest":{},
+
 
 
 

@@ -20,7 +20,7 @@ class ProvidersScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          ...providersSettingDatalist.map((e) {
+          ...providersSettingDatalist(context).map((e) {
             return ListTile(
               title: Text(
                 e.title,

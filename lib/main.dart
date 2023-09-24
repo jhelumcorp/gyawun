@@ -30,6 +30,7 @@ void main() async {
   await openBox('downloads');
   await openBox('favorites');
   await openBox('songHistory');
+  await openBox('playlists');
 
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,

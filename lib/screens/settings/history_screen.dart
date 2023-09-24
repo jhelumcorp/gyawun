@@ -20,7 +20,7 @@ class HistoryScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          ...historySettingDatalist.map((e) {
+          ...historySettingDatalist(context).map((e) {
             return ListTile(
               title: Text(
                 e.title,

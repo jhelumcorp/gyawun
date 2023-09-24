@@ -49,6 +49,7 @@ dependencies:
     git:
       url: https://github.com/SongTube/audio_tagger
       ref: main
+  url_launcher: ^6.1.14
 
 dev_dependencies:
   flutter_test:
@@ -58,5 +59,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
+  assets:
+    - assets/images/icon.png
 flutter_intl:
   enabled: true
+

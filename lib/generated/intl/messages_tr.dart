@@ -21,16 +21,20 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{
+        "about": MessageLookupByLibrary.simpleMessage("Hakkında"),
         "addToFavorites":
             MessageLookupByLibrary.simpleMessage("favorilere ekle"),
         "addToQueue": MessageLookupByLibrary.simpleMessage("Sıraya ekle"),
         "appearence": MessageLookupByLibrary.simpleMessage("Görünüm"),
+        "bugReport": MessageLookupByLibrary.simpleMessage("Hata raporu"),
         "cancel": MessageLookupByLibrary.simpleMessage("İptal etmek"),
         "clearPlaybackCache":
             MessageLookupByLibrary.simpleMessage("Oynatma Önbelleğini Temizle"),
         "clearPlaybackCacheDialogText": MessageLookupByLibrary.simpleMessage(
             "Oynatma önbelleğini temizlemek istediğinizden emin misiniz?"),
         "confirm": MessageLookupByLibrary.simpleMessage("Onaylamak"),
+        "contributors":
+            MessageLookupByLibrary.simpleMessage("Katkıda Bulunanlar"),
         "country": MessageLookupByLibrary.simpleMessage("Ülke"),
         "date": MessageLookupByLibrary.simpleMessage("Tarih"),
         "deletePlaybackHistory":
@@ -39,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Oynatma Geçmişini silmek istediğinizden emin misiniz?"),
         "deletePlaybackHistoryText": MessageLookupByLibrary.simpleMessage(
             "Öneriler Oynatma Geçmişine dayanmaktadır"),
+        "developer": MessageLookupByLibrary.simpleMessage("Geliştirici"),
         "done": MessageLookupByLibrary.simpleMessage("Tamamlamak"),
         "download": MessageLookupByLibrary.simpleMessage("İndirmek"),
         "downloadQuality":
@@ -52,20 +57,25 @@ class MessageLookup extends MessageLookupByLibrary {
             "Öneriler Oynatma Geçmişine dayanmaktadır"),
         "equilizer": MessageLookupByLibrary.simpleMessage("dengeleyici"),
         "favorites": MessageLookupByLibrary.simpleMessage("Favoriler"),
+        "featureRequest":
+            MessageLookupByLibrary.simpleMessage("Özellik isteği"),
         "high": MessageLookupByLibrary.simpleMessage("Yüksek"),
         "history": MessageLookupByLibrary.simpleMessage("Tarih"),
         "home": MessageLookupByLibrary.simpleMessage("Ev"),
         "homescreenProvider":
             MessageLookupByLibrary.simpleMessage("Ana Ekran Sağlayıcısı"),
+        "inkashmir": MessageLookupByLibrary.simpleMessage(" Keşmir'de"),
         "languages": MessageLookupByLibrary.simpleMessage("Diller"),
         "loudnessAndEquilizer": MessageLookupByLibrary.simpleMessage(
             "ses yüksekliği ve dengeleyici"),
         "low": MessageLookupByLibrary.simpleMessage("Düşük"),
+        "madeWith": MessageLookupByLibrary.simpleMessage("İle yapılan "),
         "materialColors":
             MessageLookupByLibrary.simpleMessage("Malzeme Renkleri"),
         "medium": MessageLookupByLibrary.simpleMessage("Orta"),
         "musicAndPlayback":
             MessageLookupByLibrary.simpleMessage("Müzik ve Oynatma"),
+        "name": MessageLookupByLibrary.simpleMessage("İsim"),
         "no": MessageLookupByLibrary.simpleMessage("HAYIR"),
         "ok": MessageLookupByLibrary.simpleMessage("Tamam"),
         "pitchBlack": MessageLookupByLibrary.simpleMessage("Zifiri karanlık"),
@@ -86,13 +96,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "serviceProviders":
             MessageLookupByLibrary.simpleMessage("Servis sağlayıcıları"),
         "settings": MessageLookupByLibrary.simpleMessage("Ayarlar"),
+        "sheikhhaziq": MessageLookupByLibrary.simpleMessage("Şeyh Haziq"),
         "sleepTimer":
             MessageLookupByLibrary.simpleMessage("Uyku Zamanlayıcısı"),
         "songs": MessageLookupByLibrary.simpleMessage("şarkılar"),
+        "sourceCode": MessageLookupByLibrary.simpleMessage("Kaynak kodu"),
         "streamingQuality":
             MessageLookupByLibrary.simpleMessage("Yayın Kalitesi"),
         "themeMode": MessageLookupByLibrary.simpleMessage("Tema Modu"),
         "title": MessageLookupByLibrary.simpleMessage("Başlık"),
+        "version": MessageLookupByLibrary.simpleMessage("Sürüm"),
         "yes": MessageLookupByLibrary.simpleMessage("Evet"),
         "youtubeDownloadQuality":
             MessageLookupByLibrary.simpleMessage("YouTube İndirme Kalitesi"),

@@ -61,7 +61,8 @@ You can add your favorite language by:-
 - [x] Playback Cache
 - [x] support for other Music Providers(YouTube Music)
 - [x] Multiple Language Support(Partially)
-- [ ] Save playlist
+- [x] Save playlist
+- [ ] Create Playlists
 
 ## Installation
 

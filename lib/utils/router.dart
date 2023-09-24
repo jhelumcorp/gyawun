@@ -11,6 +11,7 @@ import 'package:gyawun/screens/main_screen/home_screen.dart';
 import 'package:gyawun/screens/playlists/favorites_details.dart';
 import 'package:gyawun/screens/playlists/playlists_screen.dart';
 import 'package:gyawun/screens/search/main_search.dart';
+import 'package:gyawun/screens/settings/about_screen.dart';
 import 'package:gyawun/screens/settings/appearence.dart';
 import 'package:gyawun/screens/settings/download_screen.dart';
 import 'package:gyawun/screens/settings/equalizer_screen.dart';
@@ -87,6 +88,11 @@ List<StatefulShellBranch> branches = [
               pageBuilder: (context, state) =>
                   const CupertinoPage(child: FavoriteDetails()),
             ),
+            GoRoute(
+              path: 'saved',
+              pageBuilder: (context, state) =>
+                  CupertinoPage(child: ListScreen(list: state.extra as Map)),
+            ),
           ]),
     ],
   ),
@@ -138,7 +144,12 @@ List<StatefulShellBranch> branches = [
               path: 'download',
               pageBuilder: (context, state) =>
                   const CupertinoPage(child: DownloadScreen()),
-            )
+            ),
+            GoRoute(
+              path: 'about',
+              pageBuilder: (context, state) =>
+                  const CupertinoPage(child: AboutScreen()),
+            ),
           ]),
     ],
   ),

@@ -63,7 +63,7 @@ class _ListScreenState extends State<ListScreen> {
             PlaylistAlbumHeader(item: widget.list, songs: songs),
             const SizedBox(height: 8),
             Text(
-              S().songs,
+              S.of(context).songs,
               style: textStyle(context, bold: true)
                   .copyWith(color: Theme.of(context).colorScheme.primary),
             ),
@@ -101,7 +101,8 @@ class _ListScreenState extends State<ListScreen> {
                         sort(param: param);
                       }
                     },
-                    child: Text(S().title, style: smallTextStyle(context)),
+                    child: Text(S.of(context).title,
+                        style: smallTextStyle(context)),
                   ),
                   const SizedBox(width: 8),
                   MaterialButton(
@@ -120,7 +121,8 @@ class _ListScreenState extends State<ListScreen> {
                         sort(param: param);
                       }
                     },
-                    child: Text(S().date, style: smallTextStyle(context)),
+                    child: Text(S.of(context).date,
+                        style: smallTextStyle(context)),
                   )
                 ],
               ),

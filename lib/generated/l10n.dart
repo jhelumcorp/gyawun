@@ -427,6 +427,116 @@ class S {
     );
   }
 
+  /// `About`
+  String get about {
+    return Intl.message(
+      'About',
+      name: 'about',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name`
+  String get name {
+    return Intl.message(
+      'Name',
+      name: 'name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Version`
+  String get version {
+    return Intl.message(
+      'Version',
+      name: 'version',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Developer`
+  String get developer {
+    return Intl.message(
+      'Developer',
+      name: 'developer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sheikh Haziq`
+  String get sheikhhaziq {
+    return Intl.message(
+      'Sheikh Haziq',
+      name: 'sheikhhaziq',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contributors`
+  String get contributors {
+    return Intl.message(
+      'Contributors',
+      name: 'contributors',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Source Code`
+  String get sourceCode {
+    return Intl.message(
+      'Source Code',
+      name: 'sourceCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bug Report`
+  String get bugReport {
+    return Intl.message(
+      'Bug Report',
+      name: 'bugReport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Feature Request`
+  String get featureRequest {
+    return Intl.message(
+      'Feature Request',
+      name: 'featureRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Made with `
+  String get madeWith {
+    return Intl.message(
+      'Made with ',
+      name: 'madeWith',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` in Kashmir`
+  String get inkashmir {
+    return Intl.message(
+      ' in Kashmir',
+      name: 'inkashmir',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Languages`
   String get languages {
     return Intl.message(
@@ -616,6 +726,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
       Locale.fromSubtags(languageCode: 'en'),
       Locale.fromSubtags(languageCode: 'ar'),
       Locale.fromSubtags(languageCode: 'hi'),
+      Locale.fromSubtags(languageCode: 'ru'),
       Locale.fromSubtags(languageCode: 'tr'),
       Locale.fromSubtags(languageCode: 'ur'),
     ];
