@@ -11,14 +11,13 @@ import 'package:gyawun/screens/main_screen/home_screen.dart';
 import 'package:gyawun/screens/playlists/favorites_details.dart';
 import 'package:gyawun/screens/playlists/playlists_screen.dart';
 import 'package:gyawun/screens/search/main_search.dart';
-import 'package:gyawun/screens/settings/app_layout.dart';
+import 'package:gyawun/screens/settings/appearence.dart';
 import 'package:gyawun/screens/settings/download_screen.dart';
 import 'package:gyawun/screens/settings/equalizer_screen.dart';
 import 'package:gyawun/screens/settings/history_screen.dart';
 import 'package:gyawun/screens/settings/playback_screent.dart';
 import 'package:gyawun/screens/settings/providers_screen.dart';
 import 'package:gyawun/screens/settings/setting_screen.dart';
-import 'package:gyawun/screens/settings/theme_screen.dart';
 
 PageController pageController = PageController();
 GoRouter router = GoRouter(
@@ -110,14 +109,9 @@ List<StatefulShellBranch> branches = [
               const NoTransitionPage(child: SettingScreen()),
           routes: [
             GoRoute(
-              path: 'applayout',
+              path: 'appearence',
               pageBuilder: (context, state) =>
                   const CupertinoPage(child: AppLayout()),
-            ),
-            GoRoute(
-              path: 'theme',
-              pageBuilder: (context, state) =>
-                  const CupertinoPage(child: ThemeScreen()),
             ),
             GoRoute(
                 path: 'playback',

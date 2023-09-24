@@ -14,7 +14,7 @@ class PlaylistsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).playlists,
+        title: Text(S.of(context).saved,
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
@@ -28,8 +28,8 @@ class PlaylistsScreen extends StatelessWidget {
                   onTap: () => context.go('/playlists/favorite'),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
-                  title:
-                      Text('Favorites', style: textStyle(context, bold: false)),
+                  title: Text(S().favorites,
+                      style: textStyle(context, bold: false)),
                   leading: Container(
                       height: 50,
                       width: 50,
@@ -38,8 +38,7 @@ class PlaylistsScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Icon(Iconsax.heart5)),
-                  subtitle: Text(
-                      '${box.values.length} song${box.values.length > 1 ? "s" : ""}'),
+                  subtitle: Text('${box.values.length} ${S().songs}'),
                 );
               }),
         ],

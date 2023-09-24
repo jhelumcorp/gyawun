@@ -38,6 +38,13 @@
   <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/06.jpg" width="30%" />
 </p>
 
+## Languages
+You can add your favorite language by:-
+1. Join Gyawun on [PoEditor](https://poeditor.com/join/project/pFSZW9Pux7)
+2. Add your favorite Language.
+3. Translate Your Language and download as .arb.
+4. create a pull request.
+
 ## Features / TODO
 - [x] Play (almost) any song with high quality from Jio Saavn and YouTube Music
 - [x] Background playback

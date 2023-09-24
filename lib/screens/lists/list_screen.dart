@@ -5,6 +5,7 @@ import 'package:gyawun/api/api.dart';
 import 'package:gyawun/api/extensions.dart';
 import 'package:gyawun/api/ytmusic.dart';
 import 'package:gyawun/components/playlist_album_header.dart';
+import 'package:gyawun/generated/l10n.dart';
 import 'package:gyawun/providers/media_manager.dart';
 import 'package:gyawun/ui/colors.dart';
 import 'package:gyawun/ui/text_styles.dart';
@@ -62,7 +63,7 @@ class _ListScreenState extends State<ListScreen> {
             PlaylistAlbumHeader(item: widget.list, songs: songs),
             const SizedBox(height: 8),
             Text(
-              'Songs',
+              S().songs,
               style: textStyle(context, bold: true)
                   .copyWith(color: Theme.of(context).colorScheme.primary),
             ),
@@ -100,7 +101,7 @@ class _ListScreenState extends State<ListScreen> {
                         sort(param: param);
                       }
                     },
-                    child: Text('Title', style: smallTextStyle(context)),
+                    child: Text(S().title, style: smallTextStyle(context)),
                   ),
                   const SizedBox(width: 8),
                   MaterialButton(
@@ -119,7 +120,7 @@ class _ListScreenState extends State<ListScreen> {
                         sort(param: param);
                       }
                     },
-                    child: Text('Date', style: smallTextStyle(context)),
+                    child: Text(S().date, style: smallTextStyle(context)),
                   )
                 ],
               ),

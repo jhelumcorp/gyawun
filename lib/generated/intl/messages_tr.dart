@@ -20,40 +20,83 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'tr';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static _notInlinedMessages(_) => <String, Function> {
-    "clearPlaybackCache" : MessageLookupByLibrary.simpleMessage("Oynatma Önbelleğini Temizle"),
-    "country" : MessageLookupByLibrary.simpleMessage("Ülke"),
-    "download" : MessageLookupByLibrary.simpleMessage("İndir"),
-    "downloadQuality" : MessageLookupByLibrary.simpleMessage("İndirme Kalitesi"),
-    "downloads" : MessageLookupByLibrary.simpleMessage("İndirilenler"),
-    "enablePlaybackCache" : MessageLookupByLibrary.simpleMessage("Oynatma Önbelleğini Etkinleştir"),
-    "high" : MessageLookupByLibrary.simpleMessage("Yüksek"),
-    "history" : MessageLookupByLibrary.simpleMessage("Tarihçe"),
-    "home" : MessageLookupByLibrary.simpleMessage("Ana Sayfa"),
-    "homescreenProvider" : MessageLookupByLibrary.simpleMessage("Ana Screen Sağlayıcı"),
-    "languages" : MessageLookupByLibrary.simpleMessage("Diller"),
-    "layout" : MessageLookupByLibrary.simpleMessage("Düzen"),
-    "low" : MessageLookupByLibrary.simpleMessage("Düşük"),
-    "materialColors" : MessageLookupByLibrary.simpleMessage("Malzeme Renkleri"),
-    "medium" : MessageLookupByLibrary.simpleMessage("Orta"),
-    "musicAndPlayback" : MessageLookupByLibrary.simpleMessage("Müzik ve Oynatma"),
-    "ok" : MessageLookupByLibrary.simpleMessage("tamam"),
-    "pitchBlack" : MessageLookupByLibrary.simpleMessage("Zifiri Siyah"),
-    "playlists" : MessageLookupByLibrary.simpleMessage("Oynatma listeleri"),
-    "primaryColor" : MessageLookupByLibrary.simpleMessage("Birincil Renk"),
-    "recentlyPlayed" : MessageLookupByLibrary.simpleMessage("Son Oynanan"),
-    "recommended" : MessageLookupByLibrary.simpleMessage("Önerilen"),
-    "rightToLeft" : MessageLookupByLibrary.simpleMessage("Sağdan Sola"),
-    "searchGyawun" : MessageLookupByLibrary.simpleMessage("Arama Gyawun"),
-    "searchProvider" : MessageLookupByLibrary.simpleMessage("Arama Sağlayıcısı"),
-    "searchSettings" : MessageLookupByLibrary.simpleMessage("Arama Ayarları"),
-    "serviceProviders" : MessageLookupByLibrary.simpleMessage("Servis Sağlayıcılar"),
-    "settings" : MessageLookupByLibrary.simpleMessage("Ayarlar"),
-    "sleepTimer" : MessageLookupByLibrary.simpleMessage("Uyku Zamanlayıcısı"),
-    "streamingQuality" : MessageLookupByLibrary.simpleMessage("Akış Kalitesi"),
-    "theme" : MessageLookupByLibrary.simpleMessage("Tema"),
-    "themeMode" : MessageLookupByLibrary.simpleMessage("Tema Modu"),
-    "youtubeDownloadQuality" : MessageLookupByLibrary.simpleMessage("YouTube İndirme Kalitesi"),
-    "youtubeStreamingQuality" : MessageLookupByLibrary.simpleMessage("YouTube Akış Kalitesi")
-  };
+  static _notInlinedMessages(_) => <String, Function>{
+        "addToFavorites":
+            MessageLookupByLibrary.simpleMessage("favorilere ekle"),
+        "addToQueue": MessageLookupByLibrary.simpleMessage("Sıraya ekle"),
+        "appearence": MessageLookupByLibrary.simpleMessage("Görünüm"),
+        "cancel": MessageLookupByLibrary.simpleMessage("İptal etmek"),
+        "clearPlaybackCache":
+            MessageLookupByLibrary.simpleMessage("Oynatma Önbelleğini Temizle"),
+        "clearPlaybackCacheDialogText": MessageLookupByLibrary.simpleMessage(
+            "Oynatma önbelleğini temizlemek istediğinizden emin misiniz?"),
+        "confirm": MessageLookupByLibrary.simpleMessage("Onaylamak"),
+        "country": MessageLookupByLibrary.simpleMessage("Ülke"),
+        "date": MessageLookupByLibrary.simpleMessage("Tarih"),
+        "deletePlaybackHistory":
+            MessageLookupByLibrary.simpleMessage("Oynatma Geçmişini sil"),
+        "deletePlaybackHistoryDialogText": MessageLookupByLibrary.simpleMessage(
+            "Oynatma Geçmişini silmek istediğinizden emin misiniz?"),
+        "deletePlaybackHistoryText": MessageLookupByLibrary.simpleMessage(
+            "Öneriler Oynatma Geçmişine dayanmaktadır"),
+        "done": MessageLookupByLibrary.simpleMessage("Tamamlamak"),
+        "download": MessageLookupByLibrary.simpleMessage("İndirmek"),
+        "downloadQuality":
+            MessageLookupByLibrary.simpleMessage("İndirme Kalitesi"),
+        "downloads": MessageLookupByLibrary.simpleMessage("İndirilenler"),
+        "enablePlaybackCache": MessageLookupByLibrary.simpleMessage(
+            "Oynatma Önbelleğini Etkinleştir"),
+        "enablePlaybackHistory": MessageLookupByLibrary.simpleMessage(
+            "Oynatma Geçmişini Etkinleştir"),
+        "enablePlaybackHistoryText": MessageLookupByLibrary.simpleMessage(
+            "Öneriler Oynatma Geçmişine dayanmaktadır"),
+        "equilizer": MessageLookupByLibrary.simpleMessage("dengeleyici"),
+        "favorites": MessageLookupByLibrary.simpleMessage("Favoriler"),
+        "high": MessageLookupByLibrary.simpleMessage("Yüksek"),
+        "history": MessageLookupByLibrary.simpleMessage("Tarih"),
+        "home": MessageLookupByLibrary.simpleMessage("Ev"),
+        "homescreenProvider":
+            MessageLookupByLibrary.simpleMessage("Ana Ekran Sağlayıcısı"),
+        "languages": MessageLookupByLibrary.simpleMessage("Diller"),
+        "loudnessAndEquilizer": MessageLookupByLibrary.simpleMessage(
+            "ses yüksekliği ve dengeleyici"),
+        "low": MessageLookupByLibrary.simpleMessage("Düşük"),
+        "materialColors":
+            MessageLookupByLibrary.simpleMessage("Malzeme Renkleri"),
+        "medium": MessageLookupByLibrary.simpleMessage("Orta"),
+        "musicAndPlayback":
+            MessageLookupByLibrary.simpleMessage("Müzik ve Oynatma"),
+        "no": MessageLookupByLibrary.simpleMessage("HAYIR"),
+        "ok": MessageLookupByLibrary.simpleMessage("Tamam"),
+        "pitchBlack": MessageLookupByLibrary.simpleMessage("Zifiri karanlık"),
+        "playAll": MessageLookupByLibrary.simpleMessage("Hepsini Oynat"),
+        "playNext": MessageLookupByLibrary.simpleMessage("sonrakini çal"),
+        "playlists": MessageLookupByLibrary.simpleMessage("Çalma listeleri"),
+        "primaryColor": MessageLookupByLibrary.simpleMessage("Ana renk"),
+        "recentlyPlayed": MessageLookupByLibrary.simpleMessage("Son oynatılan"),
+        "recommended": MessageLookupByLibrary.simpleMessage("Tavsiye edilen"),
+        "rightToLeft": MessageLookupByLibrary.simpleMessage("Sağdan sola"),
+        "saved": MessageLookupByLibrary.simpleMessage("Kaydedildi"),
+        "searchGyawun": MessageLookupByLibrary.simpleMessage("Gyawun'u arayın"),
+        "searchProvider":
+            MessageLookupByLibrary.simpleMessage("Arama Sağlayıcı"),
+        "searchSettings":
+            MessageLookupByLibrary.simpleMessage("Arama Ayarları"),
+        "selectLanguage": MessageLookupByLibrary.simpleMessage("Dil Seçin"),
+        "serviceProviders":
+            MessageLookupByLibrary.simpleMessage("Servis sağlayıcıları"),
+        "settings": MessageLookupByLibrary.simpleMessage("Ayarlar"),
+        "sleepTimer":
+            MessageLookupByLibrary.simpleMessage("Uyku Zamanlayıcısı"),
+        "songs": MessageLookupByLibrary.simpleMessage("şarkılar"),
+        "streamingQuality":
+            MessageLookupByLibrary.simpleMessage("Yayın Kalitesi"),
+        "themeMode": MessageLookupByLibrary.simpleMessage("Tema Modu"),
+        "title": MessageLookupByLibrary.simpleMessage("Başlık"),
+        "yes": MessageLookupByLibrary.simpleMessage("Evet"),
+        "youtubeDownloadQuality":
+            MessageLookupByLibrary.simpleMessage("YouTube İndirme Kalitesi"),
+        "youtubeStreamingQuality":
+            MessageLookupByLibrary.simpleMessage("YouTube Yayın Kalitesi")
+      };
 }

@@ -5,6 +5,7 @@ import 'package:gyawun/api/api.dart';
 import 'package:gyawun/api/extensions.dart';
 import 'package:gyawun/api/ytmusic.dart';
 import 'package:gyawun/components/search_tile.dart';
+import 'package:gyawun/generated/l10n.dart';
 import 'package:gyawun/ui/colors.dart';
 import 'package:gyawun/ui/text_styles.dart';
 import 'package:gyawun/utils/enums.dart';
@@ -59,7 +60,7 @@ class _MainSearchScreenState extends State<MainSearchScreen>
                 borderRadius: BorderRadius.circular(35),
                 borderSide: BorderSide.none,
               ),
-              hintText: 'Search Gyawun',
+              hintText: S().searchGyawun,
               prefixIcon: IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back)),
@@ -86,7 +87,7 @@ class _MainSearchScreenState extends State<MainSearchScreen>
         child: Column(
           children: [
             ListTile(
-              title: Text("Search Provider", style: textStyle(context)),
+              title: Text(S().searchProvider, style: textStyle(context)),
               trailing: DropdownButton2(
                 underline: const SizedBox.shrink(),
                 value: searchProvider,

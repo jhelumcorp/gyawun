@@ -25,8 +25,7 @@ Box box = Hive.box('settings');
 
 List<SettingItem> allDataLists(BuildContext context) => [
       ...[
-        ...appLayoutSettingDataList(context),
-        ...themesSettingDataList(context),
+        ...appAppearenceSettingDataList(context),
         ...playbackSettingDataList(context),
         ...providersSettingDatalist,
         ...downloadSettingDatalist(context),
@@ -107,18 +106,11 @@ List<SettingItem> mainSettingDataList(BuildContext context) => [
         },
       ),
       SettingItem(
-        title: S.of(context).layout,
+        title: S.of(context).appearence,
         icon: EvaIcons.layout,
         color: Colors.accents[2],
         hasNavigation: true,
-        location: '/settings/applayout',
-      ),
-      SettingItem(
-        title: S.of(context).theme,
-        icon: Iconsax.colorfilter,
-        color: Colors.accents[3],
-        hasNavigation: true,
-        location: '/settings/theme',
+        location: '/settings/appearence',
       ),
       SettingItem(
         title: S.of(context).musicAndPlayback,
@@ -149,7 +141,7 @@ List<SettingItem> mainSettingDataList(BuildContext context) => [
         location: '/settings/history',
       )
     ];
-List<SettingItem> appLayoutSettingDataList(BuildContext context) => [
+List<SettingItem> appAppearenceSettingDataList(BuildContext context) => [
       SettingItem(
         title: S.of(context).languages,
         trailing: (context) {
@@ -169,8 +161,6 @@ List<SettingItem> appLayoutSettingDataList(BuildContext context) => [
               context.read<ThemeManager>().toggleTextDirection(),
         ),
       ),
-    ];
-List<SettingItem> themesSettingDataList(BuildContext context) => [
       SettingItem(
         title: S.of(context).primaryColor,
         onTap: (context) {
@@ -273,7 +263,7 @@ List<SettingItem> themesSettingDataList(BuildContext context) => [
 
 List<SettingItem> playbackSettingDataList(BuildContext context) => [
       SettingItem(
-        title: 'Loudess and Equilizer',
+        title: S().loudnessAndEquilizer,
         hasNavigation: true,
         location: '/settings/playback/equilizer',
       ),
@@ -428,6 +418,58 @@ List<SettingItem> playbackSettingDataList(BuildContext context) => [
           })
       // 'playbackCache'
     ];
+List<SettingItem> providersSettingDatalist = [
+  SettingItem(
+    title: S().homescreenProvider,
+    trailing: (context) {
+      return ValueListenableBuilder(
+        valueListenable: box.listenable(keys: ['homescreenProvider']),
+        builder: (context, value, child) {
+          return DropdownButton2(
+            underline: const SizedBox(),
+            value: value.get('homescreenProvider', defaultValue: 'saavn'),
+            items: const [
+              DropdownMenuItem(value: 'saavn', child: Text('Saavn')),
+              DropdownMenuItem(value: 'youtube', child: Text('YouTube')),
+            ],
+            onChanged: (val) {
+              if (val != null) {
+                value.put('homescreenProvider', val);
+              }
+            },
+          );
+        },
+      );
+    },
+  ),
+  SettingItem(
+    title: S().searchProvider,
+    trailing: (context) {
+      Stream<BoxEvent> event = box.watch(key: 'searchProvider');
+      return StreamBuilder(
+        stream: event,
+        builder: (context, snapshot) => DropdownButton2<String>(
+            style: textStyle(context, bold: false).copyWith(fontSize: 16),
+            underline: const SizedBox(),
+            value: snapshot.data?.value ??
+                box.get('searchProvider', defaultValue: 'saavn'),
+            dropdownStyleData: DropdownStyleData(
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            ),
+            iconStyleData: const IconStyleData(icon: Icon(EvaIcons.arrowDown)),
+            items: const [
+              DropdownMenuItem(value: 'saavn', child: Text('Saavn')),
+              DropdownMenuItem(value: 'youtube', child: Text('YouTube'))
+            ],
+            onChanged: (value) {
+              if (value == null) return;
+              box.put('searchProvider', value);
+            }),
+      );
+    },
+  ),
+];
 
 List<SettingItem> downloadSettingDatalist(BuildContext context) => [
       SettingItem(
@@ -496,83 +538,32 @@ List<SettingItem> downloadSettingDatalist(BuildContext context) => [
 
 List<SettingItem> historySettingDatalist = [
   SettingItem(
-      title: 'Enable Playback history',
-      onTap: (context) async {
-        bool isEnabled = box.get('playbackHistory', defaultValue: true);
-        await box.put('playbackHistory', !isEnabled);
-      },
-      trailing: (context) {
-        return ValueListenableBuilder(
-          valueListenable: box.listenable(keys: ['playbackHistory']),
-          builder: (context, value, child) {
-            bool isEnabled = value.get('playbackHistory', defaultValue: true);
-            return CupertinoSwitch(
-                value: isEnabled,
-                onChanged: (val) async {
-                  await value.put('playbackHistory', val);
-                });
-          },
-        );
-      },
-      subtitle: 'Recommeddations are based on the playback history.'),
-  SettingItem(
-      title: 'Delete Playback history',
-      onTap: (context) async {
-        await deletePlaybackHistory(context);
-      },
-      subtitle: 'Recommeddations are based on the playback history.'),
-];
-
-List<SettingItem> providersSettingDatalist = [
-  SettingItem(
-    title: 'HomeScreen Provider',
+    title: S().enablePlaybackHistory,
+    onTap: (context) async {
+      bool isEnabled = box.get('playbackHistory', defaultValue: true);
+      await box.put('playbackHistory', !isEnabled);
+    },
     trailing: (context) {
       return ValueListenableBuilder(
-        valueListenable: box.listenable(keys: ['homescreenProvider']),
+        valueListenable: box.listenable(keys: ['playbackHistory']),
         builder: (context, value, child) {
-          return DropdownButton2(
-            underline: const SizedBox(),
-            value: value.get('homescreenProvider', defaultValue: 'saavn'),
-            items: const [
-              DropdownMenuItem(value: 'saavn', child: Text('Saavn')),
-              DropdownMenuItem(value: 'youtube', child: Text('YouTube')),
-            ],
-            onChanged: (val) {
-              if (val != null) {
-                value.put('homescreenProvider', val);
-              }
-            },
-          );
+          bool isEnabled = value.get('playbackHistory', defaultValue: true);
+          return CupertinoSwitch(
+              value: isEnabled,
+              onChanged: (val) async {
+                await value.put('playbackHistory', val);
+              });
         },
       );
     },
+    subtitle: S().enablePlaybackHistoryText,
   ),
   SettingItem(
-    title: "Search Provider",
-    trailing: (context) {
-      Stream<BoxEvent> event = box.watch(key: 'searchProvider');
-      return StreamBuilder(
-        stream: event,
-        builder: (context, snapshot) => DropdownButton2<String>(
-            style: textStyle(context, bold: false).copyWith(fontSize: 16),
-            underline: const SizedBox(),
-            value: snapshot.data?.value ??
-                box.get('searchProvider', defaultValue: 'saavn'),
-            dropdownStyleData: DropdownStyleData(
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
-            ),
-            iconStyleData: const IconStyleData(icon: Icon(EvaIcons.arrowDown)),
-            items: const [
-              DropdownMenuItem(value: 'saavn', child: Text('Saavn')),
-              DropdownMenuItem(value: 'youtube', child: Text('YouTube'))
-            ],
-            onChanged: (value) {
-              if (value == null) return;
-              box.put('searchProvider', value);
-            }),
-      );
+    title: S().deletePlaybackHistory,
+    onTap: (context) async {
+      await deletePlaybackHistory(context);
     },
+    subtitle: S().deletePlaybackHistoryText,
   ),
 ];
 
@@ -858,15 +849,15 @@ Future<void> deletePlaybackHistory(BuildContext context) async {
   showCupertinoDialog(
     context: context,
     builder: (context) => CupertinoAlertDialog(
-      title: const Text('Confirm'),
-      content: const Text('Are you sure you want to delete playback history'),
+      title: Text(S().confirm),
+      content: Text(S().deletePlaybackHistoryDialogText),
       actions: [
         CupertinoDialogAction(
-          child: const Text('No'),
+          child: Text(S().no),
           onPressed: () => Navigator.pop(context),
         ),
         CupertinoDialogAction(
-          child: const Text('Yes'),
+          child: Text(S().yes),
           onPressed: () async {
             await Hive.box('songHistory')
                 .clear()
@@ -885,15 +876,15 @@ clearPlaybackCache(context) async {
   showCupertinoDialog(
     context: context,
     builder: (context) => CupertinoAlertDialog(
-      title: const Text('Confirm'),
-      content: const Text('Are you sure you want to clear playback cache'),
+      title: Text(S().confirm),
+      content: Text(S().clearPlaybackCacheDialogText),
       actions: [
         CupertinoDialogAction(
-          child: const Text('No'),
+          child: Text(S().no),
           onPressed: () => Navigator.pop(context),
         ),
         CupertinoDialogAction(
-          child: const Text('Yes'),
+          child: Text(S().yes),
           onPressed: () async {
             await GetIt.I<PlaybackCache>()
                 .clearCache()
@@ -916,7 +907,7 @@ showlanguagePage(BuildContext context) {
     builder: (context) {
       return CupertinoActionSheet(
         title: Text(
-          "Select Language",
+          S().selectLanguage,
           style: textStyle(context).copyWith(fontSize: 18),
         ),
         message: Material(
@@ -951,4 +942,9 @@ showlanguagePage(BuildContext context) {
       );
     },
   );
+}
+
+String qualities(BuildContext context, name) {
+  Map q = {'High': S().high, 'Medium': S().medium, 'Low': S().low};
+  return q[name];
 }

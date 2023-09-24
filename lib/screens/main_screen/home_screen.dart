@@ -5,7 +5,7 @@ import 'package:gyawun/api/format.dart';
 import 'package:gyawun/api/ytmusic.dart';
 import 'package:gyawun/components/home_section.dart';
 import 'package:gyawun/components/recently_played.dart';
-import 'package:gyawun/components/recomendations.dart';
+import 'package:gyawun/components/recommendations.dart';
 import 'package:gyawun/ui/colors.dart';
 import 'package:gyawun/utils/recomendations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -23,9 +23,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin<HomeScreen> {
   List songs = [];
-  List recomendedSongs = [];
+  List recommendedSongs = [];
   double tileHeight = 0;
-  bool loading = true;
+  bool loading = false;
 
   @override
   void initState() {
@@ -66,8 +66,8 @@ class _HomeScreenState extends State<HomeScreen>
               onRefresh: () => fetchAllData(),
               child: ListView(
                 children: [
-                  if (recomendedSongs.isNotEmpty)
-                    Recomendations(recomendedSongs: recomendedSongs),
+                  if (recommendedSongs.isNotEmpty)
+                    Recommendations(recommendedSongs: recommendedSongs),
                   const RecentlyPlayed(),
                   ...songs
                       .map((item) => HomeSection(sectionIitem: item))
@@ -79,15 +79,26 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   fetchAllData() async {
+    // setState(() {
+    //   loading = true;
+    //   recommendedSongs = [];
+    //   songs = [];
+    // });
+    Box homeCache = Hive.box('HomeCache');
+    recommendedSongs = await homeCache.get('recommended', defaultValue: []);
+    songs = await homeCache.get('songs', defaultValue: []);
     setState(() {
-      loading = true;
-      recomendedSongs = [];
-      songs = [];
+      if (recommendedSongs.isEmpty && songs.isEmpty) {
+        loading = true;
+      }
     });
-    // await YtMusicService().getHomes();
-    recomendedSongs = await getRecomendations();
+    recommendedSongs = await getRecomendations();
     songs = await fetchHomeData();
 
+    await Hive.box('HomeCache').putAll({
+      'recommended': recommendedSongs,
+      'songs': songs,
+    });
     setState(() {
       loading = false;
     });

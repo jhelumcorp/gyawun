@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
-// import 'dart:developer' as d;
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -152,8 +151,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
   menuSelected(String item) {
     switch (item) {
       case 'equilizer':
-        Navigator.push(context,
-            MaterialPageRoute(builder: (_) => const EqualizerScreen()));
+        showModalBottomSheet(
+            context: context, builder: (_) => const EqualizerScreen());
         break;
       default:
         Navigator.pop(context);

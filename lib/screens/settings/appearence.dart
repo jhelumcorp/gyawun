@@ -14,13 +14,13 @@ class AppLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).layout,
+        title: Text(S.of(context).appearence,
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
       body: ListView(
         children: [
-          ...appLayoutSettingDataList(context).map((e) {
+          ...appAppearenceSettingDataList(context).map((e) {
             return ListTile(
               title: Text(
                 e.title,

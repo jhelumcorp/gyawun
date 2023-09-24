@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun/generated/l10n.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -24,7 +25,7 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
         .get('loudnessEnabled', defaultValue: false) as bool;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Loudess and Equalizer',
+        title: Text(S().loudnessAndEquilizer,
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),

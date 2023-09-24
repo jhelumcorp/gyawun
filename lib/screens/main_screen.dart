@@ -50,7 +50,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
                         selectedIcon: const Icon(Iconsax.music_playlist5),
                         icon: const Icon(Iconsax.music_playlist),
                         label: Text(
-                          S.of(context).playlists,
+                          S.of(context).saved,
                           style: smallTextStyle(context, bold: false),
                         ),
                       ),
@@ -98,9 +98,9 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
                   label: S.of(context).home,
                 ),
                 NavigationDestination(
-                  selectedIcon: const Icon(Iconsax.music_playlist5),
-                  icon: const Icon(Iconsax.music_playlist),
-                  label: S.of(context).playlists,
+                  selectedIcon: const Icon(Iconsax.bookmark),
+                  icon: const Icon(Iconsax.bookmark_2),
+                  label: S.of(context).saved,
                 ),
                 NavigationDestination(
                   selectedIcon: const Icon(EvaIcons.download),

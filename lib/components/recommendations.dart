@@ -7,13 +7,13 @@ import 'package:provider/provider.dart';
 
 import '../generated/l10n.dart';
 
-class Recomendations extends StatelessWidget {
-  const Recomendations({
+class Recommendations extends StatelessWidget {
+  const Recommendations({
     super.key,
-    required this.recomendedSongs,
+    required this.recommendedSongs,
   });
 
-  final List recomendedSongs;
+  final List recommendedSongs;
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +32,13 @@ class Recomendations extends StatelessWidget {
             padEnds: false,
             controller: PageController(
                 viewportFraction: constraints.maxWidth > 600 ? 0.45 : 0.9),
-            itemCount: (recomendedSongs.length / 4).ceil(),
+            itemCount: (recommendedSongs.length / 4).ceil(),
             itemBuilder: (p0, p1) {
-              List items = recomendedSongs
+              List items = recommendedSongs
                   .getRange(
                       4 * p1,
-                      ((4 * p1) + 4) >= recomendedSongs.length
-                          ? recomendedSongs.length
+                      ((4 * p1) + 4) >= recommendedSongs.length
+                          ? recommendedSongs.length
                           : (4 * p1) + 4)
                   .toList();
               return Padding(
@@ -48,9 +48,9 @@ class Recomendations extends StatelessWidget {
                         .map((item) => ListTile(
                               onTap: () {
                                 context.read<MediaManager>().addAndPlay(
-                                    recomendedSongs,
+                                    recommendedSongs,
                                     initialIndex:
-                                        recomendedSongs.indexOf(item));
+                                        recommendedSongs.indexOf(item));
                               },
                               onLongPress: () =>
                                   showSongOptions(context, Map.from(item)),

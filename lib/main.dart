@@ -23,13 +23,13 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // MetadataGod.initialize();
-  // ALDownloader.initialize();
+
   await Hive.initFlutter();
-  await Hive.openBox('settings');
-  await Hive.openBox('downloads');
-  await Hive.openBox('favorites');
-  await Hive.openBox('songHistory');
+  await openBox('HomeCache');
+  await openBox('settings');
+  await openBox('downloads');
+  await openBox('favorites');
+  await openBox('songHistory');
 
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,
@@ -112,4 +112,8 @@ class _MainAppState extends State<MainApp> {
       );
     });
   }
+}
+
+Future<Box<E>> openBox<E>(String name) async {
+  return await Hive.openBox(name);
 }

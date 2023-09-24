@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun/api/image_resolution_modifier.dart';
+import 'package:gyawun/generated/l10n.dart';
 import 'package:gyawun/providers/media_manager.dart';
 import 'package:gyawun/ui/text_styles.dart';
 import 'package:gyawun/utils/get_subtitle.dart';
@@ -50,7 +51,7 @@ class PlaylistAlbumHeader extends StatelessWidget {
                   color: Theme.of(context).colorScheme.inversePrimary,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  child: Text("Play All",
+                  child: Text(S().playAll,
                       style: smallTextStyle(context, bold: true)),
                 )
               ],
