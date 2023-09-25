@@ -90,6 +90,31 @@ class AboutScreen extends StatelessWidget {
                       mode: LaunchMode.externalApplication),
                 ),
                 ListTile(
+                  leading: const Icon(Iconsax.building),
+                  title: Text(
+                    S.of(context).organisation,
+                    style: subtitleTextStyle(context),
+                  ),
+                  trailing: Wrap(
+                    alignment: WrapAlignment.center,
+                    runAlignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        S.of(context).jhelumCorp,
+                        style: smallTextStyle(context),
+                      ),
+                      const Icon(
+                        EvaIcons.chevronRight,
+                        size: 30,
+                      )
+                    ],
+                  ),
+                  onTap: () => launchUrl(
+                      Uri.parse('https://jhelumcorp.github.io'),
+                      mode: LaunchMode.externalApplication),
+                ),
+                ListTile(
                   leading: const Icon(EvaIcons.people),
                   title: Text(
                     S.of(context).contributors,

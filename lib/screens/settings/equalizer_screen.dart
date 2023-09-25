@@ -36,7 +36,7 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
             child: Column(
               children: [
                 ListTile(
-                  title: const Text('Loudness Enhancer'),
+                  title: Text(S.of(context).loudnessEnhancer),
                   trailing: CupertinoSwitch(
                     value: loudnessEnabled,
                     onChanged: (value) {
@@ -56,7 +56,7 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
                 ),
                 const LoudnessControls(),
                 ListTile(
-                  title: const Text('Enable Equalizer'),
+                  title: Text(S.of(context).enableEqualizer),
                   trailing: CupertinoSwitch(
                     value: enabled,
                     onChanged: (value) {

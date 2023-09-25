@@ -288,7 +288,7 @@ List<SettingItem> playbackSettingDataList(BuildContext context) => [
                   builder: (context) {
                     return CupertinoActionSheet(
                       title: Text(
-                        "Select Languages",
+                        S.of(context).selectLanguage,
                         style: textStyle(context).copyWith(fontSize: 18),
                       ),
                       message: Material(
@@ -318,13 +318,13 @@ List<SettingItem> playbackSettingDataList(BuildContext context) => [
                       actions: [
                         CupertinoActionSheetAction(
                             onPressed: () => Navigator.pop(context),
-                            child: const Text("Done"))
+                            child: Text(S.of(context).done))
                       ],
                     );
                   },
                 );
               },
-              child: const Text("Select"),
+              child: Text(S.of(context).select),
             );
           }),
       SettingItem(
@@ -945,7 +945,7 @@ showlanguagePage(BuildContext context) {
         actions: [
           CupertinoActionSheetAction(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"))
+              child: Text(S.of(context).cancel))
         ],
       );
     },

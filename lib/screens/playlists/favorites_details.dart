@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
+import 'package:gyawun/generated/l10n.dart';
 import 'package:gyawun/providers/media_manager.dart';
 import 'package:gyawun/ui/text_styles.dart';
 import 'package:gyawun/utils/option_menu.dart';
@@ -16,14 +17,15 @@ class FavoriteDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Favorites', style: mediumTextStyle(context, bold: false)),
+        title: Text(S.of(context).favorites,
+            style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
       body: ValueListenableBuilder(
         valueListenable: Hive.box('favorites').listenable(),
         builder: (context, Box box, child) {
           if (box.isEmpty) {
-            return const Center(child: Text("Nothing in here"));
+            return Center(child: Text(S.of(context).nothingInHere));
           }
           List songs = box.values.toList();
           return ListView.builder(
@@ -38,7 +40,7 @@ class FavoriteDetails extends StatelessWidget {
                       await handler(true);
                       await Hive.box('favorites').delete(song['id']);
                     },
-                    title: "Delete",
+                    title: S.of(context).delete,
                   )
                 ],
                 child: ListTile(

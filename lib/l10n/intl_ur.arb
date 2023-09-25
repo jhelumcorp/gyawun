@@ -130,4 +130,17 @@
     "@bugReport": {},
     "featureRequest": "خصوصیت کی درخواست",
     "@featureRequest": {},
+    "organisation": "تنظیم",
+    "@organisation": {},
+    "jhelumCorp": "جہلم کارپوریشن",
+    "@jhelumCorp": {},
+    "select": "منتخب کریں۔",
+    "@select": {},
+    "delete": "حذف کریں۔",
+    "@delete": {},
+    "nothingInHere": "یہاں کچھ نہیں ہے۔",
+    "@nothingInHere": {},
+    "loudnessEnhancer": "بلند آواز بڑھانے والا",
+    "enableEqualizer": "Equalizer کو فعال کریں۔",
+    "removeFromFavorites": "پسندیدہ سے ہٹا دیں۔"
 }

@@ -130,4 +130,17 @@
     "@bugReport": {},
     "featureRequest": "طلب المواصفات",
     "@featureRequest": {},
+    "organisation": "منظمة",
+    "@organisation": {},
+    "jhelumCorp": "شركة جيلوم",
+    "@jhelumCorp": {},
+    "select": "يختار",
+    "@select": {},
+    "delete": "يمسح",
+    "@delete": {},
+    "nothingInHere": "لا شيء هنا",
+    "@nothingInHere": {},
+    "loudnessEnhancer": "محسن جهارة الصوت",
+    "enableEqualizer": "تمكين المعادل",
+    "removeFromFavorites": "إزالة من المفضلة"
 }

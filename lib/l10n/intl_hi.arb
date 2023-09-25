@@ -130,4 +130,17 @@
     "@bugReport": {},
     "featureRequest": "सुविधा का अनुरोध",
     "@featureRequest": {},
+    "organisation": "संगठन",
+    "@organisation": {},
+    "jhelumCorp": "झेलम कॉर्पोरेशन",
+    "@jhelumCorp": {},
+    "select": "चुनना",
+    "@select": {},
+    "delete": "मिटाना",
+    "@delete": {},
+    "nothingInHere": "यहाँ कुछ भी नहीं",
+    "@nothingInHere": {},
+    "loudnessEnhancer": "ध्वनि वर्धक",
+    "enableEqualizer": "तुल्यकारक सक्षम करें",
+    "removeFromFavorites": "पसंदीदा से निकालें"
 }

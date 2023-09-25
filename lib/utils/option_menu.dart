@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gyawun/generated/l10n.dart';
 import 'package:gyawun/providers/media_manager.dart';
 import 'package:gyawun/screens/settings/equalizer_screen.dart';
 import 'package:gyawun/ui/text_styles.dart';
-import 'package:gyawun/utils/snackbar.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -54,37 +54,31 @@ showSongOptions(BuildContext context, Map<String, dynamic> song,
             Navigator.push(context,
                 MaterialPageRoute(builder: (_) => const EqualizerScreen()));
           },
-          child: const Text("Equilizer"),
+          child: Text(S.of(context).equilizer),
         ),
         CupertinoActionSheetAction(
           onPressed: () {
             Navigator.pop(context);
-            ShowSnackBar().showSnackBar(context, 'Added to queue');
             context.read<MediaManager>().playNext(song);
           },
-          child: const Text("Play Next"),
+          child: Text(S.of(context).playNext),
         ),
         CupertinoActionSheetAction(
           onPressed: () {
             Navigator.pop(context);
-            ShowSnackBar().showSnackBar(context, 'Added to queue');
             context.read<MediaManager>().addItems([song]);
           },
-          child: const Text("Add To Queue"),
+          child: Text(S.of(context).addToQueue),
         ),
         CupertinoActionSheetAction(
           onPressed: () {
             Navigator.pop(context);
-            ShowSnackBar().showSnackBar(
-                context,
-                isfavorite(song['id'])
-                    ? "Added to Favorites"
-                    : "Removed from Favorites");
+
             togglefavorite(song);
           },
           child: Text(isfavorite(song['id'])
-              ? "Remove from Favorites"
-              : "Add to Favorites"),
+              ? S.of(context).removeFromFavorites
+              : S.of(context).addToFavorites),
         ),
       ],
     ),

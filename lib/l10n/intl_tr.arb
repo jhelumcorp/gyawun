@@ -130,4 +130,17 @@
     "@bugReport": {},
     "featureRequest": "Özellik isteği",
     "@featureRequest": {},
+    "organisation": "Organizasyon",
+    "@organisation": {},
+    "jhelumCorp": "Jhelum Şirketi",
+    "@jhelumCorp": {},
+    "select": "Seçme",
+    "@select": {},
+    "delete": "Silmek",
+    "@delete": {},
+    "nothingInHere": "Burada hiçbir şey yok",
+    "@nothingInHere": {},
+    "loudnessEnhancer": "Ses Yüksekliği Artırıcı",
+    "enableEqualizer": "Ekolayzeri Etkinleştir",
+    "removeFromFavorites": "Favorilerden çıkar"
 }

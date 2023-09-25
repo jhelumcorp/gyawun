@@ -130,4 +130,17 @@
     "@bugReport": {},
     "featureRequest": "Запрос функции",
     "@featureRequest": {},
+    "organisation": "Организация",
+    "@organisation": {},
+    "jhelumCorp": "Джелум Корп",
+    "@jhelumCorp": {},
+    "select": "Выбирать",
+    "@select": {},
+    "delete": "Удалить",
+    "@delete": {},
+    "nothingInHere": "Здесь ничего нет",
+    "@nothingInHere": {},
+    "loudnessEnhancer": "Усилитель громкости",
+    "enableEqualizer": "Включить эквалайзер",
+    "removeFromFavorites": "Удалить из Избранного"
 }

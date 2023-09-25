@@ -477,6 +477,26 @@ class S {
     );
   }
 
+  /// `Organisation`
+  String get organisation {
+    return Intl.message(
+      'Organisation',
+      name: 'organisation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Jhelum Corp`
+  String get jhelumCorp {
+    return Intl.message(
+      'Jhelum Corp',
+      name: 'jhelumCorp',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Contributors`
   String get contributors {
     return Intl.message(
@@ -512,26 +532,6 @@ class S {
     return Intl.message(
       'Feature Request',
       name: 'featureRequest',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Made with `
-  String get madeWith {
-    return Intl.message(
-      'Made with ',
-      name: 'madeWith',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// ` in Kashmir`
-  String get inkashmir {
-    return Intl.message(
-      ' in Kashmir',
-      name: 'inkashmir',
       desc: '',
       args: [],
     );
@@ -612,6 +612,36 @@ class S {
     return Intl.message(
       'No',
       name: 'no',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select`
+  String get select {
+    return Intl.message(
+      'Select',
+      name: 'select',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nothing in here`
+  String get nothingInHere {
+    return Intl.message(
+      'Nothing in here',
+      name: 'nothingInHere',
       desc: '',
       args: [],
     );
@@ -712,6 +742,36 @@ class S {
     return Intl.message(
       'add To Favorites',
       name: 'addToFavorites',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loudness Enhancer`
+  String get loudnessEnhancer {
+    return Intl.message(
+      'Loudness Enhancer',
+      name: 'loudnessEnhancer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable Equilizer`
+  String get enableEqualizer {
+    return Intl.message(
+      'Enable Equilizer',
+      name: 'enableEqualizer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove From Favorites`
+  String get removeFromFavorites {
+    return Intl.message(
+      'Remove From Favorites',
+      name: 'removeFromFavorites',
       desc: '',
       args: [],
     );
