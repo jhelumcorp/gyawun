@@ -115,6 +115,19 @@ class AboutScreen extends StatelessWidget {
                       mode: LaunchMode.externalApplication),
                 ),
                 ListTile(
+                  leading: const Icon(Icons.telegram_outlined),
+                  title: Text(
+                    S.of(context).telegram,
+                    style: subtitleTextStyle(context),
+                  ),
+                  trailing: const Icon(
+                    EvaIcons.chevronRight,
+                    size: 30,
+                  ),
+                  onTap: () => launchUrl(Uri.parse('https://t.me/jhelumcorp'),
+                      mode: LaunchMode.externalApplication),
+                ),
+                ListTile(
                   leading: const Icon(EvaIcons.people),
                   title: Text(
                     S.of(context).contributors,

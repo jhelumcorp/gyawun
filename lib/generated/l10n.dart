@@ -247,6 +247,26 @@ class S {
     );
   }
 
+  /// `Loudness Enhancer`
+  String get loudnessEnhancer {
+    return Intl.message(
+      'Loudness Enhancer',
+      name: 'loudnessEnhancer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable Equilizer`
+  String get enableEqualizer {
+    return Intl.message(
+      'Enable Equilizer',
+      name: 'enableEqualizer',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Select language`
   String get selectLanguage {
     return Intl.message(
@@ -497,6 +517,16 @@ class S {
     );
   }
 
+  /// `Telegram`
+  String get telegram {
+    return Intl.message(
+      'Telegram',
+      name: 'telegram',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Contributors`
   String get contributors {
     return Intl.message(
@@ -742,26 +772,6 @@ class S {
     return Intl.message(
       'add To Favorites',
       name: 'addToFavorites',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Loudness Enhancer`
-  String get loudnessEnhancer {
-    return Intl.message(
-      'Loudness Enhancer',
-      name: 'loudnessEnhancer',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enable Equilizer`
-  String get enableEqualizer {
-    return Intl.message(
-      'Enable Equilizer',
-      name: 'enableEqualizer',
       desc: '',
       args: [],
     );

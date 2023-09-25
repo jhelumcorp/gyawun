@@ -142,5 +142,6 @@
     "@nothingInHere": {},
     "loudnessEnhancer": "Усилитель громкости",
     "enableEqualizer": "Включить эквалайзер",
-    "removeFromFavorites": "Удалить из Избранного"
+    "removeFromFavorites": "Удалить из Избранного",
+    "telegram": "Телеграмма"
 }

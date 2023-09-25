@@ -103,6 +103,8 @@
   "@organisation":{},
   "jhelumCorp":"Jhelum Corp",
   "@jhelumCorp":{},
+  "telegram":"Telegram",
+  "@telegram":{},
   "contributors":"Contributors",
   "@contributors":{},
   "sourceCode":"Source Code",

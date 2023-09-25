@@ -142,5 +142,6 @@
     "@nothingInHere": {},
     "loudnessEnhancer": "محسن جهارة الصوت",
     "enableEqualizer": "تمكين المعادل",
-    "removeFromFavorites": "إزالة من المفضلة"
+    "removeFromFavorites": "إزالة من المفضلة",
+    "telegram": "برقية"
 }

@@ -88,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "songs" : MessageLookupByLibrary.simpleMessage("الأغاني"),
     "sourceCode" : MessageLookupByLibrary.simpleMessage("مصدر الرمز"),
     "streamingQuality" : MessageLookupByLibrary.simpleMessage("جودة البث"),
+    "telegram" : MessageLookupByLibrary.simpleMessage("برقية"),
     "themeMode" : MessageLookupByLibrary.simpleMessage("وضع الموضوع"),
     "title" : MessageLookupByLibrary.simpleMessage("عنوان"),
     "version" : MessageLookupByLibrary.simpleMessage("إصدار"),

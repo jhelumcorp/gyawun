@@ -88,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "songs" : MessageLookupByLibrary.simpleMessage("songs"),
     "sourceCode" : MessageLookupByLibrary.simpleMessage("Source Code"),
     "streamingQuality" : MessageLookupByLibrary.simpleMessage("Streaming Quality"),
+    "telegram" : MessageLookupByLibrary.simpleMessage("Telegram"),
     "themeMode" : MessageLookupByLibrary.simpleMessage("Theme Mode"),
     "title" : MessageLookupByLibrary.simpleMessage("Title"),
     "version" : MessageLookupByLibrary.simpleMessage("Version"),

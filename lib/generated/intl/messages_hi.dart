@@ -88,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "songs" : MessageLookupByLibrary.simpleMessage("गीत"),
     "sourceCode" : MessageLookupByLibrary.simpleMessage("सोर्स कोड"),
     "streamingQuality" : MessageLookupByLibrary.simpleMessage("स्ट्रीमिंग गुणवत्ता"),
+    "telegram" : MessageLookupByLibrary.simpleMessage("तार"),
     "themeMode" : MessageLookupByLibrary.simpleMessage("थीम मोड"),
     "title" : MessageLookupByLibrary.simpleMessage("शीर्षक"),
     "version" : MessageLookupByLibrary.simpleMessage("संस्करण"),

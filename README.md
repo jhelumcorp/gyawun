@@ -13,14 +13,8 @@
 
   
   
-  <a href="https://t.me/gyawun"><img src="https://img.shields.io/badge/Join_us_on_Telegram-0088cc?style=social&logo=telegram" alt="Telergram" height="50"/></a>
+  <a href="https://t.me/jhelumcorp"><img src="https://img.shields.io/badge/Join_us_on_Telegram-0088cc?style=social&logo=telegram" alt="Telergram" height="50"/></a>
 
-
-## Join Our Discord server
-
-[![Join our Discord server!](https://invidget.switchblade.xyz/YtxYgGSYwN)](http://discord.gg/YtxYgGSYwN)
-   
-    
 
 
 </div>

@@ -142,5 +142,6 @@
     "@nothingInHere": {},
     "loudnessEnhancer": "Ses Yüksekliği Artırıcı",
     "enableEqualizer": "Ekolayzeri Etkinleştir",
-    "removeFromFavorites": "Favorilerden çıkar"
+    "removeFromFavorites": "Favorilerden çıkar",
+    "telegram": "Telgraf"
 }

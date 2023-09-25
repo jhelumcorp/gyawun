@@ -142,5 +142,6 @@
     "@nothingInHere": {},
     "loudnessEnhancer": "ध्वनि वर्धक",
     "enableEqualizer": "तुल्यकारक सक्षम करें",
-    "removeFromFavorites": "पसंदीदा से निकालें"
+    "removeFromFavorites": "पसंदीदा से निकालें",
+    "telegram": "तार"
 }
