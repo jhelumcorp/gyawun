@@ -27,13 +27,33 @@ class _ListScreenState extends State<ListScreen> {
   List copySongs = [];
   bool ascending = true;
   String param = '';
+  int num = 10;
+  int page = 1;
+  bool more = false;
+  bool end = false;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(() async {
+      var nextPageTrigger = 0.8 * _scrollController.position.maxScrollExtent;
+      if (_scrollController.position.pixels > nextPageTrigger &&
+          !end &&
+          !more) {
+        setState(() {
+          more = true;
+        });
+        await fetchSongs(page: ++page, number: 50);
+        setState(() {
+          more = false;
+        });
+      }
+    });
     // pprint(widget.list);
     loading = true;
-    fetchSongs();
+    fetchSongs(number: 50, page: 1);
   }
 
   sort({String param = 'title'}) {
@@ -47,6 +67,13 @@ class _ListScreenState extends State<ListScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    _scrollController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     MediaManager mediaManager = context.read<MediaManager>();
     return Scaffold(
@@ -56,6 +83,7 @@ class _ListScreenState extends State<ListScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,35 +159,38 @@ class _ListScreenState extends State<ListScreen> {
             loading
                 ? const Center(child: CircularProgressIndicator())
                 : Column(
-                    children: songs.map((song) {
-                      return ListTile(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        onTap: () {
-                          int index = songs.indexOf(song);
-                          mediaManager.addAndPlay(songs, initialIndex: index);
-                        },
-                        onLongPress: () =>
-                            showSongOptions(context, Map.from(song)),
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Stack(
-                            children: [
-                              CachedNetworkImage(
-                                  imageUrl: song['image'],
-                                  width: song['type'] == 'video' ? 80 : 50,
-                                  height: 50,
-                                  fit: BoxFit.contain),
-                            ],
+                    children: [
+                      ...songs.map((song) {
+                        return ListTile(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          onTap: () {
+                            int index = songs.indexOf(song);
+                            mediaManager.addAndPlay(songs, initialIndex: index);
+                          },
+                          onLongPress: () =>
+                              showSongOptions(context, Map.from(song)),
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Stack(
+                              children: [
+                                CachedNetworkImage(
+                                    imageUrl: song['image'],
+                                    width: song['type'] == 'video' ? 80 : 50,
+                                    height: 50,
+                                    fit: BoxFit.contain),
+                              ],
+                            ),
                           ),
-                        ),
-                        title: Text(song['title'],
-                            style: smallTextStyle(context, bold: true),
-                            maxLines: 1),
-                        subtitle: Text(song['subtitle'],
-                            style: smallTextStyle(context), maxLines: 1),
-                      );
-                    }).toList(),
+                          title: Text(song['title'],
+                              style: smallTextStyle(context, bold: true),
+                              maxLines: 1),
+                          subtitle: Text(song['subtitle'],
+                              style: smallTextStyle(context), maxLines: 1),
+                        );
+                      }).toList(),
+                      if (more) const Center(child: CircularProgressIndicator())
+                    ],
                   ),
           ],
         ),
@@ -167,7 +198,7 @@ class _ListScreenState extends State<ListScreen> {
     );
   }
 
-  fetchSongs() async {
+  Future fetchSongs({int page = 1, int number = 500}) async {
     List list = [];
     if (widget.list['type'] == 'playlist' || widget.list['type'] == 'chart') {
       if (widget.list['provider'] == 'youtube') {
@@ -191,16 +222,17 @@ class _ListScreenState extends State<ListScreen> {
     } else if (widget.list['type'] == 'mix') {
       Map songMap = await SaavnAPI().getSongFromToken(
           widget.list['perma_url'].toString().split('/').last, 'mix',
-          n: 500);
+          n: number * page, p: 1);
       list = songMap['songs'];
     } else if (widget.list['type'] == 'show') {
       Map songMap = await SaavnAPI().getSongFromToken(
           widget.list['perma_url'].toString().split('/').last, 'show',
-          n: 500, p: 1);
+          n: number * page, p: 1);
       list = songMap['songs'].map((e) {
         e['url'] = e['url']
             .toString()
             .substring(0, e['url'].toString().lastIndexOf('.') + 4);
+
         return e;
       }).toList();
     } else if (widget.list['type'] == 'single') {
@@ -209,9 +241,13 @@ class _ListScreenState extends State<ListScreen> {
       // pprint(songMap);
       list = songMap['songs'];
     }
-    songs = list;
-    copySongs = List.from(list);
-    loading = false;
-    setState(() {});
+    if (mounted) {
+      songs = list;
+      copySongs = List.from(list);
+      loading = false;
+      setState(() {
+        if (list.length < number * page) end = true;
+      });
+    }
   }
 }
