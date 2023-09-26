@@ -73,13 +73,14 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
   }
 
   _loadEquilizer() async {
-    await _equalizer.setEnabled(Hive.box('settings')
-        .get('equalizerEnabled', defaultValue: false) as bool);
+
     await _loudnessEnhancer.setEnabled(Hive.box('settings')
         .get('loudnessEnabled', defaultValue: false) as bool);
-
     await _loudnessEnhancer
         .setTargetGain(Hive.box('settings').get('loudness', defaultValue: 0.0));
+
+            await _equalizer.setEnabled(Hive.box('settings')
+        .get('equalizerEnabled', defaultValue: false) as bool);
     _equalizer.parameters.then((value) async {
       _equalizerParams ??= value;
 
@@ -88,7 +89,7 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
         bands,
         (e) {
           final gain = Hive.box('settings')
-              .get('equalizerBand${e.index}', defaultValue: 0.5) as double;
+              .get('equalizerBand${e.index}', defaultValue: 0.0) as double;
           _equalizerParams!.bands[e.index].setGain(gain);
         },
       );

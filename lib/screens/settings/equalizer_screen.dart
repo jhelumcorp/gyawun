@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gyawun/generated/l10n.dart';
+import 'package:gyawun/utils/pprint.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -23,94 +24,101 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
         .get('equalizerEnabled', defaultValue: false) as bool;
     bool loudnessEnabled = Hive.box('settings')
         .get('loudnessEnabled', defaultValue: false) as bool;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(S().loudnessAndEquilizer,
-            style: mediumTextStyle(context, bold: false)),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: LayoutBuilder(builder: (context, constraints) {
-          return SizedBox(
-            height: constraints.maxHeight > 600 ? 600 : null,
-            child: Column(
-              children: [
-                ListTile(
-                  title: Text(S.of(context).loudnessEnhancer),
-                  trailing: CupertinoSwitch(
-                    value: loudnessEnabled,
-                    onChanged: (value) {
-                      loudnessEnabled = value;
-                      Hive.box('settings').put('loudnessEnabled', value);
-                      GetIt.I<AndroidEqualizer>().setEnabled(value);
-                      setState(() {});
-                    },
-                  ),
-                  onTap: () {
-                    loudnessEnabled = !loudnessEnabled;
-                    Hive.box('settings')
-                        .put('loudnessEnabled', loudnessEnabled);
-                    GetIt.I<AndroidEqualizer>().setEnabled(loudnessEnabled);
-                    setState(() {});
-                  },
-                ),
-                const LoudnessControls(),
-                ListTile(
-                  title: Text(S.of(context).enableEqualizer),
-                  trailing: CupertinoSwitch(
-                    value: enabled,
-                    onChanged: (value) {
-                      enabled = value;
-                      Hive.box('settings').put('equalizerEnabled', value);
-                      GetIt.I<AndroidEqualizer>().setEnabled(value);
-                      setState(() {});
-                    },
-                  ),
-                  onTap: () {
-                    enabled = !enabled;
-                    Hive.box('settings').put('equalizerEnabled', enabled);
-                    GetIt.I<AndroidEqualizer>().setEnabled(enabled);
-                    setState(() {});
-                  },
-                ),
-
-                //
-                if (enabled)
-                  FutureBuilder(
-                    future: getEqParms(),
-                    builder: (context, snapshot) {
-                      final parameters = snapshot.data;
-                      if (parameters == null) return const SizedBox();
-                      return Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            for (var band in parameters['bands'])
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: VerticalSlider(
-                                        min: parameters['minDecibels'],
-                                        max: parameters['maxDecibels'],
-                                        value: band['gain'],
-                                        bandIndex: band['index'] as int,
-                                      ),
+    return ClipRRect(
+      borderRadius:const BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(S().loudnessAndEquilizer,
+              style: mediumTextStyle(context, bold: false)),
+          centerTitle: true,
+        ),
+        body: SafeArea(
+          child: Padding(
+          
+            padding: const EdgeInsets.all(8.0),
+            child: LayoutBuilder(builder: (context, constraints) {
+              return SizedBox(
+                height: constraints.maxHeight > 600 ? 600 : null,
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(S.of(context).loudnessEnhancer),
+                      trailing: CupertinoSwitch(
+                        value: loudnessEnabled,
+                        onChanged: (value) {
+                          loudnessEnabled = value;
+                          Hive.box('settings').put('loudnessEnabled', value);
+                          GetIt.I<AndroidLoudnessEnhancer>().setEnabled(value);
+                          setState(() {});
+                        },
+                      ),
+                      onTap: () {
+                        loudnessEnabled = !loudnessEnabled;
+                        Hive.box('settings')
+                            .put('loudnessEnabled', loudnessEnabled);
+                        GetIt.I<AndroidLoudnessEnhancer>().setEnabled(loudnessEnabled);
+                        setState(() {});
+                      },
+                    ),
+                    const LoudnessControls(),
+                    ListTile(
+                      title: Text(S.of(context).enableEqualizer),
+                      trailing: CupertinoSwitch(
+                        value: enabled,
+                        onChanged: (value) {
+                          enabled = value;
+                          Hive.box('settings').put('equalizerEnabled', value);
+                          GetIt.I<AndroidEqualizer>().setEnabled(value);
+                          setState(() {});
+                        },
+                      ),
+                      onTap: () {
+                        enabled = !enabled;
+                        Hive.box('settings').put('equalizerEnabled', enabled);
+                        GetIt.I<AndroidEqualizer>().setEnabled(enabled);
+                        setState(() {});
+                      },
+                    ),
+              
+                    //
+                    if (enabled)
+                      FutureBuilder(
+                        future: getEqParms(),
+                        builder: (context, snapshot) {
+                          final parameters = snapshot.data;
+                          if (parameters == null) return const SizedBox();
+                          return Expanded(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                for (var band in parameters['bands'])
+                                  Expanded(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: VerticalSlider(
+                                            min: parameters['minDecibels'],
+                                            max: parameters['maxDecibels'],
+                                            value: band['gain'],
+                                            bandIndex: band['index'] as int,
+                                          ),
+                                        ),
+                                        Text(
+                                            '${band['centerFrequency'].round()} Hz'),
+                                      ],
                                     ),
-                                    Text(
-                                        '${band['centerFrequency'].round()} Hz'),
-                                  ],
-                                ),
-                              ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-              ],
-            ),
-          );
-        }),
+                                  ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                  ],
+                ),
+              );
+            }),
+          ),
+        ),
       ),
     );
   }

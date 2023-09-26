@@ -10,6 +10,7 @@ import 'package:gyawun/api/extensions.dart';
 import 'package:gyawun/models/setting_item.dart';
 import 'package:gyawun/providers/media_manager.dart';
 import 'package:gyawun/providers/theme_manager.dart';
+import 'package:gyawun/screens/settings/equalizer_screen.dart';
 import 'package:gyawun/ui/colors.dart';
 import 'package:gyawun/ui/text_styles.dart';
 import 'package:gyawun/utils/format_duration.dart';
@@ -271,8 +272,10 @@ List<SettingItem> appAppearenceSettingDataList(BuildContext context) => [
 List<SettingItem> playbackSettingDataList(BuildContext context) => [
       SettingItem(
         title: S.of(context).loudnessAndEquilizer,
-        hasNavigation: true,
-        location: '/settings/playback/equilizer',
+        hasNavigation: false,
+        onTap: (context) => showModalBottomSheet(
+          backgroundColor: Colors.transparent,
+            context: context, builder: (_) => const EqualizerScreen()),
       ),
       SettingItem(
           title: S.of(context).languages,

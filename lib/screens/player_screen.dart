@@ -14,6 +14,7 @@ import 'package:flutter_progress_status/flutter_progress_status.dart';
 import 'package:gyawun/api/image_resolution_modifier.dart';
 import 'package:gyawun/components/play_button.dart';
 import 'package:gyawun/components/queue_list.dart';
+import 'package:gyawun/generated/l10n.dart';
 import 'package:gyawun/providers/media_manager.dart';
 import 'package:gyawun/ui/colors.dart';
 import 'package:gyawun/ui/text_styles.dart';
@@ -44,10 +45,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
   PanelController panelController = PanelController();
   double progress = 0;
   Uri? arturi;
-  List<String> menuItems = ['equilizer'];
+  late List<Map<String,dynamic>> menuItems;
+  @override
+  void initState() {
+    super.initState();
+    
+  }
 
   @override
   Widget build(BuildContext context) {
+    menuItems = [{'index':0,'value':S.of(context).equilizer}];
     MediaManager mediaManager = context.watch<MediaManager>();
     MediaItem? song = mediaManager.currentSong;
     if (arturi != song?.artUri) {
@@ -92,7 +99,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             .map(
                               (item) => PopupMenuItem(
                                 value: item,
-                                child: Text(item.capitalize()),
+                                child: Text(item['value']),
                               ),
                             )
                             .toList();
@@ -148,9 +155,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
     );
   }
 
-  menuSelected(String item) {
-    switch (item) {
-      case 'equilizer':
+  menuSelected(Map item) {
+    switch (item['index']) {
+      case 0:
         showModalBottomSheet(
             context: context, builder: (_) => const EqualizerScreen());
         break;

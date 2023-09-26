@@ -30,8 +30,33 @@ download(MediaItem song) async {
     name = '$oldName($count)';
     count++;
   }
+
+  final client = Client();
+  Stream<List<int>> stream;
+  int total = 0;
+  int recieved = 0;
   if (song.extras!['provider'] == 'youtube') {
-    await downloadYoutubeSong(song, '/storage/emulated/0/Music/$name.m4a');
+      String id = song.id.replaceFirst('youtube', '');
+  StreamManifest manifest = await yt.videos.streamsClient.getManifest(id);
+  int qualityIndex = 0;
+  List<AudioOnlyStreamInfo> streamInfos =
+      manifest.audioOnly.sortByBitrate().reversed.toList();
+
+  String quality = (Hive.box('settings')
+          .get('youtubeDownloadQuality', defaultValue: 'Medium'))
+      .toString()
+      .toLowerCase();
+  if (quality == 'low') {
+    qualityIndex = 0;
+  } else if (quality == 'medium') {
+    qualityIndex = (streamInfos.length / 2).floor();
+  } else {
+    qualityIndex = streamInfos.length - 1;
+  }
+  AudioOnlyStreamInfo streamInfo = streamInfos[qualityIndex];
+  total = streamInfo.size.totalBytes;
+   stream = yt.videos.streamsClient.get(streamInfo);
+  //  await downloadYoutubeSong(song, '/storage/emulated/0/Music/$name.m4a');
   } else {
     int downloadQuality =
         Hive.box('settings').get('downloadQuality', defaultValue: 160);
@@ -39,15 +64,17 @@ download(MediaItem song) async {
         .toString()
         .replaceAll(RegExp('_92|_160|_320'), '_$downloadQuality');
 
-    final client = Client();
     final response = await client.send(Request('GET', Uri.parse(url)));
-    final int total = response.contentLength ?? 0;
-    int recieved = 0;
-    Logger.root.info('Client connected, Starting download');
-    response.stream.asBroadcastStream();
+    total = response.contentLength ?? 0;
+    stream = response.stream;
+
+  }
+
+      Logger.root.info('Client connected, Starting download');
+    stream.asBroadcastStream();
     Logger.root.info('broadcasting download state');
     List<int> bytes = [];
-    response.stream.listen((value) {
+    stream.listen((value) {
       bytes.addAll(value);
       try {
         recieved += value.length;
@@ -58,14 +85,14 @@ download(MediaItem song) async {
       }
     }).onDone(() async {
       client.close();
-      String localPath = '/storage/emulated/0/Music/';
+      String localPath = '/storage/emulated/0/Music';
       String filePath = '$localPath/$name.m4a';
       File fileDef = File(filePath);
+      
       await fileDef.writeAsBytes(bytes);
       Response res = await get(song.artUri!);
       String? image = await saveImage(song.id, res.bodyBytes);
-      if (song.extras!['provider'] != 'youtube') {
-        await AudioTagger.writeAllTags(
+       await AudioTagger.writeAllTags(
           songPath: fileDef.path,
           tags: AudioTags(
             title: oldName,
@@ -73,15 +100,17 @@ download(MediaItem song) async {
             album: song.album ?? '',
             genre: song.genre ?? '',
             track: 1.toString(),
-            year: song.extras?['year'],
+            year: song.extras?['year'].toString()??'',
             disc: '',
           ),
         );
-        await AudioTagger.writeArtwork(
+        try{await AudioTagger.writeArtwork(
           songPath: fileDef.path,
           artworkPath: image,
         );
-      }
+        }catch(e){
+          log(e.toString());
+        }
 
       Hive.box('downloads').put(song.id, {
         'path': fileDef.path,
@@ -90,7 +119,6 @@ download(MediaItem song) async {
         ...song.extras ?? {}
       });
     });
-  }
 }
 
 Future<bool> checkAndRequestPermissions() async {
@@ -196,7 +224,7 @@ Future<String> getSongUrl(
   return 'http://${InternetAddress.loopbackIPv4.host}:8080?id=$id&q=$quality';
 }
 
-Future<void> downloadYoutubeSong(MediaItem song, String path) async {
+Future<String?> downloadYoutubeSong(MediaItem song, String path) async {
   Hive.box('downloads').put(song.id, {
     'path': null,
     'progress': 0.0,
@@ -224,7 +252,7 @@ Future<void> downloadYoutubeSong(MediaItem song, String path) async {
   var file = await File(path).create();
 
   Response res = await get(song.artUri!);
-  await saveImage(song.id, res.bodyBytes);
+  String? image = await saveImage(song.id, res.bodyBytes);
   int total = streamInfo.size.totalBytes;
   stream.asBroadcastStream();
   List<int> recieved = [];
@@ -250,4 +278,5 @@ Future<void> downloadYoutubeSong(MediaItem song, String path) async {
   try {} catch (err) {
     Hive.box('downloads').delete(song.id);
   }
+  return image;
 }
