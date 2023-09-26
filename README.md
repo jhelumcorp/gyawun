@@ -56,6 +56,7 @@ You can add your favorite language by:-
 - [x] support for other Music Providers(YouTube Music)
 - [x] Multiple Language Support(Partially)
 - [x] Save playlist
+- [x] Equilizer and Loudness Enhancer
 - [ ] Create Playlists
 
 ## Installation
