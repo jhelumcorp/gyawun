@@ -39,9 +39,9 @@ class ThemeManager extends ChangeNotifier {
   List<Map<String, dynamic>> get supportedLanguages => [
         {'code': 'ar', 'name': 'arabic'},
         {'code': 'en', 'name': 'english'},
-        // {'code': 'es', 'name': 'spanish'},
-        // {'code': 'fr', 'name': 'french'},
-        // {'code': 'de', 'name': 'german'},
+        {'code': 'es', 'name': 'spanish'},
+        {'code': 'fr', 'name': 'french'},
+        {'code': 'de', 'name': 'german'},
         {'code': 'hi', 'name': 'hindi'},
         // {'code': 'ja', 'name': 'japanese'},
         // {'code': 'ko', 'name': 'korean'},

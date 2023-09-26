@@ -191,7 +191,7 @@ class _ListScreenState extends State<ListScreen> {
     } else if (widget.list['type'] == 'mix') {
       Map songMap = await SaavnAPI().getSongFromToken(
           widget.list['perma_url'].toString().split('/').last, 'mix',
-          n: 100);
+          n: 500);
       list = songMap['songs'];
     } else if (widget.list['type'] == 'show') {
       Map songMap = await SaavnAPI().getSongFromToken(
