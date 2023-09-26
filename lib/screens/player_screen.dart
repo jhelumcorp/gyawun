@@ -24,7 +24,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import './../api/extensions.dart';
 import 'settings/equalizer_screen.dart';
 
 class PlayerScreen extends StatefulWidget {
