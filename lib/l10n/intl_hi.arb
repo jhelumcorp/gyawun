@@ -38,8 +38,6 @@
     "@materialColors": {},
     "musicAndPlayback": "संगीत और प्लेबैक",
     "@musicAndPlayback": {},
-    "loudnessAndEquilizer": "ज़ोर और तुल्यकारक",
-    "@loudnessAndEquilizer": {},
     "selectLanguage": "भाषा चुने",
     "@selectLanguage": {},
     "streamingQuality": "स्ट्रीमिंग गुणवत्ता",
@@ -104,8 +102,6 @@
     "@title": {},
     "date": "तारीख",
     "@date": {},
-    "equilizer": "संतुलन बनानेवाला",
-    "@equilizer": {},
     "playNext": "अगला खेलें",
     "@playNext": {},
     "addToQueue": "क़तार में जोड़ें",
@@ -141,7 +137,12 @@
     "nothingInHere": "यहाँ कुछ भी नहीं",
     "@nothingInHere": {},
     "loudnessEnhancer": "ध्वनि वर्धक",
-    "enableEqualizer": "तुल्यकारक सक्षम करें",
+    "@loudnessEnhancer": {},
     "removeFromFavorites": "पसंदीदा से निकालें",
-    "telegram": "तार"
+    "@removeFromFavorites": {},
+    "telegram": "तार",
+    "@telegram": {},
+    "loudnessAndEqualizer": "प्रबलता और तुल्यकारक",
+    "enableEqualizer": "तुल्यकारक सक्षम करें",
+    "equalizer": "तुल्यकारक"
 }

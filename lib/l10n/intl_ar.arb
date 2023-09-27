@@ -38,8 +38,6 @@
     "@materialColors": {},
     "musicAndPlayback": "الموسيقى والتشغيل",
     "@musicAndPlayback": {},
-    "loudnessAndEquilizer": "جهارة الصوت والمعادل",
-    "@loudnessAndEquilizer": {},
     "selectLanguage": "اختار اللغة",
     "@selectLanguage": {},
     "streamingQuality": "جودة البث",
@@ -104,8 +102,6 @@
     "@title": {},
     "date": "تاريخ",
     "@date": {},
-    "equilizer": "المعادل",
-    "@equilizer": {},
     "playNext": "العب التالي",
     "@playNext": {},
     "addToQueue": "إضافة إلى قائمة الانتظار",
@@ -141,7 +137,12 @@
     "nothingInHere": "لا شيء هنا",
     "@nothingInHere": {},
     "loudnessEnhancer": "محسن جهارة الصوت",
-    "enableEqualizer": "تمكين المعادل",
+    "@loudnessEnhancer": {},
     "removeFromFavorites": "إزالة من المفضلة",
-    "telegram": "برقية"
+    "@removeFromFavorites": {},
+    "telegram": "برقية",
+    "@telegram": {},
+    "loudnessAndEqualizer": "جهارة الصوت والمعادل",
+    "enableEqualizer": "تمكين المعادل",
+    "equalizer": "المعادل"
 }

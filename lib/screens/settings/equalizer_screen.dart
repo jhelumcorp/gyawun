@@ -24,16 +24,16 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
     bool loudnessEnabled = Hive.box('settings')
         .get('loudnessEnabled', defaultValue: false) as bool;
     return ClipRRect(
-      borderRadius:const BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
+      borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(S().loudnessAndEquilizer,
+          title: Text(S().loudnessAndEqualizer,
               style: mediumTextStyle(context, bold: false)),
           centerTitle: true,
         ),
         body: SafeArea(
           child: Padding(
-          
             padding: const EdgeInsets.all(8.0),
             child: LayoutBuilder(builder: (context, constraints) {
               return SizedBox(
@@ -55,7 +55,8 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
                         loudnessEnabled = !loudnessEnabled;
                         Hive.box('settings')
                             .put('loudnessEnabled', loudnessEnabled);
-                        GetIt.I<AndroidLoudnessEnhancer>().setEnabled(loudnessEnabled);
+                        GetIt.I<AndroidLoudnessEnhancer>()
+                            .setEnabled(loudnessEnabled);
                         setState(() {});
                       },
                     ),
@@ -78,7 +79,7 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
                         setState(() {});
                       },
                     ),
-              
+
                     //
                     if (enabled)
                       FutureBuilder(

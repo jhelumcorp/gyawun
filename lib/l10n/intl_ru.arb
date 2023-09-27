@@ -38,8 +38,6 @@
     "@materialColors": {},
     "musicAndPlayback": "Музыка и воспроизведение",
     "@musicAndPlayback": {},
-    "loudnessAndEquilizer": "громкость и эквалайзер",
-    "@loudnessAndEquilizer": {},
     "selectLanguage": "Выберите язык",
     "@selectLanguage": {},
     "streamingQuality": "Качество потоковой передачи",
@@ -104,8 +102,6 @@
     "@title": {},
     "date": "Дата",
     "@date": {},
-    "equilizer": "эквалайзер",
-    "@equilizer": {},
     "playNext": "играть Далее",
     "@playNext": {},
     "addToQueue": "Добавить в очередь",
@@ -141,7 +137,12 @@
     "nothingInHere": "Здесь ничего нет",
     "@nothingInHere": {},
     "loudnessEnhancer": "Усилитель громкости",
-    "enableEqualizer": "Включить эквалайзер",
+    "@loudnessEnhancer": {},
     "removeFromFavorites": "Удалить из Избранного",
-    "telegram": "Телеграмма"
+    "@removeFromFavorites": {},
+    "telegram": "Телеграмма",
+    "@telegram": {},
+    "loudnessAndEqualizer": "Громкость и эквалайзер",
+    "enableEqualizer": "Включить эквалайзер",
+    "equalizer": "Эквалайзер"
 }

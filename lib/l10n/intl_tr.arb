@@ -38,8 +38,6 @@
     "@materialColors": {},
     "musicAndPlayback": "Müzik ve Oynatma",
     "@musicAndPlayback": {},
-    "loudnessAndEquilizer": "ses yüksekliği ve dengeleyici",
-    "@loudnessAndEquilizer": {},
     "selectLanguage": "Dil Seçin",
     "@selectLanguage": {},
     "streamingQuality": "Yayın Kalitesi",
@@ -104,8 +102,6 @@
     "@title": {},
     "date": "Tarih",
     "@date": {},
-    "equilizer": "dengeleyici",
-    "@equilizer": {},
     "playNext": "sonrakini çal",
     "@playNext": {},
     "addToQueue": "Sıraya ekle",
@@ -141,7 +137,12 @@
     "nothingInHere": "Burada hiçbir şey yok",
     "@nothingInHere": {},
     "loudnessEnhancer": "Ses Yüksekliği Artırıcı",
-    "enableEqualizer": "Ekolayzeri Etkinleştir",
+    "@loudnessEnhancer": {},
     "removeFromFavorites": "Favorilerden çıkar",
-    "telegram": "Telgraf"
+    "@removeFromFavorites": {},
+    "telegram": "Telgraf",
+    "@telegram": {},
+    "loudnessAndEqualizer": "Ses Yüksekliği ve Ekolayzer",
+    "enableEqualizer": "Ekolayzeri Etkinleştir",
+    "equalizer": "Ekolayzer"
 }

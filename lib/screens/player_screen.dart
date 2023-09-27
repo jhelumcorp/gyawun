@@ -44,16 +44,17 @@ class _PlayerScreenState extends State<PlayerScreen> {
   PanelController panelController = PanelController();
   double progress = 0;
   Uri? arturi;
-  late List<Map<String,dynamic>> menuItems;
+  late List<Map<String, dynamic>> menuItems;
   @override
   void initState() {
     super.initState();
-    
   }
 
   @override
   Widget build(BuildContext context) {
-    menuItems = [{'index':0,'value':S.of(context).equilizer}];
+    menuItems = [
+      {'index': 0, 'value': S.of(context).equalizer}
+    ];
     MediaManager mediaManager = context.watch<MediaManager>();
     MediaItem? song = mediaManager.currentSong;
     if (arturi != song?.artUri) {

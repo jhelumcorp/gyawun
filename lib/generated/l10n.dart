@@ -237,11 +237,11 @@ class S {
     );
   }
 
-  /// `loudness And Equilizer`
-  String get loudnessAndEquilizer {
+  /// `loudness And Equalizer`
+  String get loudnessAndEqualizer {
     return Intl.message(
-      'loudness And Equilizer',
-      name: 'loudnessAndEquilizer',
+      'loudness And Equalizer',
+      name: 'loudnessAndEqualizer',
       desc: '',
       args: [],
     );
@@ -257,10 +257,10 @@ class S {
     );
   }
 
-  /// `Enable Equilizer`
+  /// `Enable Equalizer`
   String get enableEqualizer {
     return Intl.message(
-      'Enable Equilizer',
+      'Enable Equalizer',
       name: 'enableEqualizer',
       desc: '',
       args: [],
@@ -737,11 +737,11 @@ class S {
     );
   }
 
-  /// `Equilizer`
-  String get equilizer {
+  /// `Equalizer`
+  String get equalizer {
     return Intl.message(
-      'Equilizer',
-      name: 'equilizer',
+      'Equalizer',
+      name: 'equalizer',
       desc: '',
       args: [],
     );

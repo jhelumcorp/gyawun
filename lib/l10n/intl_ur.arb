@@ -38,8 +38,6 @@
     "@materialColors": {},
     "musicAndPlayback": "موسیقی اور پلے بیک",
     "@musicAndPlayback": {},
-    "loudnessAndEquilizer": "لاؤڈنس اور ایکولائزر",
-    "@loudnessAndEquilizer": {},
     "selectLanguage": "زبان منتخب کریں۔",
     "@selectLanguage": {},
     "streamingQuality": "سلسلہ بندی کا معیار",
@@ -104,8 +102,6 @@
     "@title": {},
     "date": "تاریخ",
     "@date": {},
-    "equilizer": "ایکولائزر",
-    "@equilizer": {},
     "playNext": "اگلا کھیلیں",
     "@playNext": {},
     "addToQueue": "قطار میں شامل کریں",
@@ -141,7 +137,12 @@
     "nothingInHere": "یہاں کچھ نہیں ہے۔",
     "@nothingInHere": {},
     "loudnessEnhancer": "بلند آواز بڑھانے والا",
-    "enableEqualizer": "Equalizer کو فعال کریں۔",
+    "@loudnessEnhancer": {},
     "removeFromFavorites": "پسندیدہ سے ہٹا دیں۔",
-    "telegram": "ٹیلی گرام"
+    "@removeFromFavorites": {},
+    "telegram": "ٹیلی گرام",
+    "@telegram": {},
+    "loudnessAndEqualizer": "لاؤڈنس اور ایکویلائزر",
+    "enableEqualizer": "Equalizer کو فعال کریں۔",
+    "equalizer": "برابر کرنے والا"
 }

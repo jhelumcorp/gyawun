@@ -271,11 +271,12 @@ List<SettingItem> appAppearenceSettingDataList(BuildContext context) => [
 
 List<SettingItem> playbackSettingDataList(BuildContext context) => [
       SettingItem(
-        title: S.of(context).loudnessAndEquilizer,
+        title: S.of(context).loudnessAndEqualizer,
         hasNavigation: false,
         onTap: (context) => showModalBottomSheet(
-          backgroundColor: Colors.transparent,
-            context: context, builder: (_) => const EqualizerScreen()),
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (_) => const EqualizerScreen()),
       ),
       SettingItem(
           title: S.of(context).languages,

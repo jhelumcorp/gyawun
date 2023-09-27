@@ -54,7 +54,7 @@ showSongOptions(BuildContext context, Map<String, dynamic> song,
             Navigator.push(context,
                 MaterialPageRoute(builder: (_) => const EqualizerScreen()));
           },
-          child: Text(S.of(context).equilizer),
+          child: Text(S.of(context).equalizer),
         ),
         CupertinoActionSheetAction(
           onPressed: () {
