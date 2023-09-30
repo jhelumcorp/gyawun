@@ -59,9 +59,9 @@ body:
         If your bug includes a crash, please use `adb logcat` or other ways to provide logs.
   
   - type: input
-    id: vibemusic-version
+    id: gyawun-version
     attributes:
-      label: Vibe Music version
+      label: Gyawun version
       placeholder: |
         Example: "0.3.1"
     validations:
@@ -74,7 +74,7 @@ body:
       description: |
         You can find this somewhere in your Android settings.
       placeholder: |
-        Example: "Android 12"
+        Example: "Android 13"
     validations:
       required: true
 
