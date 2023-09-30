@@ -144,5 +144,19 @@
     "@telegram": {},
     "loudnessAndEqualizer": "Громкость и эквалайзер",
     "enableEqualizer": "Включить эквалайзер",
-    "equalizer": "Эквалайзер"
+    "equalizer": "Эквалайзер",
+    "donate":"Пожертвовать",
+    "@donate":{},
+    "donateSubtitle":"Поддержите развитие Gyawun",
+    "@donateSubtitle":{},
+    "paymentMethods":"Способы оплаты",
+    "@paymentMethods":{},
+    "supportMeOnKofi": "Поддержите меня на Ko-fi",
+    "@supportMeOnKofi": {},
+    "buyMeACoffee": "Купите мне кофе",
+    "@buyMeACoffee": {},
+    "gyawun": "Гявун",
+    "@gyawun": {},
+    "madeInKashmir": "Сделано в Кашмире",
+    "@madeInKashmir": {}
 }

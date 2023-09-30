@@ -144,5 +144,19 @@
     "@telegram": {},
     "loudnessAndEqualizer": "प्रबलता और तुल्यकारक",
     "enableEqualizer": "तुल्यकारक सक्षम करें",
-    "equalizer": "तुल्यकारक"
+    "equalizer": "तुल्यकारक",
+    "donate":"दान करें",
+    "@donate":{},
+    "donateSubtitle":"ज्ञावुन के विकास का समर्थन करें",
+    "@donateSubtitle":{},
+    "paymentMethods":"भुगतान के तरीके",
+    "@paymentMethods":{},
+    "supportMeOnKofi":"मुझे Ko-fi पर समर्थन दें",
+    "@supportMeOnKofi":{},
+    "buyMeACoffee":"मुझे एक कॉफी खरीदें",
+    "@buyMeACoffee":{},
+    "gyawun":"ग्यावुन",
+    "@gyawun":{},
+    "madeInKashmir":"कश्मीर में बनाया गया",
+    "@madeInKashmir":{}
 }

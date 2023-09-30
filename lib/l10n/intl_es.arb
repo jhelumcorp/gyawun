@@ -144,5 +144,19 @@
     "@telegram": {},
     "loudnessAndEqualizer": "Sonoridad y ecualizador",
     "enableEqualizer": "Habilitar ecualizador",
-    "equalizer": "Igualada"
+    "equalizer": "Igualada",
+    "donate": "Donar",
+    "@donate": {},
+    "donateSubtitle": "Apoye el desarrollo de Gyawun",
+    "@donateSubtitle": {},
+    "paymentMethods": "Métodos de pago",
+    "@paymentMethods": {},
+    "supportMeOnKofi":"Apóyame en Ko-fi",
+    "@supportMeOnKofi":{},
+    "buyMeACoffee":"Cómprame un café",
+    "@buyMeACoffee":{},
+    "gyawun":"Gyawun",
+    "@gyawun":{},
+    "madeInKashmir":"Hecho en Cachemira",
+    "@madeInKashmir":{}
 }

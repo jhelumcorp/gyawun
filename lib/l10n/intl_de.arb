@@ -144,5 +144,19 @@
     "@telegram": {},
     "loudnessAndEqualizer": "Lautstärke und Equalizer",
     "enableEqualizer": "Equalizer aktivieren",
-    "equalizer": "Equalizer"
+    "equalizer": "Equalizer",
+    "donate":"Spenden",
+    "@donate":{},
+    "donateSubtitle":"Unterstützen Sie die Entwicklung von Gyawun",
+    "@donateSubtitle":{},
+    "paymentMethods":"Zahlungsmethoden",
+    "@paymentMethods":{},
+    "supportMeOnKofi":"Unterstütze mich auf Ko-fi",
+    "@supportMeOnKofi":{},
+    "buyMeACoffee":"Kauf mir einen Kaffee",
+    "@buyMeACoffee":{},
+    "gyawun":"Gyawun",
+    "@gyawun":{},
+    "madeInKashmir":"Hergestellt in Kaschmir",
+    "@madeInKashmir":{}
 }

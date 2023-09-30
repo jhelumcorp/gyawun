@@ -144,5 +144,19 @@
     "@telegram": {},
     "loudnessAndEqualizer": "جهارة الصوت والمعادل",
     "enableEqualizer": "تمكين المعادل",
-    "equalizer": "المعادل"
+    "equalizer": "المعادل",
+    "donate":"تبرع",
+    "@donate":{},
+    "donateSubtitle":"دعم تطوير جياون",
+    "@donateSubtitle":{},
+    "paymentMethods":"طرق الدفع",
+    "@paymentMethods":{},
+    "supportMeOnKofi":"دعمني على Ko-fi",
+    "@supportMeOnKofi":{},
+    "buyMeACoffee":"اشتري لي قهوة",
+    "@buyMeACoffee":{},
+    "gyawun":"جياون",
+    "@gyawun":{},
+    "madeInKashmir":"صنع في كشمير",
+    "@madeInKashmir":{}
 }

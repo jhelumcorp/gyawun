@@ -144,5 +144,19 @@
     "@telegram": {},
     "loudnessAndEqualizer": "Volume et égaliseur",
     "enableEqualizer": "Activer l'égaliseur",
-    "equalizer": "Égaliseur"
+    "equalizer": "Égaliseur",
+    "donate":"Faire un don",
+    "@donate":{},
+    "donateSubtitle":"Soutenez le développement de Gyawun",
+    "@donateSubtitle":{},
+    "paymentMethods":"Méthodes de paiement",
+    "@paymentMethods":{},
+    "supportMeOnKofi":"Soutenez-moi sur Ko-fi",
+    "@supportMeOnKofi":{},
+    "buyMeACoffee":"Offrez-moi un café",
+    "@buyMeACoffee":{},
+    "gyawun":"Gyawun",
+    "@gyawun":{},
+    "madeInKashmir":"Fabriqué au Cachemire",
+    "@madeInKashmir":{}
 }

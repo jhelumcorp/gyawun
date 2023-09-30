@@ -41,6 +41,16 @@
   "materialColors": "Material Colors",
   "@materialColors": {},
 
+  "donate":"Donate",
+  "@donate":{},
+  "donateSubtitle":"Support the development of Gyawun",
+  "@donateSubtitle":{},
+  "paymentMethods":"Payment Methods",
+  "@paymentMethods":{},
+  "supportMeOnKofi":"Support me on Ko-fi",
+  "@supportMeOnKofi":{},
+  "buyMeACoffee":"Buy me a Coffee",
+  "@buyMeACoffee":{},
   "musicAndPlayback": "Music and Playback",
   "@musicAndPlayback": {},
   "loudnessAndEqualizer":"loudness And Equalizer",
@@ -93,6 +103,8 @@
   "@about":{},
   "name":"Name",
   "@name":{},
+  "gyawun":"Gyawun",
+  "@gyawun":{},
   "version":"Version",
   "@version":{},
   "developer":"Developer",
@@ -113,6 +125,8 @@
   "@bugReport":{},
   "featureRequest":"Feature Request",
   "@featureRequest":{},
+  "madeInKashmir":"Made in Kashmir",
+  "@madeInKashmir":{},
 
 
 

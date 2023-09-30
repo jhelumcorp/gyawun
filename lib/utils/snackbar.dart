@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
 class ShowSnackBar {
-  void showSnackBar(
+  static void showSnackBar(
     BuildContext context,
     String title, {
     SnackBarAction? action,
     Duration duration = const Duration(seconds: 1),
     bool noAction = false,
+    Color? backgroundColor,
   }) {
     try {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: duration,
           elevation: 6,
-          backgroundColor: Colors.grey[900],
+          backgroundColor: backgroundColor,
           behavior: SnackBarBehavior.floating,
           content: Text(
             title,
@@ -34,4 +35,32 @@ class ShowSnackBar {
       Logger.root.severe('Failed to show Snackbar with title: $title', e);
     }
   }
+
+  static void showSuccess(BuildContext context, String title,
+          {SnackBarAction? action,
+          Duration duration = const Duration(seconds: 1),
+          bool noAction = false}) =>
+      showSnackBar(context, title,
+          action: action,
+          duration: duration,
+          noAction: noAction,
+          backgroundColor: Colors.green);
+  static void showError(BuildContext context, String title,
+          {SnackBarAction? action,
+          Duration duration = const Duration(seconds: 1),
+          bool noAction = false}) =>
+      showSnackBar(context, title,
+          action: action,
+          duration: duration,
+          noAction: noAction,
+          backgroundColor: Colors.red);
+  static void showWarning(BuildContext context, String title,
+          {SnackBarAction? action,
+          Duration duration = const Duration(seconds: 1),
+          bool noAction = false}) =>
+      showSnackBar(context, title,
+          action: action,
+          duration: duration,
+          noAction: noAction,
+          backgroundColor: Colors.yellow);
 }

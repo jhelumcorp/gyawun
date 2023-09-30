@@ -67,7 +67,7 @@ class _HomeSectionState extends State<HomeSection> {
                     context.read<MediaManager>().addAndPlay(sectionitems,
                         initialIndex: sectionitems.indexOf(song));
                   } else if (song['type'] == 'radio_station') {
-                    ShowSnackBar().showSnackBar(
+                    ShowSnackBar.showSnackBar(
                       context,
                       'Connecting Radio...',
                       duration: const Duration(seconds: 3),

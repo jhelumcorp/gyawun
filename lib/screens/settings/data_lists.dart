@@ -43,16 +43,23 @@ List<SettingItem> mainSettingDataList(BuildContext context) => [
           color: Colors.accents[0],
           onTap: (BuildContext context) {
             showDurationPicker(
-                    context: context,
-                    initialTime: const Duration(minutes: 30),
-                    snapToMins: 0.5,
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(10)))
-                .then((duration) {
-              if (duration != null) {
-                context.read<MediaManager>().setTimer(duration);
-              }
-            });
+                context: context,
+                initialTime: const Duration(minutes: 30),
+                snapToMins: 0.5,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Theme.of(GetIt.I<GlobalKey<NavigatorState>>()
+                          .currentState!
+                          .context)
+                      .colorScheme
+                      .background,
+                )).then(
+              (duration) {
+                if (duration != null) {
+                  context.read<MediaManager>().setTimer(duration);
+                }
+              },
+            );
           },
           trailing: (context) {
             MediaManager mediaManager = context.watch<MediaManager>();
@@ -90,7 +97,7 @@ List<SettingItem> mainSettingDataList(BuildContext context) => [
         },
         onTap: (context) {
           showCountryPicker(
-            context: context,
+            context: GetIt.I<GlobalKey<NavigatorState>>().currentContext!,
             countryFilter: countries,
             onSelect: (value) {
               box.put('locationName', value.name);
@@ -98,8 +105,6 @@ List<SettingItem> mainSettingDataList(BuildContext context) => [
             },
             countryListTheme: CountryListThemeData(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              textStyle: Theme.of(context).primaryTextTheme.titleLarge,
-              searchTextStyle: Theme.of(context).primaryTextTheme.titleLarge,
               borderRadius: BorderRadius.circular(10),
               bottomSheetHeight: MediaQuery.of(context).size.height * (2 / 3),
             ),
@@ -157,7 +162,7 @@ List<SettingItem> appAppearenceSettingDataList(BuildContext context) => [
               style: smallTextStyle(context));
         },
         onTap: (context) {
-          showlanguagePage(context);
+          showlanguagePage();
         },
       ),
       SettingItem(
@@ -175,42 +180,65 @@ List<SettingItem> appAppearenceSettingDataList(BuildContext context) => [
           showCupertinoModalPopup(
             context: context,
             builder: (context) {
-              return CupertinoActionSheet(
-                title: Text(
-                  "Pick Theme Color",
-                  style: textStyle(context).copyWith(fontSize: 18),
+              return Material(
+                color: Theme.of(context).colorScheme.background,
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20)),
+                child: SafeArea(
+                  child: ListView(
+                    shrinkWrap: true,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                    children: [
+                      Text(
+                        "Pick Theme Color",
+                        style: textStyle(context).copyWith(fontSize: 18),
+                      ),
+                      BlockPicker(
+                        availableColors: const [
+                          accentColor,
+                          Color.fromRGBO(0, 123, 255, 1),
+                          Color.fromRGBO(40, 167, 69, 1),
+                          Color.fromRGBO(220, 53, 69, 1),
+                          Color.fromRGBO(255, 193, 7, 1),
+                          Color.fromRGBO(111, 66, 193, 1),
+                          Color.fromRGBO(253, 126, 20, 1),
+                          Color.fromRGBO(32, 201, 151, 1),
+                          Color.fromRGBO(233, 30, 99, 1),
+                          Color.fromRGBO(63, 81, 181, 1),
+                          Color.fromRGBO(0, 188, 212, 1),
+                          Color.fromRGBO(255, 193, 7, 1),
+                          Color.fromRGBO(103, 58, 183, 1),
+                          Color.fromRGBO(255, 87, 34, 1),
+                          Color.fromRGBO(205, 220, 57, 1),
+                        ],
+                        pickerColor: context.watch<ThemeManager>().accentColor,
+                        onColorChanged: (Color color) {
+                          context.read<ThemeManager>().setAccentColor(color);
+                        },
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(0),
+                              backgroundColor: MaterialStateProperty.all(
+                                Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                            child: Text(
+                              S.of(context).done,
+                              style: smallTextStyle(context),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                message: BlockPicker(
-                  availableColors: const [
-                    accentColor,
-                    Color.fromRGBO(0, 123, 255, 1),
-                    Color.fromRGBO(40, 167, 69, 1),
-                    Color.fromRGBO(220, 53, 69, 1),
-                    Color.fromRGBO(255, 193, 7, 1),
-                    Color.fromRGBO(111, 66, 193, 1),
-                    Color.fromRGBO(253, 126, 20, 1),
-                    Color.fromRGBO(32, 201, 151, 1),
-                    Color.fromRGBO(233, 30, 99, 1),
-                    Color.fromRGBO(63, 81, 181, 1),
-                    Color.fromRGBO(0, 188, 212, 1),
-                    Color.fromRGBO(255, 193, 7, 1),
-                    Color.fromRGBO(103, 58, 183, 1),
-                    Color.fromRGBO(255, 87, 34, 1),
-                    Color.fromRGBO(205, 220, 57, 1),
-                  ],
-                  pickerColor: context.watch<ThemeManager>().accentColor,
-                  onColorChanged: (Color color) {
-                    context.read<ThemeManager>().setAccentColor(color);
-                  },
-                ),
-                actions: [
-                  CupertinoActionSheetAction(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("Done", style: smallTextStyle(context)),
-                  )
-                ],
               );
             },
           );
@@ -290,40 +318,64 @@ List<SettingItem> playbackSettingDataList(BuildContext context) => [
                 showCupertinoModalPopup(
                   context: context,
                   builder: (context) {
-                    return CupertinoActionSheet(
-                      title: Text(
-                        S.of(context).selectLanguage,
-                        style: textStyle(context).copyWith(fontSize: 18),
+                    return Material(
+                      color: Theme.of(context).colorScheme.background,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
+                      child: SafeArea(
+                        child: ListView(
+                            shrinkWrap: true,
+                            primary: false,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 32, vertical: 16),
+                            children: [
+                              Text(
+                                S.of(context).selectLanguage,
+                                style:
+                                    textStyle(context).copyWith(fontSize: 18),
+                              ),
+                              ...langs.map((lang) {
+                                return ListTile(
+                                  dense: true,
+                                  visualDensity: VisualDensity.compact,
+                                  title: Text(lang),
+                                  trailing: Checkbox(
+                                      visualDensity: VisualDensity.compact,
+                                      value: context
+                                          .watch<ThemeManager>()
+                                          .languages
+                                          .contains(lang),
+                                      onChanged: (val) {
+                                        if (val != null) {
+                                          context
+                                              .read<ThemeManager>()
+                                              .toggleLanguage(lang, val);
+                                        }
+                                      }),
+                                );
+                              }).toList(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                      elevation: MaterialStateProperty.all(0),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text(
+                                      S.of(context).done,
+                                      style: smallTextStyle(context),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ]),
                       ),
-                      message: Material(
-                        color: Colors.transparent,
-                        child: Column(
-                            children: langs.map((lang) {
-                          return ListTile(
-                            dense: true,
-                            visualDensity: VisualDensity.compact,
-                            title: Text(lang),
-                            trailing: Checkbox(
-                                visualDensity: VisualDensity.compact,
-                                value: context
-                                    .watch<ThemeManager>()
-                                    .languages
-                                    .contains(lang),
-                                onChanged: (val) {
-                                  if (val != null) {
-                                    context
-                                        .read<ThemeManager>()
-                                        .toggleLanguage(lang, val);
-                                  }
-                                }),
-                          );
-                        }).toList()),
-                      ),
-                      actions: [
-                        CupertinoActionSheetAction(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text(S.of(context).done))
-                      ],
                     );
                   },
                 );
@@ -874,7 +926,7 @@ Future<void> deletePlaybackHistory(BuildContext context) async {
             await Hive.box('songHistory')
                 .clear()
                 .then((value) => Navigator.pop(context))
-                .then((value) => ShowSnackBar().showSnackBar(
+                .then((value) => ShowSnackBar.showSnackBar(
                     context, 'Playback History Deleted.',
                     duration: const Duration(seconds: 2)));
           },
@@ -901,7 +953,7 @@ clearPlaybackCache(context) async {
             await GetIt.I<PlaybackCache>()
                 .clearCache()
                 .then((value) => Navigator.pop(context))
-                .then((value) => ShowSnackBar().showSnackBar(
+                .then((value) => ShowSnackBar.showSnackBar(
                     context, 'Playback Cache Deleted.',
                     duration: const Duration(seconds: 2)));
           },
@@ -911,46 +963,73 @@ clearPlaybackCache(context) async {
   );
 }
 
-showlanguagePage(BuildContext context) {
+showlanguagePage() {
+  BuildContext context =
+      GetIt.I<GlobalKey<NavigatorState>>().currentState!.context;
   List<Map<String, dynamic>> languages =
       context.read<ThemeManager>().supportedLanguages;
   showCupertinoModalPopup(
+    useRootNavigator: true,
     context: context,
     builder: (context) {
-      return CupertinoActionSheet(
-        title: Text(
-          S.of(context).selectLanguage,
-          style: textStyle(context).copyWith(fontSize: 18),
+      return Material(
+        color: Theme.of(context).colorScheme.background,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        child: SafeArea(
+          child: ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            children: [
+              Text(
+                S.of(context).selectLanguage,
+                style: textStyle(context).copyWith(fontSize: 18),
+              ),
+              ...languages.map((lang) {
+                return ListTile(
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                    title: Text(
+                      lang['name'].toString().capitalize(),
+                      style: smallTextStyle(context),
+                    ),
+                    trailing: context
+                                .watch<ThemeManager>()
+                                .language['code']
+                                .toLowerCase() ==
+                            lang['code'].toString().toLowerCase()
+                        ? const Icon(Icons.check)
+                        : null,
+                    onTap: () async {
+                      await context
+                          .read<ThemeManager>()
+                          .setLanguage(lang['code'].toString().toLowerCase())
+                          .then((value) => Navigator.pop(context));
+                    });
+              }).toList(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      S.of(context).done,
+                      style: smallTextStyle(context),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
-        message: Material(
-          color: Colors.transparent,
-          child: Column(children: [
-            ...languages.map((lang) {
-              return ListTile(
-                  dense: true,
-                  visualDensity: VisualDensity.compact,
-                  title: Text(lang['name'].toString().capitalize()),
-                  trailing: context
-                              .watch<ThemeManager>()
-                              .language['code']
-                              .toLowerCase() ==
-                          lang['code'].toString().toLowerCase()
-                      ? const Icon(Icons.check)
-                      : null,
-                  onTap: () async {
-                    await context
-                        .read<ThemeManager>()
-                        .setLanguage(lang['code'].toString().toLowerCase())
-                        .then((value) => Navigator.pop(context));
-                  });
-            }).toList()
-          ]),
-        ),
-        actions: [
-          CupertinoActionSheetAction(
-              onPressed: () => Navigator.pop(context),
-              child: Text(S.of(context).cancel))
-        ],
       );
     },
   );

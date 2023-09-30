@@ -16,12 +16,13 @@ import 'package:gyawun/screens/settings/appearence.dart';
 import 'package:gyawun/screens/settings/download_screen.dart';
 import 'package:gyawun/screens/settings/equalizer_screen.dart';
 import 'package:gyawun/screens/settings/history_screen.dart';
-import 'package:gyawun/screens/settings/playback_screent.dart';
+import 'package:gyawun/screens/settings/playback_screen.dart';
 import 'package:gyawun/screens/settings/providers_screen.dart';
 import 'package:gyawun/screens/settings/setting_screen.dart';
 
 PageController pageController = PageController();
 GoRouter router = GoRouter(
+  navigatorKey: GetIt.I<GlobalKey<NavigatorState>>(),
   initialLocation: '/',
   routes: [
     ShellRoute(

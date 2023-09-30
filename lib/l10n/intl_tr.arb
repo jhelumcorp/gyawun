@@ -144,5 +144,19 @@
     "@telegram": {},
     "loudnessAndEqualizer": "Ses Yüksekliği ve Ekolayzer",
     "enableEqualizer": "Ekolayzeri Etkinleştir",
-    "equalizer": "Ekolayzer"
+    "equalizer": "Ekolayzer",
+    "donate": "Bağış yapmak",
+    "@donate": {},
+    "donateSubtitle": "Gyawun'un geliştirilmesini destekleyin",
+    "@donateSubtitle": {},
+    "paymentMethods": "Ödeme Yöntemleri",
+    "@paymentMethods": {},
+    "supportMeOnKofi": "Ko-fi'de beni destekle",
+    "@supportMeOnKofi": {},
+    "buyMeACoffee": "Bana kahve ısmarla",
+    "@buyMeACoffee": {},
+    "gyawun": "Gyawun",
+    "@gyawun": {},
+    "madeInKashmir": "Keşmir'de yapıldı",
+    "@madeInKashmir": {}
 }

@@ -17,7 +17,6 @@ import 'package:gyawun/ui/themes/light.dart';
 import 'package:gyawun/utils/playback_cache.dart';
 import 'package:gyawun/utils/router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-// import 'package:metadata_god/metadata_god.dart';
 
 import 'package:provider/provider.dart';
 
@@ -41,6 +40,8 @@ void main() async {
   }
 
   GetIt.I.registerSingleton<AudioHandler>(await initAudioService());
+  GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  GetIt.I.registerSingleton<GlobalKey<NavigatorState>>(navigatorKey);
   MediaManager mediaManager = MediaManager();
   ThemeManager themeManager = ThemeManager();
   GetIt.I.registerSingleton(mediaManager);

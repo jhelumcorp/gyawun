@@ -49,7 +49,7 @@ class AboutScreen extends StatelessWidget {
                     style: subtitleTextStyle(context),
                   ),
                   trailing: Text(
-                    "Gyawun",
+                    S.of(context).gyawun,
                     style: smallTextStyle(context),
                   ),
                 ),
@@ -190,21 +190,11 @@ class AboutScreen extends StatelessWidget {
             ),
           ),
           Center(
-              child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(text: "Made with ", style: subtitleTextStyle(context)),
-                const WidgetSpan(
-                    child: Icon(
-                  Iconsax.heart5,
-                  color: Colors.red,
-                  size: 20,
-                )),
-                TextSpan(text: " in Kashmir", style: subtitleTextStyle(context))
-              ]),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(S.of(context).madeInKashmir),
             ),
-          )),
+          ),
         ],
       ),
     );

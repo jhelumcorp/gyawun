@@ -32,6 +32,7 @@ migrate_working_dir/
 .pub/
 /build/
 **/lib/config.dart
+**/lib/screens/settings/payment_screen.dart
 
 # Symbolication related
 app.*.symbols

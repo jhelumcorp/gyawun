@@ -227,6 +227,56 @@ class S {
     );
   }
 
+  /// `Donate`
+  String get donate {
+    return Intl.message(
+      'Donate',
+      name: 'donate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Support the development of Gyawun`
+  String get donateSubtitle {
+    return Intl.message(
+      'Support the development of Gyawun',
+      name: 'donateSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment Methods`
+  String get paymentMethods {
+    return Intl.message(
+      'Payment Methods',
+      name: 'paymentMethods',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Support me on Ko-fi`
+  String get supportMeOnKofi {
+    return Intl.message(
+      'Support me on Ko-fi',
+      name: 'supportMeOnKofi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Buy me a Coffee`
+  String get buyMeACoffee {
+    return Intl.message(
+      'Buy me a Coffee',
+      name: 'buyMeACoffee',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Music and Playback`
   String get musicAndPlayback {
     return Intl.message(
@@ -467,6 +517,16 @@ class S {
     );
   }
 
+  /// `Gyawun`
+  String get gyawun {
+    return Intl.message(
+      'Gyawun',
+      name: 'gyawun',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Version`
   String get version {
     return Intl.message(
@@ -562,6 +622,16 @@ class S {
     return Intl.message(
       'Feature Request',
       name: 'featureRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Made in Kashmir`
+  String get madeInKashmir {
+    return Intl.message(
+      'Made in Kashmir',
+      name: 'madeInKashmir',
       desc: '',
       args: [],
     );
