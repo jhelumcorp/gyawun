@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -8,18 +11,55 @@ import 'package:gyawun/screens/player_screen.dart';
 import 'package:gyawun/ui/text_styles.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
+import 'package:titlebar_buttons/titlebar_buttons.dart';
 
-class ScaffoldWithNestedNavigation extends StatelessWidget {
+class ScaffoldWithNestedNavigation extends StatefulWidget {
   const ScaffoldWithNestedNavigation({
     Key? key,
     required this.navigationShell,
   }) : super(key: key ?? const ValueKey('ScaffoldWithNestedNavigation'));
   final StatefulNavigationShell navigationShell;
 
+  @override
+  State<ScaffoldWithNestedNavigation> createState() =>
+      _ScaffoldWithNestedNavigationState();
+}
+
+class _ScaffoldWithNestedNavigationState
+    extends State<ScaffoldWithNestedNavigation> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Platform.isLinux && Process.runSync("which", ["mpv"]).exitCode != 0) {
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            title: const Text("MPV not found"),
+            content: const Text(
+                "MPV is required to play music. Please install it and restart the app."),
+            actions: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+                ),
+                onPressed: () => exit(1),
+                child:
+                    const Text("Exit", style: TextStyle(color: Colors.white)),
+              )
+            ],
+          ),
+        );
+      }
+    });
+  }
+
   void _goBranch(int index) {
-    navigationShell.goBranch(
+    widget.navigationShell.goBranch(
       index,
-      initialLocation: index == navigationShell.currentIndex,
+      initialLocation: index == widget.navigationShell.currentIndex,
     );
   }
 
@@ -29,6 +69,28 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
+          if (Platform.isLinux)
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onPanStart: (details) {
+                appWindow.startDragging();
+              },
+              child: WindowTitleBarBox(
+                child: PreferredSize(
+                    preferredSize:
+                        Size(double.maxFinite, appWindow.titleBarHeight),
+                    child: AppBar(
+                      title: Text(S.of(context).gyawun),
+                      centerTitle: true,
+                      actions: [
+                        DecoratedMinimizeButton(onPressed: appWindow.minimize),
+                        DecoratedMaximizeButton(
+                            onPressed: appWindow.maximizeOrRestore),
+                        DecoratedCloseButton(onPressed: appWindow.close)
+                      ],
+                    )),
+              ),
+            ),
           Expanded(
             child: Row(
               children: [
@@ -71,15 +133,17 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
                         ),
                       )
                     ],
-                    selectedIndex: navigationShell.currentIndex,
+                    selectedIndex: widget.navigationShell.currentIndex,
                   ),
                 Expanded(
-                  child: navigationShell,
+                  child: widget.navigationShell,
                 ),
                 if (screenWidth >= 700 &&
                     MediaQuery.of(context).size.height >= 600 &&
                     context.watch<MediaManager>().currentSong != null)
-                  const SizedBox(width: 350, child: PlayerScreen())
+                  SizedBox(
+                      width: Platform.isLinux ? 450 : 350,
+                      child: const PlayerScreen())
               ],
             ),
           ),
@@ -90,7 +154,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
           ? NavigationBar(
               labelBehavior:
                   NavigationDestinationLabelBehavior.onlyShowSelected,
-              selectedIndex: navigationShell.currentIndex,
+              selectedIndex: widget.navigationShell.currentIndex,
               destinations: [
                 NavigationDestination(
                   selectedIcon: const Icon(EvaIcons.home),

@@ -136,6 +136,13 @@ List<StatefulShellBranch> branches = [
               pageBuilder: (context, state) =>
                   const CupertinoPage(child: HistoryScreen()),
             ),
+            // GoRoute(
+            //   path: 'upi',
+            //   pageBuilder: (context, state) => CupertinoPage(
+            //       child: PaymentScreen(
+            //     razorPay: state.extra as bool,
+            //   )),
+            // ),
             GoRoute(
               path: 'providers',
               pageBuilder: (context, state) =>

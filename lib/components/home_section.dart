@@ -82,6 +82,11 @@ class _HomeSectionState extends State<HomeSection> {
                     showSongOptions(context, Map.from(song));
                   }
                 },
+                onSecondaryTapDown: (details) {
+                  if (song['type'] == 'song') {
+                    showSongOptions(context, Map.from(song));
+                  }
+                },
                 child: SizedBox(
                   width: song['type'] == 'chart' || song['type'] == 'video'
                       ? 250

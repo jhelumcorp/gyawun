@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,6 +56,15 @@ void main() async {
     ],
     child: const MainApp(),
   ));
+  if (Platform.isLinux) {
+    doWhenWindowReady(() {
+      const initialSize = Size(1280, 720);
+      // appWindow.minSize = initialSize;
+      appWindow.size = initialSize;
+      appWindow.alignment = Alignment.center;
+      appWindow.show();
+    });
+  }
 }
 
 class MainApp extends StatefulWidget {
@@ -117,5 +127,5 @@ class _MainAppState extends State<MainApp> {
 }
 
 Future<Box<E>> openBox<E>(String name) async {
-  return await Hive.openBox(name);
+  return await Hive.openBox(name, path: Platform.isAndroid ? null : 'Gyawun');
 }

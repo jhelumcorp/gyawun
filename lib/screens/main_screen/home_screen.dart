@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun/api/api.dart';
 import 'package:gyawun/api/format.dart';
@@ -9,6 +10,7 @@ import 'package:gyawun/components/recommendations.dart';
 import 'package:gyawun/ui/colors.dart';
 import 'package:gyawun/utils/recomendations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../../components/skeletons/home_page.dart';
 import '../../generated/l10n.dart';
@@ -34,8 +36,15 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    GetIt.I<AudioPlayer>().dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return Scaffold(
       extendBody: true,
       appBar: AppBar(

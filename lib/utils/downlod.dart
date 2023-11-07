@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_tagger/audio_tagger.dart';
 import 'package:audio_tagger/audio_tags.dart';
+import 'package:audiotags/audiotags.dart' as tags;
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
@@ -19,14 +20,19 @@ download(MediaItem song) async {
   if (item != null) {
     return;
   }
-  bool status = await checkAndRequestPermissions();
-  if (!status) return;
+  if (Platform.isAndroid) {
+    bool status = await checkAndRequestPermissions();
+    if (!status) return;
+  }
   final RegExp avoid = RegExp(r'[\.\\\*\:\"\?#/;\|]');
   String oldName = song.title.replaceAll(avoid, "");
 
   int count = 1;
   String name = oldName;
-  while (await File('/storage/emulated/0/Music/$name.m4a').exists()) {
+  String path = Platform.isAndroid
+      ? '/storage/emulated/0/Music'
+      : (await getDownloadsDirectory())!.path.replaceAll('Downloads', 'Music');
+  while (await File('$path/$name.m4a').exists()) {
     name = '$oldName($count)';
     count++;
   }
@@ -36,27 +42,26 @@ download(MediaItem song) async {
   int total = 0;
   int recieved = 0;
   if (song.extras!['provider'] == 'youtube') {
-      String id = song.id.replaceFirst('youtube', '');
-  StreamManifest manifest = await yt.videos.streamsClient.getManifest(id);
-  int qualityIndex = 0;
-  List<AudioOnlyStreamInfo> streamInfos =
-      manifest.audioOnly.sortByBitrate().reversed.toList();
+    String id = song.id.replaceFirst('youtube', '');
+    StreamManifest manifest = await yt.videos.streamsClient.getManifest(id);
+    int qualityIndex = 0;
+    List<AudioOnlyStreamInfo> streamInfos =
+        manifest.audioOnly.sortByBitrate().reversed.toList();
 
-  String quality = (Hive.box('settings')
-          .get('youtubeDownloadQuality', defaultValue: 'Medium'))
-      .toString()
-      .toLowerCase();
-  if (quality == 'low') {
-    qualityIndex = 0;
-  } else if (quality == 'medium') {
-    qualityIndex = (streamInfos.length / 2).floor();
-  } else {
-    qualityIndex = streamInfos.length - 1;
-  }
-  AudioOnlyStreamInfo streamInfo = streamInfos[qualityIndex];
-  total = streamInfo.size.totalBytes;
-   stream = yt.videos.streamsClient.get(streamInfo);
-  //  await downloadYoutubeSong(song, '/storage/emulated/0/Music/$name.m4a');
+    String quality = (Hive.box('settings')
+            .get('youtubeDownloadQuality', defaultValue: 'Medium'))
+        .toString()
+        .toLowerCase();
+    if (quality == 'low') {
+      qualityIndex = 0;
+    } else if (quality == 'medium') {
+      qualityIndex = (streamInfos.length / 2).floor();
+    } else {
+      qualityIndex = streamInfos.length - 1;
+    }
+    AudioOnlyStreamInfo streamInfo = streamInfos[qualityIndex];
+    total = streamInfo.size.totalBytes;
+    stream = yt.videos.streamsClient.get(streamInfo);
   } else {
     int downloadQuality =
         Hive.box('settings').get('downloadQuality', defaultValue: 160);
@@ -67,58 +72,70 @@ download(MediaItem song) async {
     final response = await client.send(Request('GET', Uri.parse(url)));
     total = response.contentLength ?? 0;
     stream = response.stream;
-
   }
 
-      Logger.root.info('Client connected, Starting download');
-    stream.asBroadcastStream();
-    Logger.root.info('broadcasting download state');
-    List<int> bytes = [];
-    stream.listen((value) {
-      bytes.addAll(value);
-      try {
-        recieved += value.length;
-        Hive.box('downloads').put(song.id,
-            {'path': null, 'progress': recieved / total, 'status': 'pending'});
-      } catch (e) {
-        Logger.root.severe('Error in download: $e');
-      }
-    }).onDone(() async {
-      client.close();
-      String localPath = '/storage/emulated/0/Music';
-      String filePath = '$localPath/$name.m4a';
-      File fileDef = File(filePath);
-      
-      await fileDef.writeAsBytes(bytes);
-      Response res = await get(song.artUri!);
-      String? image = await saveImage(song.id, res.bodyBytes);
-       await AudioTagger.writeAllTags(
-          songPath: fileDef.path,
-          tags: AudioTags(
-            title: oldName,
-            artist: song.artist ?? '',
-            album: song.album ?? '',
-            genre: song.genre ?? '',
-            track: 1.toString(),
-            year: song.extras?['year'].toString()??'',
-            disc: '',
-          ),
-        );
-        try{await AudioTagger.writeArtwork(
-          songPath: fileDef.path,
-          artworkPath: image,
-        );
-        }catch(e){
-          log(e.toString());
-        }
+  Logger.root.info('Client connected, Starting download');
+  stream.asBroadcastStream();
+  Logger.root.info('broadcasting download state');
+  List<int> bytes = [];
+  stream.listen((value) {
+    bytes.addAll(value);
+    try {
+      recieved += value.length;
+      Hive.box('downloads').put(song.id,
+          {'path': null, 'progress': recieved / total, 'status': 'pending'});
+    } catch (e) {
+      Logger.root.severe('Error in download: $e');
+    }
+  }).onDone(() async {
+    client.close();
+    String localPath = path;
+    String filePath = '$localPath/$name.m4a';
+    File fileDef = File(filePath);
 
-      Hive.box('downloads').put(song.id, {
-        'path': fileDef.path,
-        'progress': 100,
-        'status': 'done',
-        ...song.extras ?? {}
-      });
+    await fileDef.writeAsBytes(bytes);
+    Response res = await get(song.artUri!);
+    String? image = await saveImage(song.id, res.bodyBytes);
+    if (Platform.isAndroid) {
+      await AudioTagger.writeAllTags(
+        songPath: fileDef.path,
+        tags: AudioTags(
+          title: oldName,
+          artist: song.artist ?? '',
+          album: song.album ?? '',
+          genre: song.genre ?? '',
+          track: 1.toString(),
+          year: song.extras?['year'].toString() ?? '',
+          disc: '',
+        ),
+      );
+
+      await AudioTagger.writeArtwork(
+        songPath: fileDef.path,
+        artworkPath: image,
+      );
+    } else {
+      tags.Tag tag = tags.Tag(
+          title: oldName,
+          artist: song.artist ?? '',
+          album: song.album ?? '',
+          genre: song.genre ?? '',
+          pictures: [
+            tags.Picture(
+                bytes: res.bodyBytes,
+                mimeType: tags.MimeType.none,
+                pictureType: tags.PictureType.other)
+          ]);
+      await tags.AudioTags.write(fileDef.path, tag);
+    }
+
+    Hive.box('downloads').put(song.id, {
+      'path': fileDef.path,
+      'progress': 100,
+      'status': 'done',
+      ...song.extras ?? {}
     });
+  });
 }
 
 Future<bool> checkAndRequestPermissions() async {
@@ -196,15 +213,23 @@ Future<void> deleteSong({dynamic key, String path = ""}) async {
 }
 
 Future<Uri> getImageUri(String id) async {
-  final tempDir = await getApplicationDocumentsDirectory();
-  final file = File('${tempDir.path}/$id.jpg');
+  final tempDir = Platform.isAndroid
+      ? (await getApplicationDocumentsDirectory()).path
+      : (await getDownloadsDirectory())!
+          .path
+          .replaceAll('Downloads', 'Music/.Thumbnails');
+  final file = await File('$tempDir/$id.jpg').create(recursive: true);
 
   return file.uri;
 }
 
 Future<String?> saveImage(String id, Uint8List bytes) async {
-  final tempDir = await getApplicationDocumentsDirectory();
-  final file = File('${tempDir.path}/$id.jpg');
+  final tempDir = Platform.isAndroid
+      ? (await getApplicationDocumentsDirectory()).path
+      : (await getDownloadsDirectory())!
+          .path
+          .replaceAll('Downloads', 'Music/.Thumbnails');
+  final file = await File('$tempDir/$id.jpg').create(recursive: true);
   try {
     await file.writeAsBytes(bytes);
     return file.path;

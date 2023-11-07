@@ -33,6 +33,8 @@ migrate_working_dir/
 /build/
 **/lib/config.dart
 **/lib/screens/settings/payment_screen.dart
+**/Gyawun
+**/dist
 
 # Symbolication related
 app.*.symbols

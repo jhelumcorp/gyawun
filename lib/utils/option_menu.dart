@@ -14,75 +14,170 @@ showSongOptions(BuildContext context, Map<String, dynamic> song,
     {dynamic playlistKey}) {
   showCupertinoModalPopup(
     context: context,
-    builder: (context) => CupertinoActionSheet(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: song['offline'] == true
-                ? Image.file(File(song['image']),
-                    width: 50, height: 50, fit: BoxFit.fill)
-                : CachedNetworkImage(
-                    imageUrl: song['image'], height: 50, width: 50),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    builder: (context) {
+      return SafeArea(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width > 600 ? 600 : null,
+          child: Material(
+            color: Theme.of(context).colorScheme.background,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              shrinkWrap: true,
               children: [
-                Text(
-                  song['title'],
-                  style: textStyle(context),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: song['offline'] == true
+                          ? Image.file(File(song['image']),
+                              width: 50, height: 50, fit: BoxFit.fill)
+                          : CachedNetworkImage(
+                              imageUrl: song['image'], height: 50, width: 50),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            song['title'],
+                            style: textStyle(context),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            song['artist'],
+                            style: smallTextStyle(context),
+                            textAlign: TextAlign.start,
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-                Text(
-                  song['artist'],
-                  style: smallTextStyle(context),
-                  textAlign: TextAlign.start,
-                )
+                const Divider(),
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    context.read<MediaManager>().playNext(song);
+                  },
+                  child: Text(S.of(context).playNext,
+                      style: TextStyle(color: textStyle(context).color)),
+                ),
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    context.read<MediaManager>().addItems([song]);
+                  },
+                  child: Text(S.of(context).addToQueue,
+                      style: TextStyle(color: textStyle(context).color)),
+                ),
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+
+                    togglefavorite(song);
+                  },
+                  child: Text(
+                      isfavorite(song['id'])
+                          ? S.of(context).removeFromFavorites
+                          : S.of(context).addToFavorites,
+                      style: TextStyle(color: textStyle(context).color)),
+                ),
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const EqualizerScreen()));
+                  },
+                  child: Text(S.of(context).equalizer,
+                      style: TextStyle(color: textStyle(context).color)),
+                ),
               ],
             ),
-          )
-        ],
-      ),
-      actions: [
-        CupertinoActionSheetAction(
-          onPressed: () {
-            Navigator.pop(context);
-            Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const EqualizerScreen()));
-          },
-          child: Text(S.of(context).equalizer),
+          ),
         ),
-        CupertinoActionSheetAction(
-          onPressed: () {
-            Navigator.pop(context);
-            context.read<MediaManager>().playNext(song);
-          },
-          child: Text(S.of(context).playNext),
-        ),
-        CupertinoActionSheetAction(
-          onPressed: () {
-            Navigator.pop(context);
-            context.read<MediaManager>().addItems([song]);
-          },
-          child: Text(S.of(context).addToQueue),
-        ),
-        CupertinoActionSheetAction(
-          onPressed: () {
-            Navigator.pop(context);
-
-            togglefavorite(song);
-          },
-          child: Text(isfavorite(song['id'])
-              ? S.of(context).removeFromFavorites
-              : S.of(context).addToFavorites),
-        ),
-      ],
-    ),
+      );
+    },
   );
+  // showCupertinoModalPopup(
+  //   context: context,
+  //   builder: (context) => CupertinoActionSheet(
+  //     title: Row(
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       children: [
+  //         ClipRRect(
+  //           borderRadius: BorderRadius.circular(8),
+  //           child: song['offline'] == true
+  //               ? Image.file(File(song['image']),
+  //                   width: 50, height: 50, fit: BoxFit.fill)
+  //               : CachedNetworkImage(
+  //                   imageUrl: song['image'], height: 50, width: 50),
+  //         ),
+  //         const SizedBox(width: 8),
+  //         Expanded(
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                 song['title'],
+  //                 style: textStyle(context),
+  //                 maxLines: 1,
+  //                 overflow: TextOverflow.ellipsis,
+  //               ),
+  //               Text(
+  //                 song['artist'],
+  //                 style: smallTextStyle(context),
+  //                 textAlign: TextAlign.start,
+  //               )
+  //             ],
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //     actions: [
+  //       CupertinoActionSheetAction(
+  //         onPressed: () {
+  //           Navigator.pop(context);
+  //           Navigator.push(context,
+  //               MaterialPageRoute(builder: (_) => const EqualizerScreen()));
+  //         },
+  //         child: Text(S.of(context).equalizer),
+  //       ),
+  //       CupertinoActionSheetAction(
+  //         onPressed: () {
+  //           Navigator.pop(context);
+  //           context.read<MediaManager>().playNext(song);
+  //         },
+  //         child: Text(S.of(context).playNext),
+  //       ),
+  //       CupertinoActionSheetAction(
+  //         onPressed: () {
+  //           Navigator.pop(context);
+  //           context.read<MediaManager>().addItems([song]);
+  //         },
+  //         child: Text(S.of(context).addToQueue),
+  //       ),
+  //       CupertinoActionSheetAction(
+  //         onPressed: () {
+  //           Navigator.pop(context);
+
+  //           togglefavorite(song);
+  //         },
+  //         child: Text(isfavorite(song['id'])
+  //             ? S.of(context).removeFromFavorites
+  //             : S.of(context).addToFavorites),
+  //       ),
+  //     ],
+  //   ),
+  // );
 }
 
 bool isfavorite(dynamic id) {

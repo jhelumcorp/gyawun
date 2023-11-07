@@ -180,63 +180,68 @@ List<SettingItem> appAppearenceSettingDataList(BuildContext context) => [
           showCupertinoModalPopup(
             context: context,
             builder: (context) {
-              return Material(
-                color: Theme.of(context).colorScheme.background,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20)),
-                child: SafeArea(
-                  child: ListView(
-                    shrinkWrap: true,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                    children: [
-                      Text(
-                        "Pick Theme Color",
-                        style: textStyle(context).copyWith(fontSize: 18),
-                      ),
-                      BlockPicker(
-                        availableColors: const [
-                          accentColor,
-                          Color.fromRGBO(0, 123, 255, 1),
-                          Color.fromRGBO(40, 167, 69, 1),
-                          Color.fromRGBO(220, 53, 69, 1),
-                          Color.fromRGBO(255, 193, 7, 1),
-                          Color.fromRGBO(111, 66, 193, 1),
-                          Color.fromRGBO(253, 126, 20, 1),
-                          Color.fromRGBO(32, 201, 151, 1),
-                          Color.fromRGBO(233, 30, 99, 1),
-                          Color.fromRGBO(63, 81, 181, 1),
-                          Color.fromRGBO(0, 188, 212, 1),
-                          Color.fromRGBO(255, 193, 7, 1),
-                          Color.fromRGBO(103, 58, 183, 1),
-                          Color.fromRGBO(255, 87, 34, 1),
-                          Color.fromRGBO(205, 220, 57, 1),
-                        ],
-                        pickerColor: context.watch<ThemeManager>().accentColor,
-                        onColorChanged: (Color color) {
-                          context.read<ThemeManager>().setAccentColor(color);
-                        },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              elevation: MaterialStateProperty.all(0),
-                              backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context).primaryColor,
+              return SizedBox(
+                width: MediaQuery.of(context).size.width > 600 ? 600 : null,
+                child: Material(
+                  color: Theme.of(context).colorScheme.background,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                  child: SafeArea(
+                    child: ListView(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 8),
+                      children: [
+                        Text(
+                          "Pick Theme Color",
+                          style: textStyle(context).copyWith(fontSize: 18),
+                        ),
+                        BlockPicker(
+                          useInShowDialog: false,
+                          availableColors: const [
+                            accentColor,
+                            Color.fromRGBO(0, 123, 255, 1),
+                            Color.fromRGBO(40, 167, 69, 1),
+                            Color.fromRGBO(220, 53, 69, 1),
+                            Color.fromRGBO(255, 193, 7, 1),
+                            Color.fromRGBO(111, 66, 193, 1),
+                            Color.fromRGBO(253, 126, 20, 1),
+                            Color.fromRGBO(32, 201, 151, 1),
+                            Color.fromRGBO(233, 30, 99, 1),
+                            Color.fromRGBO(63, 81, 181, 1),
+                            Color.fromRGBO(0, 188, 212, 1),
+                            Color.fromRGBO(255, 193, 7, 1),
+                            Color.fromRGBO(103, 58, 183, 1),
+                            Color.fromRGBO(255, 87, 34, 1),
+                            Color.fromRGBO(205, 220, 57, 1),
+                          ],
+                          pickerColor:
+                              context.watch<ThemeManager>().accentColor,
+                          onColorChanged: (Color color) {
+                            context.read<ThemeManager>().setAccentColor(color);
+                          },
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
+                                backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).primaryColor,
+                                ),
                               ),
-                            ),
-                            onPressed: () => Navigator.pop(context),
-                            child: Text(
-                              S.of(context).done,
-                              style: smallTextStyle(context),
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
+                              onPressed: () => Navigator.pop(context),
+                              child: Text(
+                                S.of(context).done,
+                                style: smallTextStyle(context),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -298,14 +303,14 @@ List<SettingItem> appAppearenceSettingDataList(BuildContext context) => [
     ];
 
 List<SettingItem> playbackSettingDataList(BuildContext context) => [
-      SettingItem(
-        title: S.of(context).loudnessAndEqualizer,
-        hasNavigation: false,
-        onTap: (context) => showModalBottomSheet(
-            backgroundColor: Colors.transparent,
-            context: context,
-            builder: (_) => const EqualizerScreen()),
-      ),
+      // SettingItem(
+      //   title: S.of(context).loudnessAndEqualizer,
+      //   hasNavigation: false,
+      //   onTap: (context) => showModalBottomSheet(
+      //       backgroundColor: Colors.transparent,
+      //       context: context,
+      //       builder: (_) => const EqualizerScreen()),
+      // ),
       SettingItem(
           title: S.of(context).languages,
           trailing: (context) {
@@ -318,63 +323,67 @@ List<SettingItem> playbackSettingDataList(BuildContext context) => [
                 showCupertinoModalPopup(
                   context: context,
                   builder: (context) {
-                    return Material(
-                      color: Theme.of(context).colorScheme.background,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
-                      child: SafeArea(
-                        child: ListView(
-                            shrinkWrap: true,
-                            primary: false,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 32, vertical: 16),
-                            children: [
-                              Text(
-                                S.of(context).selectLanguage,
-                                style:
-                                    textStyle(context).copyWith(fontSize: 18),
-                              ),
-                              ...langs.map((lang) {
-                                return ListTile(
-                                  dense: true,
-                                  visualDensity: VisualDensity.compact,
-                                  title: Text(lang),
-                                  trailing: Checkbox(
-                                      visualDensity: VisualDensity.compact,
-                                      value: context
-                                          .watch<ThemeManager>()
-                                          .languages
-                                          .contains(lang),
-                                      onChanged: (val) {
-                                        if (val != null) {
-                                          context
-                                              .read<ThemeManager>()
-                                              .toggleLanguage(lang, val);
-                                        }
-                                      }),
-                                );
-                              }).toList(),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  ElevatedButton(
-                                    style: ButtonStyle(
-                                      elevation: MaterialStateProperty.all(0),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                        Theme.of(context).primaryColor,
+                    return SizedBox(
+                      width:
+                          MediaQuery.of(context).size.width > 600 ? 600 : null,
+                      child: Material(
+                        color: Theme.of(context).colorScheme.background,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                        child: SafeArea(
+                          child: ListView(
+                              shrinkWrap: true,
+                              primary: false,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 32, vertical: 16),
+                              children: [
+                                Text(
+                                  S.of(context).selectLanguage,
+                                  style:
+                                      textStyle(context).copyWith(fontSize: 18),
+                                ),
+                                ...langs.map((lang) {
+                                  return ListTile(
+                                    dense: true,
+                                    visualDensity: VisualDensity.compact,
+                                    title: Text(lang),
+                                    trailing: Checkbox(
+                                        visualDensity: VisualDensity.compact,
+                                        value: context
+                                            .watch<ThemeManager>()
+                                            .languages
+                                            .contains(lang),
+                                        onChanged: (val) {
+                                          if (val != null) {
+                                            context
+                                                .read<ThemeManager>()
+                                                .toggleLanguage(lang, val);
+                                          }
+                                        }),
+                                  );
+                                }).toList(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    ElevatedButton(
+                                      style: ButtonStyle(
+                                        elevation: MaterialStateProperty.all(0),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                          Theme.of(context).primaryColor,
+                                        ),
                                       ),
-                                    ),
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text(
-                                      S.of(context).done,
-                                      style: smallTextStyle(context),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ]),
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text(
+                                        S.of(context).done,
+                                        style: smallTextStyle(context),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ]),
+                        ),
                       ),
                     );
                   },
@@ -972,62 +981,65 @@ showlanguagePage() {
     useRootNavigator: true,
     context: context,
     builder: (context) {
-      return Material(
-        color: Theme.of(context).colorScheme.background,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        child: SafeArea(
-          child: ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            children: [
-              Text(
-                S.of(context).selectLanguage,
-                style: textStyle(context).copyWith(fontSize: 18),
-              ),
-              ...languages.map((lang) {
-                return ListTile(
-                    dense: true,
-                    visualDensity: VisualDensity.compact,
-                    title: Text(
-                      lang['name'].toString().capitalize(),
-                      style: smallTextStyle(context),
-                    ),
-                    trailing: context
-                                .watch<ThemeManager>()
-                                .language['code']
-                                .toLowerCase() ==
-                            lang['code'].toString().toLowerCase()
-                        ? const Icon(Icons.check)
-                        : null,
-                    onTap: () async {
-                      await context
-                          .read<ThemeManager>()
-                          .setLanguage(lang['code'].toString().toLowerCase())
-                          .then((value) => Navigator.pop(context));
-                    });
-              }).toList(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      elevation: MaterialStateProperty.all(0),
-                      backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).primaryColor,
+      return SizedBox(
+        width: MediaQuery.of(context).size.width > 600 ? 600 : null,
+        child: Material(
+          color: Theme.of(context).colorScheme.background,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+          child: SafeArea(
+            child: ListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              children: [
+                Text(
+                  S.of(context).selectLanguage,
+                  style: textStyle(context).copyWith(fontSize: 18),
+                ),
+                ...languages.map((lang) {
+                  return ListTile(
+                      dense: true,
+                      visualDensity: VisualDensity.compact,
+                      title: Text(
+                        lang['name'].toString().capitalize(),
+                        style: smallTextStyle(context),
                       ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      S.of(context).done,
-                      style: smallTextStyle(context),
-                    ),
-                  )
-                ],
-              ),
-            ],
+                      trailing: context
+                                  .watch<ThemeManager>()
+                                  .language['code']
+                                  .toLowerCase() ==
+                              lang['code'].toString().toLowerCase()
+                          ? const Icon(Icons.check)
+                          : null,
+                      onTap: () async {
+                        await context
+                            .read<ThemeManager>()
+                            .setLanguage(lang['code'].toString().toLowerCase())
+                            .then((value) => Navigator.pop(context));
+                      });
+                }).toList(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(0),
+                        backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        S.of(context).done,
+                        style: smallTextStyle(context),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       );

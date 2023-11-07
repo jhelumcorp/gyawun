@@ -14,7 +14,6 @@ import 'package:flutter_progress_status/flutter_progress_status.dart';
 import 'package:gyawun/api/image_resolution_modifier.dart';
 import 'package:gyawun/components/play_button.dart';
 import 'package:gyawun/components/queue_list.dart';
-import 'package:gyawun/generated/l10n.dart';
 import 'package:gyawun/providers/media_manager.dart';
 import 'package:gyawun/ui/colors.dart';
 import 'package:gyawun/ui/text_styles.dart';
@@ -52,9 +51,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    menuItems = [
-      {'index': 0, 'value': S.of(context).equalizer}
-    ];
+    // menuItems = [
+    //   {'index': 0, 'value': S.of(context).equalizer}
+    // ];
     MediaManager mediaManager = context.watch<MediaManager>();
     MediaItem? song = mediaManager.currentSong;
     if (arturi != song?.artUri) {
@@ -91,20 +90,20 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       },
                       icon: const Icon(Icons.lyrics_rounded),
                     ),
-                    PopupMenuButton(
-                      onSelected: menuSelected,
-                      icon: const Icon(Icons.more_vert),
-                      itemBuilder: (BuildContext context) {
-                        return menuItems
-                            .map(
-                              (item) => PopupMenuItem(
-                                value: item,
-                                child: Text(item['value']),
-                              ),
-                            )
-                            .toList();
-                      },
-                    ),
+                    // PopupMenuButton(
+                    //   onSelected: menuSelected,
+                    //   icon: const Icon(Icons.more_vert),
+                    //   itemBuilder: (BuildContext context) {
+                    //     return menuItems
+                    //         .map(
+                    //           (item) => PopupMenuItem(
+                    //             value: item,
+                    //             child: Text(item['value']),
+                    //           ),
+                    //         )
+                    //         .toList();
+                    //   },
+                    // ),
                   ]
                 : null,
           ),
@@ -144,7 +143,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     song: song,
                     width: constraints.maxWidth,
                     height: constraints.maxHeight -
-                        (constraints.maxWidth * 0.85) -
+                        (constraints.maxWidth * 0.88) -
                         16,
                     panelController: panelController,
                   )
