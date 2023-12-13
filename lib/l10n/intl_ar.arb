@@ -158,5 +158,11 @@
     "gyawun":"جياون",
     "@gyawun":{},
     "madeInKashmir":"صنع في كشمير",
-    "@madeInKashmir":{}
+    "@madeInKashmir":{},
+    "enableSearchHistory": "تمكين سجل البحث",
+    "@enableSearchHistory":{},
+    "deleteSearchHistory": "حذف سجل البحث",
+    "@deleteSearchHistory": {},
+    "deleteSearchHistoryDialogText":"هل أنت متأكد أنك تريد حذف سجل البحث؟",
+    "@deleteSearchHistoryDialogText":{}
 }

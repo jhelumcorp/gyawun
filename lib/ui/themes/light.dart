@@ -7,7 +7,6 @@ final defaultFontStyle = GoogleFonts.poppins();
 ThemeData lightTheme(accentColor) => ThemeData.light().copyWith(
     colorScheme: ColorScheme.fromSeed(seedColor: accentColor),
     primaryColor: accentColor,
-    useMaterial3: true,
     scaffoldBackgroundColor: const Color.fromARGB(255, 247, 247, 247),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
@@ -103,7 +102,6 @@ ThemeData lightTheme(accentColor) => ThemeData.light().copyWith(
 ThemeData materialLightTheme(accentColor) => ThemeData.light().copyWith(
     colorScheme: ColorScheme.fromSeed(seedColor: accentColor),
     primaryColor: accentColor,
-    useMaterial3: true,
     scaffoldBackgroundColor: const Color.fromARGB(255, 247, 247, 247),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,

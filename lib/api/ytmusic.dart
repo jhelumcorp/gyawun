@@ -13,10 +13,6 @@ Map types = {
   'MUSIC_VIDEO_TYPE_UGC': 'video',
   'MUSIC_VIDEO_TYPE_OFFICIAL_SOURCE_MUSIC': 'video',
   'MUSIC_VIDEO_TYPE_ATV': 'song',
-  'şarkı': 'song',
-  'profil': 'profile',
-  'oynatma listesi': 'playlist',
-  'sanatçı': 'artist',
 };
 
 class YtMusicService {

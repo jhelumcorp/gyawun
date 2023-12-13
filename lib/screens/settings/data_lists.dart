@@ -303,14 +303,14 @@ List<SettingItem> appAppearenceSettingDataList(BuildContext context) => [
     ];
 
 List<SettingItem> playbackSettingDataList(BuildContext context) => [
-      // SettingItem(
-      //   title: S.of(context).loudnessAndEqualizer,
-      //   hasNavigation: false,
-      //   onTap: (context) => showModalBottomSheet(
-      //       backgroundColor: Colors.transparent,
-      //       context: context,
-      //       builder: (_) => const EqualizerScreen()),
-      // ),
+      SettingItem(
+        title: S.of(context).loudnessAndEqualizer,
+        hasNavigation: false,
+        onTap: (context) => showModalBottomSheet(
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (_) => const EqualizerScreen()),
+      ),
       SettingItem(
           title: S.of(context).languages,
           trailing: (context) {
@@ -638,6 +638,32 @@ List<SettingItem> historySettingDatalist(BuildContext context) => [
         },
         subtitle: S.of(context).deletePlaybackHistoryText,
       ),
+      SettingItem(
+        title: S.of(context).enableSearchHistory,
+        onTap: (context) async {
+          bool isEnabled = box.get('searchHistory', defaultValue: true);
+          await box.put('searchHistory', !isEnabled);
+        },
+        trailing: (context) {
+          return ValueListenableBuilder(
+            valueListenable: box.listenable(keys: ['searchHistory']),
+            builder: (context, value, child) {
+              bool isEnabled = value.get('searchHistory', defaultValue: true);
+              return CupertinoSwitch(
+                  value: isEnabled,
+                  onChanged: (val) async {
+                    await value.put('searchHistory', val);
+                  });
+            },
+          );
+        },
+      ),
+      SettingItem(
+        title: S.of(context).deleteSearchHistory,
+        onTap: (context) async {
+          await deleteSearchHistory(context);
+        },
+      ),
     ];
 
 List<ThemeMode> dropdownItems = [
@@ -938,6 +964,33 @@ Future<void> deletePlaybackHistory(BuildContext context) async {
                 .then((value) => ShowSnackBar.showSnackBar(
                     context, 'Playback History Deleted.',
                     duration: const Duration(seconds: 2)));
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+Future<void> deleteSearchHistory(BuildContext context) async {
+  showCupertinoDialog(
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
+      title: Text(S.of(context).confirm),
+      content: Text(S.of(context).deleteSearchHistoryDialogText),
+      actions: [
+        CupertinoDialogAction(
+          child: Text(S.of(context).no),
+          onPressed: () => Navigator.pop(context),
+        ),
+        CupertinoDialogAction(
+          child: Text(S.of(context).yes),
+          onPressed: () async {
+            await Hive.box('searchHistory')
+                .clear()
+                .then((value) => Navigator.pop(context))
+                .then((value) => ShowSnackBar.showSnackBar(
+                    context, 'search History Deleted.',
+                    duration: const Duration(seconds: 1)));
           },
         ),
       ],

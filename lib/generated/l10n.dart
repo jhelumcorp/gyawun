@@ -497,6 +497,36 @@ class S {
     );
   }
 
+  /// `Enable Search History`
+  String get enableSearchHistory {
+    return Intl.message(
+      'Enable Search History',
+      name: 'enableSearchHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `delete Search History`
+  String get deleteSearchHistory {
+    return Intl.message(
+      'delete Search History',
+      name: 'deleteSearchHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete Search History.`
+  String get deleteSearchHistoryDialogText {
+    return Intl.message(
+      'Are you sure you want to delete Search History.',
+      name: 'deleteSearchHistoryDialogText',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `About`
   String get about {
     return Intl.message(

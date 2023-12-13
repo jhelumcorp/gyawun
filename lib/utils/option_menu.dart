@@ -187,7 +187,9 @@ bool isfavorite(dynamic id) {
 togglefavorite(Map<String, dynamic> song) async {
   Box box = Hive.box('favorites');
   if (box.get(song['id']) == null) {
-    await box.put(song['id'], song);
+    Map newsong = Map.from(song);
+    newsong['palette'] = null;
+    await box.put(song['id'], newsong);
   } else {
     await box.delete(song['id']);
   }

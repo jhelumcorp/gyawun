@@ -158,5 +158,11 @@
     "gyawun":"Gyawun",
     "@gyawun":{},
     "madeInKashmir":"Hergestellt in Kaschmir",
-    "@madeInKashmir":{}
+    "@madeInKashmir":{},
+    "enableSearchHistory": "Aktivieren Sie den Suchverlauf",
+    "@enableSearchHistory":{},
+    "deleteSearchHistory": "Suchverlauf löschen",
+    "@deleteSearchHistory": {},
+    "deleteSearchHistoryDialogText":"Möchten Sie den Suchverlauf wirklich löschen?",
+    "@deleteSearchHistoryDialogText":{}
 }

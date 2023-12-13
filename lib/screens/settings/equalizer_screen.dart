@@ -39,6 +39,7 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
               return SizedBox(
                 height: constraints.maxHeight > 600 ? 600 : null,
                 child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     ListTile(
                       title: Text(S.of(context).loudnessEnhancer),

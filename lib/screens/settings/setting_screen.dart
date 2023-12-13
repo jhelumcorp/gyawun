@@ -1,4 +1,5 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -77,10 +78,7 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
           if (searchText == "")
             ListTile(
-              leading: ColorIcon(
-                  icon: IconData(int.parse('0x20B9'),
-                      fontFamily: 'CupertinoIcons'),
-                  color: Colors.accents[14]),
+              leading: ColorIcon(icon: Icons.money, color: Colors.accents[14]),
               title: Text(
                 S.of(context).donate,
                 style: textStyle(context, bold: false).copyWith(fontSize: 16),
@@ -169,11 +167,8 @@ showPaymentsModal() {
                   SizedBox(
                     height: 40,
                     width: 40,
-                    child: ColorIcon(
-                      color: Colors.accents[14],
-                      icon: IconData(int.parse('0x20B9'),
-                          fontFamily: 'CupertinoIcons'),
-                    ),
+                    child:
+                        ColorIcon(color: Colors.accents[14], icon: Icons.money),
                   ),
                 ],
               ),

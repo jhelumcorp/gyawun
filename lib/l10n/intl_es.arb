@@ -158,5 +158,11 @@
     "gyawun":"Gyawun",
     "@gyawun":{},
     "madeInKashmir":"Hecho en Cachemira",
-    "@madeInKashmir":{}
+    "@madeInKashmir":{},
+    "enableSearchHistory": "Habilitar historial de búsqueda",
+    "@enableSearchHistory":{},
+    "deleteSearchHistory": "Borrar historial de búsqueda",
+    "@deleteSearchHistory": {},
+    "deleteSearchHistoryDialogText":"¿Estás seguro de que quieres borrar el historial de búsqueda?",
+    "@deleteSearchHistoryDialogText":{}
 }

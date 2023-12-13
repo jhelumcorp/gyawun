@@ -35,9 +35,9 @@ extension AudioHandlerExtension on AudioHandler {
 }
 
 class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
-  // final _equalizer = AndroidEqualizer();
-  // final _loudnessEnhancer = AndroidLoudnessEnhancer();
-  // AndroidEqualizerParameters? _equalizerParams;
+  final _equalizer = AndroidEqualizer();
+  final _loudnessEnhancer = AndroidLoudnessEnhancer();
+  AndroidEqualizerParameters? _equalizerParams;
 
   late AudioPlayer _player;
   ConcatenatingAudioSource _playlist = ConcatenatingAudioSource(children: []);
@@ -45,22 +45,22 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
   MyAudioHandler() {
     if (Platform.isAndroid) {
       final AudioPipeline pipeline = AudioPipeline(
-          // androidAudioEffects: [
-          //   _equalizer,
-          //   _loudnessEnhancer,
-          // ],
-          );
+        androidAudioEffects: [
+          _equalizer,
+          _loudnessEnhancer,
+        ],
+      );
       _player = AudioPlayer(audioPipeline: pipeline);
     } else {
       _player = AudioPlayer();
     }
     GetIt.I.registerSingleton<AudioPlayer>(_player);
-    // GetIt.I.registerSingleton<AndroidEqualizer>(_equalizer);
-    // GetIt.I.registerSingleton<AndroidLoudnessEnhancer>(_loudnessEnhancer);
+    GetIt.I.registerSingleton<AndroidEqualizer>(_equalizer);
+    GetIt.I.registerSingleton<AndroidLoudnessEnhancer>(_loudnessEnhancer);
 
-    // if (Platform.isAndroid) {
-    //   _loadEquilizer();
-    // }
+    if (Platform.isAndroid) {
+      _loadEquilizer();
+    }
     _loadEmptyPlaylist();
     _notifyAudioHandlerAboutPlaybackEvents();
     _listenForDurationChanges();
@@ -71,28 +71,28 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
     });
   }
 
-  // _loadEquilizer() async {
-  //   await _loudnessEnhancer.setEnabled(Hive.box('settings')
-  //       .get('loudnessEnabled', defaultValue: false) as bool);
-  //   await _loudnessEnhancer
-  //       .setTargetGain(Hive.box('settings').get('loudness', defaultValue: 0.0));
+  _loadEquilizer() async {
+    await _loudnessEnhancer.setEnabled(Hive.box('settings')
+        .get('loudnessEnabled', defaultValue: false) as bool);
+    await _loudnessEnhancer
+        .setTargetGain(Hive.box('settings').get('loudness', defaultValue: 0.0));
 
-  //   await _equalizer.setEnabled(Hive.box('settings')
-  //       .get('equalizerEnabled', defaultValue: false) as bool);
-  //   _equalizer.parameters.then((value) async {
-  //     _equalizerParams ??= value;
+    await _equalizer.setEnabled(Hive.box('settings')
+        .get('equalizerEnabled', defaultValue: false) as bool);
+    _equalizer.parameters.then((value) async {
+      _equalizerParams ??= value;
 
-  //     final List<AndroidEqualizerBand> bands = _equalizerParams!.bands;
-  //     await Future.forEach(
-  //       bands,
-  //       (e) {
-  //         final gain = Hive.box('settings')
-  //             .get('equalizerBand${e.index}', defaultValue: 0.0) as double;
-  //         _equalizerParams!.bands[e.index].setGain(gain);
-  //       },
-  //     );
-  //   });
-  // }
+      final List<AndroidEqualizerBand> bands = _equalizerParams!.bands;
+      await Future.forEach(
+        bands,
+        (e) {
+          final gain = Hive.box('settings')
+              .get('equalizerBand${e.index}', defaultValue: 0.0) as double;
+          _equalizerParams!.bands[e.index].setGain(gain);
+        },
+      );
+    });
+  }
 
   Future<void> _loadEmptyPlaylist() async {
     try {
@@ -125,7 +125,7 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
           MediaAction.skipToNext,
           MediaAction.skipToPrevious,
         },
-        androidCompactActionIndices: const [0, 1, 2],
+        androidCompactActionIndices: const [1, 2, 3],
         processingState: const {
           ProcessingState.idle: AudioProcessingState.idle,
           ProcessingState.loading: AudioProcessingState.loading,

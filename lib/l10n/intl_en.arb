@@ -98,6 +98,12 @@
   "@deletePlaybackHistoryText": {},
   "deletePlaybackHistoryDialogText":"Are you sure you want to delete Playback History.",
   "@deletePlaybackHistoryDialogText":{},
+  "enableSearchHistory": "Enable Search History",
+  "@enableSearchHistory":{},
+  "deleteSearchHistory": "delete Search History",
+  "@deleteSearchHistory": {},
+  "deleteSearchHistoryDialogText":"Are you sure you want to delete Search History.",
+  "@deleteSearchHistoryDialogText":{},
 
   "about":"About",
   "@about":{},

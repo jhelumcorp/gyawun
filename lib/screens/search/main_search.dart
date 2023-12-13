@@ -21,6 +21,7 @@ class MainSearchScreen extends StatefulWidget {
 class _MainSearchScreenState extends State<MainSearchScreen>
     with AutomaticKeepAliveClientMixin<MainSearchScreen> {
   bool searching = false;
+  bool typing = true;
   Map items = {};
   List<String> hints = [];
   final TextEditingController _searchController = TextEditingController();
@@ -29,16 +30,6 @@ class _MainSearchScreenState extends State<MainSearchScreen>
               'youtube'
           ? SearchProvider.youtube
           : SearchProvider.saavn;
-
-  @override
-  void initState() {
-    super.initState();
-    SaavnAPI().getTopSearches().then((value) {
-      setState(() {
-        hints = value;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +66,7 @@ class _MainSearchScreenState extends State<MainSearchScreen>
                     )
                   : null,
             ),
-            // onChanged: (value) => searchItems(value),
+            onChanged: (value) => getHints(value),
             onSubmitted: (value) => searchItems(value),
             textInputAction: TextInputAction.search,
             maxLines: 1,
@@ -109,60 +100,78 @@ class _MainSearchScreenState extends State<MainSearchScreen>
               ),
             ),
             Expanded(
-              child: _searchController.text.trim().isEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Wrap(
-                        runSpacing: 8,
-                        spacing: 8,
-                        children: hints
-                            .map((e) => GestureDetector(
-                                  onTap: () {
-                                    _searchController.text = e;
-                                    searchItems(e);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                        color: darkGreyColor.withAlpha(50),
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: Text(e),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                    )
-                  : searching
-                      ? const Center(child: CircularProgressIndicator())
-                      : SingleChildScrollView(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: items
-                                .map((key, val) {
-                                  return MapEntry(
-                                      key,
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            key,
-                                            style: textStyle(context).copyWith(
-                                                color: Theme.of(context)
-                                                    .primaryColor),
-                                          ),
-                                          ...val.map((item) {
-                                            return SearchTile(item: item);
-                                          }).toList(),
-                                        ],
-                                      ));
-                                })
-                                .values
-                                .toList(),
-                          ),
-                        ),
+              child: _searchController.text.isEmpty
+                  ? ListView(
+                      children: Hive.box('searchHistory')
+                          .keys
+                          .toList()
+                          .reversed
+                          .map((key) {
+                      String value = Hive.box('searchHistory').get(key);
+                      return ListTile(
+                        title: Text(value),
+                        leading: const Icon(Icons.restore),
+                        trailing: IconButton(
+                            onPressed: () {
+                              Hive.box('searchHistory').delete(key);
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.delete_outline_rounded)),
+                        onTap: () {
+                          _searchController.text = value;
+                          searchItems(value);
+                        },
+                      );
+                    }).toList())
+                  : typing
+                      ? ListView(
+                          children: hints
+                              .map((e) => ListTile(
+                                    title: Text(e),
+                                    leading:
+                                        const Icon(Icons.arrow_outward_rounded),
+                                    onTap: () {
+                                      _searchController.text = e;
+                                      searchItems(e);
+                                    },
+                                  ))
+                              .toList(),
+                        )
+                      : searching
+                          ? const Center(child: CircularProgressIndicator())
+                          : SingleChildScrollView(
+                              padding: const EdgeInsets.all(8),
+                              child: Column(
+                                children: items
+                                    .map((key, val) {
+                                      return MapEntry(
+                                          key,
+                                          (key == 'Episodes' ||
+                                                  key == 'Podcasts')
+                                              ? const SizedBox()
+                                              : Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      key,
+                                                      style: textStyle(context)
+                                                          .copyWith(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                    ),
+                                                    ...val.map((item) {
+                                                      return SearchTile(
+                                                          item: item);
+                                                    }).toList(),
+                                                  ],
+                                                ));
+                                    })
+                                    .values
+                                    .toList(),
+                              ),
+                            ),
             ),
           ],
         ),
@@ -170,11 +179,23 @@ class _MainSearchScreenState extends State<MainSearchScreen>
     );
   }
 
+  getHints(query) async {
+    setState(() {
+      typing = true;
+    });
+    hints = await YtMusicService().getSearchSuggestions(query: query);
+    setState(() {});
+  }
+
   searchItems(String query) async {
     if (query.trim().isEmpty) return;
     setState(() {
       searching = true;
+      typing = false;
     });
+    if (Hive.box('settings').get('searchHistory', defaultValue: true)) {
+      Hive.box('searchHistory').add(query);
+    }
     if (searchProvider == SearchProvider.saavn) {
       await searchSaavn(query);
     } else {

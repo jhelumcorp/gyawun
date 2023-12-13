@@ -158,5 +158,11 @@
     "gyawun":"ग्यावुन",
     "@gyawun":{},
     "madeInKashmir":"कश्मीर में बनाया गया",
-    "@madeInKashmir":{}
+    "@madeInKashmir":{},
+    "enableSearchHistory": "खोज इतिहास सक्षम करें",
+    "@enableSearchHistory":{},
+    "deleteSearchHistory": "खोज इतिहास हटाएं",
+    "@deleteSearchHistory": {},
+    "deleteSearchHistoryDialogText":"क्या आप वाकई खोज इतिहास हटाना चाहते हैं?",
+    "@deleteSearchHistoryDialogText":{}
 }

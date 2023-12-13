@@ -3,13 +3,12 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:audio_tagger/audio_tagger.dart';
-import 'package:audio_tagger/audio_tags.dart';
-import 'package:audiotags/audiotags.dart' as tags;
+// import 'package:audiotags/audiotags.dart' as tags;
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
+import 'package:metadata_god/metadata_god.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -95,46 +94,22 @@ download(MediaItem song) async {
 
     await fileDef.writeAsBytes(bytes);
     Response res = await get(song.artUri!);
-    String? image = await saveImage(song.id, res.bodyBytes);
+    await saveImage(song.id, res.bodyBytes);
     if (Platform.isAndroid) {
-      await AudioTagger.writeAllTags(
-        songPath: fileDef.path,
-        tags: AudioTags(
-          title: oldName,
-          artist: song.artist ?? '',
-          album: song.album ?? '',
-          genre: song.genre ?? '',
-          track: 1.toString(),
-          year: song.extras?['year'].toString() ?? '',
-          disc: '',
-        ),
+      await MetadataGod.writeMetadata(
+        file: fileDef.path,
+        metadata: Metadata(
+            title: oldName,
+            artist: song.artist ?? '',
+            album: song.album ?? '',
+            genre: song.genre ?? '',
+            picture: Picture(mimeType: 'image/png', data: res.bodyBytes)),
       );
-
-      await AudioTagger.writeArtwork(
-        songPath: fileDef.path,
-        artworkPath: image,
-      );
-    } else {
-      tags.Tag tag = tags.Tag(
-          title: oldName,
-          artist: song.artist ?? '',
-          album: song.album ?? '',
-          genre: song.genre ?? '',
-          pictures: [
-            tags.Picture(
-                bytes: res.bodyBytes,
-                mimeType: tags.MimeType.none,
-                pictureType: tags.PictureType.other)
-          ]);
-      await tags.AudioTags.write(fileDef.path, tag);
     }
-
-    Hive.box('downloads').put(song.id, {
-      'path': fileDef.path,
-      'progress': 100,
-      'status': 'done',
-      ...song.extras ?? {}
-    });
+    Map newsong = Map.from(song.extras ?? {});
+    newsong['palette'] = null;
+    Hive.box('downloads').put(song.id,
+        {'path': fileDef.path, 'progress': 100, 'status': 'done', ...newsong});
   });
 }
 

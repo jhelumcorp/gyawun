@@ -18,6 +18,7 @@ import 'package:gyawun/ui/themes/light.dart';
 import 'package:gyawun/utils/playback_cache.dart';
 import 'package:gyawun/utils/router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:metadata_god/metadata_god.dart';
 
 import 'package:provider/provider.dart';
 
@@ -25,11 +26,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
+  MetadataGod.initialize();
   await openBox('HomeCache');
   await openBox('settings');
   await openBox('downloads');
   await openBox('favorites');
   await openBox('songHistory');
+  await openBox('searchHistory');
   await openBox('playlists');
 
   SystemChrome.setEnabledSystemUIMode(
@@ -95,32 +98,26 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     ThemeManager themeManager = context.watch<ThemeManager>();
-
     return DynamicColorBuilder(builder: (lightScheme, darkScheme) {
-      return Shortcuts(
-        shortcuts: <LogicalKeySet, Intent>{
-          LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent(),
-        },
-        child: MaterialApp.router(
-          title: 'Gyawun',
-          locale: Locale(themeManager.language['code']),
-          localizationsDelegates: const [
-            S.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: S.delegate.supportedLocales,
-          theme: themeManager.isMaterialTheme && darkScheme != null
-              ? materialLightTheme(darkScheme.primary)
-              : themeManager.getLightTheme,
-          darkTheme: themeManager.isMaterialTheme && lightScheme != null
-              ? materialDarkTheme(lightScheme.primary)
-              : themeManager.getDarkTheme,
-          themeMode: themeManager.themeMode,
-          routerConfig: router,
-          debugShowCheckedModeBanner: false,
-        ),
+      return MaterialApp.router(
+        title: 'Gyawun',
+        locale: Locale(themeManager.language['code']),
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        theme: themeManager.isMaterialTheme && darkScheme != null
+            ? materialLightTheme(darkScheme.primary)
+            : themeManager.getLightTheme,
+        darkTheme: themeManager.isMaterialTheme && lightScheme != null
+            ? materialDarkTheme(lightScheme.primary)
+            : themeManager.getDarkTheme,
+        themeMode: themeManager.themeMode,
+        routerConfig: router,
+        debugShowCheckedModeBanner: false,
       );
     });
   }

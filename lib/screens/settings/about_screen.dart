@@ -60,7 +60,7 @@ class AboutScreen extends StatelessWidget {
                     style: subtitleTextStyle(context),
                   ),
                   trailing: Text(
-                    "1.0.0",
+                    "1.0.1",
                     style: smallTextStyle(context),
                   ),
                 ),
@@ -186,13 +186,13 @@ class AboutScreen extends StatelessWidget {
                           'https://github.com/jhelumcorp/gyawun/issues/new?assignees=sheikhhaziq&labels=enhancement%2CFeature+Request&projects=&template=feature_request.yaml'),
                       mode: LaunchMode.externalApplication),
                 ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(S.of(context).madeInKashmir),
+                  ),
+                ),
               ],
-            ),
-          ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(S.of(context).madeInKashmir),
             ),
           ),
         ],

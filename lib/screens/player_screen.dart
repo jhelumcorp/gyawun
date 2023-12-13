@@ -14,13 +14,16 @@ import 'package:flutter_progress_status/flutter_progress_status.dart';
 import 'package:gyawun/api/image_resolution_modifier.dart';
 import 'package:gyawun/components/play_button.dart';
 import 'package:gyawun/components/queue_list.dart';
+import 'package:gyawun/generated/l10n.dart';
 import 'package:gyawun/providers/media_manager.dart';
 import 'package:gyawun/ui/colors.dart';
 import 'package:gyawun/ui/text_styles.dart';
 import 'package:gyawun/utils/downlod.dart';
+import 'package:gyawun/utils/enums.dart';
 import 'package:gyawun/utils/option_menu.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'settings/equalizer_screen.dart';
@@ -38,11 +41,12 @@ class PlayerScreen extends StatefulWidget {
 
 class _PlayerScreenState extends State<PlayerScreen> {
   final PanelController controller = PanelController();
-
   FlipCardController flipCardController = FlipCardController();
   PanelController panelController = PanelController();
+  final boundaryKey = GlobalKey();
   double progress = 0;
   Uri? arturi;
+  Color? color;
   late List<Map<String, dynamic>> menuItems;
   @override
   void initState() {
@@ -51,107 +55,130 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // menuItems = [
-    //   {'index': 0, 'value': S.of(context).equalizer}
-    // ];
+    menuItems = [
+      {'index': 0, 'value': S.of(context).equalizer}
+    ];
     MediaManager mediaManager = context.watch<MediaManager>();
     MediaItem? song = mediaManager.currentSong;
     if (arturi != song?.artUri) {
       arturi = song?.artUri;
-      setState(() {});
+      if (song?.extras?['palette'] == null && arturi != null) {
+        PaletteGenerator.fromImageProvider(
+                CachedNetworkImageProvider(arturi.toString()))
+            .then((value) {
+          song?.extras?['palette'] = value;
+          setState(() {});
+        });
+      }
     }
+    PaletteGenerator? palette = song?.extras?['palette'];
+    color = (context.isDarkMode
+            ? palette?.darkVibrantColor?.color
+            : palette?.lightVibrantColor?.color) ??
+        Theme.of(context).colorScheme.primary;
 
     return WillPopScope(
-      onWillPop: () async {
-        if (panelController.isPanelOpen) {
-          panelController.close();
-          return false;
-        }
-        return true;
-      },
-      child: Scaffold(
-          backgroundColor:
-              Theme.of(context).colorScheme.surfaceTint.withAlpha(30),
-          appBar: AppBar(
-            shadowColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-            leading: Navigator.canPop(context)
-                ? IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(EvaIcons.chevronDownOutline))
-                : null,
-            title: Text("Gyawun", style: textStyle(context, bold: false)),
-            centerTitle: true,
-            actions: song != null
-                ? [
-                    IconButton(
-                      onPressed: () {
-                        flipCardController.toggleCard();
-                      },
-                      icon: const Icon(Icons.lyrics_rounded),
-                    ),
-                    // PopupMenuButton(
-                    //   onSelected: menuSelected,
-                    //   icon: const Icon(Icons.more_vert),
-                    //   itemBuilder: (BuildContext context) {
-                    //     return menuItems
-                    //         .map(
-                    //           (item) => PopupMenuItem(
-                    //             value: item,
-                    //             child: Text(item['value']),
-                    //           ),
-                    //         )
-                    //         .toList();
-                    //   },
-                    // ),
-                  ]
-                : null,
+        onWillPop: () async {
+          if (panelController.isPanelOpen) {
+            panelController.close();
+            return false;
+          }
+          return true;
+        },
+        child: Theme(
+          data: Theme.of(context)
+              .copyWith(colorScheme: ColorScheme.fromSeed(seedColor: color!)),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [color!, color!.withAlpha(150), color!.withAlpha(20)],
+              ),
+            ),
+            child: Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: AppBar(
+                  shadowColor: Colors.transparent,
+                  surfaceTintColor: Colors.transparent,
+                  leading: Navigator.canPop(context)
+                      ? IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(EvaIcons.chevronDownOutline))
+                      : null,
+                  title: Text("Gyawun", style: textStyle(context, bold: false)),
+                  centerTitle: true,
+                  actions: song != null
+                      ? [
+                          IconButton(
+                            onPressed: () {
+                              flipCardController.toggleCard();
+                            },
+                            icon: const Icon(Icons.lyrics_rounded),
+                          ),
+                          PopupMenuButton(
+                            onSelected: menuSelected,
+                            icon: const Icon(Icons.more_vert),
+                            itemBuilder: (BuildContext context) {
+                              return menuItems
+                                  .map(
+                                    (item) => PopupMenuItem(
+                                      value: item,
+                                      child: Text(item['value']),
+                                    ),
+                                  )
+                                  .toList();
+                            },
+                          ),
+                        ]
+                      : null,
+                ),
+                body: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    if (constraints.maxWidth > constraints.maxHeight) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ArtWork(
+                            controller: flipCardController,
+                            width: min(
+                              constraints.maxHeight / 0.9,
+                              constraints.maxWidth / 1.8,
+                            ),
+                            song: song,
+                          ),
+                          NameAndControls(
+                            song: song,
+                            width: constraints.maxWidth / 2,
+                            height: constraints.maxHeight,
+                            panelController: panelController,
+                          )
+                        ],
+                      );
+                    }
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ArtWork(
+                          controller: flipCardController,
+                          width: constraints.maxWidth,
+                          song: song,
+                        ),
+                        NameAndControls(
+                          song: song,
+                          width: constraints.maxWidth,
+                          height: constraints.maxHeight -
+                              (constraints.maxWidth * 0.88) -
+                              16,
+                          panelController: panelController,
+                        )
+                      ],
+                    );
+                  }),
+                )),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(0),
-            child: LayoutBuilder(builder: (context, constraints) {
-              if (constraints.maxWidth > constraints.maxHeight) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ArtWork(
-                      controller: flipCardController,
-                      width: min(
-                        constraints.maxHeight / 0.9,
-                        constraints.maxWidth / 1.8,
-                      ),
-                      song: song,
-                    ),
-                    NameAndControls(
-                      song: song,
-                      width: constraints.maxWidth / 2,
-                      height: constraints.maxHeight,
-                      panelController: panelController,
-                    )
-                  ],
-                );
-              }
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ArtWork(
-                    controller: flipCardController,
-                    width: constraints.maxWidth,
-                    song: song,
-                  ),
-                  NameAndControls(
-                    song: song,
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight -
-                        (constraints.maxWidth * 0.88) -
-                        16,
-                    panelController: panelController,
-                  )
-                ],
-              );
-            }),
-          )),
-    );
+        ));
   }
 
   menuSelected(Map item) {

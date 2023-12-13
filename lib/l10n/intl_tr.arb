@@ -158,5 +158,11 @@
     "gyawun": "Gyawun",
     "@gyawun": {},
     "madeInKashmir": "Keşmir'de yapıldı",
-    "@madeInKashmir": {}
+    "@madeInKashmir": {},
+    "enableSearchHistory": "Arama Geçmişini Etkinleştir",
+    "@enableSearchHistory":{},
+    "deleteSearchHistory": "Arama Geçmişini Sil",
+    "@deleteSearchHistory": {},
+    "deleteSearchHistoryDialogText":"Arama Geçmişini silmek istediğinizden emin misiniz?",
+    "@deleteSearchHistoryDialogText":{}
 }

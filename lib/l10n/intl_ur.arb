@@ -158,5 +158,11 @@
     "gyawun": "گیون",
     "@gyawun": {},
     "madeInKashmir": "کشمیر میں تیار کیا گیا",
-    "@madeInKashmir": {}
+    "@madeInKashmir": {},
+    "enableSearchHistory": "تلاش کی سرگزشت کو فعال کریں۔",
+    "@enableSearchHistory":{},
+    "deleteSearchHistory": "تلاش کی سرگزشت کو حذف کریں",
+    "@deleteSearchHistory": {},
+    "deleteSearchHistoryDialogText":"کیا آپ واقعی تلاش کی سرگزشت کو حذف کرنا چاہتے ہیں؟",
+    "@deleteSearchHistoryDialogText":{}
 }
