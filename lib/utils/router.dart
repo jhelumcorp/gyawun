@@ -1,164 +1,125 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun/providers/theme_manager.dart';
-import 'package:gyawun/screens/artists/artist_screen.dart';
-import 'package:gyawun/screens/download_screen.dart';
-import 'package:gyawun/screens/lists/list_screen.dart';
-import 'package:gyawun/screens/main_screen.dart';
-import 'package:gyawun/screens/main_screen/home_screen.dart';
-import 'package:gyawun/screens/playlists/favorites_details.dart';
-import 'package:gyawun/screens/playlists/playlists_screen.dart';
-import 'package:gyawun/screens/search/main_search.dart';
-import 'package:gyawun/screens/settings/about_screen.dart';
-import 'package:gyawun/screens/settings/appearence.dart';
-import 'package:gyawun/screens/settings/download_screen.dart';
-import 'package:gyawun/screens/settings/equalizer_screen.dart';
-import 'package:gyawun/screens/settings/history_screen.dart';
-import 'package:gyawun/screens/settings/playback_screen.dart';
-import 'package:gyawun/screens/settings/providers_screen.dart';
-import 'package:gyawun/screens/settings/setting_screen.dart';
 
-PageController pageController = PageController();
+import '../screens/download_screen/download_screen.dart';
+import '../screens/home_screen/chip_screen.dart';
+import '../screens/home_screen/home_screen.dart';
+import '../screens/home_screen/search_screen/search_screen.dart';
+import '../screens/library_screen/library_screen.dart';
+import '../screens/main_screen/main_screen.dart';
+import '../screens/main_screen/player_screen.dart';
+import '../screens/playlist_screen/browse_screen.dart';
+import '../screens/settings_screen/about/about_screen.dart';
+import '../screens/settings_screen/appearence/appearence_screen.dart';
+import '../screens/settings_screen/backup_restore/backup_restore_screen.dart';
+import '../screens/settings_screen/content/content_screen.dart';
+import '../screens/settings_screen/playback/audio_and_playback_screen.dart';
+import '../screens/settings_screen/playback/equalizer_screen.dart';
+import '../screens/settings_screen/settings_screen.dart';
+
 GoRouter router = GoRouter(
-  navigatorKey: GetIt.I<GlobalKey<NavigatorState>>(),
   initialLocation: '/',
   routes: [
     ShellRoute(
-        builder: (context, state, child) => Directionality(
-            textDirection: GetIt.I<ThemeManager>().isRightToLeftDirection
-                ? TextDirection.rtl
-                : TextDirection.ltr,
-            child: child),
-        routes: [
-          StatefulShellRoute.indexedStack(
+      builder: (context, state, child) => child,
+      routes: [
+        StatefulShellRoute.indexedStack(
             branches: branches,
             builder: (context, state, navigationShell) =>
-                ScaffoldWithNestedNavigation(navigationShell: navigationShell),
-          ),
-        ]),
+                MainScreen(navigationShell: navigationShell)),
+      ],
+    ),
+    GoRoute(
+      path: '/player',
+      pageBuilder: (context, state) {
+        return const CupertinoPage(
+          name: 'player',
+          child: PlayerScreen(),
+          fullscreenDialog: true,
+        );
+      },
+    ),
   ],
 );
 
 List<StatefulShellBranch> branches = [
   StatefulShellBranch(
     routes: [
-      // top route inside branch
       GoRoute(
           path: '/',
-          pageBuilder: (context, state) =>
-              const NoTransitionPage(child: HomeScreen()),
+          builder: (context, state) => const HomeScreen(),
           routes: [
             GoRoute(
-              path: 'list',
-              pageBuilder: (context, state) =>
-                  CupertinoPage(child: ListScreen(list: state.extra as Map)),
+              path: 'chip',
+              builder: (context, state) {
+                Map<String, dynamic> args = state.extra as Map<String, dynamic>;
+                return ChipScreen(
+                    title: args['title'] ?? '',
+                    endpoint: args['endpoint'] ?? {});
+              },
+            ),
+            GoRoute(
+              path: 'browse',
+              builder: (context, state) {
+                Map<String, dynamic> args = state.extra as Map<String, dynamic>;
+                return BrowseScreen(endpoint: args);
+              },
             ),
             GoRoute(
               path: 'search',
+              builder: (context, state) => const SearchScreen(),
+            ),
+          ]),
+    ],
+  ),
+  StatefulShellBranch(routes: [
+    GoRoute(
+      path: '/library',
+      builder: (context, state) => const LibraryScreen(),
+    ),
+  ]),
+  StatefulShellBranch(routes: [
+    GoRoute(
+      path: '/download',
+      builder: (context, state) => const DownloadScreen(),
+    ),
+  ]),
+  StatefulShellBranch(routes: [
+    GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
+        routes: [
+          GoRoute(
+            path: 'appearence',
+            pageBuilder: (context, state) =>
+                const CupertinoPage(child: AppearenceScreen()),
+          ),
+          GoRoute(
+            path: 'content',
+            pageBuilder: (context, state) =>
+                const CupertinoPage(child: ContentScreen()),
+          ),
+          GoRoute(
+              path: 'playback',
               pageBuilder: (context, state) =>
-                  const MaterialPage(child: MainSearchScreen()),
+                  const CupertinoPage(child: AudioAndPlaybackScreen()),
               routes: [
                 GoRoute(
-                  path: 'list',
-                  pageBuilder: (context, state) => CupertinoPage(
-                      child: ListScreen(list: state.extra as Map)),
-                ),
-                GoRoute(
-                  path: 'artist',
-                  pageBuilder: (context, state) => CupertinoPage(
-                      child:
-                          ArtistScreen(artist: Map.from(state.extra as Map))),
-                ),
-              ],
-            ),
-          ]),
-    ],
-  ),
-  StatefulShellBranch(
-    routes: [
-      // top route inside branch
-      GoRoute(
-          path: '/playlists',
-          pageBuilder: (context, state) =>
-              const NoTransitionPage(child: PlaylistsScreen()),
-          routes: [
-            GoRoute(
-              path: 'favorite',
-              pageBuilder: (context, state) =>
-                  const CupertinoPage(child: FavoriteDetails()),
-            ),
-            GoRoute(
-              path: 'saved',
-              pageBuilder: (context, state) =>
-                  CupertinoPage(child: ListScreen(list: state.extra as Map)),
-            ),
-          ]),
-    ],
-  ),
-  StatefulShellBranch(
-    routes: [
-      // top route inside branch
-      GoRoute(
-        path: '/downloads',
-        pageBuilder: (context, state) =>
-            const NoTransitionPage(child: DownloadsScreen()),
-      ),
-    ],
-  ),
-  StatefulShellBranch(
-    routes: [
-      // top route inside branch
-      GoRoute(
-          path: '/settings',
-          pageBuilder: (context, state) =>
-              const NoTransitionPage(child: SettingScreen()),
-          routes: [
-            GoRoute(
-              path: 'appearence',
-              pageBuilder: (context, state) =>
-                  const CupertinoPage(child: AppLayout()),
-            ),
-            GoRoute(
-                path: 'playback',
-                pageBuilder: (context, state) =>
-                    const CupertinoPage(child: PlaybackScreen()),
-                routes: [
-                  GoRoute(
-                    path: 'equilizer',
-                    pageBuilder: (context, state) =>
-                        const CupertinoPage(child: EqualizerScreen()),
-                  ),
-                ]),
-            GoRoute(
-              path: 'history',
-              pageBuilder: (context, state) =>
-                  const CupertinoPage(child: HistoryScreen()),
-            ),
-            // GoRoute(
-            //   path: 'upi',
-            //   pageBuilder: (context, state) => CupertinoPage(
-            //       child: PaymentScreen(
-            //     razorPay: state.extra as bool,
-            //   )),
-            // ),
-            GoRoute(
-              path: 'providers',
-              pageBuilder: (context, state) =>
-                  const CupertinoPage(child: ProvidersScreen()),
-            ),
-            GoRoute(
-              path: 'download',
-              pageBuilder: (context, state) =>
-                  const CupertinoPage(child: DownloadScreen()),
-            ),
-            GoRoute(
-              path: 'about',
-              pageBuilder: (context, state) =>
-                  const CupertinoPage(child: AboutScreen()),
-            ),
-          ]),
-    ],
-  ),
+                  path: 'equalizer',
+                  pageBuilder: (context, state) =>
+                      const CupertinoPage(child: EqualizerScreen()),
+                )
+              ]),
+          GoRoute(
+            path: 'backup_restore',
+            pageBuilder: (context, state) =>
+                const CupertinoPage(child: BackupRestoreScreen()),
+          ),
+          GoRoute(
+            path: 'about',
+            pageBuilder: (context, state) =>
+                const CupertinoPage(child: AboutScreen()),
+          ),
+        ]),
+  ])
 ];

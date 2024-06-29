@@ -1,128 +1,117 @@
 import 'dart:io';
 
-import 'package:audio_service/audio_service.dart';
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun/generated/l10n.dart';
-import 'package:gyawun/providers/audio_handler.dart';
-import 'package:gyawun/providers/media_manager.dart';
-import 'package:gyawun/providers/theme_manager.dart';
-import 'package:gyawun/services/server.dart';
-import 'package:gyawun/ui/themes/dark.dart';
-import 'package:gyawun/ui/themes/light.dart';
-import 'package:gyawun/utils/playback_cache.dart';
-import 'package:gyawun/utils/router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:metadata_god/metadata_god.dart';
-
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
+
+import 'generated/l10n.dart';
+import 'services/download_manager.dart';
+import 'services/file_storage.dart';
+import 'services/library.dart';
+import 'services/media_player.dart';
+import 'services/settings_manager.dart';
+import 'themes/colors.dart';
+import 'themes/dark.dart';
+import 'themes/light.dart';
+import 'utils/router.dart';
+import 'ytmusic/ytmusic.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.jhelum.gyawun.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
   await Hive.initFlutter();
-  MetadataGod.initialize();
-  await openBox('HomeCache');
-  await openBox('settings');
-  await openBox('downloads');
-  await openBox('favorites');
-  await openBox('songHistory');
-  await openBox('searchHistory');
-  await openBox('playlists');
-
-  SystemChrome.setEnabledSystemUIMode(
+  await Hive.openBox('SETTINGS');
+  await Hive.openBox('LIBRARY');
+  await Hive.openBox('SEARCH_HISTORY');
+  await Hive.openBox('SONG_HISTORY');
+  await Hive.openBox('FAVOURITES');
+  await Hive.openBox('DOWNLOADS');
+  await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,
     overlays: [SystemUiOverlay.top],
   );
-  if (Platform.isAndroid) {
-    await FlutterDisplayMode.setHighRefreshRate();
-  }
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
+  YTMusic ytMusic = YTMusic();
+  await ytMusic.init();
 
-  GetIt.I.registerSingleton<AudioHandler>(await initAudioService());
-  GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  GetIt.I.registerSingleton<GlobalKey<NavigatorState>>(navigatorKey);
-  MediaManager mediaManager = MediaManager();
-  ThemeManager themeManager = ThemeManager();
-  GetIt.I.registerSingleton(mediaManager);
-  GetIt.I.registerSingleton(themeManager);
-  GetIt.I.registerSingleton(PlaybackCache());
+  final GlobalKey<NavigatorState> panelKey = GlobalKey<NavigatorState>();
 
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => themeManager),
-      ChangeNotifierProvider(create: (context) => mediaManager),
-    ],
-    child: const MainApp(),
-  ));
-  if (Platform.isLinux) {
-    doWhenWindowReady(() {
-      const initialSize = Size(1280, 720);
-      // appWindow.minSize = initialSize;
-      appWindow.size = initialSize;
-      appWindow.alignment = Alignment.center;
-      appWindow.show();
-    });
-  }
+  await FileStorage.initialise();
+  FileStorage fileStorage = FileStorage();
+  HttpServer server = await YTMusic.startServer();
+  GetIt.I.registerSingleton<HttpServer>(server);
+  SettingsManager settingsManager = SettingsManager();
+  GetIt.I.registerSingleton<SettingsManager>(settingsManager);
+  MediaPlayer mediaPlayer =
+      MediaPlayer('${server.address.address}:${server.port}');
+  GetIt.I.registerSingleton<MediaPlayer>(mediaPlayer);
+  LibraryService libraryService = LibraryService();
+  GetIt.I.registerSingleton<DownloadManager>(DownloadManager());
+  GetIt.I.registerSingleton(panelKey);
+  GetIt.I.registerSingleton<YTMusic>(ytMusic);
+
+  GetIt.I.registerSingleton<FileStorage>(fileStorage);
+
+  GetIt.I.registerSingleton<LibraryService>(libraryService);
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => settingsManager),
+        ChangeNotifierProvider(create: (_) => mediaPlayer),
+        ChangeNotifierProvider(create: (_) => libraryService),
+      ],
+      child: const Gyawun(),
+    ),
+  );
 }
 
-class MainApp extends StatefulWidget {
-  const MainApp({super.key});
-
-  @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-  late HttpServer httpServer;
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  init() async {
-    httpServer = await startServer();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    httpServer.close();
-  }
-
+class Gyawun extends StatelessWidget {
+  const Gyawun({super.key});
   @override
   Widget build(BuildContext context) {
-    ThemeManager themeManager = context.watch<ThemeManager>();
     return DynamicColorBuilder(builder: (lightScheme, darkScheme) {
-      return MaterialApp.router(
-        title: 'Gyawun',
-        locale: Locale(themeManager.language['code']),
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: S.delegate.supportedLocales,
-        theme: themeManager.isMaterialTheme && darkScheme != null
-            ? materialLightTheme(darkScheme.primary)
-            : themeManager.getLightTheme,
-        darkTheme: themeManager.isMaterialTheme && lightScheme != null
-            ? materialDarkTheme(lightScheme.primary)
-            : themeManager.getDarkTheme,
-        themeMode: themeManager.themeMode,
-        routerConfig: router,
-        debugShowCheckedModeBanner: false,
+      return Shortcuts(
+        shortcuts: <LogicalKeySet, Intent>{
+          LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent(),
+        },
+        child: MaterialApp.router(
+          title: 'Gyawun',
+          routerConfig: router,
+          locale: Locale(context.watch<SettingsManager>().language['value']!),
+          localizationsDelegates: const [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+          debugShowCheckedModeBanner: false,
+          themeMode: context.watch<SettingsManager>().themeMode,
+          theme: lightTheme(primaryBlack,
+              colorScheme: context.watch<SettingsManager>().materialColors
+                  ? lightScheme
+                  : null),
+          darkTheme: darkTheme(primaryWhite,
+              colorScheme: context.watch<SettingsManager>().materialColors
+                  ? darkScheme
+                  : null),
+        ),
       );
     });
   }
-}
-
-Future<Box<E>> openBox<E>(String name) async {
-  return await Hive.openBox(name, path: Platform.isAndroid ? null : 'Gyawun');
 }

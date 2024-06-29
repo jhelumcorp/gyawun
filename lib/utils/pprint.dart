@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
-pprint(json) {
-  var encoder = const JsonEncoder.withIndent("     ");
-  String str = encoder.convert(json);
-  log(str);
+pprint(data) {
+  const JsonEncoder encoder = JsonEncoder.withIndent('  ');
+  final jsonString = encoder.convert(data);
+  log(jsonString);
 }
