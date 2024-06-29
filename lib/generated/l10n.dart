@@ -10,7 +10,7 @@ import 'intl/messages_all.dart';
 
 // ignore_for_file: non_constant_identifier_names, lines_longer_than_80_chars
 // ignore_for_file: join_return_with_assignment, prefer_final_in_for_each
-// ignore_for_file: avoid_redundant_argument_values
+// ignore_for_file: avoid_redundant_argument_values, avoid_escaping_inner_quotes
 
 class S {
   S();
@@ -18,28 +18,31 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(_current != null, 'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    assert(_current != null,
+        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
     return _current!;
   }
 
-  static const AppLocalizationDelegate delegate =
-    AppLocalizationDelegate();
+  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name); 
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       final instance = S();
       S._current = instance;
- 
+
       return instance;
     });
-  } 
+  }
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(instance != null, 'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    assert(instance != null,
+        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
     return instance!;
   }
 
@@ -107,11 +110,11 @@ class S {
     );
   }
 
-  /// `Favorites`
-  String get favorites {
+  /// `Favourites`
+  String get favourites {
     return Intl.message(
-      'Favorites',
-      name: 'favorites',
+      'Favourites',
+      name: 'favourites',
       desc: '',
       args: [],
     );
@@ -277,21 +280,21 @@ class S {
     );
   }
 
-  /// `Music and Playback`
-  String get musicAndPlayback {
+  /// `Audio and Playback`
+  String get audioAndPlayback {
     return Intl.message(
-      'Music and Playback',
-      name: 'musicAndPlayback',
+      'Audio and Playback',
+      name: 'audioAndPlayback',
       desc: '',
       args: [],
     );
   }
 
-  /// `loudness And Equalizer`
-  String get loudnessAndEqualizer {
+  /// `Loudness And Equalizer`
+  String get LoudnessAndEqualizer {
     return Intl.message(
-      'loudness And Equalizer',
-      name: 'loudnessAndEqualizer',
+      'Loudness And Equalizer',
+      name: 'LoudnessAndEqualizer',
       desc: '',
       args: [],
     );
@@ -317,10 +320,10 @@ class S {
     );
   }
 
-  /// `Select language`
+  /// `Select Language`
   String get selectLanguage {
     return Intl.message(
-      'Select language',
+      'Select Language',
       name: 'selectLanguage',
       desc: '',
       args: [],
@@ -677,6 +680,16 @@ class S {
     );
   }
 
+  /// `Language`
+  String get language {
+    return Intl.message(
+      'Language',
+      name: 'language',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Done`
   String get done {
     return Intl.message(
@@ -847,10 +860,10 @@ class S {
     );
   }
 
-  /// `play Next`
+  /// `Play Next`
   String get playNext {
     return Intl.message(
-      'play Next',
+      'Play Next',
       name: 'playNext',
       desc: '',
       args: [],
@@ -867,21 +880,61 @@ class S {
     );
   }
 
-  /// `add To Favorites`
-  String get addToFavorites {
+  /// `Add To Favourites`
+  String get addToFavourites {
     return Intl.message(
-      'add To Favorites',
-      name: 'addToFavorites',
+      'Add To Favourites',
+      name: 'addToFavourites',
       desc: '',
       args: [],
     );
   }
 
-  /// `Remove From Favorites`
-  String get removeFromFavorites {
+  /// `Remove From Favourites`
+  String get removeFromFavourites {
     return Intl.message(
-      'Remove From Favorites',
-      name: 'removeFromFavorites',
+      'Remove From Favourites',
+      name: 'removeFromFavourites',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start Radio`
+  String get startRadio {
+    return Intl.message(
+      'Start Radio',
+      name: 'startRadio',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Artists`
+  String get Artists {
+    return Intl.message(
+      'Artists',
+      name: 'Artists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Album`
+  String get Album {
+    return Intl.message(
+      'Album',
+      name: 'Album',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Library`
+  String get Library {
+    return Intl.message(
+      'Library',
+      name: 'Library',
       desc: '',
       args: [],
     );
@@ -902,6 +955,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
       Locale.fromSubtags(languageCode: 'ru'),
       Locale.fromSubtags(languageCode: 'tr'),
       Locale.fromSubtags(languageCode: 'ur'),
+      Locale.fromSubtags(languageCode: 'zh'),
     ];
   }
 

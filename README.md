@@ -8,7 +8,6 @@
     <a href="https://github.com/sheikhhaziq/gyawun/commits"><img src="https://img.shields.io/github/commit-activity/m/sheikhhaziq/gyawun?color=g" alt="Commits per month" /></a>
     <a href="https://github.com/sheikhhaziq/gyawun/releases/latest"><img src="https://img.shields.io/github/release-date/sheikhhaziq/gyawun" alt="Last release" /></a>
 
-## Beta versions will  be released only on telegram.
 
 
   
@@ -32,15 +31,9 @@
   <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/06.jpg" width="30%" />
 </p>
 
-## Languages
-You can add your favorite language by:-
-1. Join Gyawun on [PoEditor](https://poeditor.com/join/project/pFSZW9Pux7)
-2. Add your favorite Language.
-3. Translate Your Language and download as .arb.
-4. create a pull request.
 
 ## Features / TODO
-- [x] Play (almost) any song with high quality from Jio Saavn and YouTube Music
+- [x] Play (almost) any song with high quality from YouTube Music
 - [x] Background playback
 - [x] Search for Songs, Artists and Playlists
 - [x] Reorder songs in playlist or queue
@@ -49,15 +42,12 @@ You can add your favorite language by:-
 - [x] Material You colors
 - [x] Dynamic theme support
 - [x] Add to favorites
-- [x] Change direction from right to left
+- [x] Create playlist
 - [x] Save history locally
 - [x] Download songs locally
-- [x] Playback Cache
-- [x] support for other Music Providers(YouTube Music)
 - [x] Multiple Language Support(Partially)
 - [x] Save playlist
 - [x] Equilizer and Loudness Enhancer
-- [ ] Create Playlists
 
 ## Installation
 
