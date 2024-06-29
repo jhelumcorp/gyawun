@@ -1,0 +1,524 @@
+import 'dart:core';
+import 'dart:math';
+
+import '../helpers.dart';
+import '../yt_service_provider.dart';
+import 'utils.dart';
+
+mixin BrowsingMixin on YTMusicServices {
+  Future<Map<String, dynamic>> browse(
+      {Map<String, dynamic>? body,
+      int limit = 2,
+      String additionalParams = ''}) async {
+    if (additionalParams != '') {
+      return browseContinuation(
+          body: body, limit: limit, additionalParams: additionalParams);
+    }
+    String endpoint = 'browse';
+    body ??= {"browseId": "FEmusic_home"};
+
+    var response =
+        await sendRequest(endpoint, body, additionalParams: additionalParams);
+    Map<String, dynamic> result = {};
+    Map<String, dynamic> contents = response['contents'];
+    Map<String, dynamic>? header = response['header'] ??
+        nav(response, [
+          'contents',
+          'twoColumnBrowseResultsRenderer',
+          'tabs',
+          0,
+          'tabRenderer',
+          'content',
+          'sectionListRenderer',
+          'contents',
+          0
+        ]);
+    if (header != null) {
+      result['header'] = handlePageHeader(header['musicDetailHeaderRenderer'] ??
+          header['musicImmersiveHeaderRenderer'] ??
+          header['musicResponsiveHeaderRenderer'] ??
+          header['musicVisualHeaderRenderer'] ??
+          header['musicHeaderRenderer']);
+    }
+
+    if (response.containsKey('background')) {
+      result['backgrounds'] = response['background']['musicThumbnailRenderer']
+          ['thumbnail']['thumbnails'];
+    }
+
+    if (contents.containsKey('singleColumnBrowseResultsRenderer') ||
+        contents.containsKey('twoColumnBrowseResultsRenderer')) {
+      Map? tabRenderer = nav(contents,
+          ['singleColumnBrowseResultsRenderer', 'tabs', 0, 'tabRenderer']);
+      Map? sectionListRenderer =
+          nav(tabRenderer, ['content', 'sectionListRenderer']) ??
+              nav(contents, [
+                'twoColumnBrowseResultsRenderer',
+                'secondaryContents',
+                'sectionListRenderer'
+              ]);
+
+      List? chips =
+          nav(sectionListRenderer, ['header', 'chipCloudRenderer', 'chips']);
+      if (chips != null) {
+        result['chips'] = [];
+        result['chips'].addAll(handleChips(chips));
+      }
+      String? cont = nav(sectionListRenderer,
+              ['continuations', 0, 'nextContinuationData', 'continuation']) ??
+          nav(sectionListRenderer, [
+            'contents',
+            0,
+            'musicShelfRenderer',
+            'continuations',
+            0,
+            'nextContinuationData',
+            'continuation'
+          ]);
+      String? continuationparams;
+      if (cont != null) {
+        continuationparams = getContinuationString(cont);
+        result['continuation'] = continuationparams;
+      } else {
+        result['continuation'] = null;
+      }
+
+      List finalContents = nav(sectionListRenderer, ['contents']);
+
+      result['sections'] = handleOuterContents(finalContents,
+          thumbnails: result['header']?['thumbnails']);
+      (result['sections'] as List).removeWhere((el) => el['contents'].isEmpty);
+
+      if (limit > 1 && continuationparams != null) {
+        limit = limit - 1;
+
+        var data = await browseContinuation(
+            body: body, limit: limit, additionalParams: continuationparams);
+        if (data['sections'] != null) {
+          result['sections'].addAll(data['sections']);
+        }
+        result['continuation'] = data['continuation'];
+      }
+    }
+    return result;
+  }
+
+  Future<Map<String, dynamic>> browseContinuation(
+      {Map<String, dynamic>? body,
+      int limit = 1,
+      String additionalParams = ''}) async {
+    String endpoint = 'browse';
+    body ??= {"browseId": "FEmusic_home"};
+
+    var response =
+        await sendRequest(endpoint, body, additionalParams: additionalParams);
+    Map<String, dynamic> result = {};
+
+    List? contents = nav(response,
+        ['continuationContents', 'sectionListContinuation', 'contents']);
+    if (contents == null) return {};
+    result['sections'] = handleOuterContents(contents);
+    String? continuations = nav(response, [
+      'continuationContents',
+      'sectionListContinuation',
+      'continuations',
+      0,
+      'nextContinuationData',
+      'continuation'
+    ]);
+
+    if (continuations != null) {
+      String? continuationparams = getContinuationString(continuations);
+      result['continuation'] = continuationparams;
+    } else {
+      result['continuation'] = null;
+    }
+
+    if (limit > 1 && result['continuation'] != null) {
+      limit = limit - 1;
+      var data = await browse(
+          body: body, limit: limit, additionalParams: result['continuation']);
+      if (data['sections'] != null) result['sections'].addAll(data['sections']);
+      result['continuation'] = data['continuation'];
+    }
+    return result;
+  }
+
+  int getDatestamp() {
+    final DateTime now = DateTime.now();
+    final DateTime epoch = DateTime.fromMillisecondsSinceEpoch(0);
+    final Duration difference = now.difference(epoch);
+    final int days = difference.inDays;
+    return days;
+  }
+
+  Future addYoutubeHistory(String videoId) async {
+    signatureTimestamp = signatureTimestamp ?? getDatestamp() - 1;
+    Map<String, dynamic> body = {};
+    body['playbackContext'] = {
+      'contentPlaybackContext': {'signatureTimestamp': signatureTimestamp},
+    };
+    body['video_id'] = videoId;
+
+    final Map response = await sendRequest('player', body);
+    String url =
+        response['playbackTracking']['videostatsPlaybackUrl']['baseUrl'];
+    const String cpna =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+    Random rand = Random();
+
+    String generateCpn() {
+      return List.generate(16, (index) => cpna[rand.nextInt(64)]).join();
+    }
+
+    String cpn = generateCpn();
+    Map<String, dynamic> params = {"ver": 2, "c": "WEB_REMIX", "cpn": cpn};
+    params.forEach((k, v) {
+      url += '&$k=$v';
+    });
+    await sendGetRequest(url, headers);
+  }
+
+  Future<List> getNextSongList({
+    String? videoId,
+    String? playlistId,
+    String? params,
+    int limit = 25,
+    bool radio = false,
+    bool shuffle = false,
+  }) async {
+    try {
+      Map<String, dynamic> body = Map.from(context);
+      body['enablePersistentPlaylistPanel'] = true;
+      body['isAudioOnly'] = true;
+      body['tunerSettingValue'] = 'AUTOMIX_SETTING_NORMAL';
+
+      if (videoId == null && playlistId == null) {
+        return [];
+      }
+      if (videoId != null) {
+        body['videoId'] = videoId;
+        playlistId ??= 'RDAMVM$videoId';
+        if (!(radio || shuffle)) {
+          body['watchEndpointMusicSupportedConfigs'] = {
+            'watchEndpointMusicConfig': {
+              'hasPersistentPlaylistPanel': true,
+              'musicVideoType': 'MUSIC_VIDEO_TYPE_ATV;',
+            }
+          };
+        }
+      }
+
+      body['playlistId'] = playlistIdTrimmer(playlistId!);
+
+      if (shuffle) body['params'] = 'wAEB8gECKAE%3D';
+      if (radio) body['params'] = 'wAEB';
+      if (params != null) body['params'] = params;
+      final Map response = await sendRequest('next', body);
+      dynamic contents = nav(response, [
+        'contents',
+        'singleColumnMusicWatchNextResultsRenderer',
+        'tabbedRenderer',
+        'watchNextTabbedResultsRenderer',
+        'tabs',
+        0,
+        'tabRenderer',
+        'content',
+        'musicQueueRenderer',
+        'content',
+        'playlistPanelRenderer',
+        'contents'
+      ]);
+
+      List result = handleContents(contents);
+      return result;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List> getPlaylistSongs(String playlistId) async {
+    Map<String, dynamic> body = {
+      "browseId": playlistId.startsWith('VL') ? playlistId : 'VL$playlistId'
+    };
+    var response = await sendRequest('browse', body);
+
+    List contents = nav(response, [
+          'contents',
+          'singleColumnBrowseResultsRenderer',
+          'tabs',
+          0,
+          'tabRenderer',
+          'content',
+          'sectionListRenderer',
+          'contents',
+          0,
+          'musicPlaylistShelfRenderer',
+          'contents'
+        ]) ??
+        nav(response, [
+          'contents',
+          'twoColumnBrowseResultsRenderer',
+          'secondaryContents',
+          'sectionListRenderer',
+          'contents',
+          0,
+          'musicPlaylistShelfRenderer',
+          'contents'
+        ]);
+
+    List result = handleContents(contents);
+
+    return result;
+  }
+}
+
+Map<String, dynamic> handlePageHeader(Map<String, dynamic> header) {
+  List? subruns = nav(header, ['subtitle', 'runs']) ??
+      nav(header, ['straplineTextOne', 'runs']);
+  List? secondSubruns = nav(header, ['secondSubtitle', 'runs']);
+  Map<String, dynamic> result = {
+    'title': nav(header, ['title', 'runs', 0, 'text']),
+    'subtitle': subruns?.map((run) => run['text']).join('') ??
+        nav(header, [
+          'subscriptionButton',
+          'subscribeButtonRenderer',
+          'longSubscriberCountText',
+          'runs',
+          0,
+          'text'
+        ]),
+    'secondSubtitle': secondSubruns?.map((run) => run['text']).join(''),
+    'type': nav(header, ['subscriptionButton']) != null ? 'ARTIST' : null,
+    'thumbnails': nav(header, [
+          'thumbnail',
+          'croppedSquareThumbnailRenderer',
+          'thumbnail',
+          'thumbnails'
+        ]) ??
+        nav(header, [
+          'thumbnail',
+          'musicThumbnailRenderer',
+          'thumbnail',
+          'thumbnails'
+        ]) ??
+        nav(header, [
+          'foregroundThumbnail',
+          'musicThumbnailRenderer',
+          'thumbnail',
+          'thumbnails'
+        ]),
+    'description': nav(header, ['description', 'runs', 0, 'text']) ??
+        nav(header, [
+          'description',
+          'musicDescriptionShelfRenderer',
+          'description',
+          'runs',
+          0,
+          'text'
+        ]),
+    'playlistId': nav(header, [
+      'startRadioButton',
+      'buttonRenderer',
+      'navigationEndpoint',
+      'watchEndpoint',
+      'playlistId'
+    ])?.replaceAll('RDAMPL', ''),
+    'videoId': nav(header, [
+      'buttons',
+      0,
+      'musicPlayButtonRenderer',
+      'playNavigationEndpoint',
+      'watchEndpoint',
+      'videoId'
+    ]),
+    'params': nav(header, [
+      'startRadioButton',
+      'buttonRenderer',
+      'navigationEndpoint',
+      'watchEndpoint',
+      'params'
+    ]),
+    'channelId': nav(
+        header, ['subscriptionButton', 'subscribeButtonRenderer', 'channelId']),
+    'artists': [],
+  };
+  if (subruns != null) {
+    for (Map run in subruns) {
+      Map? navigationEndpoint = nav(run, ['navigationEndpoint']);
+      Map? browseEndpoint = nav(navigationEndpoint, ['browseEndpoint']);
+      String? pageType = nav(browseEndpoint, [
+        'browseEndpointContextSupportedConfigs',
+        'browseEndpointContextMusicConfig',
+        'pageType'
+      ]);
+      if (pageType == 'MUSIC_PAGE_TYPE_ARTIST') {
+        result['artists'].add({
+          'name': nav(run, ['text']),
+          'endpoint': browseEndpoint
+        });
+      } else if (pageType == 'MUSIC_PAGE_TYPE_ALBUM') {
+        result['album'] = {
+          'name': nav(run, ['text']),
+          'endpoint': browseEndpoint
+        };
+      }
+    }
+  }
+  List? menuItems = nav(header, ['menu', 'menuRenderer', 'items']) ??
+      (nav(header, ['buttons']) as List?)
+              ?.firstWhere((el) => el['menuRenderer'] != null)?['menuRenderer']
+          ?['items'];
+  if (menuItems != null) {
+    for (Map run in menuItems) {
+      String? iconType =
+          nav(run, ['menuNavigationItemRenderer', 'icon', 'iconType']) ??
+              nav(run, ['menuServiceItemRenderer', 'icon', 'iconType']) ??
+              nav(run,
+                  ['toggleMenuServiceItemRenderer', 'defaultIcon', 'iconType']);
+      if (iconType == 'MUSIC_SHUFFLE') {
+        result['playlistId'] ??= nav(run, [
+          'menuNavigationItemRenderer',
+          'navigationEndpoint',
+          'watchPlaylistEndpoint',
+          'playlistId'
+        ]);
+      } else if (iconType == 'MIX') {
+        result['playlistId'] ??= nav(run, [
+          'menuNavigationItemRenderer',
+          'navigationEndpoint',
+          'watchPlaylistEndpoint',
+          'playlistId'
+        ])?.replaceAll('RDAMPL', '');
+      } else if (iconType == 'QUEUE_PLAY_NEXT') {
+        result['playlistId'] ??= nav(run, [
+          'menuServiceItemRenderer',
+          'serviceEndpoint',
+          'queueAddEndpoint',
+          'queueTarget',
+          'playlistId'
+        ]);
+      } else if (iconType == 'LIBRARY_ADD') {
+        result['playlistId'] ??= nav(run, [
+          'toggleMenuServiceItemRenderer',
+          'toggledServiceEndpoint',
+          'likeEndpoint',
+          'target',
+          'playlistId'
+        ]);
+      }
+    }
+  }
+  result.removeWhere((key, val) => val == null || val.toString().isEmpty);
+  return result;
+}
+
+List handleChips(chips) {
+  List resultChips = [];
+  for (Map chip in chips) {
+    chip = chip['chipCloudChipRenderer'];
+    resultChips.add({
+      'title': nav(chip, ['text', 'runs', 0, 'text']),
+      'selected': nav(chip, ['isSelected']) ?? false,
+      'endpoint': nav(chip, ['navigationEndpoint', 'browseEndpoint']),
+    });
+  }
+  return resultChips;
+}
+
+List<Map<String, dynamic>> handleOuterContents(List contents,
+    {List? thumbnails}) {
+  List<Map<String, dynamic>> results = [];
+  for (Map content in contents) {
+    Map<String, dynamic> result = {};
+    result['contents'] = [];
+    Map? musicPlaylistShelfRenderer =
+        nav(content, ['musicPlaylistShelfRenderer']);
+    Map? musicShelfRenderer = nav(content, ['musicShelfRenderer']);
+    Map? musicCarouselShelfRenderer =
+        nav(content, ['musicCarouselShelfRenderer']);
+    Map? gridRenderer = nav(content, ['gridRenderer']);
+    if (musicCarouselShelfRenderer != null) {
+      results.add(handleMusicCarouselShelfRenderer(musicCarouselShelfRenderer));
+    } else if (musicPlaylistShelfRenderer != null) {
+      results.add(handleMusicPlaylistShelfRenderer(musicPlaylistShelfRenderer));
+    } else if (musicShelfRenderer != null) {
+      results.add(
+          handleMusicShelfRenderer(musicShelfRenderer, thumbnails: thumbnails));
+    } else if (gridRenderer != null) {
+      results.add(handleGridRenderer(gridRenderer));
+    }
+    results.add(result);
+  }
+
+  return results;
+}
+
+handleMusicCarouselShelfRenderer(Map item) {
+  Map<String, dynamic> section = {};
+  section.addAll(handleHeader(
+      nav(item, ['header', 'musicCarouselShelfBasicHeaderRenderer'])));
+  if (item['numItemsPerColumn'] != null) {
+    section['viewType'] = 'COLUMN';
+  } else {
+    section['viewType'] = 'ROW';
+  }
+  section['contents'] = [];
+  // Map header = nav(musicCarouselShelfRenderer, ['header']);
+  List? contents = nav(item, ['contents']);
+
+  if (contents != null) {
+    section['contents'].addAll(handleContents(contents));
+  }
+
+  return section;
+}
+
+Map<String, dynamic> handleHeader(Map header) {
+  Map<String, dynamic> res = {
+    'title': nav(header, ['title', 'runs', 0, 'text']),
+    'strapline': nav(header, ['strapline', 'runs', 0, 'text']),
+    'trailing': nav(header, ['moreContentButton']) != null
+        ? {
+            'text': nav(header, [
+              'moreContentButton',
+              'buttonRenderer',
+              'text',
+              'runs',
+              0,
+              'text'
+            ]),
+            'playable': nav(header, [
+                  'moreContentButton',
+                  'buttonRenderer',
+                  'navigationEndpoint',
+                  'watchPlaylistEndpoint'
+                ]) !=
+                null,
+            'endpoint': nav(header, [
+                  'moreContentButton',
+                  'buttonRenderer',
+                  'navigationEndpoint',
+                  'watchPlaylistEndpoint'
+                ]) ??
+                nav(header, [
+                  'moreContentButton',
+                  'buttonRenderer',
+                  'navigationEndpoint',
+                  'browseEndpoint'
+                ]),
+          }
+        : null,
+  };
+
+  res.removeWhere((key, val) => val == null);
+  return res;
+}
+
+String playlistIdTrimmer(String playlistId) {
+  if (playlistId.startsWith('VL')) {
+    return playlistId.substring(2);
+  } else {
+    return playlistId;
+  }
+}
