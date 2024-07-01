@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/utils/enhanced_image.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 
@@ -60,12 +61,19 @@ class BottomPlayer extends StatelessWidget {
                                     fit: BoxFit.fill,
                                   )
                                 : CachedNetworkImage(
-                                    imageUrl: currentSong
-                                        .extras!['thumbnails'].first['url']
-                                        .replaceAll('w60-h60', 'w300-h300'),
+                                    imageUrl: getEnhancedImage(currentSong
+                                        .extras!['thumbnails'].first['url']),
                                     height: 50,
                                     width: 50,
                                     fit: BoxFit.fill,
+                                    errorWidget: (context, url, error) {
+                                      return CachedNetworkImage(
+                                        imageUrl: getEnhancedImage(
+                                            currentSong.extras!['thumbnails']
+                                                .first['url'],
+                                            quality: 'medium'),
+                                      );
+                                    },
                                   ),
                           ),
                           const SizedBox(width: 8),

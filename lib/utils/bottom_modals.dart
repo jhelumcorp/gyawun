@@ -7,6 +7,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/utils/enhanced_image.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../generated/l10n.dart';
-import '../screens/playlist_screen/browse_screen.dart';
+import '../screens/browse_screen/browse_screen.dart';
 import '../screens/settings_screen/playback/equalizer_screen.dart';
 import '../services/bottom_message.dart';
 import '../services/download_manager.dart';
@@ -56,12 +57,14 @@ class Modals {
     BuildContext context, {
     String? title,
     String? hintText,
+    String doneText = 'Done',
   }) =>
       showModalBottomSheet<String?>(
         context: context,
         useRootNavigator: false,
         backgroundColor: Colors.transparent,
         isScrollControlled: true,
+        useSafeArea: true,
         builder: (context) =>
             _textFieldBottomModal(context, title: title, hintText: hintText),
       );
@@ -190,11 +193,6 @@ _confirmBottomModal(BuildContext context,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              // spacing: 8,
-              // runSpacing: 8,
-              // runAlignment: WrapAlignment.end,
-              // crossAxisAlignment: WrapCrossAlignment.end,
-              // alignment: WrapAlignment.end,
               children: [
                 MaterialButton(
                   color: Theme.of(context).colorScheme.primary.withAlpha(30),
@@ -604,7 +602,8 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
   );
 }
 
-_textFieldBottomModal(BuildContext context, {String? title, String? hintText}) {
+_textFieldBottomModal(BuildContext context,
+    {String? title, String? hintText, String doneText = 'Done'}) {
   String? text;
   return BottomModalLayout(
     child: SingleChildScrollView(
@@ -650,7 +649,7 @@ _textFieldBottomModal(BuildContext context, {String? title, String? hintText}) {
                     Navigator.pop(context, text);
                   },
                   child: Text(
-                    'Create',
+                    doneText,
                     style: TextStyle(
                         color: Theme.of(context).scaffoldBackgroundColor),
                   ),
@@ -678,9 +677,15 @@ _playerOptionsModal(BuildContext context, Map song) {
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: CachedNetworkImage(
-              imageUrl: song['thumbnails'].first['url'],
+              imageUrl: getEnhancedImage(song['thumbnails'].first['url']),
               height: 50,
               width: 50,
+              errorWidget: (context, url, error) {
+                return CachedNetworkImage(
+                  imageUrl: getEnhancedImage(song['thumbnails'].first['url'],
+                      quality: 'medium'),
+                );
+              },
             ),
           ),
           subtitle: song['subtitle'] != null
@@ -774,7 +779,6 @@ _playerOptionsModal(BuildContext context, Map song) {
             },
           ),
         ),
-        const SizedBox(height: 8)
       ],
     ),
   ));
@@ -920,7 +924,6 @@ _songBottomModal(BuildContext context, Map song) {
                                 .cast<String, dynamic>()),
                       ));
                 }),
-          const SizedBox(height: 16),
         ],
       ),
     ),
@@ -1071,6 +1074,8 @@ _playlistBottomModal(BuildContext context, Map playlist) {
               leading: const Icon(Icons.radar_outlined),
               onTap: () async {
                 Navigator.pop(context);
+                BottomMessage.showText(
+                    context, 'Songs will start playing soon.');
                 await GetIt.I<MediaPlayer>().startRelated(Map.from(playlist),
                     radio: true, isArtist: playlist['type'] == 'ARTIST');
               },
@@ -1101,7 +1106,6 @@ _playlistBottomModal(BuildContext context, Map playlist) {
                         BrowseScreen(endpoint: playlist['album']['endpoint']),
                   )),
             ),
-          const SizedBox(height: 16),
         ],
       ),
     ),
@@ -1118,21 +1122,22 @@ class BottomModalLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool material = context.watch<SettingsManager>().materialColors;
-    return SafeArea(
-      child: Container(
-        width: double.maxFinite,
-        constraints: const BoxConstraints(maxWidth: 600),
-        margin: material ? EdgeInsets.zero : const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerLow,
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(16),
-            topRight: const Radius.circular(16),
-            bottomLeft: Radius.circular(material ? 0 : 16),
-            bottomRight: Radius.circular(material ? 0 : 16),
-          ),
+    return Container(
+      width: double.maxFinite,
+      constraints: const BoxConstraints(maxWidth: 600),
+      margin: material ? EdgeInsets.zero : const EdgeInsets.all(8),
+      child: Material(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.only(
+          topLeft: const Radius.circular(16),
+          topRight: const Radius.circular(16),
+          bottomLeft: Radius.circular(material ? 0 : 16),
+          bottomRight: Radius.circular(material ? 0 : 16),
         ),
-        child: child,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: child,
+        ),
       ),
     );
   }

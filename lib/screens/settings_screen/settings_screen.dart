@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/utils/bottom_modals.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
@@ -139,10 +140,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 showPaymentsModal(BuildContext context) {
   showModalBottomSheet(
     useSafeArea: true,
-    backgroundColor: Theme.of(context).colorScheme.surface,
+    backgroundColor: Colors.transparent,
     context: context,
-    builder: (context) => Container(
-      padding: const EdgeInsets.all(16),
+    builder: (context) => BottomModalLayout(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

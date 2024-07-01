@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/utils/pprint.dart';
 
 import '../screens/download_screen/download_screen.dart';
 import '../screens/home_screen/chip_screen.dart';
@@ -8,7 +9,7 @@ import '../screens/home_screen/search_screen/search_screen.dart';
 import '../screens/library_screen/library_screen.dart';
 import '../screens/main_screen/main_screen.dart';
 import '../screens/main_screen/player_screen.dart';
-import '../screens/playlist_screen/browse_screen.dart';
+import '../screens/browse_screen/browse_screen.dart';
 import '../screens/settings_screen/about/about_screen.dart';
 import '../screens/settings_screen/appearence/appearence_screen.dart';
 import '../screens/settings_screen/backup_restore/backup_restore_screen.dart';

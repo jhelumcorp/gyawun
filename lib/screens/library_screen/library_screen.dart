@@ -13,7 +13,7 @@ import '../../generated/l10n.dart';
 import '../../services/library.dart';
 import '../../themes/colors.dart';
 import '../../utils/bottom_modals.dart';
-import '../playlist_screen/browse_screen.dart';
+import '../browse_screen/browse_screen.dart';
 import 'favourite_details_screen.dart';
 import 'history_screen.dart';
 import 'playlist_details_screen.dart';
