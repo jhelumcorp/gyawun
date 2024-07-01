@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/utils/enhanced_image.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 
@@ -70,14 +71,24 @@ class QueueList extends StatelessWidget {
                                                 },
                                               )
                                             : CachedNetworkImage(
-                                                imageUrl: song
+                                                imageUrl: getEnhancedImage(song
                                                     .extras!['thumbnails']
-                                                    .first['url']
-                                                    .replaceAll(
-                                                        'w60-h60', 'w300-h300'),
+                                                    .first['url']),
                                                 width: 50,
                                                 height: 50,
-                                                fit: BoxFit.fill),
+                                                fit: BoxFit.fill,
+                                                errorWidget:
+                                                    (context, url, error) {
+                                                  return CachedNetworkImage(
+                                                    imageUrl: getEnhancedImage(
+                                                        song
+                                                            .extras![
+                                                                'thumbnails']
+                                                            .first['url'],
+                                                        quality: 'medium'),
+                                                  );
+                                                },
+                                              ),
                                         if (index == currentIndex)
                                           Container(
                                             height: 50,

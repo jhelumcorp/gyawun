@@ -8,6 +8,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/utils/enhanced_image.dart';
+import 'package:gyawun_beta/utils/pprint.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -49,7 +51,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
     if (image == null) return Theme.of(context).scaffoldBackgroundColor;
     PaletteGenerator paletteGenerator =
         await PaletteGenerator.fromImageProvider(
-            CachedNetworkImageProvider(image));
+      CachedNetworkImageProvider(
+        image,
+        errorListener: (p0) {
+          setState(() {
+            image = getEnhancedImage(image!, quality: 'medium');
+          });
+          pprint(p0);
+        },
+      ),
+    );
     if (mounted) {
       return paletteGenerator.dominantColor?.color ??
           paletteGenerator.lightVibrantColor?.color ??
@@ -88,11 +99,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
     if (currentSong?.extras?['thumbnails'] != null &&
         currentSong?.extras?['thumbnails'].isNotEmpty &&
         image !=
-            currentSong?.extras?['thumbnails']?.first['url']
-                .replaceAll('w60-h60', 'w300-h300')) {
+            getEnhancedImage(
+                currentSong?.extras?['thumbnails']?.first['url'])) {
       setState(() {
-        image = currentSong?.extras?['thumbnails']?.first['url']
-            .replaceAll('w60-h60', 'w300-h300');
+        image =
+            getEnhancedImage(currentSong?.extras?['thumbnails']?.first['url']);
       });
     }
     // ignore: deprecated_member_use
@@ -316,35 +327,51 @@ class Artwork extends StatelessWidget {
                 Icons.music_note,
                 size: width * 0.5,
               )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(30),
-                          spreadRadius: 10,
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: song?.extras?['offline'] == true &&
-                              !song!.artUri.toString().startsWith('https')
-                          ? Image.file(
-                              File.fromUri(song!.artUri!),
-                            )
-                          : CachedNetworkImage(
-                              imageUrl: song!.extras!['thumbnails'].first['url']
-                                  .replaceAll('w60-h60', 'w300-h300'),
+            : SafeArea(
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withAlpha(30),
+                              spreadRadius: 10,
+                              blurRadius: 10,
+                              offset: const Offset(0, 3),
                             ),
-                    ),
-                  ),
-                ],
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: song?.extras?['offline'] == true &&
+                                  !song!.artUri.toString().startsWith('https')
+                              ? Image.file(
+                                  File.fromUri(song!.artUri!),
+                                )
+                              : CachedNetworkImage(
+                                  width: min(constraints.maxHeight,
+                                      constraints.maxWidth),
+                                  filterQuality: FilterQuality.high,
+                                  imageUrl: getEnhancedImage(
+                                      song!.extras!['thumbnails'].first['url']),
+                                  errorWidget: (context, url, error) {
+                                    return CachedNetworkImage(
+                                      imageUrl: getEnhancedImage(
+                                        song!
+                                            .extras!['thumbnails'].first['url'],
+                                        quality: 'medium',
+                                      ),
+                                    );
+                                  },
+                                ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
               ),
       ),
     );
@@ -378,8 +405,9 @@ class NameAndControls extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (isRow)
-              AppBar(
-                actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
                   IconButton(
                       onPressed: () {
                         currentState?.openEndDrawer();
@@ -388,7 +416,6 @@ class NameAndControls extends StatelessWidget {
                         Icons.queue_music_outlined,
                       ))
                 ],
-                automaticallyImplyLeading: false,
               ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

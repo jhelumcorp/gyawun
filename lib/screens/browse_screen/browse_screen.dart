@@ -112,7 +112,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
                               sections.length == 1 ||
                               sec.$1 == 0);
                     }),
-                    const SizedBox(height: 8),
+                    if (!nextLoading && continuation != null)
+                      const SizedBox(height: 64),
+                    if (nextLoading) const CircularProgressIndicator(),
                     if (nextLoading) const CircularProgressIndicator(),
                   ],
                 ),
@@ -214,6 +216,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                 if (header['videoId'] != null || header['playlistId'] != null)
                   MaterialButton(
                     onPressed: () async {
+                      BottomMessage.showText(
+                          context, 'Songs will start playing soon.');
                       await GetIt.I<MediaPlayer>()
                           .startPlaylistSongs(Map.from(header));
                     },

@@ -178,6 +178,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ...sections.map((section) {
                             return SectionItem(section: section);
                           }),
+                          if (!nextLoading && continuation != null)
+                            const SizedBox(height: 50),
                           if (nextLoading) const CircularProgressIndicator(),
                         ],
                       )

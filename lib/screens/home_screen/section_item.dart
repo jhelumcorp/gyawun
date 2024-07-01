@@ -6,12 +6,14 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/services/bottom_message.dart';
+import 'package:gyawun_beta/utils/enhanced_image.dart';
 
 import '../../utils/extensions.dart';
 import '../../services/media_player.dart';
 import '../../themes/colors.dart';
 import '../../utils/bottom_modals.dart';
-import '../playlist_screen/browse_screen.dart';
+import '../browse_screen/browse_screen.dart';
 
 class SectionItem extends StatelessWidget {
   const SectionItem({required this.section, this.isMore = false, super.key});
@@ -37,26 +39,45 @@ class SectionItem extends StatelessWidget {
                         )
                       : null,
                   trailing: section['trailing'] != null
-                      ? MaterialButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          onPressed: () async {
-                            if (section['trailing']['playable'] == false) {
-                              // GetIt.I<YTMusic>().browseMore(body: section['trailing']['endpoint']);
-                              Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (context) => BrowseScreen(
-                                      endpoint: section['trailing']['endpoint'],
-                                      isMore: true,
-                                    ),
-                                  ));
-                            } else {
-                              await GetIt.I<MediaPlayer>().startPlaylistSongs(
-                                  section['trailing']['endpoint']);
-                            }
-                          },
-                          child: Text(section['trailing']['text']),
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              onTap: () async {
+                                if (section['trailing']['playable'] == false) {
+                                  Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                        builder: (context) => BrowseScreen(
+                                          endpoint: section['trailing']
+                                              ['endpoint'],
+                                          isMore: true,
+                                        ),
+                                      ));
+                                } else {
+                                  BottomMessage.showText(context,
+                                      'Songs will start playing soon.');
+                                  await GetIt.I<MediaPlayer>()
+                                      .startPlaylistSongs(
+                                          section['trailing']['endpoint']);
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: context.subtitleColor,
+                                  ),
+                                ),
+                                child: Text(section['trailing']['text']),
+                              ),
+                            ),
+                          ],
                         )
                       : null,
                 ),
@@ -302,7 +323,10 @@ class _ItemListState extends State<ItemList> {
                   ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: CachedNetworkImage(
-                        imageUrl: items[index]['thumbnails'].first['url'],
+                        imageUrl: getEnhancedImage(
+                            items[index]['thumbnails'].first['url'],
+                            width: width),
+                        filterQuality: FilterQuality.high,
                         height: height,
                         width: width,
                         fit: BoxFit.cover,

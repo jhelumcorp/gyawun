@@ -9,7 +9,7 @@ import '../../../services/media_player.dart';
 import '../../../themes/colors.dart';
 import '../../../utils/bottom_modals.dart';
 import '../../../ytmusic/ytmusic.dart';
-import '../../playlist_screen/browse_screen.dart';
+import '../../browse_screen/browse_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({this.endpoint, this.isMore = false, super.key});

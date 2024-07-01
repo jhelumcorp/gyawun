@@ -382,6 +382,7 @@ class MediaPlayer extends ChangeNotifier {
   Future<void> stop() async {
     await _player.stop();
     await _playlist.clear();
+    await _player.seek(Duration.zero, index: 0);
     _currentIndex = null;
     _currentSong = null;
     notifyListeners();
