@@ -552,7 +552,7 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
             Text(updateInfo != null ? 'Update Available' : 'Update Info'),
             if (updateInfo != null)
               Text(
-                '${updateInfo.name}\n${f.format(DateTime.parse(updateInfo.publishedAt))}',
+                '${updateInfo.name}\n${f.format(DateTime.parse(updateInfo.publishedAt))}\n${updateInfo.downloadCount} downloads',
                 style: TextStyle(fontSize: 16, color: context.subtitleColor),
               )
           ],

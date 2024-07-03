@@ -29,14 +29,19 @@ class SectionItem extends StatelessWidget {
                 ListTile(
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                  title: Text(section['title'] ?? '',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20)),
-                  subtitle: section['strapline'] != null
-                      ? Text(
+                  title: section['strapline'] == null
+                      ? Text(section['title'] ?? '',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20))
+                      : Text(
                           section['strapline'],
-                          style: TextStyle(color: Colors.grey.withAlpha(200)),
-                        )
+                          style: TextStyle(
+                              color: Colors.grey.withAlpha(200), fontSize: 14),
+                        ),
+                  subtitle: section['strapline'] != null
+                      ? Text(section['title'] ?? '',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20))
                       : null,
                   trailing: section['trailing'] != null
                       ? Row(
@@ -80,15 +85,21 @@ class SectionItem extends StatelessWidget {
                           ],
                         )
                       : null,
+                  leading: section['thumbnails'] != null &&
+                          section['thumbnails']?.isNotEmpty
+                      ? CircleAvatar(
+                          backgroundImage: CachedNetworkImageProvider(
+                            section['thumbnails'].first['url'],
+                          ),
+                        )
+                      : null,
                 ),
-              // leading:section['thumbnails']?.isNotEmpty ? Image.network(section['thumbnails'].first['url']):null,
-
-              if (section['viewType'] == 'ROW')
-                ItemList(items: section['contents']),
               if (section['viewType'] == 'COLUMN' && !isMore)
-                SongList(songs: section['contents']),
-              if (section['viewType'] == 'SINGLE_COLUMN' || isMore)
+                SongList(songs: section['contents'])
+              else if (section['viewType'] == 'SINGLE_COLUMN' || isMore)
                 SingleColumnList(songs: section['contents'])
+              else
+                ItemList(items: section['contents']),
             ],
           );
   }
@@ -320,17 +331,27 @@ class _ItemListState extends State<ItemList> {
                   borderRadius: BorderRadius.circular(8)),
               child: Column(
                 children: [
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: CachedNetworkImage(
-                        imageUrl: getEnhancedImage(
-                            items[index]['thumbnails'].first['url'],
-                            width: width),
-                        filterQuality: FilterQuality.high,
-                        height: height,
-                        width: width,
-                        fit: BoxFit.cover,
-                      )),
+                  items[index]['type'] == 'ARTIST'
+                      ? CircleAvatar(
+                          backgroundImage: CachedNetworkImageProvider(
+                            getEnhancedImage(
+                                items[index]['thumbnails'].first['url'],
+                                width: width),
+                          ),
+                          radius: height / 2,
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: CachedNetworkImage(
+                            imageUrl: getEnhancedImage(
+                              items[index]['thumbnails'].first['url'],
+                              width: width,
+                            ),
+                            height: height,
+                            width: width,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                   SizedBox(
                     width: width,
                     child: ListTile(

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +9,7 @@ import '../../services/library.dart';
 import '../../services/media_player.dart';
 import '../../themes/colors.dart';
 import '../../utils/bottom_modals.dart';
+import '../../utils/enhanced_image.dart';
 import '../../ytmusic/ytmusic.dart';
 import '../home_screen/section_item.dart';
 import '../../utils/extensions.dart';
@@ -115,7 +114,6 @@ class _BrowseScreenState extends State<BrowseScreen> {
                     if (!nextLoading && continuation != null)
                       const SizedBox(height: 64),
                     if (nextLoading) const CircularProgressIndicator(),
-                    if (nextLoading) const CircularProgressIndicator(),
                   ],
                 ),
               )),
@@ -145,15 +143,23 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   }
 
   _buildImage(List thumbnails, double maxWidth, {bool isRound = false}) {
-    Map thumbnail = thumbnails.where((el) => el['width'] > 190).first;
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(
-            isRound ? min((thumbnail['height'] as int), 250).toDouble() : 8),
-        child: CachedNetworkImage(
-          imageUrl: thumbnail['url'].replaceAll('w540-h225', 'w225-h225'),
-          width: min((thumbnail['height'] as int), 250).toDouble(),
-          height: min((thumbnail['height'] as int), 250).toDouble(),
-        ));
+    return isRound
+        ? CircleAvatar(
+            backgroundImage: CachedNetworkImageProvider(
+              getEnhancedImage(thumbnails.first['url'], width: 250),
+            ),
+            radius: 125,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          )
+        : ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: CachedNetworkImage(
+              imageUrl: getEnhancedImage(thumbnails.last['url'], width: 250),
+              filterQuality: FilterQuality.high,
+              width: 250,
+              height: 250,
+            ),
+          );
   }
 
   _buildContent(Map header, BuildContext context, {bool isRow = false}) {

@@ -2,14 +2,15 @@ import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
 
+import 'auth/auth.dart';
 import 'helpers.dart';
 
-abstract class YTMusicServices {
+abstract class YTMusicServices extends AuthMixin {
   YTMusicServices() : super() {
     init();
   }
   Future<void> init() async {
-    headers = initializeHeaders();
+    headers = await loadHeaders();
     context = initializeContext();
 
     if (!headers.containsKey('X-Goog-Visitor-Id')) {
@@ -21,8 +22,8 @@ abstract class YTMusicServices {
     context = initializeContext();
   }
 
-  refreshHeaders() {
-    headers = initializeHeaders();
+  Future<void> refreshHeaders() async {
+    headers = await loadHeaders();
   }
 
   Future<void> resetVisitorId() async {

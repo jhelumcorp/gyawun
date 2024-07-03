@@ -5,31 +5,25 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
+import 'package:gyawun_beta/screens/browse_screen/browse_screen.dart';
+import 'package:gyawun_beta/screens/library_screen/favourite_details_screen.dart';
+import 'package:gyawun_beta/screens/library_screen/history_screen.dart';
+import 'package:gyawun_beta/screens/library_screen/playlist_details_screen.dart';
+import 'package:gyawun_beta/services/library.dart';
+import 'package:gyawun_beta/themes/colors.dart';
+import 'package:gyawun_beta/utils/bottom_modals.dart';
+import 'package:gyawun_beta/utils/extensions.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../utils/extensions.dart';
-import '../../generated/l10n.dart';
-import '../../services/library.dart';
-import '../../themes/colors.dart';
-import '../../utils/bottom_modals.dart';
-import '../browse_screen/browse_screen.dart';
-import 'favourite_details_screen.dart';
-import 'history_screen.dart';
-import 'playlist_details_screen.dart';
-
-class LibraryScreen extends StatelessWidget {
-  const LibraryScreen({super.key});
+class LocalLibrary extends StatelessWidget {
+  const LocalLibrary({super.key});
 
   @override
   Widget build(BuildContext context) {
     Map playlists = context.watch<LibraryService>().playlists;
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).Library),
-        centerTitle: true,
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -237,12 +231,6 @@ class LibraryScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Modals.showCreateplaylistModal(context);
-        },
-        child: const Icon(CupertinoIcons.add),
       ),
     );
   }

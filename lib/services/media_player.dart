@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/utils/pprint.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
@@ -245,6 +246,11 @@ class MediaPlayer extends ChangeNotifier {
     _player.setLoopMode(_loopMode.value);
   }
 
+  Future<void> skipSilence(bool value) async {
+    await _player.setSkipSilenceEnabled(value);
+    GetIt.I<SettingsManager>().skipSilence = value;
+  }
+
   Future<void> playSong(Map<String, dynamic> song,
       {bool autoFetch = true}) async {
     // await YTMusic.getData();
@@ -257,6 +263,7 @@ class MediaPlayer extends ChangeNotifier {
               (await File(song['path']).exists())
           ? song['path']
           : 'http://$serverAddress?id=${song['videoId']}&quality=${GetIt.I<SettingsManager>().audioQuality.name.toLowerCase()}');
+      pprint(GetIt.I<SettingsManager>().audioQuality.name.toLowerCase());
       await _playlist.add(
         AudioSource.uri(
           uri,

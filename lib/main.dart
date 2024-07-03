@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/services/yt_account.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +68,7 @@ void main() async {
   GetIt.I.registerSingleton<FileStorage>(fileStorage);
 
   GetIt.I.registerSingleton<LibraryService>(libraryService);
+  GetIt.I.registerSingleton<YTAccount>(YTAccount());
 
   runApp(
     MultiProvider(

@@ -1,12 +1,18 @@
 library ytmusic;
 
 import 'dart:io';
+import 'package:gyawun_beta/ytmusic/mixins/library.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'mixins/browsing.dart';
 import 'mixins/search.dart';
+import 'mixins/user.dart';
 import 'yt_service_provider.dart';
 
-class YTMusic extends YTMusicServices with BrowsingMixin, SearchMixin {
+class YTMusic extends YTMusicServices
+    with BrowsingMixin, SearchMixin, LibraryMixin, UserMixin {
+  YTMusic() {
+    checkLogged();
+  }
   static final YoutubeExplode _yt = YoutubeExplode();
 
   static Future<HttpServer> startServer() async {
@@ -26,7 +32,6 @@ class YTMusic extends YTMusicServices with BrowsingMixin, SearchMixin {
           .reversed
           .where((stream) => stream.container == StreamContainer.mp4)
           .toList();
-
       if (quality == 'low') {
         qualityIndex = 0;
       } else {

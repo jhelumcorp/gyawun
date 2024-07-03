@@ -11,6 +11,13 @@ import 'setting_item.dart';
 
 List<SettingItem> settingScreenData(BuildContext context) => [
       SettingItem(
+        title: 'Google Account',
+        icon: CupertinoIcons.person,
+        color: Colors.accents[6],
+        hasNavigation: true,
+        location: '/settings/account',
+      ),
+      SettingItem(
         title: S.of(context).appearence,
         icon: Icons.looks,
         color: Colors.accents[0],
