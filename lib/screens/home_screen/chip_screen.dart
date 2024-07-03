@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/utils/pprint.dart';
 
 import '../../ytmusic/ytmusic.dart';
 import 'section_item.dart';
@@ -94,7 +93,6 @@ class _ChipScreenState extends State<ChipScreen> {
       body: initialLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 8),
               controller: _scrollController,
               child: SafeArea(
                 child: Column(

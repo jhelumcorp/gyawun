@@ -129,7 +129,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 data: darkTheme(primaryWhite),
                 child: Container(
                   color: Colors.black,
-                  child: Container(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [

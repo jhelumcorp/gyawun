@@ -1,6 +1,8 @@
 import 'dart:core';
 import 'dart:math';
 
+import 'package:gyawun_beta/utils/pprint.dart';
+
 import '../helpers.dart';
 import '../yt_service_provider.dart';
 import 'utils.dart';
@@ -38,12 +40,10 @@ mixin BrowsingMixin on YTMusicServices {
           header['musicImmersiveHeaderRenderer'] ??
           header['musicResponsiveHeaderRenderer'] ??
           header['musicVisualHeaderRenderer'] ??
-          header['musicHeaderRenderer']);
-    }
-
-    if (response.containsKey('background')) {
-      result['backgrounds'] = response['background']['musicThumbnailRenderer']
-          ['thumbnail']['thumbnails'];
+          header['musicHeaderRenderer'] ??
+          header['musicEditablePlaylistDetailHeaderRenderer']?['header']
+              ?['musicResponsiveHeaderRenderer'] ??
+          header['musicEditablePlaylistDetailHeaderRenderer']?['header']);
     }
 
     if (contents.containsKey('singleColumnBrowseResultsRenderer') ||
@@ -57,7 +57,8 @@ mixin BrowsingMixin on YTMusicServices {
                 'secondaryContents',
                 'sectionListRenderer'
               ]);
-
+      // pprint(nav(sectionListRenderer,
+      //     ['contents', 0, 'musicShelfRenderer', 'continuations']));
       List? chips =
           nav(sectionListRenderer, ['header', 'chipCloudRenderer', 'chips']);
       if (chips != null) {
@@ -75,6 +76,7 @@ mixin BrowsingMixin on YTMusicServices {
             'nextContinuationData',
             'continuation'
           ]);
+
       String? continuationparams;
       if (cont != null) {
         continuationparams = getContinuationString(cont);
@@ -88,17 +90,25 @@ mixin BrowsingMixin on YTMusicServices {
       result['sections'] = handleOuterContents(finalContents,
           thumbnails: result['header']?['thumbnails']);
       (result['sections'] as List).removeWhere((el) => el['contents'].isEmpty);
-
       if (limit > 1 && continuationparams != null) {
         limit = limit - 1;
 
         var data = await browseContinuation(
             body: body, limit: limit, additionalParams: continuationparams);
         if (data['sections'] != null) {
-          result['sections'].addAll(data['sections']);
+          if (data['addToLast'] == true) {
+            result['sections']
+                .last['contents']
+                .addAll(data['sections'].first['contents']);
+          } else {
+            result['sections']
+                .addAll(data['sections'].cast<Map<String, dynamic>>());
+          }
         }
         result['continuation'] = data['continuation'];
       }
+    } else {
+      // pprint(contents);
     }
     return result;
   }
@@ -112,21 +122,39 @@ mixin BrowsingMixin on YTMusicServices {
 
     var response =
         await sendRequest(endpoint, body, additionalParams: additionalParams);
-    Map<String, dynamic> result = {};
+    Map<String, dynamic> result = {'sections': []};
 
     List? contents = nav(response,
-        ['continuationContents', 'sectionListContinuation', 'contents']);
-    if (contents == null) return {};
-    result['sections'] = handleOuterContents(contents);
-    String? continuations = nav(response, [
-      'continuationContents',
-      'sectionListContinuation',
-      'continuations',
-      0,
-      'nextContinuationData',
-      'continuation'
-    ]);
+            ['continuationContents', 'sectionListContinuation', 'contents']) ??
+        nav(response,
+            ['continuationContents', 'musicShelfContinuation', 'contents']);
 
+    if (contents == null) return {};
+    if (nav(response,
+            ['continuationContents', 'musicShelfContinuation', 'contents']) !=
+        null) {
+      result['sections'].add({'contents': handleContents(contents)});
+      result['addToLast'] = true;
+    } else {
+      result['sections'] = handleOuterContents(contents);
+    }
+
+    String? continuations = nav(response, [
+          'continuationContents',
+          'sectionListContinuation',
+          'continuations',
+          0,
+          'nextContinuationData',
+          'continuation'
+        ]) ??
+        nav(response, [
+          'continuationContents',
+          'musicShelfContinuation',
+          'continuations',
+          0,
+          'nextContinuationData',
+          'continuation'
+        ]);
     if (continuations != null) {
       String? continuationparams = getContinuationString(continuations);
       result['continuation'] = continuationparams;
@@ -138,9 +166,12 @@ mixin BrowsingMixin on YTMusicServices {
       limit = limit - 1;
       var data = await browse(
           body: body, limit: limit, additionalParams: result['continuation']);
-      if (data['sections'] != null) result['sections'].addAll(data['sections']);
+      if (data['sections'] != null) {
+        result['sections'].addAll(data['sections']);
+      }
       result['continuation'] = data['continuation'];
     }
+
     return result;
   }
 
@@ -447,6 +478,8 @@ List<Map<String, dynamic>> handleOuterContents(List contents,
           handleMusicShelfRenderer(musicShelfRenderer, thumbnails: thumbnails));
     } else if (gridRenderer != null) {
       results.add(handleGridRenderer(gridRenderer));
+    } else {
+      // pprint(content);
     }
     results.add(result);
   }
@@ -458,11 +491,20 @@ handleMusicCarouselShelfRenderer(Map item) {
   Map<String, dynamic> section = {};
   section.addAll(handleHeader(
       nav(item, ['header', 'musicCarouselShelfBasicHeaderRenderer'])));
-  if (item['numItemsPerColumn'] != null) {
+  if (item['numItemsPerColumn'] != null &&
+      (int.parse(item['numItemsPerColumn'] ?? 0)) >= 4) {
     section['viewType'] = 'COLUMN';
   } else {
     section['viewType'] = 'ROW';
   }
+  section['thumbnails'] = nav(item, [
+    'header',
+    'musicCarouselShelfBasicHeaderRenderer',
+    'thumbnail',
+    'musicThumbnailRenderer',
+    'thumbnail',
+    'thumbnails'
+  ]);
   section['contents'] = [];
   // Map header = nav(musicCarouselShelfRenderer, ['header']);
   List? contents = nav(item, ['contents']);

@@ -21,6 +21,7 @@ class SettingsManager extends ChangeNotifier {
   ];
   AudioQuality _audioQuality = AudioQuality.high;
   AudioQuality _downloadQuality = AudioQuality.high;
+  bool _skipSilence = false;
   bool _materialColors = false;
   bool _equalizerEnabled = false;
   List<double> _equalizerBandsGain = [];
@@ -36,6 +37,7 @@ class SettingsManager extends ChangeNotifier {
   List<AudioQuality> get audioQualities => _audioQualities;
   AudioQuality get audioQuality => _audioQuality;
   AudioQuality get downloadQuality => _downloadQuality;
+  bool get skipSilence => _skipSilence;
   bool get materialColors => _materialColors;
   bool get equalizerEnabled => _equalizerEnabled;
   List<double> get equalizerBandsGain => _equalizerBandsGain;
@@ -57,6 +59,7 @@ class SettingsManager extends ChangeNotifier {
     _audioQuality = _audioQualities[_box.get('AUDIO_QUALITY', defaultValue: 0)];
     _downloadQuality =
         _audioQualities[_box.get('DOWNLOAD_QUALITY', defaultValue: 0)];
+    _skipSilence = _box.get('SKIP_SILENCE', defaultValue: false);
     _equalizerEnabled = _box.get('EQUALIZER_ENABLED', defaultValue: false);
     _loudnessEnabled = _box.get('LOUDNESS_ENABLED', defaultValue: false);
     _loudnessTargetGain = _box.get('LOUDNESS_TARGET_GAIN', defaultValue: 0.0);
@@ -93,6 +96,12 @@ class SettingsManager extends ChangeNotifier {
   set downloadQuality(AudioQuality value) {
     _box.put('DOWNLOAD_QUALITY', _audioQualities.indexOf(value));
     _downloadQuality = value;
+    notifyListeners();
+  }
+
+  set skipSilence(bool value) {
+    _box.put('SKIP_SILENCE', value);
+    _skipSilence = value;
     notifyListeners();
   }
 

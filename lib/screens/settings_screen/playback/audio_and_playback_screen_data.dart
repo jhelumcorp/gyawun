@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/services/media_player.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +27,26 @@ List<SettingItem> audioandplaybackScreenData(BuildContext context) => [
         trailing: (context) => DropdownButton(
             style: textStyle(context, bold: false).copyWith(fontSize: 16),
             underline: const SizedBox(),
+            value: context.watch<SettingsManager>().audioQuality,
+            items: context
+                .read<SettingsManager>()
+                .audioQualities
+                .map(
+                  (e) => DropdownMenuItem(
+                      value: e, child: Text(e.name.toUpperCase())),
+                )
+                .toList(),
+            onChanged: (value) async {
+              if (value == null) return;
+              context.read<SettingsManager>().audioQuality = value;
+            }),
+      ),
+      SettingItem(
+        title: "Download Quality",
+        icon: CupertinoIcons.speaker_zzz,
+        trailing: (context) => DropdownButton(
+            style: textStyle(context, bold: false).copyWith(fontSize: 16),
+            underline: const SizedBox(),
             value: context.watch<SettingsManager>().downloadQuality,
             items: context
                 .read<SettingsManager>()
@@ -40,24 +62,19 @@ List<SettingItem> audioandplaybackScreenData(BuildContext context) => [
             }),
       ),
       SettingItem(
-        title: "Download Quality",
-        icon: CupertinoIcons.speaker_zzz,
-        trailing: (context) => DropdownButton(
-            style: textStyle(context, bold: false).copyWith(fontSize: 16),
-            underline: const SizedBox(),
-            value: context.watch<SettingsManager>().audioQuality,
-            items: context
-                .read<SettingsManager>()
-                .audioQualities
-                .map(
-                  (e) => DropdownMenuItem(
-                      value: e, child: Text(e.name.toUpperCase())),
-                )
-                .toList(),
-            onChanged: (value) async {
-              if (value == null) return;
-              context.read<SettingsManager>().audioQuality = value;
-            }),
+        title: 'Skip Silence',
+        icon: CupertinoIcons.forward_end_alt,
+        onTap: (context) async {
+          await GetIt.I<MediaPlayer>()
+              .skipSilence(!(context.read<SettingsManager>().skipSilence));
+        },
+        trailing: (context) {
+          return CupertinoSwitch(
+              value: context.watch<SettingsManager>().skipSilence,
+              onChanged: (value) async {
+                await GetIt.I<MediaPlayer>().skipSilence(value);
+              });
+        },
       ),
       SettingItem(
         title: S.of(context).enablePlaybackHistory,

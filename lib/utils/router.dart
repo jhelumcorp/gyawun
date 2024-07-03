@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_beta/utils/pprint.dart';
+import 'package:gyawun_beta/screens/settings_screen/account/account_screen.dart';
 
 import '../screens/download_screen/download_screen.dart';
 import '../screens/home_screen/chip_screen.dart';
 import '../screens/home_screen/home_screen.dart';
 import '../screens/home_screen/search_screen/search_screen.dart';
-import '../screens/library_screen/library_screen.dart';
+import '../screens/library_screen/library_screen/library_screen.dart';
 import '../screens/main_screen/main_screen.dart';
 import '../screens/main_screen/player_screen.dart';
 import '../screens/browse_screen/browse_screen.dart';
@@ -90,6 +90,11 @@ List<StatefulShellBranch> branches = [
         path: '/settings',
         builder: (context, state) => const SettingsScreen(),
         routes: [
+          GoRoute(
+            path: 'account',
+            pageBuilder: (context, state) =>
+                const CupertinoPage(child: AccountScreen()),
+          ),
           GoRoute(
             path: 'appearence',
             pageBuilder: (context, state) =>

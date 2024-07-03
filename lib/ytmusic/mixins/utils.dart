@@ -125,9 +125,6 @@ Map<String, dynamic> handleMusicShelfRenderer(Map item, {List? thumbnails}) {
   Map<String, dynamic> section = {
     'title': nav(item, ['title', 'runs', 0, 'text']),
     'contents': [],
-    'viewType': nav(contents, [0, 'musicMultiRowListItemRenderer']) != null
-        ? 'SINGLE_COLUMN'
-        : 'COLUMN',
   };
   if (nav(item, ['bottomEndpoint', 'searchEndpoint']) != null) {
     section['trailing'] = {
@@ -143,6 +140,7 @@ Map<String, dynamic> handleMusicShelfRenderer(Map item, {List? thumbnails}) {
 }
 
 Map<String, dynamic> handleGridRenderer(Map item) {
+  // pprint(item);
   List? contents = nav(item, ['items']);
   Map<String, dynamic> section = {
     'title': nav(item, ['title', 'runs', 0, 'text']),
@@ -170,6 +168,7 @@ handleContinuationContents(Map item) {
 
 handleMusicPlaylistShelfRenderer(Map item) {
   // pprint(item.keys.toList());
+
   Map<String, dynamic> section = {'contents': []};
   if (nav(item, ['playlistId']) != null) {
     section['playlistId'] = nav(item, ['playlistId']);
