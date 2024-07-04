@@ -1,5 +1,4 @@
 import 'dart:core';
-
 import '../helpers.dart';
 
 handleContents(List contents, {List? thumbnails}) {
@@ -140,7 +139,7 @@ Map<String, dynamic> handleMusicShelfRenderer(Map item, {List? thumbnails}) {
 }
 
 Map<String, dynamic> handleGridRenderer(Map item) {
-  // pprint(item);
+  
   List? contents = nav(item, ['items']);
   Map<String, dynamic> section = {
     'title': nav(item, ['title', 'runs', 0, 'text']),

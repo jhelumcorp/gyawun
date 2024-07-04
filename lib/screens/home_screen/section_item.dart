@@ -297,7 +297,7 @@ class _ItemListState extends State<ItemList> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            double width = height * (items[index]['aspectRatio']);
+            double width = height * (items[index]?['aspectRatio']??1);
             String? subtitle = _buildSubtitle(items[index]);
             return InkWell(
               onTap: () async {
