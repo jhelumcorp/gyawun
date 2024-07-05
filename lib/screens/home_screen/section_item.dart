@@ -336,7 +336,7 @@ class _ItemListState extends State<ItemList> {
                           backgroundImage: CachedNetworkImageProvider(
                             getEnhancedImage(
                                 items[index]['thumbnails'].first['url'],
-                                width: width),
+                                width: width.toInt()),
                           ),
                           radius: height / 2,
                         )
@@ -345,7 +345,7 @@ class _ItemListState extends State<ItemList> {
                           child: CachedNetworkImage(
                             imageUrl: getEnhancedImage(
                               items[index]['thumbnails'].first['url'],
-                              width: width,
+                              width: width.toInt(),
                             ),
                             height: height,
                             width: width,

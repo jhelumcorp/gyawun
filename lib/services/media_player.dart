@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/utils/pprint.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
@@ -24,9 +23,11 @@ class MediaPlayer extends ChangeNotifier {
   AndroidEqualizerParameters? _equalizerParams;
 
   List<IndexedAudioSource>? _songList = [];
-  MediaItem? _currentSong;
-  int? _currentIndex;
-  ButtonState _buttonState = ButtonState.loading;
+  // MediaItem? _currentSong;
+  final ValueNotifier<MediaItem?> _currentSongNotifier = ValueNotifier(null);
+  final ValueNotifier<int?> _currentIndex = ValueNotifier(null);
+  final ValueNotifier<ButtonState> _buttonState =
+      ValueNotifier(ButtonState.loading);
   Timer? _timer;
   final ValueNotifier<Duration?> _timerDuration = ValueNotifier(null);
 
@@ -52,9 +53,10 @@ class MediaPlayer extends ChangeNotifier {
   AudioPlayer get player => _player;
   ConcatenatingAudioSource get playlist => _playlist;
   List<IndexedAudioSource>? get songList => _songList;
-  MediaItem? get currentSong => _currentSong;
-  int? get currentIndex => _currentIndex;
-  ButtonState get buttonState => _buttonState;
+  // MediaItem? get currentSong => _currentSong;
+  ValueNotifier<MediaItem?> get currentSongNotifier => _currentSongNotifier;
+  ValueNotifier<int?> get currentIndex => _currentIndex;
+  ValueNotifier<ButtonState> get buttonState => _buttonState;
 
   ValueNotifier<ProgressBarState> get progressBarState => _progressBarState;
   bool get shuffleModeEnabled => _shuffleModeEnabled;
@@ -126,19 +128,20 @@ class MediaPlayer extends ChangeNotifier {
         shouldAdd = true;
       }
       if (playlist == null || playlist.isEmpty) {
-        _currentSong = null;
-        _currentIndex == null;
+        _currentSongNotifier.value = null;
+        _currentIndex.value == null;
         _songList = [];
       } else {
-        _currentIndex ??= 0;
+        _currentIndex.value ??= 0;
         _songList = playlist;
 
-        _currentSong ??= (_songList!.length > _currentIndex!)
-            ? _songList![_currentIndex!].tag
-            : null;
+        _currentSongNotifier.value ??=
+            (_songList!.length > _currentIndex.value!)
+                ? _songList![_currentIndex.value!].tag
+                : null;
       }
-      if (shouldAdd == true && _currentSong != null) {
-        addHistory(_currentSong!.extras!);
+      if (shouldAdd == true && _currentSongNotifier.value != null) {
+        addHistory(_currentSongNotifier.value!.extras!);
       }
       notifyListeners();
     });
@@ -150,14 +153,11 @@ class MediaPlayer extends ChangeNotifier {
       final processingState = event.processingState;
       if (processingState == ProcessingState.loading ||
           processingState == ProcessingState.buffering) {
-        _buttonState = ButtonState.loading;
-        notifyListeners();
+        _buttonState.value = ButtonState.loading;
       } else if (!isPlaying || processingState == ProcessingState.idle) {
-        _buttonState = ButtonState.paused;
-        notifyListeners();
+        _buttonState.value = ButtonState.paused;
       } else if (processingState != ProcessingState.completed) {
-        _buttonState = ButtonState.playing;
-        notifyListeners();
+        _buttonState.value = ButtonState.playing;
       } else {
         _player.seek(Duration.zero);
         _player.pause();
@@ -213,17 +213,15 @@ class MediaPlayer extends ChangeNotifier {
 
   void _listenToChangesInSong() async {
     _player.currentIndexStream.listen((index) {
-      if (_songList != null && _currentIndex != index) {
-        _currentIndex = index;
-        _currentSong = index != null &&
+      if (_songList != null && _currentIndex.value != index) {
+        _currentIndex.value = index;
+        _currentSongNotifier.value = index != null &&
                 songList!.isNotEmpty &&
                 _songList?.elementAt(index) != null
             ? _songList![index].tag
             : null;
-
-        notifyListeners();
-        if (_songList!.isNotEmpty && _currentIndex != null) {
-          MediaItem item = _songList![_currentIndex!].tag;
+        if (_songList!.isNotEmpty && _currentIndex.value != null) {
+          MediaItem item = _songList![_currentIndex.value!].tag;
           addHistory(item.extras!);
         }
       }
@@ -263,7 +261,6 @@ class MediaPlayer extends ChangeNotifier {
               (await File(song['path']).exists())
           ? song['path']
           : 'http://$serverAddress?id=${song['videoId']}&quality=${GetIt.I<SettingsManager>().audioQuality.name.toLowerCase()}');
-      pprint(GetIt.I<SettingsManager>().audioQuality.name.toLowerCase());
       await _playlist.add(
         AudioSource.uri(
           uri,
@@ -390,8 +387,8 @@ class MediaPlayer extends ChangeNotifier {
     await _player.stop();
     await _playlist.clear();
     await _player.seek(Duration.zero, index: 0);
-    _currentIndex = null;
-    _currentSong = null;
+    _currentIndex.value = null;
+    _currentSongNotifier.value = null;
     notifyListeners();
   }
 
@@ -400,7 +397,7 @@ class MediaPlayer extends ChangeNotifier {
     if (isNext) {
       index = _player.sequence == null || _player.sequence!.isEmpty
           ? 0
-          : currentIndex! + 1;
+          : currentIndex.value! + 1;
     }
 
     await _playlist.insertAll(

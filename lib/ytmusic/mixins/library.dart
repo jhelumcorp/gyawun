@@ -24,6 +24,28 @@ mixin LibraryMixin on YTMusicServices {
     return result;
   }
 
+  Future<Map<String, dynamic>> importPlaylist(String browseId) async {
+    Map<String, dynamic> body = {'browseId': browseId};
+    var response = await sendRequest('browse', body);
+    Map<String, dynamic> header = nav(response, [
+      'contents',
+      'twoColumnBrowseResultsRenderer',
+      'tabs',
+      0,
+      'tabRenderer',
+      'content',
+      'sectionListRenderer',
+      'contents',
+      0,
+      'musicResponsiveHeaderRenderer'
+    ]);
+    Map<String, dynamic> result = handlePageHeader(header);
+    if (result['endpoint'] == null) {
+      result['endpoint'] = {"browseId": browseId};
+    }
+    return result;
+  }
+
   Future<List> getHistory() async {
     Map<String, dynamic> body = {'browseId': 'FEmusic_history'};
     var response = await sendRequest('browse', body);

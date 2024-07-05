@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gyawun_beta/utils/bottom_modals.dart';
-import 'package:gyawun_beta/utils/pprint.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -140,7 +139,6 @@ class AuthMixin {
       Map token = Hive.box('SETTINGS').get('YTMUSIC_AUTH', defaultValue: {});
       if ((DateTime.now().millisecondsSinceEpoch / 1000).round() >
           (token["expires_at"] - 3600)) {
-        pprint('refreshing token');
         Map<String, dynamic> rToken =
             await refreshToken(token["refresh_token"]);
         token.updateAll((key, value) => rToken[key] ?? value);

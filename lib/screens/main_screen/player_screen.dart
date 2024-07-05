@@ -8,8 +8,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/screens/main_screen/lyrics_box.dart';
 import 'package:gyawun_beta/utils/enhanced_image.dart';
-import 'package:gyawun_beta/utils/pprint.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -40,11 +40,57 @@ class _PlayerScreenState extends State<PlayerScreen> {
   List? colors = [];
   String? image;
   bool canPop = false;
+  bool showLyrics = false;
+  late MediaItem? currentSong;
 
   @override
   void initState() {
     super.initState();
     panelController = PanelController();
+    currentSong = GetIt.I<MediaPlayer>().currentSongNotifier.value;
+    _fetchImage();
+    GetIt.I<MediaPlayer>().currentSongNotifier.addListener(songListener);
+  }
+
+  @override
+  dispose() {
+    GetIt.I<MediaPlayer>().currentSongNotifier.removeListener(songListener);
+    super.dispose();
+  }
+
+  songListener() {
+    if (currentSong != GetIt.I<MediaPlayer>().currentSongNotifier.value) {
+      if (mounted) {
+        setState(() {
+          currentSong = GetIt.I<MediaPlayer>().currentSongNotifier.value;
+        });
+      }
+      _fetchImage();
+    }
+  }
+
+  setShowLyrics() {
+    if (mounted) {
+      setState(() {
+        showLyrics = !showLyrics;
+      });
+    }
+  }
+
+  _fetchImage() {
+    if (!mounted) return;
+    if (currentSong?.extras?['thumbnails'] != null &&
+        currentSong?.extras?['thumbnails'].isNotEmpty &&
+        image !=
+            getEnhancedImage(
+                currentSong?.extras?['thumbnails']?.first['url'])) {
+      if (mounted) {
+        setState(() {
+          image = getEnhancedImage(
+              currentSong?.extras?['thumbnails']?.first['url']);
+        });
+      }
+    }
   }
 
   Future<Color?> getColor(String? image) async {
@@ -54,15 +100,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
       CachedNetworkImageProvider(
         image,
         errorListener: (p0) {
-          setState(() {
-            image = getEnhancedImage(image!, quality: 'medium');
-          });
-          pprint(p0);
+          if (mounted) {
+            setState(() {
+              image = getEnhancedImage(image!, quality: 'medium');
+            });
+          }
         },
       ),
     );
     if (mounted) {
-      return paletteGenerator.dominantColor?.color ??
+      return paletteGenerator.darkVibrantColor?.color ??
+          paletteGenerator.dominantColor?.color ??
+          paletteGenerator.darkMutedColor?.color ??
           paletteGenerator.lightVibrantColor?.color ??
           paletteGenerator.lightMutedColor?.color;
     } else {
@@ -88,24 +137,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    MediaPlayer mediaPlayer = context.watch<MediaPlayer>();
-    int? currentIndex = mediaPlayer.currentIndex;
-    MediaItem? currentSong = currentIndex != null &&
-            mediaPlayer.player.sequence != null &&
-            mediaPlayer.player.sequence!.isNotEmpty
-        ? mediaPlayer.player.sequence![currentIndex].tag
-        : null;
-
-    if (currentSong?.extras?['thumbnails'] != null &&
-        currentSong?.extras?['thumbnails'].isNotEmpty &&
-        image !=
-            getEnhancedImage(
-                currentSong?.extras?['thumbnails']?.first['url'])) {
-      setState(() {
-        image =
-            getEnhancedImage(currentSong?.extras?['thumbnails']?.first['url']);
-      });
-    }
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
@@ -125,6 +156,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
         child: FutureBuilder<Color?>(
             future: getColor(image),
             builder: (context, snapshot) {
+              if (!mounted) return Container();
               return Theme(
                 data: darkTheme(primaryWhite),
                 child: Container(
@@ -147,8 +179,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       ),
                     ),
                     child: Scaffold(
-                      // appBar: AppBar(),
-
                       key: _key,
                       backgroundColor: Colors.transparent,
                       endDrawer: MediaQuery.of(context).size.width >
@@ -178,11 +208,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Artwork(
+                                    showLyrics: showLyrics,
                                     width: maxWidth / 2.3,
                                     song: currentSong,
                                   ),
                                   NameAndControls(
                                     song: currentSong,
+                                    toggleLyrics: setShowLyrics,
                                     width: maxWidth - (maxWidth / 2.3),
                                     height: maxHeight,
                                     isRow: true,
@@ -198,7 +230,24 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                       MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
+                                    SafeArea(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  showLyrics = !showLyrics;
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                  Icons.lyrics_outlined))
+                                        ],
+                                      ),
+                                    ),
                                     Artwork(
+                                      showLyrics: showLyrics,
                                       width:
                                           min(maxWidth, maxHeight / 2.2) - 24,
                                       song: currentSong,
@@ -314,9 +363,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
 }
 
 class Artwork extends StatelessWidget {
-  const Artwork({this.song, required this.width, super.key});
+  const Artwork(
+      {this.song, required this.width, required this.showLyrics, super.key});
   final double width;
   final MediaItem? song;
+  final bool showLyrics;
 
   @override
   Widget build(BuildContext context) {
@@ -335,42 +386,48 @@ class Artwork extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withAlpha(30),
-                              spreadRadius: 10,
-                              blurRadius: 10,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
+                      if (showLyrics && song != null)
+                        LyricsBox(
+                          currentSong: song!,
+                          size: Size(width, width - 44),
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: song?.extras?['offline'] == true &&
-                                  !song!.artUri.toString().startsWith('https')
-                              ? Image.file(
-                                  File.fromUri(song!.artUri!),
-                                )
-                              : CachedNetworkImage(
-                                  width: min(constraints.maxHeight,
-                                      constraints.maxWidth),
-                                  filterQuality: FilterQuality.high,
-                                  imageUrl: getEnhancedImage(
-                                      song!.extras!['thumbnails'].first['url']),
-                                  errorWidget: (context, url, error) {
-                                    return CachedNetworkImage(
-                                      imageUrl: getEnhancedImage(
-                                        song!
-                                            .extras!['thumbnails'].first['url'],
-                                        quality: 'medium',
-                                      ),
-                                    );
-                                  },
-                                ),
+                      if (!showLyrics)
+                        Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withAlpha(30),
+                                spreadRadius: 10,
+                                blurRadius: 10,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: song?.extras?['offline'] == true &&
+                                    !song!.artUri.toString().startsWith('https')
+                                ? Image.file(
+                                    File.fromUri(song!.artUri!),
+                                  )
+                                : CachedNetworkImage(
+                                    width: min(constraints.maxHeight,
+                                        constraints.maxWidth),
+                                    filterQuality: FilterQuality.high,
+                                    imageUrl: getEnhancedImage(song!
+                                        .extras!['thumbnails'].first['url']),
+                                    errorWidget: (context, url, error) {
+                                      return CachedNetworkImage(
+                                        imageUrl: getEnhancedImage(
+                                          song!.extras!['thumbnails']
+                                              .first['url'],
+                                          quality: 'medium',
+                                        ),
+                                      );
+                                    },
+                                  ),
+                          ),
                         ),
-                      ),
                     ],
                   );
                 }),
@@ -383,6 +440,7 @@ class Artwork extends StatelessWidget {
 class NameAndControls extends StatelessWidget {
   const NameAndControls(
       {this.song,
+      this.toggleLyrics,
       required this.height,
       required this.width,
       this.isRow = false,
@@ -393,6 +451,7 @@ class NameAndControls extends StatelessWidget {
   final MediaItem? song;
   final bool isRow;
   final currentState;
+  final Function? toggleLyrics;
 
   @override
   Widget build(BuildContext context) {
@@ -416,7 +475,14 @@ class NameAndControls extends StatelessWidget {
                       },
                       icon: const Icon(
                         Icons.queue_music_outlined,
-                      ))
+                      )),
+                  IconButton(
+                      onPressed: () {
+                        if (toggleLyrics != null) {
+                          toggleLyrics!();
+                        }
+                      },
+                      icon: const Icon(Icons.lyrics_outlined))
                 ],
               ),
             Column(
@@ -556,7 +622,7 @@ class NameAndControls extends StatelessWidget {
                     onPressed: () {
                       Modals.showPlayerOptionsModal(
                         context,
-                        mediaPlayer.currentSong!.extras!,
+                        mediaPlayer.currentSongNotifier.value!.extras!,
                       );
                     },
                     icon: const Icon(Icons.more_vert_outlined))

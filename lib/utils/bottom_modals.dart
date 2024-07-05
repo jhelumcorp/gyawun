@@ -130,6 +130,17 @@ class Modals {
     );
   }
 
+  static showImportplaylistModal(BuildContext context, {Map? item}) {
+    showModalBottomSheet(
+      useRootNavigator: false,
+      backgroundColor: Colors.transparent,
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => _importPlaylistModal(context),
+    );
+  }
+
   static showPlaylistRenameBottomModal(BuildContext context,
       {required String playlistId,
       title = 'Enter here',
@@ -395,6 +406,73 @@ Widget _createPlaylistModal(
                   },
                   child: Text(
                     'Create',
+                    style: TextStyle(
+                        color: Theme.of(context).scaffoldBackgroundColor),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _importPlaylistModal(BuildContext context) {
+  String title = '';
+  return BottomModalLayout(
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          AppBar(
+            title: const Text('Import Playlist'),
+            centerTitle: true,
+            automaticallyImplyLeading: false,
+          ),
+          const Divider(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              children: [
+                TextField(
+                  onChanged: (value) => title = value,
+                  keyboardType: TextInputType.url,
+                  decoration: InputDecoration(
+                    fillColor: greyColor,
+                    filled: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: 'YT Playlist url with http',
+                    prefixIcon: const Icon(Icons.title),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                MaterialButton(
+                  minWidth: double.maxFinite,
+                  color: Theme.of(context).colorScheme.primary,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  onPressed: () async {
+                    Modals.showCenterLoadingModal(context);
+                    String message =
+                        await GetIt.I<LibraryService>().importPlaylist(title);
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      BottomMessage.showText(context, message);
+                    }
+                  },
+                  child: Text(
+                    'Import',
                     style: TextStyle(
                         color: Theme.of(context).scaffoldBackgroundColor),
                   ),

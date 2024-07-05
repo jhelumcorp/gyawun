@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/ytmusic/ytmusic.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class LibraryService extends ChangeNotifier {
@@ -39,10 +41,39 @@ class LibraryService extends ChangeNotifier {
     }
   }
 
+  Future<String> importPlaylist(String playlistUrl) async {
+    try {
+      Uri uri = Uri.parse(playlistUrl);
+      String? playlistId = uri.queryParameters['list'];
+      if (!uri.host.contains('youtube.com') || playlistId == null) {
+        return 'Invalid Url';
+      }
+      String browseId =
+          playlistId.startsWith("VL") ? playlistId : "VL$playlistId";
+      Map<String, dynamic> playlist =
+          await GetIt.I<YTMusic>().importPlaylist(browseId);
+      String id = playlistId;
+      if (_playlists[id] != null) {
+        await _box.delete(id);
+        return 'Playlist is already added';
+      } else {
+        await _box.put(
+          id,
+          {
+            ...playlist,
+            'isPredefined': true,
+            'createdAt': DateTime.now().millisecondsSinceEpoch
+          },
+        );
+        return 'Added to Library';
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   Future<String> addToOrRemoveFromLibrary(Map item) async {
-    String id = item['type'] == 'type'
-        ? item['endpoint']['browseId']
-        : item['playlistId'];
+    String id = item['playlistId'];
     if (_playlists[id] != null) {
       await _box.delete(id);
       return 'Removed from Library';
