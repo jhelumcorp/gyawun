@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../services/media_player.dart';
 import '../../utils/extensions.dart';
@@ -37,37 +37,41 @@ class _PlayButtonState extends State<PlayButton> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final MediaPlayer mediaPlayer = context.watch<MediaPlayer>();
-    if (mediaPlayer.player.playing != playing) {
-      playing = mediaPlayer.player.playing;
-      mediaPlayer.player.playing
-          ? _animationController.forward()
-          : _animationController.reverse();
-    }
     return GestureDetector(
       onTap: () {
-        mediaPlayer.player.playing
-            ? mediaPlayer.player.pause()
-            : mediaPlayer.player.play();
+        GetIt.I<MediaPlayer>().player.playing
+            ? GetIt.I<MediaPlayer>().player.pause()
+            : GetIt.I<MediaPlayer>().player.play();
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        height: 60,
-        width: 60,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color:
-              (context.isDarkMode ? Colors.white : Colors.black).withAlpha(50),
-          borderRadius: BorderRadius.circular(
-              mediaPlayer.buttonState == ButtonState.playing ? 15 : 40),
-        ),
-        child: (mediaPlayer.buttonState == ButtonState.loading)
-            ? const CircularProgressIndicator()
-            : AnimatedIcon(
-                icon: AnimatedIcons.play_pause,
-                progress: _animationController,
-                size: 40,
-              ),
+      child: ValueListenableBuilder(
+        valueListenable: GetIt.I<MediaPlayer>().buttonState,
+        builder: (context, buttonState, child) {
+          if (GetIt.I<MediaPlayer>().player.playing != playing) {
+            playing = GetIt.I<MediaPlayer>().player.playing;
+            playing
+                ? _animationController.forward()
+                : _animationController.reverse();
+          }
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            height: 60,
+            width: 60,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: (context.isDarkMode ? Colors.white : Colors.black)
+                  .withAlpha(50),
+              borderRadius: BorderRadius.circular(
+                  buttonState == ButtonState.playing ? 15 : 40),
+            ),
+            child: (buttonState == ButtonState.loading)
+                ? const CircularProgressIndicator()
+                : AnimatedIcon(
+                    icon: AnimatedIcons.play_pause,
+                    progress: _animationController,
+                    size: 40,
+                  ),
+          );
+        },
       ),
     );
   }

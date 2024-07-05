@@ -47,6 +47,8 @@ dependencies:
   pub_semver: ^2.1.4
   device_info_plus: ^10.1.0
   flutter_markdown: ^0.7.3
+  flutter_expandable_fab: ^2.1.0
+  flutter_lyric: ^2.0.4+6
   # flutter_inappwebview: ^6.0.0
 
 dev_dependencies:

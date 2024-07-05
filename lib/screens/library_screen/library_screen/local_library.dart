@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/screens/browse_screen/browse_screen.dart';
@@ -23,6 +24,8 @@ class LocalLibrary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map playlists = context.watch<LibraryService>().playlists;
+
+    // pprint(playlists);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -114,12 +117,13 @@ class LocalLibrary extends StatelessWidget {
                                 onTap: () {
                                   if (item['isPredefined']) {
                                     Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                          builder: (context) => BrowseScreen(
-                                              endpoint: item['endpoint']
-                                                  .cast<String, dynamic>()),
-                                        ));
+                                      context,
+                                      CupertinoPageRoute(
+                                        builder: (context) => BrowseScreen(
+                                            endpoint: item['endpoint']
+                                                .cast<String, dynamic>()),
+                                      ),
+                                    );
                                   } else {
                                     Navigator.push(
                                         context,
@@ -231,6 +235,31 @@ class LocalLibrary extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: ExpandableFab(
+        openButtonBuilder: RotateFloatingActionButtonBuilder(
+          child: const Icon(CupertinoIcons.add),
+        ),
+        closeButtonBuilder: DefaultFloatingActionButtonBuilder(
+          child: const Icon(CupertinoIcons.clear),
+        ),
+        distance: 70,
+        type: ExpandableFabType.up,
+        children: [
+          FloatingActionButton.small(
+            onPressed: () {
+              Modals.showCreateplaylistModal(context);
+            },
+            child: const Icon(CupertinoIcons.create),
+          ),
+          FloatingActionButton.small(
+            onPressed: () {
+              Modals.showImportplaylistModal(context);
+            },
+            child: const Icon(Icons.import_export),
+          ),
+        ],
       ),
     );
   }

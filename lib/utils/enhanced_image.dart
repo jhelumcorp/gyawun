@@ -1,5 +1,5 @@
 String getEnhancedImage(String imageUrl,
-    {String quality = 'high', double? width}) {
+    {String quality = 'high', int? width}) {
   if (width != null) {
     return imageUrl
         .trim()
@@ -7,7 +7,8 @@ String getEnhancedImage(String imageUrl,
         .replaceAll('w226-h226', 'w${width.toInt()}-h${width.toInt()}')
         .replaceAll('w540-h225', 'w${width.toInt()}-h${width.toInt()}')
         .replaceAll('w544-h544', 'w${width.toInt()}-h${width.toInt()}')
-        .replaceAll('s=192', 's=$width')
+        .replaceAll('=s192', '=s$width')
+         .replaceAll('=s1200', '=s$width')
         .replaceAll('sddefault', 'mqdefault');
   }
   switch (quality) {

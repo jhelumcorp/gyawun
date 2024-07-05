@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../services/yt_account.dart';
-import '../../../utils/bottom_modals.dart';
 import 'local_library.dart';
 import 'ytm_library.dart';
 
@@ -61,12 +59,6 @@ class _LibraryScreenState extends State<LibraryScreen>
                     ],
                   )
                 : const LocalLibrary(),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Modals.showCreateplaylistModal(context);
-              },
-              child: const Icon(CupertinoIcons.add),
-            ),
           );
         });
   }

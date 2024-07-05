@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
 
-import '../utils/pprint.dart';
 import 'file_storage.dart';
 import 'settings_manager.dart';
 
@@ -24,7 +23,6 @@ class DownloadManager {
     if (!(await FileStorage.requestPermissions())) {
       return;
     }
-    pprint('started download');
     HttpServer server = GetIt.I<HttpServer>();
     StreamedResponse response = await client.send(
       Request(

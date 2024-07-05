@@ -1,5 +1,147 @@
 import 'dart:core';
+
 import '../helpers.dart';
+
+Map<String, dynamic> handlePageHeader(Map<String, dynamic> header) {
+  // pprint(header);
+  List? subruns = nav(header, ['subtitle', 'runs']) ??
+      nav(header, ['straplineTextOne', 'runs']);
+  List? secondSubruns = nav(header, ['secondSubtitle', 'runs']);
+  Map<String, dynamic> result = {
+    'title': nav(header, ['title', 'runs', 0, 'text']),
+    'subtitle': subruns?.map((run) => run['text']).join('') ??
+        nav(header, [
+          'subscriptionButton',
+          'subscribeButtonRenderer',
+          'longSubscriberCountText',
+          'runs',
+          0,
+          'text'
+        ]),
+    'secondSubtitle': secondSubruns?.map((run) => run['text']).join(''),
+    'type': nav(header, ['subscriptionButton']) != null ? 'ARTIST' : null,
+    'thumbnails': nav(header, [
+          'thumbnail',
+          'croppedSquareThumbnailRenderer',
+          'thumbnail',
+          'thumbnails'
+        ]) ??
+        nav(header, [
+          'thumbnail',
+          'musicThumbnailRenderer',
+          'thumbnail',
+          'thumbnails'
+        ]) ??
+        nav(header, [
+          'foregroundThumbnail',
+          'musicThumbnailRenderer',
+          'thumbnail',
+          'thumbnails'
+        ]),
+    'description': nav(header, ['description', 'runs', 0, 'text']) ??
+        nav(header, [
+          'description',
+          'musicDescriptionShelfRenderer',
+          'description',
+          'runs',
+          0,
+          'text'
+        ]),
+    'playlistId': nav(header, [
+      'startRadioButton',
+      'buttonRenderer',
+      'navigationEndpoint',
+      'watchEndpoint',
+      'playlistId'
+    ])?.replaceAll('RDAMPL', ''),
+    'videoId': nav(header, [
+      'buttons',
+      0,
+      'musicPlayButtonRenderer',
+      'playNavigationEndpoint',
+      'watchEndpoint',
+      'videoId'
+    ]),
+    'params': nav(header, [
+      'startRadioButton',
+      'buttonRenderer',
+      'navigationEndpoint',
+      'watchEndpoint',
+      'params'
+    ]),
+    'channelId': nav(
+        header, ['subscriptionButton', 'subscribeButtonRenderer', 'channelId']),
+    'artists': [],
+  };
+  if (subruns != null) {
+    for (Map run in subruns) {
+      Map? navigationEndpoint = nav(run, ['navigationEndpoint']);
+      Map? browseEndpoint = nav(navigationEndpoint, ['browseEndpoint']);
+      String? pageType = nav(browseEndpoint, [
+        'browseEndpointContextSupportedConfigs',
+        'browseEndpointContextMusicConfig',
+        'pageType'
+      ]);
+      if (pageType == 'MUSIC_PAGE_TYPE_ARTIST') {
+        result['artists'].add({
+          'name': nav(run, ['text']),
+          'endpoint': browseEndpoint
+        });
+      } else if (pageType == 'MUSIC_PAGE_TYPE_ALBUM') {
+        result['album'] = {
+          'name': nav(run, ['text']),
+          'endpoint': browseEndpoint
+        };
+      }
+    }
+  }
+  List? menuItems = nav(header, ['menu', 'menuRenderer', 'items']) ??
+      (nav(header, ['buttons']) as List?)
+              ?.firstWhere((el) => el['menuRenderer'] != null)?['menuRenderer']
+          ?['items'];
+  if (menuItems != null) {
+    for (Map run in menuItems) {
+      String? iconType =
+          nav(run, ['menuNavigationItemRenderer', 'icon', 'iconType']) ??
+              nav(run, ['menuServiceItemRenderer', 'icon', 'iconType']) ??
+              nav(run,
+                  ['toggleMenuServiceItemRenderer', 'defaultIcon', 'iconType']);
+      if (iconType == 'MUSIC_SHUFFLE') {
+        result['playlistId'] ??= nav(run, [
+          'menuNavigationItemRenderer',
+          'navigationEndpoint',
+          'watchPlaylistEndpoint',
+          'playlistId'
+        ]);
+      } else if (iconType == 'MIX') {
+        result['playlistId'] ??= nav(run, [
+          'menuNavigationItemRenderer',
+          'navigationEndpoint',
+          'watchPlaylistEndpoint',
+          'playlistId'
+        ])?.replaceAll('RDAMPL', '');
+      } else if (iconType == 'QUEUE_PLAY_NEXT') {
+        result['playlistId'] ??= nav(run, [
+          'menuServiceItemRenderer',
+          'serviceEndpoint',
+          'queueAddEndpoint',
+          'queueTarget',
+          'playlistId'
+        ]);
+      } else if (iconType == 'LIBRARY_ADD') {
+        result['playlistId'] ??= nav(run, [
+          'toggleMenuServiceItemRenderer',
+          'toggledServiceEndpoint',
+          'likeEndpoint',
+          'target',
+          'playlistId'
+        ]);
+      }
+    }
+  }
+  result.removeWhere((key, val) => val == null || val.toString().isEmpty);
+  return result;
+}
 
 handleContents(List contents, {List? thumbnails}) {
   List contentsResult = [];
@@ -139,7 +281,6 @@ Map<String, dynamic> handleMusicShelfRenderer(Map item, {List? thumbnails}) {
 }
 
 Map<String, dynamic> handleGridRenderer(Map item) {
-  
   List? contents = nav(item, ['items']);
   Map<String, dynamic> section = {
     'title': nav(item, ['title', 'runs', 0, 'text']),
