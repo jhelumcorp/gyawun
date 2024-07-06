@@ -52,7 +52,7 @@ dependencies:
   media_kit_libs_windows_audio: any
   just_audio_media_kit: ^2.0.0
   media_kit_native_event_loop: ^1.0.8
-  audio_service_mpris: ^0.1.5
+  flutter_acrylic: ^1.1.4
 
 dev_dependencies:
   flutter_test:

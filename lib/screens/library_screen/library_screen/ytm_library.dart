@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +36,15 @@ class YTMLibraryScreen extends StatelessWidget {
                             onTap: () {
                               Navigator.push(
                                   context,
-                                  CupertinoPageRoute(
-                                    builder: (context) =>
-                                        const YoutubeHistory(),
-                                  ));
+                                  Platform.isWindows
+                                      ? MaterialPageRoute(
+                                          builder: (context) =>
+                                              const YoutubeHistory(),
+                                        )
+                                      : CupertinoPageRoute(
+                                          builder: (context) =>
+                                              const YoutubeHistory(),
+                                        ));
                             },
                             child: ListTile(
                               title: Text(
@@ -70,11 +77,17 @@ class YTMLibraryScreen extends StatelessWidget {
                               onTap: () {
                                 Navigator.push(
                                     context,
-                                    CupertinoPageRoute(
-                                      builder: (context) => BrowseScreen(
-                                          endpoint: playlist['endpoint']
-                                              .cast<String, dynamic>()),
-                                    ));
+                                    Platform.isWindows
+                                        ? MaterialPageRoute(
+                                            builder: (context) => BrowseScreen(
+                                                endpoint: playlist['endpoint']
+                                                    .cast<String, dynamic>()),
+                                          )
+                                        : CupertinoPageRoute(
+                                            builder: (context) => BrowseScreen(
+                                                endpoint: playlist['endpoint']
+                                                    .cast<String, dynamic>()),
+                                          ));
                               },
                               child: ListTile(
                                 title: Text(

@@ -35,103 +35,127 @@ class _SettingsScreenState extends State<SettingsScreen> {
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: TextField(
-              controller: searchController,
-              onChanged: (value) {
-                setState(() {
-                  searchText = value;
-                });
-              },
-              autofocus: false,
-              keyboardType: TextInputType.text,
-              maxLines: 1,
-              textInputAction: TextInputAction.search,
-              decoration: InputDecoration(
-                fillColor: darkGreyColor.withAlpha(100),
-                filled: true,
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(35),
-                  borderSide: BorderSide.none,
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: TextField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      searchText = value;
+                    });
+                  },
+                  autofocus: false,
+                  keyboardType: TextInputType.text,
+                  maxLines: 1,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    fillColor: darkGreyColor.withAlpha(100),
+                    filled: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(35),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: S.of(context).searchSettings,
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: searchController.text.trim().isNotEmpty
+                        ? GestureDetector(
+                            onTap: () {
+                              searchController.text = "";
+                              searchText = "";
+                              setState(() {});
+                            },
+                            child: const Icon(CupertinoIcons.clear),
+                          )
+                        : null,
+                  ),
                 ),
-                hintText: S.of(context).searchSettings,
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: searchController.text.trim().isNotEmpty
-                    ? GestureDetector(
-                        onTap: () {
-                          searchController.text = "";
-                          searchText = "";
-                          setState(() {});
-                        },
-                        child: const Icon(CupertinoIcons.clear),
-                      )
-                    : null,
               ),
-            ),
-          ),
-          if (searchText == "")
-            ListTile(
-              leading: ColorIcon(icon: Icons.money, color: Colors.accents[14]),
-              title: Text(
-                S.of(context).donate,
-                style: textStyle(context, bold: false).copyWith(fontSize: 16),
-              ),
-              subtitle: Text(
-                S.of(context).donateSubtitle,
-                style: tinyTextStyle(context),
-              ),
-              onTap: () => showPaymentsModal(context),
-            ),
-          if (searchText == "") const Divider(),
-          ...(searchText == ""
-                  ? settingScreenData(context)
-                  : allSettingsData(context)
-                      .where((element) => element.title
-                          .toLowerCase()
-                          .contains(searchText.toLowerCase()))
-                      .toList())
-              .map((e) {
-            return ListTile(
-              title: Text(
-                e.title,
-                style: textStyle(context, bold: false).copyWith(fontSize: 16),
-              ),
-              leading: (e.icon != null)
-                  ? ColorIcon(
-                      color: e.color,
-                      icon: e.icon!,
-                    )
-                  : null,
-              trailing: e.trailing != null
-                  ? e.trailing!(context)
-                  : (e.hasNavigation
-                      ? const Icon(
-                          CupertinoIcons.chevron_right,
-                          size: 30,
-                        )
-                      : null),
-              onTap: () {
-                if (e.hasNavigation && e.location != null) {
-                  context.go(e.location!);
-                } else if (e.onTap != null) {
-                  e.onTap!(context);
-                }
-              },
-              subtitle: e.subtitle != null
-                  ? Text(
-                      e.subtitle!(context),
+              if (searchText == "")
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: ListTile(
+                    tileColor: Colors.grey.withAlpha(30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    leading:
+                        ColorIcon(icon: Icons.money, color: Colors.accents[14]),
+                    title: Text(
+                      S.of(context).donate,
+                      style: textStyle(context, bold: false)
+                          .copyWith(fontSize: 16),
+                    ),
+                    subtitle: Text(
+                      S.of(context).donateSubtitle,
                       style: tinyTextStyle(context),
-                      maxLines: 2,
-                    )
-                  : null,
-            );
-          }),
-        ],
+                    ),
+                    onTap: () => showPaymentsModal(context),
+                  ),
+                ),
+              if (searchText == "") const Divider(),
+              ...(searchText == ""
+                      ? settingScreenData(context)
+                      : allSettingsData(context)
+                          .where((element) => element.title
+                              .toLowerCase()
+                              .contains(searchText.toLowerCase()))
+                          .toList())
+                  .map((e) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: ListTile(
+                    tileColor: Colors.grey.withAlpha(30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    title: Text(
+                      e.title,
+                      style: textStyle(context, bold: false)
+                          .copyWith(fontSize: 16),
+                    ),
+                    leading: (e.icon != null)
+                        ? ColorIcon(
+                            color: e.color,
+                            icon: e.icon!,
+                          )
+                        : null,
+                    trailing: e.trailing != null
+                        ? e.trailing!(context)
+                        : (e.hasNavigation
+                            ? const Icon(
+                                CupertinoIcons.chevron_right,
+                                size: 30,
+                              )
+                            : null),
+                    onTap: () {
+                      if (e.hasNavigation && e.location != null) {
+                        context.go(e.location!);
+                      } else if (e.onTap != null) {
+                        e.onTap!(context);
+                      }
+                    },
+                    subtitle: e.subtitle != null
+                        ? Text(
+                            e.subtitle!(context),
+                            style: tinyTextStyle(context),
+                            maxLines: 2,
+                          )
+                        : null,
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
       ),
     );
   }

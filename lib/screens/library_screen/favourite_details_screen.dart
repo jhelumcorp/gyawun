@@ -17,51 +17,60 @@ class FavouriteDetailsScreen extends StatelessWidget {
         title: Text(S.of(context).favourites),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            MyPlayistHeader(
-              playlist: {'songs': Hive.box('FAVOURITES').values.toList()},
-            ),
-            ValueListenableBuilder(
-              valueListenable: Hive.box('FAVOURITES').listenable(),
-              builder: (context, box, child) {
-                Map songs = box.toMap();
-                return Column(
-                  children: songs
-                      .map((key, song) {
-                        return MapEntry(
-                            key,
-                            SwipeActionCell(
-                              key: ObjectKey(key),
-                              trailingActions: <SwipeAction>[
-                                SwipeAction(
-                                    title: "Remove",
-                                    onTap: (CompletionHandler handler) async {
-                                      Modals.showConfirmBottomModal(context,
-                                              message:
-                                                  'Are you sure you want to remove it?',
-                                              isDanger: true)
-                                          .then((bool confirm) async {
-                                        if (confirm) {
-                                          await box.delete(key);
-                                        }
-                                      });
-                                    },
-                                    color: Colors.red),
-                              ],
-                              child: LibraryTile(
-                                songs: box.values.toList(),
-                                index: box.values.toList().indexOf(song),
-                              ),
-                            ));
-                      })
-                      .values
-                      .toList(),
-                );
-              },
-            ),
-          ],
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            children: [
+              MyPlayistHeader(
+                playlist: {'songs': Hive.box('FAVOURITES').values.toList()},
+              ),
+              ValueListenableBuilder(
+                valueListenable: Hive.box('FAVOURITES').listenable(),
+                builder: (context, box, child) {
+                  Map songs = box.toMap();
+                  return Column(
+                    children: songs
+                        .map((key, song) {
+                          return MapEntry(
+                              key,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                                child: SwipeActionCell(
+                                  key: ObjectKey(key),
+                                  trailingActions: <SwipeAction>[
+                                    SwipeAction(
+                                        title: "Remove",
+                                        onTap:
+                                            (CompletionHandler handler) async {
+                                          Modals.showConfirmBottomModal(context,
+                                                  message:
+                                                      'Are you sure you want to remove it?',
+                                                  isDanger: true)
+                                              .then((bool confirm) async {
+                                            if (confirm) {
+                                              await box.delete(key);
+                                            }
+                                          });
+                                        },
+                                        color: Colors.red),
+                                  ],
+                                  child: LibraryTile(
+                                    songs: box.values.toList(),
+                                    index: box.values.toList().indexOf(song),
+                                  ),
+                                ),
+                              ));
+                        })
+                        .values
+                        .toList(),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -174,7 +174,7 @@ class MyPlayistHeader extends StatelessWidget {
                   color: context.isDarkMode ? Colors.white : Colors.black,
                   child: Icon(
                     Icons.play_arrow_outlined,
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: context.isDarkMode ? Colors.black : Colors.white,
                     size: 32,
                   ),
                 ),

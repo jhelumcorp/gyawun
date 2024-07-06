@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_beta/screens/settings_screen/account/account_screen.dart';
 
@@ -92,23 +95,27 @@ List<StatefulShellBranch> branches = [
         routes: [
           GoRoute(
             path: 'account',
-            pageBuilder: (context, state) =>
-                const CupertinoPage(child: AccountScreen()),
+            pageBuilder: (context, state) => Platform.isWindows
+                ? const MaterialPage(child: AccountScreen())
+                : const CupertinoPage(child: AccountScreen()),
           ),
           GoRoute(
             path: 'appearence',
-            pageBuilder: (context, state) =>
-                const CupertinoPage(child: AppearenceScreen()),
+            pageBuilder: (context, state) => Platform.isWindows
+                ? const MaterialPage(child: AppearenceScreen())
+                : const CupertinoPage(child: AppearenceScreen()),
           ),
           GoRoute(
             path: 'content',
-            pageBuilder: (context, state) =>
-                const CupertinoPage(child: ContentScreen()),
+            pageBuilder: (context, state) => Platform.isWindows
+                ? const MaterialPage(child: ContentScreen())
+                : const CupertinoPage(child: ContentScreen()),
           ),
           GoRoute(
               path: 'playback',
-              pageBuilder: (context, state) =>
-                  const CupertinoPage(child: AudioAndPlaybackScreen()),
+              pageBuilder: (context, state) => Platform.isWindows
+                  ? const MaterialPage(child: AudioAndPlaybackScreen())
+                  : const CupertinoPage(child: AudioAndPlaybackScreen()),
               routes: [
                 GoRoute(
                   path: 'equalizer',
@@ -118,13 +125,15 @@ List<StatefulShellBranch> branches = [
               ]),
           GoRoute(
             path: 'backup_restore',
-            pageBuilder: (context, state) =>
-                const CupertinoPage(child: BackupRestoreScreen()),
+            pageBuilder: (context, state) => Platform.isWindows
+                ? const MaterialPage(child: BackupRestoreScreen())
+                : const CupertinoPage(child: BackupRestoreScreen()),
           ),
           GoRoute(
             path: 'about',
-            pageBuilder: (context, state) =>
-                const CupertinoPage(child: AboutScreen()),
+            pageBuilder: (context, state) => Platform.isWindows
+                ? const MaterialPage(child: AboutScreen())
+                : const CupertinoPage(child: AboutScreen()),
           ),
         ]),
   ])

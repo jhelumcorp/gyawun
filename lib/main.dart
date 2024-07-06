@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_acrylic/window.dart';
+import 'package:flutter_acrylic/window_effect.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gyawun_beta/services/lyrics.dart';
@@ -27,23 +29,25 @@ import 'ytmusic/ytmusic.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await JustAudioBackground.init(
-    androidNotificationChannelId: 'com.jhelum.gyawun.audio',
-    androidNotificationChannelName: 'Audio playback',
-    androidNotificationOngoing: true,
-  );
-  JustAudioMediaKit.ensureInitialized(
-    linux: false,
-    windows: true,
-    android: true,
-    iOS: false,
-    macOS: false,
-  );
-  // JustAudioMediaKit.mpvLogLevel = MPVLogLevel.debug;
-  JustAudioMediaKit.bufferSize = 8 * 1024 * 1024; // 8 MB
-  JustAudioMediaKit.title = 'Gyawun Beta';
-  JustAudioMediaKit.prefetchPlaylist = true;
-  // JustAudioMediaKit.registerWith();
+  if (Platform.isAndroid) {
+    await JustAudioBackground.init(
+      androidNotificationChannelId: 'com.jhelum.gyawun.audio',
+      androidNotificationChannelName: 'Audio playback',
+      androidNotificationOngoing: true,
+    );
+  }
+  await initialiseHive();
+  if (Platform.isWindows) {
+    await Window.initialize();
+    await Window.setEffect(
+      effect: WindowEffect.mica,
+      dark: getInitialDarkness(),
+    );
+    JustAudioMediaKit.ensureInitialized();
+    JustAudioMediaKit.bufferSize = 8 * 1024 * 1024;
+    JustAudioMediaKit.title = 'Gyawun Beta';
+    JustAudioMediaKit.prefetchPlaylist = true;
+  }
 
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,
@@ -55,7 +59,6 @@ void main() async {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
-  await initialiseHive();
   YTMusic ytMusic = YTMusic();
   await ytMusic.init();
 
@@ -116,11 +119,11 @@ class Gyawun extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           themeMode: context.watch<SettingsManager>().themeMode,
           theme: lightTheme(primaryBlack,
-              colorScheme: context.watch<SettingsManager>().materialColors
+              colorScheme: context.watch<SettingsManager>().dynamicColors
                   ? lightScheme
                   : null),
           darkTheme: darkTheme(primaryWhite,
-              colorScheme: context.watch<SettingsManager>().materialColors
+              colorScheme: context.watch<SettingsManager>().dynamicColors
                   ? darkScheme
                   : null),
         ),
@@ -133,7 +136,7 @@ initialiseHive() async {
   String? applicationDataDirectoryPath;
   if (Platform.isWindows) {
     applicationDataDirectoryPath =
-        "${(await getApplicationSupportDirectory()).path}/Gyawun";
+        "${(await getApplicationSupportDirectory()).path}/database";
   }
   await Hive.initFlutter(applicationDataDirectoryPath);
   await Hive.openBox('SETTINGS');
@@ -142,4 +145,19 @@ initialiseHive() async {
   await Hive.openBox('SONG_HISTORY');
   await Hive.openBox('FAVOURITES');
   await Hive.openBox('DOWNLOADS');
+}
+
+bool getInitialDarkness() {
+  int themeMode = Hive.box('SETTINGS').get('THEME_MODE', defaultValue: 0);
+  if (themeMode == 0) {
+    return MediaQueryData.fromView(
+                    WidgetsBinding.instance.platformDispatcher.views.first)
+                .platformBrightness ==
+            Brightness.dark
+        ? true
+        : false;
+  } else if (themeMode == 2) {
+    return true;
+  }
+  return false;
 }

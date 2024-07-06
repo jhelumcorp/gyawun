@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -225,11 +227,19 @@ class SearchSectionItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20)),
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => SearchScreen(
-                                  endpoint: section['trailing']['endpoint'],
-                                  isMore: true)));
+                        context,
+                        Platform.isWindows
+                            ? MaterialPageRoute(
+                                builder: (context) => SearchScreen(
+                                    endpoint: section['trailing']['endpoint'],
+                                    isMore: true),
+                              )
+                            : CupertinoPageRoute(
+                                builder: (context) => SearchScreen(
+                                    endpoint: section['trailing']['endpoint'],
+                                    isMore: true),
+                              ),
+                      );
                     },
                     child: Text(
                       section['trailing']['text'],
@@ -272,9 +282,15 @@ class SearchListTile extends StatelessWidget {
         } else if (item['endpoint'] != null && item['videoId'] == null) {
           Navigator.push(
               context,
-              CupertinoPageRoute(
-                builder: (context) => BrowseScreen(endpoint: item['endpoint']),
-              ));
+              Platform.isWindows
+                  ? MaterialPageRoute(
+                      builder: (context) =>
+                          BrowseScreen(endpoint: item['endpoint']),
+                    )
+                  : CupertinoPageRoute(
+                      builder: (context) =>
+                          BrowseScreen(endpoint: item['endpoint']),
+                    ));
         }
       },
       onLongPress: () {

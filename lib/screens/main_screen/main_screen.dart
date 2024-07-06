@@ -61,6 +61,7 @@ class _MainScreenState extends State<MainScreen> {
               children: [
                 if (screenWidth >= 450)
                   NavigationRail(
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     labelType: NavigationRailLabelType.none,
                     selectedLabelTextStyle: smallTextStyle(context, bold: true),
                     extended: (screenWidth > 1000),
@@ -103,15 +104,15 @@ class _MainScreenState extends State<MainScreen> {
                     ],
                     selectedIndex: widget.navigationShell.currentIndex,
                   ),
-                if (screenWidth >= 450) const VerticalDivider(width: 2),
                 Expanded(
                   child: widget.navigationShell,
                 ),
                 // if (screenWidth >= 700 &&
                 //     MediaQuery.of(context).size.height >= 600 &&
-                //     context.watch<MediaManager>().currentSong != null)
+                //     context.watch<MediaPlayer>().currentSongNotifier.value !=
+                //         null)
                 //   SizedBox(
-                //       width: Platform.isLinux ? 450 : 350,
+                //       width: Platform.isWindows ? 450 : 350,
                 //       child: const PlayerScreen())
               ],
             ),

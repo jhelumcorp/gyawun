@@ -197,7 +197,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           ),
                           if (MediaQuery.of(context).size.width >
                                   MediaQuery.of(context).size.height ||
-                              MediaQuery.of(context).size.width > 450)
+                              Platform.isWindows)
                             IconButton(
                               onPressed: () {
                                 _key.currentState?.openEndDrawer();
@@ -211,7 +211,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       key: _key,
                       backgroundColor: Colors.transparent,
                       endDrawer: MediaQuery.of(context).size.width >
-                              MediaQuery.of(context).size.height
+                                  MediaQuery.of(context).size.height ||
+                              Platform.isWindows
                           ? SizedBox(
                               width:
                                   min(400, MediaQuery.of(context).size.width) -
@@ -237,13 +238,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Artwork(
+                                    setShowLyrics: setShowLyrics,
                                     showLyrics: showLyrics,
                                     width: maxWidth / 2.3,
                                     song: currentSong,
                                   ),
                                   NameAndControls(
                                     song: currentSong,
-                                    toggleLyrics: setShowLyrics,
                                     width: maxWidth - (maxWidth / 2.3),
                                     height: maxHeight,
                                     isRow: true,
@@ -259,6 +260,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Artwork(
+                                      setShowLyrics: setShowLyrics,
                                       showLyrics: showLyrics,
                                       width:
                                           min(maxWidth, maxHeight / 2.2) - 24,
@@ -376,10 +378,15 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
 class Artwork extends StatelessWidget {
   const Artwork(
-      {this.song, required this.width, required this.showLyrics, super.key});
+      {this.song,
+      required this.width,
+      required this.showLyrics,
+      required this.setShowLyrics,
+      super.key});
   final double width;
   final MediaItem? song;
   final bool showLyrics;
+  final Function setShowLyrics;
 
   @override
   Widget build(BuildContext context) {
@@ -395,47 +402,53 @@ class Artwork extends StatelessWidget {
               )
             : SafeArea(
                 child: LayoutBuilder(builder: (context, constraints) {
-                  return Center(
-                    child: showLyrics
-                        ? LyricsBox(
-                            currentSong: song!, size: Size(width, width))
-                        : Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withAlpha(30),
-                                  spreadRadius: 10,
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
+                  return GestureDetector(
+                    onTap: () {
+                      setShowLyrics();
+                    },
+                    child: Center(
+                      child: showLyrics
+                          ? LyricsBox(
+                              currentSong: song!, size: Size(width, width))
+                          : Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withAlpha(30),
+                                    spreadRadius: 10,
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: song?.extras?['offline'] == true &&
+                                        !song!.artUri
+                                            .toString()
+                                            .startsWith('https')
+                                    ? Image.file(
+                                        File.fromUri(song!.artUri!),
+                                      )
+                                    : CachedNetworkImage(
+                                        filterQuality: FilterQuality.high,
+                                        imageUrl: getEnhancedImage(song!
+                                            .extras!['thumbnails']
+                                            .first['url']),
+                                        errorWidget: (context, url, error) {
+                                          return CachedNetworkImage(
+                                            imageUrl: getEnhancedImage(
+                                              song!.extras!['thumbnails']
+                                                  .first['url'],
+                                              quality: 'medium',
+                                            ),
+                                          );
+                                        },
+                                      ),
+                              ),
                             ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: song?.extras?['offline'] == true &&
-                                      !song!.artUri
-                                          .toString()
-                                          .startsWith('https')
-                                  ? Image.file(
-                                      File.fromUri(song!.artUri!),
-                                    )
-                                  : CachedNetworkImage(
-                                      filterQuality: FilterQuality.high,
-                                      imageUrl: getEnhancedImage(song!
-                                          .extras!['thumbnails'].first['url']),
-                                      errorWidget: (context, url, error) {
-                                        return CachedNetworkImage(
-                                          imageUrl: getEnhancedImage(
-                                            song!.extras!['thumbnails']
-                                                .first['url'],
-                                            quality: 'medium',
-                                          ),
-                                        );
-                                      },
-                                    ),
-                            ),
-                          ),
+                    ),
                   );
                 }),
               ),
@@ -447,7 +460,6 @@ class Artwork extends StatelessWidget {
 class NameAndControls extends StatelessWidget {
   const NameAndControls(
       {this.song,
-      this.toggleLyrics,
       required this.height,
       required this.width,
       this.isRow = false,
@@ -456,7 +468,6 @@ class NameAndControls extends StatelessWidget {
   final double height;
   final MediaItem? song;
   final bool isRow;
-  final Function? toggleLyrics;
 
   @override
   Widget build(BuildContext context) {

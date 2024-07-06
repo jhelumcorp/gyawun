@@ -29,7 +29,7 @@ class _LibraryScreenState extends State<LibraryScreen>
         builder: (context, isLogged, child) {
           return Scaffold(
             appBar: AppBar(
-              title: Text(S.of(context).Library),
+              title: Text(S.of(context).saved),
               centerTitle: true,
               bottom: isLogged
                   ? TabBar(
