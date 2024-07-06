@@ -71,7 +71,9 @@ class _LyricsBoxState extends State<LyricsBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Center(
         child: ValueListenableBuilder(
             valueListenable: GetIt.I<MediaPlayer>().progressBarState,
             builder: (context, progress, child) {
@@ -130,6 +132,8 @@ class _LyricsBoxState extends State<LyricsBox> {
                       },
                     )
                   : const CircularProgressIndicator();
-            }));
+            }),
+      ),
+    );
   }
 }

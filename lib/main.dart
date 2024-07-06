@@ -9,6 +9,8 @@ import 'package:gyawun_beta/services/lyrics.dart';
 import 'package:gyawun_beta/services/yt_account.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:just_audio_media_kit/just_audio_media_kit.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'generated/l10n.dart';
@@ -30,13 +32,19 @@ void main() async {
     androidNotificationChannelName: 'Audio playback',
     androidNotificationOngoing: true,
   );
-  await Hive.initFlutter();
-  await Hive.openBox('SETTINGS');
-  await Hive.openBox('LIBRARY');
-  await Hive.openBox('SEARCH_HISTORY');
-  await Hive.openBox('SONG_HISTORY');
-  await Hive.openBox('FAVOURITES');
-  await Hive.openBox('DOWNLOADS');
+  JustAudioMediaKit.ensureInitialized(
+    linux: false,
+    windows: true,
+    android: true,
+    iOS: false,
+    macOS: false,
+  );
+  // JustAudioMediaKit.mpvLogLevel = MPVLogLevel.debug;
+  JustAudioMediaKit.bufferSize = 8 * 1024 * 1024; // 8 MB
+  JustAudioMediaKit.title = 'Gyawun Beta';
+  JustAudioMediaKit.prefetchPlaylist = true;
+  // JustAudioMediaKit.registerWith();
+
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,
     overlays: [SystemUiOverlay.top],
@@ -47,6 +55,7 @@ void main() async {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
+  await initialiseHive();
   YTMusic ytMusic = YTMusic();
   await ytMusic.init();
 
@@ -118,4 +127,19 @@ class Gyawun extends StatelessWidget {
       );
     });
   }
+}
+
+initialiseHive() async {
+  String? applicationDataDirectoryPath;
+  if (Platform.isWindows) {
+    applicationDataDirectoryPath =
+        "${(await getApplicationSupportDirectory()).path}/Gyawun";
+  }
+  await Hive.initFlutter(applicationDataDirectoryPath);
+  await Hive.openBox('SETTINGS');
+  await Hive.openBox('LIBRARY');
+  await Hive.openBox('SEARCH_HISTORY');
+  await Hive.openBox('SONG_HISTORY');
+  await Hive.openBox('FAVOURITES');
+  await Hive.openBox('DOWNLOADS');
 }

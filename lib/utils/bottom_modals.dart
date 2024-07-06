@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duration_picker/duration_picker.dart';
@@ -776,16 +777,17 @@ _playerOptionsModal(BuildContext context, Map song) {
               icon: const Icon(CupertinoIcons.share)),
         ),
         const Divider(height: 8),
-        ListTile(
-          dense: true,
-          title: Text(S.of(context).equalizer),
-          leading: const Icon(Icons.equalizer_outlined),
-          onTap: () {
-            Navigator.of(context).push(CupertinoPageRoute(
-                builder: (context) => const EqualizerScreen()));
-          },
-          trailing: const Icon(CupertinoIcons.right_chevron),
-        ),
+        if (Platform.isAndroid)
+          ListTile(
+            dense: true,
+            title: Text(S.of(context).equalizer),
+            leading: const Icon(Icons.equalizer_outlined),
+            onTap: () {
+              Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => const EqualizerScreen()));
+            },
+            trailing: const Icon(CupertinoIcons.right_chevron),
+          ),
         if (song['artists'] != null)
           ListTile(
             dense: true,

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gyawun_beta/screens/main_screen/lyrics_box.dart';
 import 'package:gyawun_beta/utils/enhanced_image.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -179,6 +180,34 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       ),
                     ),
                     child: Scaffold(
+                      appBar: AppBar(
+                        leading: IconButton(
+                            onPressed: () {
+                              context.pop();
+                            },
+                            icon: const Icon(CupertinoIcons.chevron_down)),
+                        actions: [
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                showLyrics = !showLyrics;
+                              });
+                            },
+                            icon: const Icon(Icons.lyrics_outlined),
+                          ),
+                          if (MediaQuery.of(context).size.width >
+                                  MediaQuery.of(context).size.height ||
+                              MediaQuery.of(context).size.width > 450)
+                            IconButton(
+                              onPressed: () {
+                                _key.currentState?.openEndDrawer();
+                              },
+                              icon: const Icon(
+                                Icons.queue_music_outlined,
+                              ),
+                            ),
+                        ],
+                      ),
                       key: _key,
                       backgroundColor: Colors.transparent,
                       endDrawer: MediaQuery.of(context).size.width >
@@ -218,7 +247,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     width: maxWidth - (maxWidth / 2.3),
                                     height: maxHeight,
                                     isRow: true,
-                                    currentState: _key.currentState,
                                   )
                                 ],
                               );
@@ -230,22 +258,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                       MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    SafeArea(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          IconButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  showLyrics = !showLyrics;
-                                                });
-                                              },
-                                              icon: const Icon(
-                                                  Icons.lyrics_outlined))
-                                        ],
-                                      ),
-                                    ),
                                     Artwork(
                                       showLyrics: showLyrics,
                                       width:
@@ -371,10 +383,11 @@ class Artwork extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: width,
-        height: width,
+    return SizedBox(
+      width: width,
+      height: width,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: song == null
             ? Icon(
                 Icons.music_note,
@@ -382,53 +395,47 @@ class Artwork extends StatelessWidget {
               )
             : SafeArea(
                 child: LayoutBuilder(builder: (context, constraints) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      if (showLyrics && song != null)
-                        LyricsBox(
-                          currentSong: song!,
-                          size: Size(width, width - 44),
-                        ),
-                      if (!showLyrics)
-                        Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withAlpha(30),
-                                spreadRadius: 10,
-                                blurRadius: 10,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
+                  return Center(
+                    child: showLyrics
+                        ? LyricsBox(
+                            currentSong: song!, size: Size(width, width))
+                        : Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withAlpha(30),
+                                  spreadRadius: 10,
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: song?.extras?['offline'] == true &&
+                                      !song!.artUri
+                                          .toString()
+                                          .startsWith('https')
+                                  ? Image.file(
+                                      File.fromUri(song!.artUri!),
+                                    )
+                                  : CachedNetworkImage(
+                                      filterQuality: FilterQuality.high,
+                                      imageUrl: getEnhancedImage(song!
+                                          .extras!['thumbnails'].first['url']),
+                                      errorWidget: (context, url, error) {
+                                        return CachedNetworkImage(
+                                          imageUrl: getEnhancedImage(
+                                            song!.extras!['thumbnails']
+                                                .first['url'],
+                                            quality: 'medium',
+                                          ),
+                                        );
+                                      },
+                                    ),
+                            ),
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: song?.extras?['offline'] == true &&
-                                    !song!.artUri.toString().startsWith('https')
-                                ? Image.file(
-                                    File.fromUri(song!.artUri!),
-                                  )
-                                : CachedNetworkImage(
-                                    width: min(constraints.maxHeight,
-                                        constraints.maxWidth),
-                                    filterQuality: FilterQuality.high,
-                                    imageUrl: getEnhancedImage(song!
-                                        .extras!['thumbnails'].first['url']),
-                                    errorWidget: (context, url, error) {
-                                      return CachedNetworkImage(
-                                        imageUrl: getEnhancedImage(
-                                          song!.extras!['thumbnails']
-                                              .first['url'],
-                                          quality: 'medium',
-                                        ),
-                                      );
-                                    },
-                                  ),
-                          ),
-                        ),
-                    ],
                   );
                 }),
               ),
@@ -444,13 +451,11 @@ class NameAndControls extends StatelessWidget {
       required this.height,
       required this.width,
       this.isRow = false,
-      this.currentState,
       super.key});
   final double width;
   final double height;
   final MediaItem? song;
   final bool isRow;
-  final currentState;
   final Function? toggleLyrics;
 
   @override
@@ -463,28 +468,8 @@ class NameAndControls extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (isRow)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        currentState?.openEndDrawer();
-                      },
-                      icon: const Icon(
-                        Icons.queue_music_outlined,
-                      )),
-                  IconButton(
-                      onPressed: () {
-                        if (toggleLyrics != null) {
-                          toggleLyrics!();
-                        }
-                      },
-                      icon: const Icon(Icons.lyrics_outlined))
-                ],
-              ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               mainAxisSize: MainAxisSize.max,
