@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -15,12 +17,13 @@ import '../setting_item.dart';
 Box _box = Hive.box('SETTINGS');
 
 List<SettingItem> audioandplaybackScreenData(BuildContext context) => [
-      SettingItem(
-        title: S.of(context).LoudnessAndEqualizer,
-        icon: Icons.equalizer_outlined,
-        location: '/settings/playback/equalizer',
-        hasNavigation: true,
-      ),
+      if (Platform.isAndroid)
+        SettingItem(
+          title: S.of(context).LoudnessAndEqualizer,
+          icon: Icons.equalizer_outlined,
+          location: '/settings/playback/equalizer',
+          hasNavigation: true,
+        ),
       SettingItem(
         title: "Audio Quality",
         icon: CupertinoIcons.speaker_zzz,

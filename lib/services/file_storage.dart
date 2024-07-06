@@ -32,6 +32,10 @@ class FileStorage {
     Directory directory = Directory("dir");
     if (Platform.isAndroid) {
       directory = Directory('/storage/emulated/0/Download/Gyawun');
+    }
+    if (Platform.isWindows) {
+      directory =
+          Directory(path.join((await getDownloadsDirectory())!.path, 'Gyawun'));
     } else {
       directory = await getApplicationDocumentsDirectory();
     }
@@ -162,7 +166,7 @@ class FileStorage {
   }
 
   static Future<bool> requestPermissions() async {
-    if (Platform.isLinux) return true;
+    if (Platform.isWindows) return true;
     List<Permission> permissions = [
       Permission.manageExternalStorage,
       Permission.storage

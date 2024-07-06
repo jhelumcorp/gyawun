@@ -19,7 +19,7 @@ class MediaPlayer extends ChangeNotifier {
       ConcatenatingAudioSource(children: []);
 
   final _loudnessEnhancer = AndroidLoudnessEnhancer();
-  final _equalizer = AndroidEqualizer();
+  AndroidEqualizer? _equalizer;
   AndroidEqualizerParameters? _equalizerParams;
 
   List<IndexedAudioSource>? _songList = [];
@@ -39,15 +39,20 @@ class MediaPlayer extends ChangeNotifier {
   bool _shuffleModeEnabled = false;
   String serverAddress;
   MediaPlayer(this.serverAddress) {
+    if (Platform.isAndroid) {
+      _equalizer = AndroidEqualizer();
+    }
     final AudioPipeline pipeline = AudioPipeline(
       androidAudioEffects: [
-        _equalizer,
+        if (Platform.isAndroid) _equalizer!,
         _loudnessEnhancer,
       ],
     );
     _player = AudioPlayer(audioPipeline: pipeline);
     GetIt.I.registerSingleton<AndroidLoudnessEnhancer>(_loudnessEnhancer);
-    GetIt.I.registerSingleton<AndroidEqualizer>(_equalizer);
+    if (Platform.isAndroid) {
+      GetIt.I.registerSingleton<AndroidEqualizer>(_equalizer!);
+    }
     _init();
   }
   AudioPlayer get player => _player;
@@ -84,8 +89,9 @@ class MediaPlayer extends ChangeNotifier {
   }
 
   _loadEqualizer() async {
-    await _equalizer.setEnabled(GetIt.I<SettingsManager>().equalizerEnabled);
-    _equalizer.parameters.then((value) async {
+    if (!Platform.isAndroid) return;
+    await _equalizer!.setEnabled(GetIt.I<SettingsManager>().equalizerEnabled);
+    _equalizer!.parameters.then((value) async {
       _equalizerParams ??= value;
       final List<AndroidEqualizerBand> bands = _equalizerParams!.bands;
       if (GetIt.I<SettingsManager>().equalizerBandsGain.isEmpty) {
@@ -109,7 +115,7 @@ class MediaPlayer extends ChangeNotifier {
   }
 
   Future<void> setEqualizerEnabled(bool value) async {
-    await _equalizer.setEnabled(value);
+    await _equalizer?.setEnabled(value);
     GetIt.I<SettingsManager>().equalizerEnabled = value;
   }
 
@@ -276,6 +282,7 @@ class MediaPlayer extends ChangeNotifier {
           ),
         ),
       );
+      await _player.load();
       _player.play();
       if (autoFetch == true && song['status'] != 'DOWNLOADED') {
         List nextSongs =
@@ -319,6 +326,7 @@ class MediaPlayer extends ChangeNotifier {
       await _addSongListToQueue(songs, isNext: true);
     }
     if (!_player.playing) {
+      await _player.load();
       _player.play();
     }
   }
@@ -327,7 +335,10 @@ class MediaPlayer extends ChangeNotifier {
     await _playlist.clear();
     await _addSongListToQueue(songs);
     await _player.seek(Duration.zero, index: index);
-    if (!(_player.playing)) _player.play();
+    if (!(_player.playing)) {
+      await _player.load();
+      _player.play();
+    }
   }
 
   Future<void> addToQueue(Map<String, dynamic> song) async {
@@ -372,6 +383,7 @@ class MediaPlayer extends ChangeNotifier {
         shuffle: shuffle);
     songs.removeAt(0);
     await _addSongListToQueue(songs, isNext: false);
+    await _player.load();
     _player.play();
   }
 
@@ -380,6 +392,7 @@ class MediaPlayer extends ChangeNotifier {
     List songs = await GetIt.I<YTMusic>().getNextSongList(
         playlistId: endpoint['playlistId'], params: endpoint['params']);
     await _addSongListToQueue(songs);
+    await _player.load();
     _player.play();
   }
 
