@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -22,7 +25,7 @@ class SettingsManager extends ChangeNotifier {
   AudioQuality _audioQuality = AudioQuality.high;
   AudioQuality _downloadQuality = AudioQuality.high;
   bool _skipSilence = false;
-  bool _materialColors = false;
+  bool _dynamicColors = true;
   bool _equalizerEnabled = false;
   List<double> _equalizerBandsGain = [];
   bool _loudnessEnabled = false;
@@ -38,7 +41,7 @@ class SettingsManager extends ChangeNotifier {
   AudioQuality get audioQuality => _audioQuality;
   AudioQuality get downloadQuality => _downloadQuality;
   bool get skipSilence => _skipSilence;
-  bool get materialColors => _materialColors;
+  bool get dynamicColors => _dynamicColors;
   bool get equalizerEnabled => _equalizerEnabled;
   List<double> get equalizerBandsGain => _equalizerBandsGain;
   bool get loudnessEnabled => _loudnessEnabled;
@@ -52,7 +55,7 @@ class SettingsManager extends ChangeNotifier {
     _themeMode = _themeModes[_box.get('THEME_MODE', defaultValue: 0)];
     _language = _languages.firstWhere((language) =>
         language['value'] == _box.get('LANGUAGE', defaultValue: 'en-IN'));
-    _materialColors = _box.get('MATERIAL_COLORS', defaultValue: false);
+    _dynamicColors = _box.get('DYNAMIC_COLORS', defaultValue: true);
     _location = _countries.firstWhere((country) =>
         country['value'] == _box.get('LOCATION', defaultValue: 'IN'));
 
@@ -67,9 +70,15 @@ class SettingsManager extends ChangeNotifier {
         _box.get('EQUALIZER_BANDS_GAIN', defaultValue: []).cast<double>();
   }
 
-  set themeMode(ThemeMode mode) {
+  setThemeMode(ThemeMode mode) async {
     _box.put('THEME_MODE', _themeModes.indexOf(mode));
     _themeMode = mode;
+    if (Platform.isWindows) {
+      await Window.setEffect(
+        effect: WindowEffect.mica,
+        dark: getDarkness(_themeModes.indexOf(mode)),
+      );
+    }
     notifyListeners();
   }
 
@@ -105,9 +114,9 @@ class SettingsManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  set materialColors(bool isMaterial) {
-    _box.put('MATERIAL_COLORS', isMaterial);
-    _materialColors = isMaterial;
+  set dynamicColors(bool isMaterial) {
+    _box.put('DYNAMIC_COLORS', isMaterial);
+    _dynamicColors = isMaterial;
     notifyListeners();
   }
 
@@ -150,6 +159,20 @@ class SettingsManager extends ChangeNotifier {
     notifyListeners();
     _init();
   }
+}
+
+bool getDarkness(int themeMode) {
+  if (themeMode == 0) {
+    return MediaQueryData.fromView(
+                    WidgetsBinding.instance.platformDispatcher.views.first)
+                .platformBrightness ==
+            Brightness.dark
+        ? true
+        : false;
+  } else if (themeMode == 2) {
+    return true;
+  }
+  return false;
 }
 
 enum AudioQuality { high, low }

@@ -26,22 +26,22 @@ List<SettingItem> appearenceScreenData(BuildContext context) => [
                   .toList(),
               onChanged: (value) async {
                 if (value == null) return;
-                context.read<SettingsManager>().themeMode = value;
+                await context.read<SettingsManager>().setThemeMode(value);
               });
         },
       ),
       SettingItem(
-        title: S.of(context).materialColors,
+        title: 'Dynamic Colors',
         icon: Icons.manage_history_sharp,
         onTap: (context) async {
-          bool isEnabled = context.read<SettingsManager>().materialColors;
-          context.read<SettingsManager>().materialColors = !isEnabled;
+          bool isEnabled = context.read<SettingsManager>().dynamicColors;
+          context.read<SettingsManager>().dynamicColors = !isEnabled;
         },
         trailing: (context) {
           return CupertinoSwitch(
-              value: context.watch<SettingsManager>().materialColors,
+              value: context.watch<SettingsManager>().dynamicColors,
               onChanged: (val) async {
-                context.read<SettingsManager>().materialColors = val;
+                context.read<SettingsManager>().dynamicColors = val;
               });
         },
       ),

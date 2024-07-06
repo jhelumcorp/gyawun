@@ -16,45 +16,59 @@ class AccountScreen extends StatelessWidget {
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),
-      body: ValueListenableBuilder(
-          valueListenable: GetIt.I<YTAccount>().user,
-          builder: (context, user, child) {
-            return ListView(
-              children: [
-                ListTile(
-                  title: Text(
-                    user != null ? user.name : 'Log In',
-                    style:
-                        textStyle(context, bold: false).copyWith(fontSize: 16),
-                  ),
-                  leading: user != null
-                      ? CircleAvatar(
-                          backgroundImage: CachedNetworkImageProvider(
-                            user.photos.first['url'],
-                          ),
-                        )
-                      : const ColorIcon(
-                          color: null,
-                          icon: Icons.login,
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: ValueListenableBuilder(
+              valueListenable: GetIt.I<YTAccount>().user,
+              builder: (context, user, child) {
+                return ListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: ListTile(
+                        tileColor: Colors.grey.withAlpha(30),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                  trailing: user != null
-                      ? FilledButton(
-                          onPressed: () async {
-                            await GetIt.I<YTAccount>().logOut(context);
-                          },
-                          child: const Text('Log Out'),
-                        )
-                      : null,
-                  onTap: () async {
-                    if (user == null) {
-                      await GetIt.I<YTAccount>().login(context);
-                    }
-                  },
-                  subtitle: user != null ? Text(user.channelHandle) : null,
-                ),
-              ],
-            );
-          }),
+                        title: Text(
+                          user != null ? user.name : 'Log In',
+                          style: textStyle(context, bold: false)
+                              .copyWith(fontSize: 16),
+                        ),
+                        leading: user != null
+                            ? CircleAvatar(
+                                backgroundImage: CachedNetworkImageProvider(
+                                  user.photos.first['url'],
+                                ),
+                              )
+                            : const ColorIcon(
+                                color: null,
+                                icon: Icons.login,
+                              ),
+                        trailing: user != null
+                            ? FilledButton(
+                                onPressed: () async {
+                                  await GetIt.I<YTAccount>().logOut(context);
+                                },
+                                child: const Text('Log Out'),
+                              )
+                            : null,
+                        onTap: () async {
+                          if (user == null) {
+                            await GetIt.I<YTAccount>().login(context);
+                          }
+                        },
+                        subtitle:
+                            user != null ? Text(user.channelHandle) : null,
+                      ),
+                    ),
+                  ],
+                );
+              }),
+        ),
+      ),
     );
   }
 }

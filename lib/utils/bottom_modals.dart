@@ -22,7 +22,6 @@ import '../services/bottom_message.dart';
 import '../services/download_manager.dart';
 import '../services/library.dart';
 import '../services/media_player.dart';
-import '../services/settings_manager.dart';
 import '../themes/colors.dart';
 import 'check_update.dart';
 import 'format_duration.dart';
@@ -865,20 +864,14 @@ _playerOptionsModal(BuildContext context, Map song) {
 }
 
 _songBottomModal(BuildContext context, Map song) {
-  bool material = context.watch<SettingsManager>().materialColors;
   return BottomModalLayout(
     child: SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
-            contentPadding: EdgeInsets.symmetric(
-                horizontal: material ? 16 : 8,
-                vertical: material
-                    ? 8
-                    : song['subtitle'] != null
-                        ? 0
-                        : 8),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
             title: Text(song['title'],
                 maxLines: 1, overflow: TextOverflow.ellipsis),
             leading: ClipRRect(
@@ -1011,20 +1004,14 @@ _songBottomModal(BuildContext context, Map song) {
 }
 
 _playlistBottomModal(BuildContext context, Map playlist) {
-  bool material = context.watch<SettingsManager>().materialColors;
   return BottomModalLayout(
     child: SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
-            contentPadding: EdgeInsets.symmetric(
-                horizontal: material ? 16 : 8,
-                vertical: material
-                    ? 8
-                    : playlist['subtitle'] != null
-                        ? 0
-                        : 8),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             title: Text(playlist['title'],
                 maxLines: 1, overflow: TextOverflow.ellipsis),
             leading: playlist['isPredefined'] != false ||
@@ -1201,18 +1188,16 @@ class BottomModalLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool material = context.watch<SettingsManager>().materialColors;
     return Container(
       width: double.maxFinite,
       constraints: const BoxConstraints(maxWidth: 600),
-      margin: material ? EdgeInsets.zero : const EdgeInsets.all(8),
       child: Material(
         color: Theme.of(context).colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.only(
-          topLeft: const Radius.circular(16),
-          topRight: const Radius.circular(16),
-          bottomLeft: Radius.circular(material ? 0 : 16),
-          bottomRight: Radius.circular(material ? 0 : 16),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+          bottomLeft: Radius.circular(0),
+          bottomRight: Radius.circular(0),
         ),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 16),

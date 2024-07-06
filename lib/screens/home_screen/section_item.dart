@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -52,14 +53,23 @@ class SectionItem extends StatelessWidget {
                               onTap: () async {
                                 if (section['trailing']['playable'] == false) {
                                   Navigator.push(
-                                      context,
-                                      CupertinoPageRoute(
-                                        builder: (context) => BrowseScreen(
-                                          endpoint: section['trailing']
-                                              ['endpoint'],
-                                          isMore: true,
-                                        ),
-                                      ));
+                                    context,
+                                    Platform.isWindows
+                                        ? MaterialPageRoute(
+                                            builder: (context) => BrowseScreen(
+                                              endpoint: section['trailing']
+                                                  ['endpoint'],
+                                              isMore: true,
+                                            ),
+                                          )
+                                        : CupertinoPageRoute(
+                                            builder: (context) => BrowseScreen(
+                                              endpoint: section['trailing']
+                                                  ['endpoint'],
+                                              isMore: true,
+                                            ),
+                                          ),
+                                  );
                                 } else {
                                   BottomMessage.showText(context,
                                       'Songs will start playing soon.');
@@ -297,7 +307,7 @@ class _ItemListState extends State<ItemList> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            double width = height * (items[index]?['aspectRatio']??1);
+            double width = height * (items[index]?['aspectRatio'] ?? 1);
             String? subtitle = _buildSubtitle(items[index]);
             return InkWell(
               onTap: () async {
@@ -305,10 +315,15 @@ class _ItemListState extends State<ItemList> {
                     items[index]['videoId'] == null) {
                   Navigator.push(
                       context,
-                      CupertinoPageRoute(
-                        builder: (context) =>
-                            BrowseScreen(endpoint: items[index]['endpoint']),
-                      ));
+                      Platform.isWindows
+                          ? MaterialPageRoute(
+                              builder: (context) => BrowseScreen(
+                                  endpoint: items[index]['endpoint']),
+                            )
+                          : CupertinoPageRoute(
+                              builder: (context) => BrowseScreen(
+                                  endpoint: items[index]['endpoint']),
+                            ));
                 } else {
                   await GetIt.I<MediaPlayer>().playSong(Map.from(items[index]));
                 }

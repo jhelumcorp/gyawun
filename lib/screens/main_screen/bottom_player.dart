@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_beta/utils/enhanced_image.dart';
+import 'package:provider/provider.dart';
 
 import '../../services/media_player.dart';
 
@@ -139,7 +141,16 @@ class BottomPlayer extends StatelessWidget {
                                             ),
                                           );
                                   },
-                                )
+                                ),
+                                if (context.watch<MediaPlayer>().player.hasNext)
+                                  IconButton(
+                                    onPressed: () {
+                                      GetIt.I<MediaPlayer>()
+                                          .player
+                                          .seekToNext();
+                                    },
+                                    icon: const Icon(Icons.skip_next),
+                                  )
                               ],
                             ),
                           ),

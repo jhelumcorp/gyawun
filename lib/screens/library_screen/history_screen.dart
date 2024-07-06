@@ -16,39 +16,43 @@ class HistoryScreen extends StatelessWidget {
         title: Text(S.of(context).history),
         centerTitle: true,
       ),
-      body: ValueListenableBuilder(
-        valueListenable: Hive.box('SONG_HISTORY').listenable(),
-        builder: (context, box, child) {
-          List songs = box.values.toList();
-          songs.sort(
-              (a, b) => (b['updatedAt'] ?? 0).compareTo((a['updatedAt'] ?? 0)));
-          return SingleChildScrollView(
-            child: Column(
-              children: songs.map((song) {
-                return SwipeActionCell(
-                  key: ObjectKey(song['videoId']),
-                  trailingActions: <SwipeAction>[
-                    SwipeAction(
-                        title: "Remove",
-                        onTap: (CompletionHandler handler) async {
-                          Modals.showConfirmBottomModal(
-                            context,
-                            message: 'Are you sure you want to remove it?',
-                            isDanger: true,
-                          ).then((bool confirm) async {
-                            if (confirm) {
-                              await box.delete(song['videoId']);
-                            }
-                          });
-                        },
-                        color: Colors.red),
-                  ],
-                  child: SongTile(song: song),
-                );
-              }).toList(),
-            ),
-          );
-        },
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: ValueListenableBuilder(
+            valueListenable: Hive.box('SONG_HISTORY').listenable(),
+            builder: (context, box, child) {
+              List songs = box.values.toList();
+              songs.sort((a, b) =>
+                  (b['updatedAt'] ?? 0).compareTo((a['updatedAt'] ?? 0)));
+              return ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                children: songs.map((song) {
+                  return SwipeActionCell(
+                    key: ObjectKey(song['videoId']),
+                    trailingActions: <SwipeAction>[
+                      SwipeAction(
+                          title: "Remove",
+                          onTap: (CompletionHandler handler) async {
+                            Modals.showConfirmBottomModal(
+                              context,
+                              message: 'Are you sure you want to remove it?',
+                              isDanger: true,
+                            ).then((bool confirm) async {
+                              if (confirm) {
+                                await box.delete(song['videoId']);
+                              }
+                            });
+                          },
+                          color: Colors.red),
+                    ],
+                    child: SongTile(song: song),
+                  );
+                }).toList(),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
