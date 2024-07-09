@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/switch.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -146,19 +147,18 @@ List<SettingItem> contentScreenData(BuildContext context) => [
           return ValueListenableBuilder(
             valueListenable: _box.listenable(keys: ['PERSONALISED_CONTENT']),
             builder: (context, value, child) {
-              bool isEnabled =
-                  value.get('PERSONALISED_CONTENT', defaultValue: true);
-              return CupertinoSwitch(
-                  value: isEnabled,
-                  onChanged: (val) async {
-                    Modals.showCenterLoadingModal(context);
-                    await value.put('PERSONALISED_CONTENT', val);
-                    await GetIt.I<YTMusic>().resetVisitorId();
+              return AdaptiveSwitch(
+                value: value.get('PERSONALISED_CONTENT', defaultValue: true),
+                onChanged: (val) async {
+                  Modals.showCenterLoadingModal(context);
+                  await value.put('PERSONALISED_CONTENT', val);
+                  await GetIt.I<YTMusic>().resetVisitorId();
 
-                    if (context.mounted) {
-                      context.pop();
-                    }
-                  });
+                  if (context.mounted) {
+                    context.pop();
+                  }
+                },
+              );
             },
           );
         },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../generated/l10n.dart';
@@ -11,8 +12,8 @@ class HistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return AdaptiveScaffold(
+      appBar: AdaptiveAppBar(
         title: Text(S.of(context).history),
         centerTitle: true,
       ),
@@ -29,6 +30,7 @@ class HistoryScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 children: songs.map((song) {
                   return SwipeActionCell(
+                    backgroundColor: Colors.transparent,
                     key: ObjectKey(song['videoId']),
                     trailingActions: <SwipeAction>[
                       SwipeAction(

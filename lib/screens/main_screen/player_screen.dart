@@ -10,6 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_beta/screens/main_screen/lyrics_box.dart';
+import 'package:gyawun_beta/screens/main_screen/main_screen.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:gyawun_beta/utils/enhanced_image.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
@@ -18,6 +20,7 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:text_scroll/text_scroll.dart';
+import 'package:window_manager/window_manager.dart';
 
 import '../../services/download_manager.dart';
 import '../../services/media_player.dart';
@@ -110,11 +113,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
       ),
     );
     if (mounted) {
-      return paletteGenerator.darkVibrantColor?.color ??
+      return paletteGenerator.lightMutedColor?.color ??
+          paletteGenerator.darkVibrantColor?.color ??
           paletteGenerator.dominantColor?.color ??
           paletteGenerator.darkMutedColor?.color ??
-          paletteGenerator.lightVibrantColor?.color ??
-          paletteGenerator.lightMutedColor?.color;
+          paletteGenerator.lightVibrantColor?.color;
     } else {
       return Colors.transparent;
     }
@@ -180,33 +183,40 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       ),
                     ),
                     child: Scaffold(
-                      appBar: AppBar(
-                        leading: IconButton(
-                            onPressed: () {
-                              context.pop();
-                            },
-                            icon: const Icon(CupertinoIcons.chevron_down)),
-                        actions: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                showLyrics = !showLyrics;
-                              });
-                            },
-                            icon: const Icon(Icons.lyrics_outlined),
-                          ),
-                          if (MediaQuery.of(context).size.width >
-                                  MediaQuery.of(context).size.height ||
-                              Platform.isWindows)
-                            IconButton(
+                      appBar: PreferredSize(
+                        preferredSize: AppBar().preferredSize,
+                        child: DragToMoveArea(
+                          child: AppBar(
+                            leading: IconButton(
                               onPressed: () {
-                                _key.currentState?.openEndDrawer();
+                                context.pop();
                               },
-                              icon: const Icon(
-                                Icons.queue_music_outlined,
-                              ),
+                              icon: const Icon(CupertinoIcons.chevron_down),
                             ),
-                        ],
+                            actions: [
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    showLyrics = !showLyrics;
+                                  });
+                                },
+                                icon: const Icon(Icons.lyrics_outlined),
+                              ),
+                              if (MediaQuery.of(context).size.width >
+                                      MediaQuery.of(context).size.height ||
+                                  Platform.isWindows)
+                                IconButton(
+                                  onPressed: () {
+                                    _key.currentState?.openEndDrawer();
+                                  },
+                                  icon: const Icon(
+                                    Icons.queue_music_outlined,
+                                  ),
+                                ),
+                              if (Platform.isWindows) const WindowButtons()
+                            ],
+                          ),
+                        ),
                       ),
                       key: _key,
                       backgroundColor: Colors.transparent,
@@ -595,7 +605,7 @@ class NameAndControls extends StatelessWidget {
                       if (item != null) {
                         if (item['status'] == 'PROCESSING' ||
                             item['status'] == 'DOWNLOADING') {
-                          return CircularProgressIndicator(
+                          return AdaptiveProgressRing(
                             value: item['status'] == 'DOWNLOADING'
                                 ? item['progress']
                                 : null,

@@ -412,7 +412,6 @@ class MediaPlayer extends ChangeNotifier {
           ? 0
           : currentIndex.value! + 1;
     }
-
     await _playlist.insertAll(
         index,
         songs.map((song) {

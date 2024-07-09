@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:gyawun_beta/utils/enhanced_image.dart';
 import 'package:provider/provider.dart';
 
@@ -20,8 +21,10 @@ class BottomPlayer extends StatelessWidget {
         builder: (context, currentSong, child) {
           return currentSong != null
               ? Container(
-                  color:
-                      Theme.of(context).colorScheme.surfaceTint.withAlpha(20),
+                  color: Platform.isWindows
+                      ? fluent_ui.FluentTheme.of(context)
+                          .scaffoldBackgroundColor
+                      : Theme.of(context).colorScheme.surfaceTint.withAlpha(20),
                   child: GestureDetector(
                     onTap: () {
                       context.push('/player');
@@ -120,7 +123,7 @@ class BottomPlayer extends StatelessWidget {
                                       GetIt.I<MediaPlayer>().buttonState,
                                   builder: (context, buttonState, child) {
                                     return (buttonState == ButtonState.loading)
-                                        ? const CircularProgressIndicator()
+                                        ? const AdaptiveProgressRing()
                                         : IconButton(
                                             onPressed: () {
                                               GetIt.I<MediaPlayer>()

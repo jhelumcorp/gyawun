@@ -22,10 +22,18 @@ class SettingsManager extends ChangeNotifier {
     AudioQuality.high,
     AudioQuality.low
   ];
+  List<WindowEffect> get windowEffectList => [
+        WindowEffect.disabled,
+        WindowEffect.acrylic,
+        WindowEffect.mica,
+        WindowEffect.tabbed,
+        WindowEffect.aero,
+      ];
   AudioQuality _audioQuality = AudioQuality.high;
   AudioQuality _downloadQuality = AudioQuality.high;
   bool _skipSilence = false;
   bool _dynamicColors = true;
+  WindowEffect _windowEffect = WindowEffect.acrylic;
   bool _equalizerEnabled = false;
   List<double> _equalizerBandsGain = [];
   bool _loudnessEnabled = false;
@@ -42,6 +50,7 @@ class SettingsManager extends ChangeNotifier {
   AudioQuality get downloadQuality => _downloadQuality;
   bool get skipSilence => _skipSilence;
   bool get dynamicColors => _dynamicColors;
+  WindowEffect get windowEffect => _windowEffect;
   bool get equalizerEnabled => _equalizerEnabled;
   List<double> get equalizerBandsGain => _equalizerBandsGain;
   bool get loudnessEnabled => _loudnessEnabled;
@@ -56,6 +65,11 @@ class SettingsManager extends ChangeNotifier {
     _language = _languages.firstWhere((language) =>
         language['value'] == _box.get('LANGUAGE', defaultValue: 'en-IN'));
     _dynamicColors = _box.get('DYNAMIC_COLORS', defaultValue: true);
+    _windowEffect = windowEffectList.firstWhere((el) =>
+        el.name.toUpperCase() ==
+        _box.get('WINDOW_EFFECT',
+            defaultValue: WindowEffect.acrylic.name.toUpperCase()));
+
     _location = _countries.firstWhere((country) =>
         country['value'] == _box.get('LOCATION', defaultValue: 'IN'));
 
@@ -75,10 +89,22 @@ class SettingsManager extends ChangeNotifier {
     _themeMode = mode;
     if (Platform.isWindows) {
       await Window.setEffect(
-        effect: WindowEffect.mica,
+        effect: _windowEffect,
         dark: getDarkness(_themeModes.indexOf(mode)),
       );
     }
+    notifyListeners();
+  }
+
+  setwindowEffect(WindowEffect effect) async {
+    _box.put('WINDOW_EFFECT', effect.name.toUpperCase());
+    _windowEffect = effect;
+
+    await Window.setEffect(
+      effect: _windowEffect,
+      dark: getDarkness(_themeModes.indexOf(_themeMode)),
+    );
+
     notifyListeners();
   }
 

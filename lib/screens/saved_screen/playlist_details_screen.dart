@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 import '../../services/bottom_message.dart';
 import '../../services/library.dart';
@@ -24,13 +27,13 @@ class PlaylistDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Map? playlist = context.watch<LibraryService>().getPlaylist(playlistkey);
     return playlist == null
-        ? const Scaffold(
+        ? const AdaptiveScaffold(
             body: Center(
               child: Text('Not available'),
             ),
           )
-        : Scaffold(
-            appBar: AppBar(
+        : AdaptiveScaffold(
+            appBar: AdaptiveAppBar(
               title: Text(playlist['title']),
               centerTitle: true,
             ),
@@ -145,7 +148,7 @@ class MyPlayistHeader extends StatelessWidget {
 
   _buildContent(Map playlist, BuildContext context, {bool isRow = false}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.only(left: 8, top: 4),
       child: Column(
         crossAxisAlignment:
             isRow ? CrossAxisAlignment.start : CrossAxisAlignment.center,
@@ -187,32 +190,34 @@ class MyPlayistHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: LayoutBuilder(builder: (context, constraints) {
-        return constraints.maxWidth > 600
-            ? Row(
-                children: [
-                  if (playlist['songs'] != null)
-                    _buildImage(playlist['songs'], constraints.maxWidth,
-                        isRound: playlist['type'] == 'ARTIST',
-                        isDark: context.isDarkMode),
-                  const SizedBox(width: 4),
-                  Expanded(
-                      child: _buildContent(playlist, context, isRow: true)),
-                ],
-              )
-            : Column(
-                children: [
-                  if (playlist['songs'] != null)
-                    _buildImage(playlist['songs'], constraints.maxWidth,
-                        isRound: playlist['type'] == 'ARTIST',
-                        isDark: context.isDarkMode),
-                  SizedBox(height: playlist['thumbnails'] != null ? 4 : 0),
-                  _buildContent(playlist, context),
-                ],
-              );
-      }),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      Widget layout = constraints.maxWidth > 600
+          ? Row(
+              children: [
+                if (playlist['songs'] != null)
+                  _buildImage(playlist['songs'], constraints.maxWidth,
+                      isRound: playlist['type'] == 'ARTIST',
+                      isDark: context.isDarkMode),
+                const SizedBox(width: 4),
+                Expanded(child: _buildContent(playlist, context, isRow: true)),
+              ],
+            )
+          : Column(
+              children: [
+                if (playlist['songs'] != null)
+                  _buildImage(playlist['songs'], constraints.maxWidth,
+                      isRound: playlist['type'] == 'ARTIST',
+                      isDark: context.isDarkMode),
+                SizedBox(height: playlist['thumbnails'] != null ? 4 : 0),
+                _buildContent(playlist, context),
+              ],
+            );
+      if (Platform.isWindows) {
+        return fluent_ui.Card(
+          child: layout,
+        );
+      }
+      return layout;
+    });
   }
 }

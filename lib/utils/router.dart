@@ -1,15 +1,17 @@
 import 'dart:io';
 
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_beta/screens/settings_screen/account/account_screen.dart';
+import 'package:gyawun_beta/screens/ytmusic_screen/ytmusic_screen.dart';
+import 'package:gyawun_beta/services/yt_account.dart';
 
-import '../screens/download_screen/download_screen.dart';
 import '../screens/home_screen/chip_screen.dart';
 import '../screens/home_screen/home_screen.dart';
 import '../screens/home_screen/search_screen/search_screen.dart';
-import '../screens/library_screen/library_screen/library_screen.dart';
+import '../screens/saved_screen/saved_screen.dart';
 import '../screens/main_screen/main_screen.dart';
 import '../screens/main_screen/player_screen.dart';
 import '../screens/browse_screen/browse_screen.dart';
@@ -27,10 +29,21 @@ GoRouter router = GoRouter(
     ShellRoute(
       builder: (context, state, child) => child,
       routes: [
-        StatefulShellRoute.indexedStack(
-            branches: branches,
-            builder: (context, state, navigationShell) =>
-                MainScreen(navigationShell: navigationShell)),
+        StatefulShellRoute(
+          branches: branches,
+          builder: (context, state, navigationShell) => MainScreen(
+            navigationShell: navigationShell,
+          ),
+          navigatorContainerBuilder: (context, navigationShell, children) =>
+              ValueListenableBuilder(
+                  valueListenable: GetIt.I<YTAccount>().isLogged,
+                  builder: (context, isLogged, child) {
+                    return MyPageView(
+                      currentIndex: navigationShell.currentIndex,
+                      children: children,
+                    );
+                  }),
+        ),
       ],
     ),
     GoRoute(
@@ -78,14 +91,14 @@ List<StatefulShellBranch> branches = [
   ),
   StatefulShellBranch(routes: [
     GoRoute(
-      path: '/library',
-      builder: (context, state) => const LibraryScreen(),
+      path: '/saved',
+      builder: (context, state) => const SavedScreen(),
     ),
   ]),
   StatefulShellBranch(routes: [
     GoRoute(
-      path: '/download',
-      builder: (context, state) => const DownloadScreen(),
+      path: '/ytmusic',
+      builder: (context, state) => const YTMScreen(),
     ),
   ]),
   StatefulShellBranch(routes: [
@@ -96,25 +109,25 @@ List<StatefulShellBranch> branches = [
           GoRoute(
             path: 'account',
             pageBuilder: (context, state) => Platform.isWindows
-                ? const MaterialPage(child: AccountScreen())
+                ? const FluentPage(child: AccountScreen())
                 : const CupertinoPage(child: AccountScreen()),
           ),
           GoRoute(
             path: 'appearence',
             pageBuilder: (context, state) => Platform.isWindows
-                ? const MaterialPage(child: AppearenceScreen())
+                ? const FluentPage(child: AppearenceScreen())
                 : const CupertinoPage(child: AppearenceScreen()),
           ),
           GoRoute(
             path: 'content',
             pageBuilder: (context, state) => Platform.isWindows
-                ? const MaterialPage(child: ContentScreen())
+                ? const FluentPage(child: ContentScreen())
                 : const CupertinoPage(child: ContentScreen()),
           ),
           GoRoute(
               path: 'playback',
               pageBuilder: (context, state) => Platform.isWindows
-                  ? const MaterialPage(child: AudioAndPlaybackScreen())
+                  ? const FluentPage(child: AudioAndPlaybackScreen())
                   : const CupertinoPage(child: AudioAndPlaybackScreen()),
               routes: [
                 GoRoute(
@@ -126,15 +139,57 @@ List<StatefulShellBranch> branches = [
           GoRoute(
             path: 'backup_restore',
             pageBuilder: (context, state) => Platform.isWindows
-                ? const MaterialPage(child: BackupRestoreScreen())
+                ? const FluentPage(child: BackupRestoreScreen())
                 : const CupertinoPage(child: BackupRestoreScreen()),
           ),
           GoRoute(
             path: 'about',
             pageBuilder: (context, state) => Platform.isWindows
-                ? const MaterialPage(child: AboutScreen())
+                ? const FluentPage(child: AboutScreen())
                 : const CupertinoPage(child: AboutScreen()),
           ),
         ]),
   ])
 ];
+
+class MyPageView extends StatefulWidget {
+  final int currentIndex;
+  final List<Widget> children;
+
+  const MyPageView(
+      {super.key, required this.currentIndex, required this.children});
+
+  @override
+  MyPageViewState createState() => MyPageViewState();
+}
+
+class MyPageViewState extends State<MyPageView> {
+  final PageController controller = PageController(initialPage: 0);
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant MyPageView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentIndex != widget.currentIndex) {
+      controller.animateToPage(widget.currentIndex,
+          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView(
+      scrollDirection:
+          (Platform.isWindows || MediaQuery.of(context).size.width >= 450)
+              ? Axis.vertical
+              : Axis.horizontal,
+      physics: const NeverScrollableScrollPhysics(),
+      controller: controller,
+      children: widget.children,
+    );
+  }
+}

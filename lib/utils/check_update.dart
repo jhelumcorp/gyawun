@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:http/http.dart' as http;
@@ -20,19 +21,34 @@ Future<UpdateInfo?> checkUpdate({BaseDeviceInfo? deviceInfo}) async {
       final deviceInfoPlugin = DeviceInfoPlugin();
       deviceInfo = await deviceInfoPlugin.deviceInfo;
     }
-    List<String> supportedAbis =
-        deviceInfo.data['supportedAbis'].cast<String>();
+
+    Map? supportedAsset;
     List assets = update['assets'];
-    Map supportedAsset = {};
-    for (var supportedAbi in supportedAbis) {
-      List supportedAssets = assets
-          .where((asset) => asset['name'].contains(supportedAbi))
-          .toList();
-      if (supportedAssets.isNotEmpty) {
-        supportedAsset = supportedAssets.first;
-        break;
+    if (Platform.isAndroid) {
+      List<String> supportedAbis =
+          deviceInfo.data['supportedAbis'].cast<String>();
+
+      for (var supportedAbi in supportedAbis) {
+        List supportedAssets = assets
+            .where((asset) => asset['name'].contains(supportedAbi))
+            .toList();
+        if (supportedAssets.isNotEmpty) {
+          supportedAsset = supportedAssets.first;
+          break;
+        }
       }
+    } else if (Platform.isWindows) {
+      List supportedAssets = assets
+          .where(
+            (asset) =>
+                asset["content_type"] == "application/x-msdownload" ||
+                asset['name'].toString().endsWith('.exe'),
+          )
+          .toList();
+      supportedAsset =
+          supportedAssets.isNotEmpty ? supportedAssets.first : null;
     }
+    if (supportedAsset == null) return null;
     int downloadCount = 0;
     for (var asset in assets) {
       downloadCount += (asset['download_count'] as int);

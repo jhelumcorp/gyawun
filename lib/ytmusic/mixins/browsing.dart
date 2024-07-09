@@ -21,6 +21,7 @@ mixin BrowsingMixin on YTMusicServices {
         await sendRequest(endpoint, body, additionalParams: additionalParams);
     Map<String, dynamic> result = {};
     Map<String, dynamic> contents = response['contents'];
+
     Map<String, dynamic>? header = response['header'] ??
         nav(response, [
           'contents',
@@ -33,15 +34,19 @@ mixin BrowsingMixin on YTMusicServices {
           'contents',
           0
         ]);
+
     if (header != null) {
-      result['header'] = handlePageHeader(header['musicDetailHeaderRenderer'] ??
-          header['musicImmersiveHeaderRenderer'] ??
-          header['musicResponsiveHeaderRenderer'] ??
-          header['musicVisualHeaderRenderer'] ??
-          header['musicHeaderRenderer'] ??
-          header['musicEditablePlaylistDetailHeaderRenderer']?['header']
-              ?['musicResponsiveHeaderRenderer'] ??
-          header['musicEditablePlaylistDetailHeaderRenderer']?['header']);
+      result['header'] = handlePageHeader(
+          header['musicDetailHeaderRenderer'] ??
+              header['musicImmersiveHeaderRenderer'] ??
+              header['musicResponsiveHeaderRenderer'] ??
+              header['musicVisualHeaderRenderer'] ??
+              header['musicHeaderRenderer'] ??
+              header['musicEditablePlaylistDetailHeaderRenderer']?['header']
+                  ?['musicResponsiveHeaderRenderer'] ??
+              header['musicEditablePlaylistDetailHeaderRenderer']?['header'],
+          editHeader: header['musicEditablePlaylistDetailHeaderRenderer']
+              ?['editHeader']?['musicPlaylistEditHeaderRenderer']);
     }
 
     if (contents.containsKey('singleColumnBrowseResultsRenderer') ||

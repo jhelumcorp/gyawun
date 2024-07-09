@@ -53,6 +53,8 @@ dependencies:
   just_audio_media_kit: ^2.0.0
   media_kit_native_event_loop: ^1.0.8
   flutter_acrylic: ^1.1.4
+  fluent_ui: ^4.9.0
+  window_manager: ^0.3.9
 
 dev_dependencies:
   flutter_test:
