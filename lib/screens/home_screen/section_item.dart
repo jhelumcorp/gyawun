@@ -9,145 +9,186 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gyawun_beta/services/bottom_message.dart';
 import 'package:gyawun_beta/utils/enhanced_image.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
 import '../../utils/extensions.dart';
 import '../../services/media_player.dart';
-import '../../themes/colors.dart';
 import '../../utils/bottom_modals.dart';
 import '../browse_screen/browse_screen.dart';
 
-class SectionItem extends StatelessWidget {
+class SectionItem extends StatefulWidget {
   const SectionItem({required this.section, this.isMore = false, super.key});
   final Map section;
   final bool isMore;
+
+  @override
+  State<SectionItem> createState() => _SectionItemState();
+}
+
+class _SectionItemState extends State<SectionItem> {
+  final ScrollController horizontalScrollController = ScrollController();
+  PageController horizontalPageController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return section['contents'].isEmpty
+    horizontalPageController = PageController(
+        viewportFraction: 350 / MediaQuery.of(context).size.width);
+    return widget.section['contents'].isEmpty
         ? const SizedBox()
         : Column(
             children: [
-              if (section['title'] != null)
-                ListTile(
+              if (widget.section['title'] != null)
+                AdaptiveListTile(
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                  title: section['strapline'] == null
-                      ? Text(section['title'] ?? '',
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  title: widget.section['strapline'] == null
+                      ? Text(widget.section['title'] ?? '',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20))
                       : Text(
-                          section['strapline'],
+                          widget.section['strapline'],
                           style: TextStyle(
                               color: Colors.grey.withAlpha(200), fontSize: 14),
                         ),
-                  subtitle: section['strapline'] != null
-                      ? Text(section['title'] ?? '',
+                  subtitle: widget.section['strapline'] != null
+                      ? Text(widget.section['title'] ?? '',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20))
                       : null,
-                  trailing: section['trailing'] != null
-                      ? Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            InkWell(
-                              borderRadius: BorderRadius.circular(20),
-                              onTap: () async {
-                                if (section['trailing']['playable'] == false) {
-                                  Navigator.push(
-                                    context,
-                                    Platform.isWindows
-                                        ? MaterialPageRoute(
-                                            builder: (context) => BrowseScreen(
-                                              endpoint: section['trailing']
-                                                  ['endpoint'],
-                                              isMore: true,
-                                            ),
-                                          )
-                                        : CupertinoPageRoute(
-                                            builder: (context) => BrowseScreen(
-                                              endpoint: section['trailing']
-                                                  ['endpoint'],
-                                              isMore: true,
-                                            ),
-                                          ),
-                                  );
-                                } else {
-                                  BottomMessage.showText(context,
-                                      'Songs will start playing soon.');
-                                  await GetIt.I<MediaPlayer>()
-                                      .startPlaylistSongs(
-                                          section['trailing']['endpoint']);
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: context.subtitleColor,
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (widget.section['trailing'] != null)
+                        AdaptiveOutlinedButton(
+                          onPressed: () async {
+                            if (widget.section['trailing']['playable'] ==
+                                false) {
+                              Navigator.push(
+                                context,
+                                AdaptivePageRoute.create(
+                                  (context) => BrowseScreen(
+                                    endpoint: widget.section['trailing']
+                                        ['endpoint'],
+                                    isMore: true,
                                   ),
                                 ),
-                                child: Text(section['trailing']['text']),
-                              ),
-                            ),
-                          ],
+                              );
+                            } else {
+                              BottomMessage.showText(
+                                  context, 'Songs will start playing soon.');
+                              await GetIt.I<MediaPlayer>().startPlaylistSongs(
+                                  widget.section['trailing']['endpoint']);
+                            }
+                          },
+                          child: Text(widget.section['trailing']['text']),
+                        ),
+                      if (Platform.isWindows &&
+                          widget.section['viewType'] != 'SINGLE_COLUMN')
+                        AdaptiveIconButton(
+                          icon: Icon(AdaptiveIcons.chevron_left),
+                          onPressed: () {
+                            if (widget.section['viewType'] == 'COLUMN' &&
+                                !widget.isMore) {
+                              horizontalPageController.previousPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeOut);
+                            } else {
+                              horizontalScrollController.animateTo(
+                                horizontalScrollController.offset -
+                                    horizontalScrollController
+                                        .position.extentInside,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeOut,
+                              );
+                            }
+                          },
+                        ),
+                      if (Platform.isWindows &&
+                          widget.section['viewType'] != 'SINGLE_COLUMN')
+                        AdaptiveIconButton(
+                          icon: Icon(AdaptiveIcons.chevron_right),
+                          onPressed: () {
+                            if (widget.section['viewType'] == 'COLUMN' &&
+                                !widget.isMore) {
+                              horizontalPageController.nextPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeOut);
+                            } else {
+                              horizontalScrollController.animateTo(
+                                horizontalScrollController.offset +
+                                    horizontalScrollController
+                                        .position.extentInside,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeOut,
+                              );
+                            }
+                          },
                         )
-                      : null,
-                  leading: section['thumbnails'] != null &&
-                          section['thumbnails']?.isNotEmpty
+                    ],
+                  ),
+                  leading: widget.section['thumbnails'] != null &&
+                          widget.section['thumbnails']?.isNotEmpty
                       ? CircleAvatar(
                           backgroundImage: CachedNetworkImageProvider(
-                            section['thumbnails'].first['url'],
+                            widget.section['thumbnails'].first['url'],
                           ),
                         )
                       : null,
                 ),
-              if (section['viewType'] == 'COLUMN' && !isMore)
-                SongList(songs: section['contents'])
-              else if (section['viewType'] == 'SINGLE_COLUMN' || isMore)
-                SingleColumnList(songs: section['contents'])
+              if (widget.section['viewType'] == 'COLUMN' && !widget.isMore)
+                SongList(
+                  songs: widget.section['contents'],
+                  controller: horizontalPageController,
+                )
+              else if (widget.section['viewType'] == 'SINGLE_COLUMN' ||
+                  widget.isMore)
+                SingleColumnList(songs: widget.section['contents'])
               else
-                ItemList(items: section['contents']),
+                ItemList(
+                  items: widget.section['contents'],
+                  controller: horizontalScrollController,
+                ),
             ],
           );
   }
 }
 
 class SongList extends StatefulWidget {
-  const SongList({required this.songs, super.key});
+  SongList({required this.songs, required this.controller, super.key});
   final List songs;
+  PageController controller;
 
   @override
   State<SongList> createState() => _SongListState();
 }
 
 class _SongListState extends State<SongList> {
-  late PageController _pageController;
+  late int num;
+  late int pages;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
   }
 
   @override
   dispose() {
     super.dispose();
-    _pageController.dispose();
+    widget.controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    int num = widget.songs.length <= 5 ? widget.songs.length : 4;
-    int pages = widget.songs.length ~/ num;
+    num = widget.songs.length <= 5 ? widget.songs.length : 4;
+    pages = widget.songs.length ~/ num;
     pages = (pages * num) < widget.songs.length ? pages + 1 : pages;
-    _pageController = PageController(
-        viewportFraction:
-            max(pages, 1) == 1 ? 1 : 350 / MediaQuery.of(context).size.width);
     return ExpandablePageView.builder(
-      controller: _pageController,
+      controller: widget.controller,
       padEnds: false,
       itemCount: pages,
       itemBuilder: (context, index) {
@@ -190,76 +231,70 @@ class SongTile extends StatelessWidget {
             .toDouble();
     return Material(
       color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(5),
-        focusColor: greyColor,
-        onTap: () async {
-          if (song['endpoint'] != null && song['videoId'] == null) {
-            Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) =>
-                      BrowseScreen(endpoint: song['endpoint']),
-                ));
-          } else {
-            await GetIt.I<MediaPlayer>().playSong(Map.from(song));
-          }
-        },
-        onSecondaryTap: () {
-          if (song['videoId'] != null) {
-            Modals.showSongBottomModal(context, song);
-          }
-        },
-        onLongPress: () {
-          if (song['videoId'] != null) {
-            Modals.showSongBottomModal(context, song);
-          }
-        },
-        child: Column(
-          children: [
-            ListTile(
-              title: Text(song['title'] ?? "", maxLines: 1),
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(3),
-                child: CachedNetworkImage(
-                  imageUrl: thumbnails
-                      .where((el) => el['width'] >= 50)
-                      .toList()
-                      .first['url'],
-                  height: height,
-                  width: 50,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              subtitle: Text(
-                _buildSubtitle(song),
-                maxLines: 1,
-                style: TextStyle(color: Colors.grey.withAlpha(250)),
-                overflow: TextOverflow.ellipsis,
-              ),
-              trailing: song['endpoint'] != null && song['videoId'] == null
-                  ? const Icon(CupertinoIcons.chevron_right)
-                  : null,
+      child: AdaptiveListTile(
+          // borderRadius: BorderRadius.circular(5),
+          // focusColor: greyColor,
+          onTap: () async {
+            if (song['endpoint'] != null && song['videoId'] == null) {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) =>
+                        BrowseScreen(endpoint: song['endpoint']),
+                  ));
+            } else {
+              await GetIt.I<MediaPlayer>().playSong(Map.from(song));
+            }
+          },
+          onSecondaryTap: () {
+            if (song['videoId'] != null) {
+              Modals.showSongBottomModal(context, song);
+            }
+          },
+          onLongPress: () {
+            if (song['videoId'] != null) {
+              Modals.showSongBottomModal(context, song);
+            }
+          },
+          title: Text(song['title'] ?? "", maxLines: 1),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            child: CachedNetworkImage(
+              imageUrl: thumbnails
+                  .where((el) => el['width'] >= 50)
+                  .toList()
+                  .first['url'],
+              height: height,
+              width: 50,
+              fit: BoxFit.cover,
             ),
-            if (song['type'] == 'EPISODE' && song['description'] != null)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  children: [
-                    ExpandableText(
-                      song['description'].split('\n')?[0] ?? '',
-                      expandText: 'Show More',
-                      collapseText: 'Show Less',
-                      maxLines: 3,
-                      style: TextStyle(color: context.subtitleColor),
-                    ),
-                    const Divider(),
-                  ],
-                ),
-              )
-          ],
-        ),
-      ),
+          ),
+          subtitle: Text(
+            _buildSubtitle(song),
+            maxLines: 1,
+            style: TextStyle(color: Colors.grey.withAlpha(250)),
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: song['endpoint'] != null && song['videoId'] == null
+              ? const Icon(CupertinoIcons.chevron_right)
+              : null,
+          description:
+              (song['type'] == 'EPISODE' && song['description'] != null)
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        children: [
+                          ExpandableText(
+                            song['description'].split('\n')?[0] ?? '',
+                            expandText: 'Show More',
+                            collapseText: 'Show Less',
+                            maxLines: 3,
+                            style: TextStyle(color: context.subtitleColor),
+                          ),
+                        ],
+                      ),
+                    )
+                  : null),
     );
   }
 
@@ -279,9 +314,10 @@ class SongTile extends StatelessWidget {
 }
 
 class ItemList extends StatefulWidget {
-  const ItemList({required this.items, super.key});
+  const ItemList({required this.items, this.controller, super.key});
 
   final List items;
+  final ScrollController? controller;
 
   @override
   State<ItemList> createState() => _ItemListState();
@@ -304,26 +340,22 @@ class _ItemListState extends State<ItemList> {
       return SizedBox(
         height: height + 72,
         child: ListView.separated(
+          controller: widget.controller,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             double width = height * (items[index]?['aspectRatio'] ?? 1);
             String? subtitle = _buildSubtitle(items[index]);
-            return InkWell(
+            return AdaptiveInkWell(
               onTap: () async {
                 if (items[index]['endpoint'] != null &&
                     items[index]['videoId'] == null) {
                   Navigator.push(
                       context,
-                      Platform.isWindows
-                          ? MaterialPageRoute(
-                              builder: (context) => BrowseScreen(
-                                  endpoint: items[index]['endpoint']),
-                            )
-                          : CupertinoPageRoute(
-                              builder: (context) => BrowseScreen(
-                                  endpoint: items[index]['endpoint']),
-                            ));
+                      AdaptivePageRoute.create(
+                        (context) =>
+                            BrowseScreen(endpoint: items[index]['endpoint']),
+                      ));
                 } else {
                   await GetIt.I<MediaPlayer>().playSong(Map.from(items[index]));
                 }
@@ -342,8 +374,7 @@ class _ItemListState extends State<ItemList> {
                   Modals.showPlaylistBottomModal(context, items[index]);
                 }
               },
-              customBorder: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
+              borderRadius: BorderRadius.circular(8),
               child: Column(
                 children: [
                   items[index]['type'] == 'ARTIST'
@@ -369,7 +400,7 @@ class _ItemListState extends State<ItemList> {
                         ),
                   SizedBox(
                     width: width,
-                    child: ListTile(
+                    child: AdaptiveListTile(
                       title: Text(
                         items[index]['title'],
                         maxLines: 1,

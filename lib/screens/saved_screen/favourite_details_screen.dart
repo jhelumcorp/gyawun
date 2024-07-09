@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../generated/l10n.dart';
@@ -12,8 +13,8 @@ class FavouriteDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return AdaptiveScaffold(
+      appBar: AdaptiveAppBar(
         title: Text(S.of(context).favourites),
         centerTitle: true,
       ),
@@ -40,6 +41,7 @@ class FavouriteDetailsScreen extends StatelessWidget {
                                     const EdgeInsets.symmetric(vertical: 4),
                                 child: SwipeActionCell(
                                   key: ObjectKey(key),
+                                  backgroundColor: Colors.transparent,
                                   trailingActions: <SwipeAction>[
                                     SwipeAction(
                                         title: "Remove",

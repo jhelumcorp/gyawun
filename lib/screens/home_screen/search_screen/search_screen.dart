@@ -4,7 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
+import 'package:gyawun_beta/utils/pprint.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 import '../../../generated/l10n.dart';
 import '../../../services/media_player.dart';
@@ -106,98 +109,131 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AdaptiveScaffold(
       appBar: PreferredSize(
-        preferredSize: AppBar().preferredSize,
+        preferredSize: const AdaptiveAppBar().preferredSize,
         child: LayoutBuilder(builder: (context, constraints) {
-          return AppBar(
+          pprint(constraints.maxWidth);
+          return AdaptiveAppBar(
             title: widget.endpoint != null
                 ? Text(widget.endpoint!['query'])
                 : Hero(
                     tag: "SearchField",
                     child: Material(
                       color: Colors.transparent,
-                      child: SizedBox(
-                        width: constraints.maxWidth > 400 ? 300 : null,
-                        child: TypeAheadField(
-                          suggestionsCallback: (query) =>
-                              GetIt.I<YTMusic>().getSearchSuggestions(query),
-                          builder: (context, controller, focusNode) {
-                            _textEditingController = controller;
-                            _focusNode = focusNode;
-                            return TextField(
-                              focusNode: _focusNode,
-                              controller: _textEditingController,
-                              onSubmitted: onSubmit,
-                              onChanged: (value) {
-                                getSuggestions(value);
-                              },
-                              decoration: InputDecoration(
-                                  fillColor: darkGreyColor.withAlpha(100),
-                                  filled: true,
+                      child: Row(
+                        children: [
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 300),
+                            child: TypeAheadField(
+                              suggestionsCallback: (query) => GetIt.I<YTMusic>()
+                                  .getSearchSuggestions(query),
+                              builder: (context, controller, focusNode) {
+                                _textEditingController = controller;
+                                _focusNode = focusNode;
+                                return AdaptiveTextField(
+                                  focusNode: _focusNode,
+                                  controller: _textEditingController,
+                                  onSubmitted: onSubmit,
+                                  onChanged: (value) {
+                                    getSuggestions(value);
+                                  },
+                                  keyboardType: TextInputType.text,
+                                  maxLines: 1,
+                                  autofocus: false,
+                                  textInputAction: TextInputAction.search,
+                                  fillColor: Platform.isWindows
+                                      ? null
+                                      : darkGreyColor.withAlpha(100),
                                   contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 2, horizontal: 16),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(35),
-                                    borderSide: BorderSide.none,
-                                  ),
+                                      vertical: 2, horizontal: 8),
+                                  borderRadius: BorderRadius.circular(
+                                      Platform.isWindows ? 4.0 : 35),
                                   hintText: S.of(context).searchGyawun,
-                                  prefixIcon: constraints.maxWidth < 400
-                                      ? IconButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          icon: const Icon(Icons.arrow_back))
-                                      : null,
-                                  suffixIcon: IconButton(
-                                      onPressed: () {
+                                  prefix: constraints.maxWidth > 400
+                                      ? null
+                                      : const AdaptiveBackButton(),
+                                  suffix: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _textEditingController?.text = '';
+                                      });
+                                    },
+                                    child: const Icon(CupertinoIcons.clear),
+                                  ),
+                                );
+                              },
+                              decorationBuilder: Platform.isWindows
+                                  ? (context, child) {
+                                      return Ink(
+                                        padding: EdgeInsets.zero,
+                                        decoration: BoxDecoration(
+                                          color: Platform.isWindows
+                                              ? fluent_ui.FluentTheme.of(
+                                                      context)
+                                                  .inactiveBackgroundColor
+                                              : Theme.of(context)
+                                                  .scaffoldBackgroundColor,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: child,
+                                      );
+                                    }
+                                  : null,
+                              itemBuilder: (context, value) {
+                                if (value['type'] == 'TEXT') {
+                                  return AdaptiveListTile(
+                                      leading: value['isHistory'] != null
+                                          ? const Icon(Icons.history)
+                                          : null,
+                                      title: Text(value['query']),
+                                      onTap: () {
                                         setState(() {
-                                          _textEditingController?.text = '';
+                                          _textEditingController?.text =
+                                              value['query'];
                                         });
-                                      },
-                                      icon: const Icon(CupertinoIcons.clear))),
-                            );
-                          },
-                          itemBuilder: (context, value) {
-                            if (value['type'] == 'TEXT') {
-                              return ListTile(
-                                  leading: value['isHistory'] != null
-                                      ? const Icon(Icons.history)
-                                      : null,
-                                  title: Text(value['query']),
-                                  onTap: () {
-                                    setState(() {
-                                      _textEditingController?.text =
-                                          value['query'];
-                                    });
-                                    onSubmit(value['query']);
-                                  });
-                            }
-                            return SearchListTile(item: value);
-                          },
-                          onSelected: (value) => (),
-                        ),
+                                        onSubmit(value['query']);
+                                      });
+                                }
+                                return SearchListTile(item: value);
+                              },
+                              onSelected: (value) => (),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
             automaticallyImplyLeading:
-                (widget.endpoint == null && constraints.maxWidth <= 400)
-                    ? false
-                    : true,
+                (constraints.maxWidth <= 400) ? false : true,
           );
         }),
       ),
       body: initialLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: AdaptiveProgressRing())
           : SingleChildScrollView(
               controller: _scrollController,
               child: Column(
                 children: [
                   ...results.map((section) {
+                    if (Platform.isWindows) {
+                      return Center(
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 1000),
+                          padding: const EdgeInsets.all(8.0),
+                          child: fluent_ui.Card(
+                            borderRadius: BorderRadius.circular(8),
+                            child: SearchSectionItem(
+                                section: section, isMore: widget.isMore),
+                          ),
+                        ),
+                      );
+                    }
                     return SearchSectionItem(
                         section: section, isMore: widget.isMore);
                   }),
-                  if (nextLoading)
-                    const Center(child: CircularProgressIndicator())
+                  if (nextLoading) const Center(child: AdaptiveProgressRing())
                 ],
               ),
             ),
@@ -216,35 +252,31 @@ class SearchSectionItem extends StatelessWidget {
     return Column(
       children: [
         if (section['title'] != null && !isMore)
-          ListTile(
+          AdaptiveListTile(
             title: Text(
               section['title'],
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             trailing: section['trailing']?['text'] != null
-                ? MaterialButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        Platform.isWindows
-                            ? MaterialPageRoute(
-                                builder: (context) => SearchScreen(
-                                    endpoint: section['trailing']['endpoint'],
-                                    isMore: true),
-                              )
-                            : CupertinoPageRoute(
-                                builder: (context) => SearchScreen(
-                                    endpoint: section['trailing']['endpoint'],
-                                    isMore: true),
-                              ),
-                      );
-                    },
-                    child: Text(
-                      section['trailing']['text'],
-                      style: const TextStyle(fontSize: 12),
-                    ))
+                ? Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: Platform.isAndroid ? 12 : 0),
+                    child: AdaptiveOutlinedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            AdaptivePageRoute.create(
+                              (context) => SearchScreen(
+                                  endpoint: section['trailing']['endpoint'],
+                                  isMore: true),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          section['trailing']['text'],
+                          style: const TextStyle(fontSize: 12),
+                        )),
+                  )
                 : null,
           ),
         ...section['contents'].map((item) {
@@ -267,8 +299,8 @@ class SearchListTile extends StatelessWidget {
   final Map item;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(20),
+    return AdaptiveListTile(
+      // borderRadius: BorderRadius.circular(5),
       onSecondaryTap: () {
         if (item['videoId'] != null) {
           Modals.showSongBottomModal(context, item);
@@ -282,15 +314,9 @@ class SearchListTile extends StatelessWidget {
         } else if (item['endpoint'] != null && item['videoId'] == null) {
           Navigator.push(
               context,
-              Platform.isWindows
-                  ? MaterialPageRoute(
-                      builder: (context) =>
-                          BrowseScreen(endpoint: item['endpoint']),
-                    )
-                  : CupertinoPageRoute(
-                      builder: (context) =>
-                          BrowseScreen(endpoint: item['endpoint']),
-                    ));
+              AdaptivePageRoute.create(
+                (context) => BrowseScreen(endpoint: item['endpoint']),
+              ));
         }
       },
       onLongPress: () {
@@ -300,32 +326,31 @@ class SearchListTile extends StatelessWidget {
           Modals.showPlaylistBottomModal(context, item);
         }
       },
-      child: ListTile(
-        dense: true,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
-        title: Text(
-          item['title'],
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: item['subtitle'] != null
-            ? Text(
-                item['subtitle'],
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              )
-            : null,
-        leading: ClipRRect(
-            borderRadius: BorderRadius.circular(
-                ['ARTIST', 'PROFILE'].contains(item['type']) ? 30 : 3),
-            child: Image.network(
-              item['thumbnails'].first['url'],
-              width: 40,
-            )),
-        trailing: item['videoId'] == null && item['endpoint'] != null
-            ? const Icon(CupertinoIcons.chevron_right)
-            : null,
+      dense: true,
+      title: Text(
+        item['title'],
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
       ),
+      subtitle: item['subtitle'] != null
+          ? Text(
+              item['subtitle'],
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
+      leading: item['thumbnails'] != null && item['thumbnails'].isNotEmpty
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(
+                  ['ARTIST', 'PROFILE'].contains(item['type']) ? 30 : 3),
+              child: Image.network(
+                item['thumbnails'].first['url'],
+                width: 40,
+              ))
+          : null,
+      trailing: item['videoId'] == null && item['endpoint'] != null
+          ? const Icon(CupertinoIcons.chevron_right)
+          : null,
     );
   }
 }

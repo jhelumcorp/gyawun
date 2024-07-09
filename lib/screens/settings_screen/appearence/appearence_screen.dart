@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../themes/text_styles.dart';
@@ -12,8 +12,8 @@ class AppearenceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return AdaptiveScaffold(
+      appBar: AdaptiveAppBar(
         title: Text(S.of(context).appearence,
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
@@ -27,11 +27,7 @@ class AppearenceScreen extends StatelessWidget {
               ...appearenceScreenData(context).map((e) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: ListTile(
-                    tileColor: Colors.grey.withAlpha(30),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
+                  child: AdaptiveListTile(
                     title: Text(
                       e.title,
                       style: textStyle(context, bold: false)
@@ -46,8 +42,8 @@ class AppearenceScreen extends StatelessWidget {
                     trailing: e.trailing != null
                         ? e.trailing!(context)
                         : (e.hasNavigation
-                            ? const Icon(
-                                CupertinoIcons.chevron_right,
+                            ? Icon(
+                                AdaptiveIcons.chevron_right,
                                 size: 30,
                               )
                             : null),

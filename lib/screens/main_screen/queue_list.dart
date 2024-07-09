@@ -149,33 +149,35 @@ class QueueList extends StatelessWidget {
                             },
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton.icon(
-                                style: ButtonStyle(
-                                  backgroundColor: WidgetStatePropertyAll(
-                                      mediaPlayer.shuffleModeEnabled
-                                          ? Colors.white
-                                          : Colors.white.withAlpha(50)),
-                                  foregroundColor: WidgetStatePropertyAll(
-                                      mediaPlayer.shuffleModeEnabled
-                                          ? Theme.of(context)
-                                              .scaffoldBackgroundColor
-                                          : Colors.white),
+                        if (Platform.isAndroid)
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton.icon(
+                                  style: ButtonStyle(
+                                    backgroundColor: WidgetStatePropertyAll(
+                                        mediaPlayer.shuffleModeEnabled
+                                            ? Colors.white
+                                            : Colors.white.withAlpha(50)),
+                                    foregroundColor: WidgetStatePropertyAll(
+                                        mediaPlayer.shuffleModeEnabled
+                                            ? Theme.of(context)
+                                                .scaffoldBackgroundColor
+                                            : Colors.white),
+                                  ),
+                                  onPressed: () {
+                                    mediaPlayer.player.setShuffleModeEnabled(
+                                        !mediaPlayer.shuffleModeEnabled);
+                                  },
+                                  icon: const Icon(Icons.shuffle_outlined),
+                                  label: const Text('Shuffle'),
                                 ),
-                                onPressed: () {
-                                  mediaPlayer.player.setShuffleModeEnabled(
-                                      !mediaPlayer.shuffleModeEnabled);
-                                },
-                                icon: const Icon(Icons.shuffle_outlined),
-                                label: const Text('Shuffle'),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ),

@@ -2,8 +2,8 @@ import 'dart:core';
 
 import '../helpers.dart';
 
-Map<String, dynamic> handlePageHeader(Map<String, dynamic> header) {
-  // pprint(header);
+Map<String, dynamic> handlePageHeader(Map<String, dynamic> header,
+    {Map? editHeader}) {
   List? subruns = nav(header, ['subtitle', 'runs']) ??
       nav(header, ['straplineTextOne', 'runs']);
   List? secondSubruns = nav(header, ['secondSubtitle', 'runs']);
@@ -138,6 +138,9 @@ Map<String, dynamic> handlePageHeader(Map<String, dynamic> header) {
         ]);
       }
     }
+  }
+  if (editHeader != null) {
+    result['privacy'] = editHeader['privacy'];
   }
   result.removeWhere((key, val) => val == null || val.toString().isEmpty);
   return result;

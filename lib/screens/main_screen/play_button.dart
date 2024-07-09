@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
 import '../../services/media_player.dart';
 import '../../utils/extensions.dart';
@@ -64,7 +65,7 @@ class _PlayButtonState extends State<PlayButton> with TickerProviderStateMixin {
                   buttonState == ButtonState.playing ? 15 : 40),
             ),
             child: (buttonState == ButtonState.loading)
-                ? const CircularProgressIndicator()
+                ? const AdaptiveProgressRing()
                 : AnimatedIcon(
                     icon: AnimatedIcons.play_pause,
                     progress: _animationController,

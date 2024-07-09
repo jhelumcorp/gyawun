@@ -8,12 +8,15 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/themes/text_styles.dart';
 import 'package:gyawun_beta/utils/enhanced_image.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 import '../generated/l10n.dart';
 import '../screens/browse_screen/browse_screen.dart';
@@ -28,22 +31,37 @@ import 'format_duration.dart';
 import '../utils/extensions.dart';
 
 class Modals {
-  static Future showCenterLoadingModal(BuildContext context) => showDialog(
+  static Future showCenterLoadingModal(BuildContext context) {
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog(
         context: context,
         useRootNavigator: false,
         builder: (context) {
-          return const AlertDialog(
+          return const fluent_ui.ContentDialog(
             title: Text('Progress'),
-            content: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [CircularProgressIndicator()],
-              ),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [fluent_ui.ProgressRing()],
             ),
           );
         },
       );
+    }
+    return showDialog(
+      context: context,
+      useRootNavigator: false,
+      builder: (context) {
+        return const AlertDialog(
+          title: Text('Progress'),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [CircularProgressIndicator()],
+          ),
+        );
+      },
+    );
+  }
+
   static Future showUpdateDialog(
           BuildContext context, UpdateInfo? updateInfo) =>
       showDialog(
@@ -70,6 +88,14 @@ class Modals {
       );
 
   static showSongBottomModal(BuildContext context, Map song) {
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: true,
+        builder: (context) => _songBottomModal(context, song),
+      );
+    }
     showModalBottomSheet(
       context: context,
       useRootNavigator: false,
@@ -84,6 +110,14 @@ class Modals {
     BuildContext context,
     Map song,
   ) {
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: true,
+        builder: (context) => _playerOptionsModal(context, song),
+      );
+    }
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -95,6 +129,14 @@ class Modals {
   }
 
   static showPlaylistBottomModal(BuildContext context, Map playlist) {
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: true,
+        builder: (context) => _playlistBottomModal(context, playlist),
+      );
+    }
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -107,6 +149,15 @@ class Modals {
 
   static showArtistsBottomModal(BuildContext context, List artists,
       {String? leading, bool shouldPop = false}) {
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: true,
+        builder: (context) =>
+            _artistsBottomModal(context, artists, shouldPop: shouldPop),
+      );
+    }
     return showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -120,6 +171,14 @@ class Modals {
 
   static showCreateplaylistModal(BuildContext context, {Map? item}) {
     String title = '';
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: true,
+        builder: (context) => _createPlaylistModal(title, context, item),
+      );
+    }
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -131,6 +190,14 @@ class Modals {
   }
 
   static showImportplaylistModal(BuildContext context, {Map? item}) {
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: true,
+        builder: (context) => _importPlaylistModal(context),
+      );
+    }
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -146,6 +213,15 @@ class Modals {
       title = 'Enter here',
       String doneText = 'Done',
       String? name}) {
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: true,
+        builder: (context) => _playlistRenameBottomModal(context,
+            name: name, playlistId: playlistId),
+      );
+    }
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -158,6 +234,14 @@ class Modals {
   }
 
   static addToPlaylist(BuildContext context, Map item) {
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: true,
+        builder: (context) => _addToPlaylist(context, item),
+      );
+    }
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -173,6 +257,15 @@ class Modals {
     required String message,
     bool isDanger = false,
   }) async {
+    if (Platform.isWindows) {
+      return await fluent_ui.showDialog<bool>(
+              context: context,
+              useRootNavigator: false,
+              barrierDismissible: true,
+              builder: (context) => _confirmBottomModal(context,
+                  message: message, isDanger: isDanger)) ??
+          false;
+    }
     return await showModalBottomSheet(
             useRootNavigator: false,
             backgroundColor: Colors.transparent,
@@ -188,55 +281,43 @@ class Modals {
 _confirmBottomModal(BuildContext context,
     {required String message, bool isDanger = false}) {
   return BottomModalLayout(
+    title: Center(
+      child: Text(
+        S.of(context).confirm,
+        style: bigTextStyle(context),
+      ),
+    ),
+    actions: [
+      AdaptiveButton(
+        color: Platform.isAndroid
+            ? Theme.of(context).colorScheme.primary.withAlpha(30)
+            : null,
+        onPressed: () {
+          Navigator.pop(context, false);
+        },
+        child: Text(
+          S.of(context).no,
+        ),
+      ),
+      const SizedBox(width: 16),
+      AdaptiveFilledButton(
+        onPressed: () {
+          Navigator.pop(context, true);
+        },
+        color: isDanger ? Colors.red : Theme.of(context).colorScheme.primary,
+        child: Text(
+          S.of(context).yes,
+        ),
+      )
+    ],
     child: SingleChildScrollView(
-      child: Column(
-        children: [
-          AppBar(
-            title: Text(S.of(context).confirm),
-            centerTitle: true,
-            automaticallyImplyLeading: false,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Text(message, textAlign: TextAlign.center),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                MaterialButton(
-                  color: Theme.of(context).colorScheme.primary.withAlpha(30),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: Text(S.of(context).no),
-                ),
-                const SizedBox(width: 16),
-                MaterialButton(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  color: isDanger
-                      ? Colors.red
-                      : Theme.of(context).colorScheme.primary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Text(
-                    S.of(context).yes,
-                    style: TextStyle(
-                        color: isDanger
-                            ? Colors.white
-                            : Theme.of(context).scaffoldBackgroundColor),
-                  ),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-        ],
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(message, textAlign: TextAlign.center),
+          ],
+        ),
       ),
     ),
   );
@@ -247,171 +328,163 @@ _playlistRenameBottomModal(BuildContext context,
   TextEditingController controller = TextEditingController();
   controller.text = name ?? '';
   return BottomModalLayout(
-      child: SingleChildScrollView(
-    child: Column(
-      children: [
-        AppBar(
-          title: const Text('Rename Playlist'),
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-          child: Column(
-            children: [
-              TextField(
-                controller: controller,
-                decoration: InputDecoration(
-                  fillColor: greyColor,
-                  filled: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
-                  ),
-                  hintText: 'New Playlist Name',
-                  prefixIcon: const Icon(Icons.title),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              MaterialButton(
-                minWidth: double.maxFinite,
-                color: Theme.of(context).colorScheme.primary,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                onPressed: () async {
-                  String text = controller.text;
-                  controller.dispose();
-                  Navigator.pop(context);
-                  context
-                      .read<LibraryService>()
-                      .renamePlaylist(
-                          playlistId: playlistId,
-                          title: text.trim().isNotEmpty ? text : null)
-                      .then((String message) =>
-                          BottomMessage.showText(context, message));
-                },
-                child: Text(
-                  'Rename',
-                  style: TextStyle(
-                      color: Theme.of(context).scaffoldBackgroundColor),
-                ),
-              )
-            ],
+      title: AppBar(
+        title: const Text('Rename Playlist'),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+      ),
+      actions: [
+        MaterialButton(
+          minWidth: double.maxFinite,
+          color: Theme.of(context).colorScheme.primary,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          onPressed: () async {
+            String text = controller.text;
+            controller.dispose();
+            Navigator.pop(context);
+            context
+                .read<LibraryService>()
+                .renamePlaylist(
+                    playlistId: playlistId,
+                    title: text.trim().isNotEmpty ? text : null)
+                .then((String message) =>
+                    BottomMessage.showText(context, message));
+          },
+          child: Text(
+            'Rename',
+            style: TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
           ),
         )
       ],
-    ),
-  ));
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      fillColor: greyColor,
+                      filled: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 2, horizontal: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      hintText: 'New Playlist Name',
+                      prefixIcon: const Icon(Icons.title),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ));
 }
 
 _artistsBottomModal(BuildContext context, List<dynamic> artists,
     {bool shouldPop = false}) {
   return BottomModalLayout(
+      title: Center(
+        child: Text(
+          S.of(context).Artists,
+          style: mediumTextStyle(context),
+        ),
+      ),
       child: SingleChildScrollView(
-    child: Column(
-      children: [
-        AppBar(
-          title: Text(S.of(context).Artists),
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-        ),
-        const Divider(height: 8),
-        ...artists.map(
-          (artist) => ListTile(
-              dense: true,
-              title: Text(
-                artist['name'],
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              leading: const Icon(CupertinoIcons.person),
-              trailing: const Icon(CupertinoIcons.right_chevron),
-              onTap: () {
-                if (shouldPop) {
-                  context.go('/browse',
-                      extra: artist['endpoint'].cast<String, dynamic>());
-                } else {
-                  Navigator.pop(context);
+        child: Column(
+          children: [
+            ...artists.map(
+              (artist) => AdaptiveListTile(
+                  dense: true,
+                  title: Text(
+                    artist['name'],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  leading: const Icon(CupertinoIcons.person),
+                  trailing: const Icon(CupertinoIcons.right_chevron),
+                  onTap: () {
+                    if (shouldPop) {
+                      context.go('/browse',
+                          extra: artist['endpoint'].cast<String, dynamic>());
+                    } else {
+                      Navigator.pop(context);
 
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => BrowseScreen(
-                          endpoint: artist['endpoint'].cast<String, dynamic>()),
-                    ),
-                  );
-                }
-              }),
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => BrowseScreen(
+                              endpoint:
+                                  artist['endpoint'].cast<String, dynamic>()),
+                        ),
+                      );
+                    }
+                  }),
+            ),
+          ],
         ),
-      ],
-    ),
-  ));
+      ));
 }
 
 Widget _createPlaylistModal(
     String title, BuildContext context, Map<dynamic, dynamic>? item) {
   return BottomModalLayout(
+    title: Center(
+        child: Text(
+      'Create a Playlist',
+      style: mediumTextStyle(context),
+    )),
+    actions: [
+      AdaptiveButton(
+        onPressed: () async {
+          Navigator.pop(context);
+        },
+        child: const Text('Cancel'),
+      ),
+      AdaptiveFilledButton(
+        color: Theme.of(context).colorScheme.primary,
+        onPressed: () async {
+          context
+              .read<LibraryService>()
+              .createPlaylist(title, item: item)
+              .then((String message) {
+            Navigator.pop(context);
+            BottomMessage.showText(context, message);
+          });
+        },
+        child: Text(
+          'Create',
+          style: TextStyle(
+              color: context.isDarkMode ? Colors.black : Colors.white),
+        ),
+      )
+    ],
     child: SingleChildScrollView(
       child: Column(
         children: [
-          AppBar(
-            title: const Text('Create a Playlist'),
-            centerTitle: true,
-            automaticallyImplyLeading: false,
-          ),
-          const Divider(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Column(
-              children: [
-                TextField(
-                  onChanged: (value) => title = value,
-                  decoration: InputDecoration(
-                    fillColor: greyColor,
-                    filled: true,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: 'Playlist Name',
-                    prefixIcon: const Icon(Icons.title),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                MaterialButton(
-                  minWidth: double.maxFinite,
-                  color: Theme.of(context).colorScheme.primary,
+          Column(
+            children: [
+              AdaptiveTextField(
+                onChanged: (value) => title = value,
+                fillColor: Platform.isAndroid ? greyColor : null,
+                hintText: 'Playlist Name',
+                prefix: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  onPressed: () async {
-                    context
-                        .read<LibraryService>()
-                        .createPlaylist(title, item: item)
-                        .then((String message) {
-                      Navigator.pop(context);
-                      BottomMessage.showText(context, message);
-                    });
-                  },
-                  child: Text(
-                    'Create',
-                    style: TextStyle(
-                        color: Theme.of(context).scaffoldBackgroundColor),
-                  ),
-                )
-              ],
-            ),
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Icon(Platform.isWindows
+                      ? fluent_ui.FluentIcons.playlist_music
+                      : Icons.title),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -422,63 +495,59 @@ Widget _createPlaylistModal(
 Widget _importPlaylistModal(BuildContext context) {
   String title = '';
   return BottomModalLayout(
+    title: Center(
+      child: Text(
+        'Import Playlist',
+        style: mediumTextStyle(context),
+      ),
+    ),
+    actions: [
+      AdaptiveButton(
+        onPressed: () async {
+          Navigator.pop(context);
+        },
+        child: const Text('Cancel'),
+      ),
+      AdaptiveFilledButton(
+        color: Theme.of(context).colorScheme.primary,
+        onPressed: () async {
+          Modals.showCenterLoadingModal(context);
+          String message =
+              await GetIt.I<LibraryService>().importPlaylist(title);
+          if (context.mounted) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            BottomMessage.showText(context, message);
+          }
+        },
+        child: Text(
+          'Import',
+          style: TextStyle(
+              color: context.isDarkMode ? Colors.black : Colors.white),
+        ),
+      )
+    ],
     child: SingleChildScrollView(
       child: Column(
         children: [
-          AppBar(
-            title: const Text('Import Playlist'),
-            centerTitle: true,
-            automaticallyImplyLeading: false,
-          ),
-          const Divider(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Column(
-              children: [
-                TextField(
-                  onChanged: (value) => title = value,
-                  keyboardType: TextInputType.url,
-                  decoration: InputDecoration(
-                    fillColor: greyColor,
-                    filled: true,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: 'YT Playlist url with http',
-                    prefixIcon: const Icon(Icons.title),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                MaterialButton(
-                  minWidth: double.maxFinite,
-                  color: Theme.of(context).colorScheme.primary,
+          Column(
+            children: [
+              AdaptiveTextField(
+                onChanged: (value) => title = value,
+                keyboardType: TextInputType.url,
+                hintText: 'YT Playlist url with http(s)',
+                prefix: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  onPressed: () async {
-                    Modals.showCenterLoadingModal(context);
-                    String message =
-                        await GetIt.I<LibraryService>().importPlaylist(title);
-                    if (context.mounted) {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      BottomMessage.showText(context, message);
-                    }
-                  },
-                  child: Text(
-                    'Import',
-                    style: TextStyle(
-                        color: Theme.of(context).scaffoldBackgroundColor),
-                  ),
-                )
-              ],
-            ),
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Icon(Platform.isWindows
+                      ? fluent_ui.FluentIcons.playlist_music
+                      : Icons.title),
+                ),
+                fillColor: Platform.isWindows ? null : greyColor,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+              ),
+            ],
           ),
         ],
       ),
@@ -488,26 +557,23 @@ Widget _importPlaylistModal(BuildContext context) {
 
 _addToPlaylist(BuildContext context, Map item) {
   return BottomModalLayout(
+    title: AppBar(
+      title: const Text('Add to Playlist'),
+      centerTitle: true,
+      automaticallyImplyLeading: false,
+      actions: [
+        IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Modals.showCreateplaylistModal(context, item: item);
+            },
+            icon: const Icon(Icons.playlist_add))
+      ],
+    ),
     child: SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: AppBar(
-              title: const Text('Add to Playlist'),
-              centerTitle: true,
-              automaticallyImplyLeading: false,
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Modals.showCreateplaylistModal(context, item: item);
-                    },
-                    icon: const Icon(Icons.playlist_add))
-              ],
-            ),
-          ),
           ...context.read<LibraryService>().userPlaylists.map((key, playlist) {
             return MapEntry(
               key,
@@ -611,6 +677,56 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
     height: MediaQuery.of(context).size.height,
     width: MediaQuery.of(context).size.width,
     child: LayoutBuilder(builder: (context, constraints) {
+      if (Platform.isWindows) {
+        return fluent_ui.ContentDialog(
+          title: Column(
+            children: [
+              Text(updateInfo != null ? 'Update Available' : 'Update Info'),
+              if (updateInfo != null)
+                Text(
+                  '${updateInfo.name}\n${f.format(DateTime.parse(updateInfo.publishedAt))}\n${updateInfo.downloadCount} downloads',
+                  style: TextStyle(fontSize: 16, color: context.subtitleColor),
+                )
+            ],
+          ),
+          content: updateInfo != null
+              ? SizedBox(
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight - 400,
+                  child: Markdown(
+                    data: updateInfo.body,
+                    shrinkWrap: true,
+                    softLineBreak: true,
+                    onTapLink: (text, href, title) {
+                      if (href != null) {
+                        launchUrl(Uri.parse(href),
+                            mode: LaunchMode.platformDefault);
+                      }
+                    },
+                  ),
+                )
+              : const Text("You are already up to date."),
+          actions: [
+            if (updateInfo != null)
+              AdaptiveFilledButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Cancel'),
+              ),
+            AdaptiveFilledButton(
+              onPressed: () {
+                Navigator.pop(context);
+                if (updateInfo != null) {
+                  launchUrl(Uri.parse(updateInfo.downloadUrl),
+                      mode: LaunchMode.externalApplication);
+                }
+              },
+              child: Text(updateInfo != null ? 'Update' : 'Done'),
+            ),
+          ],
+        );
+      }
       return AlertDialog(
         icon: Center(
           child: Container(
@@ -651,20 +767,22 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
                   },
                 ),
               )
-            : const Center(child: Text("You are already up to date.")),
+            : const Center(
+                child: Text("You are already up to date."),
+              ),
         actions: [
           if (updateInfo != null)
-            FilledButton(
+            AdaptiveFilledButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                Theme.of(context).colorScheme.primary.withOpacity(0.5),
-              )),
+              // style: ButtonStyle(
+              //     backgroundColor: WidgetStatePropertyAll(
+              //   Theme.of(context).colorScheme.primary.withOpacity(0.5),
+              // )),
               child: const Text('Cancel'),
             ),
-          FilledButton(
+          AdaptiveFilledButton(
             onPressed: () {
               Navigator.pop(context);
               if (updateInfo != null) {
@@ -684,16 +802,32 @@ _textFieldBottomModal(BuildContext context,
     {String? title, String? hintText, String doneText = 'Done'}) {
   String? text;
   return BottomModalLayout(
+    title: (title != null)
+        ? AppBar(
+            title: Text(title),
+            centerTitle: true,
+            automaticallyImplyLeading: false,
+          )
+        : null,
+    actions: [
+      MaterialButton(
+        minWidth: double.maxFinite,
+        color: Theme.of(context).colorScheme.primary,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        onPressed: () async {
+          Navigator.pop(context, text);
+        },
+        child: Text(
+          doneText,
+          style: TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
+        ),
+      )
+    ],
     child: SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (title != null)
-            AppBar(
-              title: Text(title),
-              centerTitle: true,
-              automaticallyImplyLeading: false,
-            ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
@@ -713,25 +847,6 @@ _textFieldBottomModal(BuildContext context,
                     prefixIcon: const Icon(Icons.title),
                   ),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                MaterialButton(
-                  minWidth: double.maxFinite,
-                  color: Theme.of(context).colorScheme.primary,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  onPressed: () async {
-                    Navigator.pop(context, text);
-                  },
-                  child: Text(
-                    doneText,
-                    style: TextStyle(
-                        color: Theme.of(context).scaffoldBackgroundColor),
-                  ),
-                )
               ],
             ),
           ),
@@ -743,156 +858,151 @@ _textFieldBottomModal(BuildContext context,
 
 _playerOptionsModal(BuildContext context, Map song) {
   return BottomModalLayout(
-      child: SingleChildScrollView(
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListTile(
-          contentPadding: EdgeInsets.symmetric(
-              horizontal: 8, vertical: song['subtitle'] != null ? 0 : 8),
-          title:
-              Text(song['title'], maxLines: 1, overflow: TextOverflow.ellipsis),
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: CachedNetworkImage(
-              imageUrl: getEnhancedImage(song['thumbnails'].first['url']),
-              height: 50,
-              width: 50,
-              errorWidget: (context, url, error) {
-                return CachedNetworkImage(
-                  imageUrl: getEnhancedImage(song['thumbnails'].first['url'],
-                      quality: 'medium'),
-                );
-              },
-            ),
-          ),
-          subtitle: song['subtitle'] != null
-              ? Text(song['subtitle'],
-                  maxLines: 1, overflow: TextOverflow.ellipsis)
-              : null,
-          trailing: IconButton(
-              onPressed: () => Share.shareUri(Uri.parse(
-                  'https://music.youtube.com/watch?v=${song['videoId']}')),
-              icon: const Icon(CupertinoIcons.share)),
-        ),
-        const Divider(height: 8),
-        if (Platform.isAndroid)
-          ListTile(
-            dense: true,
-            title: Text(S.of(context).equalizer),
-            leading: const Icon(Icons.equalizer_outlined),
-            onTap: () {
-              Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => const EqualizerScreen()));
-            },
-            trailing: const Icon(CupertinoIcons.right_chevron),
-          ),
-        if (song['artists'] != null)
-          ListTile(
-            dense: true,
-            title: Text(S.of(context).Artists),
-            leading: const Icon(CupertinoIcons.person_3),
-            trailing: const Icon(CupertinoIcons.right_chevron),
-            onTap: () {
-              Navigator.pop(context);
-              Modals.showArtistsBottomModal(
-                context,
-                song['artists'],
-                leading: song['thumbnails'].first['url'],
-                shouldPop: true,
+      title: AdaptiveListTile(
+        contentPadding: EdgeInsets.zero,
+        title:
+            Text(song['title'], maxLines: 1, overflow: TextOverflow.ellipsis),
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: CachedNetworkImage(
+            imageUrl: getEnhancedImage(song['thumbnails'].first['url']),
+            height: 50,
+            width: 50,
+            errorWidget: (context, url, error) {
+              return CachedNetworkImage(
+                imageUrl: getEnhancedImage(song['thumbnails'].first['url'],
+                    quality: 'medium'),
               );
             },
           ),
-        if (song['album'] != null)
-          ListTile(
+        ),
+        subtitle: song['subtitle'] != null
+            ? Text(song['subtitle'],
+                maxLines: 1, overflow: TextOverflow.ellipsis)
+            : null,
+        trailing: IconButton(
+            onPressed: () => Share.shareUri(Uri.parse(
+                'https://music.youtube.com/watch?v=${song['videoId']}')),
+            icon: const Icon(CupertinoIcons.share)),
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (Platform.isAndroid)
+              AdaptiveListTile(
+                dense: true,
+                title: Text(S.of(context).equalizer),
+                leading: const Icon(Icons.equalizer_outlined),
+                onTap: () {
+                  Navigator.of(context).push(CupertinoPageRoute(
+                      builder: (context) => const EqualizerScreen()));
+                },
+                trailing: const Icon(CupertinoIcons.right_chevron),
+              ),
+            if (song['artists'] != null)
+              AdaptiveListTile(
+                dense: true,
+                title: Text(S.of(context).Artists),
+                leading: const Icon(CupertinoIcons.person_3),
+                trailing: const Icon(CupertinoIcons.right_chevron),
+                onTap: () {
+                  Navigator.pop(context);
+                  Modals.showArtistsBottomModal(
+                    context,
+                    song['artists'],
+                    leading: song['thumbnails'].first['url'],
+                    shouldPop: true,
+                  );
+                },
+              ),
+            if (song['album'] != null)
+              AdaptiveListTile(
+                  dense: true,
+                  title: Text(S.of(context).Album,
+                      maxLines: 1, overflow: TextOverflow.ellipsis),
+                  leading: const Icon(CupertinoIcons.music_albums),
+                  trailing: const Icon(CupertinoIcons.right_chevron),
+                  onTap: () {
+                    context.go('/browse',
+                        extra:
+                            song['album']['endpoint'].cast<String, dynamic>());
+                  }),
+            AdaptiveListTile(
               dense: true,
-              title: Text(S.of(context).Album,
-                  maxLines: 1, overflow: TextOverflow.ellipsis),
-              leading: const Icon(CupertinoIcons.music_albums),
-              trailing: const Icon(CupertinoIcons.right_chevron),
+              title: const Text('Add to Playlist'),
+              leading: const Icon(Icons.playlist_add),
               onTap: () {
-                context.go('/browse',
-                    extra: song['album']['endpoint'].cast<String, dynamic>());
-              }),
-        ListTile(
-          dense: true,
-          title: const Text('Add to Playlist'),
-          leading: const Icon(Icons.playlist_add),
-          onTap: () {
-            Navigator.pop(context);
-            Modals.addToPlaylist(context, song);
-          },
-        ),
-        ListTile(
-          dense: true,
-          leading: const Icon(CupertinoIcons.timer),
-          title: Text(S.of(context).sleepTimer),
-          onTap: () {
-            showDurationPicker(
-                context: context,
-                initialTime: const Duration(minutes: 30),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Theme.of(context).colorScheme.surface,
-                )).then(
-              (duration) {
-                if (duration != null) {
-                  context.read<MediaPlayer>().setTimer(duration);
-                }
+                Navigator.pop(context);
+                Modals.addToPlaylist(context, song);
               },
-            );
-          },
-          trailing: ValueListenableBuilder(
-            valueListenable: GetIt.I<MediaPlayer>().timerDuration,
-            builder: (context, value, child) {
-              return value == null
-                  ? const SizedBox.shrink()
-                  : TextButton.icon(
-                      onPressed: () {
-                        GetIt.I<MediaPlayer>().cancelTimer();
-                      },
-                      label: Text(formatDuration(value)),
-                      icon: const Icon(CupertinoIcons.clear),
-                      iconAlignment: IconAlignment.end,
-                    );
-            },
-          ),
+            ),
+            AdaptiveListTile(
+              dense: true,
+              leading: const Icon(CupertinoIcons.timer),
+              title: Text(S.of(context).sleepTimer),
+              onTap: () {
+                showDurationPicker(
+                    context: context,
+                    initialTime: const Duration(minutes: 30),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Theme.of(context).colorScheme.surface,
+                    )).then(
+                  (duration) {
+                    if (duration != null) {
+                      context.read<MediaPlayer>().setTimer(duration);
+                    }
+                  },
+                );
+              },
+              trailing: ValueListenableBuilder(
+                valueListenable: GetIt.I<MediaPlayer>().timerDuration,
+                builder: (context, value, child) {
+                  return value == null
+                      ? const SizedBox.shrink()
+                      : TextButton.icon(
+                          onPressed: () {
+                            GetIt.I<MediaPlayer>().cancelTimer();
+                          },
+                          label: Text(formatDuration(value)),
+                          icon: const Icon(CupertinoIcons.clear),
+                          iconAlignment: IconAlignment.end,
+                        );
+                },
+              ),
+            ),
+          ],
         ),
-      ],
-    ),
-  ));
+      ));
 }
 
 _songBottomModal(BuildContext context, Map song) {
   return BottomModalLayout(
+    title: AdaptiveListTile(
+      contentPadding: EdgeInsets.zero,
+      title: Text(song['title'], maxLines: 1, overflow: TextOverflow.ellipsis),
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: CachedNetworkImage(
+          imageUrl: song['thumbnails'].first['url'],
+          height: 50,
+          width: song['type'] == 'VIDEO' ? 80 : 50,
+        ),
+      ),
+      subtitle: song['subtitle'] != null
+          ? Text(song['subtitle'], maxLines: 1, overflow: TextOverflow.ellipsis)
+          : null,
+      trailing: IconButton(
+          onPressed: () => Share.shareUri(Uri.parse(
+              'https://music.youtube.com/watch?v=${song['videoId']}')),
+          icon: const Icon(CupertinoIcons.share)),
+    ),
     child: SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-            title: Text(song['title'],
-                maxLines: 1, overflow: TextOverflow.ellipsis),
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: song['thumbnails'].first['url'],
-                height: 50,
-                width: song['type'] == 'VIDEO' ? 80 : 50,
-              ),
-            ),
-            subtitle: song['subtitle'] != null
-                ? Text(song['subtitle'],
-                    maxLines: 1, overflow: TextOverflow.ellipsis)
-                : null,
-            trailing: IconButton(
-                onPressed: () => Share.shareUri(Uri.parse(
-                    'https://music.youtube.com/watch?v=${song['videoId']}')),
-                icon: const Icon(CupertinoIcons.share)),
-          ),
-          const Divider(height: 1),
-          ListTile(
+          AdaptiveListTile(
             dense: true,
             title: Text(S.of(context).playNext),
             leading: const Icon(Icons.playlist_play),
@@ -901,7 +1011,7 @@ _songBottomModal(BuildContext context, Map song) {
               await GetIt.I<MediaPlayer>().playNext(Map.from(song));
             },
           ),
-          ListTile(
+          AdaptiveListTile(
             dense: true,
             title: Text(S.of(context).addToQueue),
             leading: const Icon(Icons.queue_music_sharp),
@@ -914,7 +1024,7 @@ _songBottomModal(BuildContext context, Map song) {
             valueListenable: Hive.box('FAVOURITES').listenable(),
             builder: (context, value, child) {
               Map? item = value.get(song['videoId']);
-              return ListTile(
+              return AdaptiveListTile(
                 dense: true,
                 title: Text(item == null
                     ? S.of(context).addToFavourites
@@ -941,7 +1051,7 @@ _songBottomModal(BuildContext context, Map song) {
           ),
           if (!['PROCESSING', 'DOWNLOADING', 'DOWNLOADED']
               .contains(song['status']))
-            ListTile(
+            AdaptiveListTile(
               dense: true,
               title: const Text('Download'),
               leading: const Icon(Icons.playlist_add),
@@ -950,7 +1060,7 @@ _songBottomModal(BuildContext context, Map song) {
                 GetIt.I<DownloadManager>().downloadSong(song);
               },
             ),
-          ListTile(
+          AdaptiveListTile(
             dense: true,
             title: const Text('Add to Playlist'),
             leading: const Icon(Icons.playlist_add),
@@ -959,7 +1069,7 @@ _songBottomModal(BuildContext context, Map song) {
               Modals.addToPlaylist(context, song);
             },
           ),
-          ListTile(
+          AdaptiveListTile(
             dense: true,
             title: Text(S.of(context).startRadio),
             leading: const Icon(Icons.radar_outlined),
@@ -969,7 +1079,7 @@ _songBottomModal(BuildContext context, Map song) {
             },
           ),
           if (song['artists'] != null)
-            ListTile(
+            AdaptiveListTile(
               dense: true,
               title: Text(S.of(context).Artists),
               leading: const Icon(CupertinoIcons.person_3),
@@ -981,7 +1091,7 @@ _songBottomModal(BuildContext context, Map song) {
               },
             ),
           if (song['album'] != null)
-            ListTile(
+            AdaptiveListTile(
                 dense: true,
                 title: Text(S.of(context).Album,
                     maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -1005,63 +1115,58 @@ _songBottomModal(BuildContext context, Map song) {
 
 _playlistBottomModal(BuildContext context, Map playlist) {
   return BottomModalLayout(
+    title: AdaptiveListTile(
+      contentPadding: EdgeInsets.zero,
+      title:
+          Text(playlist['title'], maxLines: 1, overflow: TextOverflow.ellipsis),
+      leading: playlist['isPredefined'] != false ||
+              (playlist['songs'] != null && playlist['songs']?.length > 0)
+          ? ClipRRect(
+              borderRadius:
+                  BorderRadius.circular(playlist['type'] == 'ARTIST' ? 50 : 10),
+              child: CachedNetworkImage(
+                imageUrl: playlist['thumbnails']?.isNotEmpty == true
+                    ? playlist['thumbnails'].first['url']
+                    : playlist['isPredefined'] == true
+                        ? playlist['thumbnails']
+                            .first['url']
+                            .replaceAll('w540-h225', 'w60-h60')
+                        : playlist['songs'].first['thumbnails'].first['url'],
+                height: 50,
+                width: 50,
+              ),
+            )
+          : Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                color: greyColor,
+                borderRadius: BorderRadius.circular(
+                    playlist['type'] == 'ARTIST' ? 50 : 10),
+              ),
+              child: Icon(
+                CupertinoIcons.music_note_list,
+                color: context.isDarkMode ? Colors.white : Colors.black,
+              ),
+            ),
+      subtitle: playlist['subtitle'] != null
+          ? Text(playlist['subtitle'],
+              maxLines: 1, overflow: TextOverflow.ellipsis)
+          : null,
+      trailing: playlist['isPredefined'] != false
+          ? IconButton(
+              onPressed: () => Share.shareUri(Uri.parse(playlist['type'] ==
+                      'ARTIST'
+                  ? 'https://music.youtube.com/channel/${playlist['endpoint']['browseId']}'
+                  : 'https://music.youtube.com/playlist?list=${playlist['playlistId']}')),
+              icon: const Icon(CupertinoIcons.share))
+          : null,
+    ),
     child: SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            title: Text(playlist['title'],
-                maxLines: 1, overflow: TextOverflow.ellipsis),
-            leading: playlist['isPredefined'] != false ||
-                    (playlist['songs'] != null && playlist['songs']?.length > 0)
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        playlist['type'] == 'ARTIST' ? 50 : 10),
-                    child: CachedNetworkImage(
-                      imageUrl: playlist['thumbnails']?.isNotEmpty == true
-                          ? playlist['thumbnails'].first['url']
-                          : playlist['isPredefined'] == true
-                              ? playlist['thumbnails']
-                                  .first['url']
-                                  .replaceAll('w540-h225', 'w60-h60')
-                              : playlist['songs']
-                                  .first['thumbnails']
-                                  .first['url'],
-                      height: 50,
-                      width: 50,
-                    ),
-                  )
-                : Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: greyColor,
-                      borderRadius: BorderRadius.circular(
-                          playlist['type'] == 'ARTIST' ? 50 : 10),
-                    ),
-                    child: Icon(
-                      CupertinoIcons.music_note_list,
-                      color: context.isDarkMode ? Colors.white : Colors.black,
-                    ),
-                  ),
-            subtitle: playlist['subtitle'] != null
-                ? Text(playlist['subtitle'],
-                    maxLines: 1, overflow: TextOverflow.ellipsis)
-                : null,
-            trailing: playlist['isPredefined'] != false
-                ? IconButton(
-                    onPressed: () => Share.shareUri(Uri.parse(playlist[
-                                'type'] ==
-                            'ARTIST'
-                        ? 'https://music.youtube.com/channel/${playlist['endpoint']['browseId']}'
-                        : 'https://music.youtube.com/playlist?list=${playlist['playlistId']}')),
-                    icon: const Icon(CupertinoIcons.share))
-                : null,
-          ),
-          const Divider(height: 1),
-          ListTile(
+          AdaptiveListTile(
             dense: true,
             title: Text(S.of(context).playNext),
             leading: const Icon(Icons.playlist_play),
@@ -1071,7 +1176,7 @@ _playlistBottomModal(BuildContext context, Map playlist) {
               GetIt.I<MediaPlayer>().player.play();
             },
           ),
-          ListTile(
+          AdaptiveListTile(
             dense: true,
             title: Text(S.of(context).addToQueue),
             leading: const Icon(Icons.queue_music_sharp),
@@ -1081,7 +1186,7 @@ _playlistBottomModal(BuildContext context, Map playlist) {
             },
           ),
           if (playlist['isPredefined'] == false)
-            ListTile(
+            AdaptiveListTile(
               dense: true,
               leading: const Icon(Icons.title),
               title: const Text('Rename'),
@@ -1092,7 +1197,7 @@ _playlistBottomModal(BuildContext context, Map playlist) {
                     name: playlist['title']);
               },
             ),
-          ListTile(
+          AdaptiveListTile(
             dense: true,
             title: Text(context.watch<LibraryService>().getPlaylist(
                         playlist['playlistId'] ??
@@ -1135,7 +1240,7 @@ _playlistBottomModal(BuildContext context, Map playlist) {
             },
           ),
           if (playlist['playlistId'] != null)
-            ListTile(
+            AdaptiveListTile(
               dense: true,
               title: Text(S.of(context).startRadio),
               leading: const Icon(Icons.radar_outlined),
@@ -1148,7 +1253,7 @@ _playlistBottomModal(BuildContext context, Map playlist) {
               },
             ),
           if (playlist['artists'] != null && playlist['artists'].isNotEmpty)
-            ListTile(
+            AdaptiveListTile(
               dense: true,
               title: Text(S.of(context).Artists),
               leading: const Icon(CupertinoIcons.person_3),
@@ -1160,7 +1265,7 @@ _playlistBottomModal(BuildContext context, Map playlist) {
               },
             ),
           if (playlist['album'] != null)
-            ListTile(
+            AdaptiveListTile(
               dense: true,
               title: Text(S.of(context).Album,
                   maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -1182,12 +1287,35 @@ _playlistBottomModal(BuildContext context, Map playlist) {
 class BottomModalLayout extends StatelessWidget {
   const BottomModalLayout({
     required this.child,
+    this.title,
+    this.actions,
     super.key,
   });
   final Widget child;
+  final Widget? title;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isWindows) {
+      return fluent_ui.ContentDialog(
+        title: Material(
+          color: Colors.transparent,
+          child: title,
+        ),
+        content: Material(
+          color: Colors.transparent,
+          child: child,
+        ),
+        actions: actions
+            ?.map((action) => Material(
+                  color: Colors.transparent,
+                  child: action,
+                ))
+            .toList(),
+      );
+    }
+
     return Container(
       width: double.maxFinite,
       constraints: const BoxConstraints(maxWidth: 600),
@@ -1200,8 +1328,27 @@ class BottomModalLayout extends StatelessWidget {
           bottomRight: Radius.circular(0),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: child,
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (title != null)
+                Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+                    child: title!),
+              child,
+              if (actions != null)
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: actions!,
+                  ),
+                )
+            ],
+          ),
         ),
       ),
     );

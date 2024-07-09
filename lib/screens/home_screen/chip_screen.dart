@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
 import '../../ytmusic/ytmusic.dart';
 import 'section_item.dart';
@@ -85,13 +86,13 @@ class _ChipScreenState extends State<ChipScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return AdaptiveScaffold(
+      appBar: AdaptiveAppBar(
         title: Text(widget.title),
         centerTitle: true,
       ),
       body: initialLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: AdaptiveProgressRing())
           : SingleChildScrollView(
               controller: _scrollController,
               child: SafeArea(
@@ -100,7 +101,10 @@ class _ChipScreenState extends State<ChipScreen> {
                     ...sections.map((section) {
                       return SectionItem(section: section);
                     }),
-                    if (nextLoading) const CircularProgressIndicator(),
+                    if (nextLoading)
+                      const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: AdaptiveProgressRing()),
                   ],
                 ),
               ),

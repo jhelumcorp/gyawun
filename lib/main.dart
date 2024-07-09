@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_acrylic/window.dart';
@@ -14,6 +15,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'generated/l10n.dart';
 import 'services/download_manager.dart';
@@ -39,10 +41,33 @@ void main() async {
   await initialiseHive();
   if (Platform.isWindows) {
     await Window.initialize();
-    await Window.setEffect(
-      effect: WindowEffect.mica,
-      dark: getInitialDarkness(),
-    );
+
+    await Window.hideWindowControls();
+    await WindowManager.instance.ensureInitialized();
+    windowManager.waitUntilReadyToShow().then((_) async {
+      await windowManager.setTitleBarStyle(
+        TitleBarStyle.hidden,
+        windowButtonVisibility: false,
+      );
+      WindowEffect windowEffect = windowEffectList.firstWhere(
+        (el) =>
+            el.name.toUpperCase() ==
+            Hive.box('SETTINGS').get(
+              'WINDOW_EFFECT',
+              defaultValue: WindowEffect.mica.name.toUpperCase(),
+            ),
+      );
+      await Window.setEffect(
+        effect: windowEffect,
+        dark: getInitialDarkness(),
+      );
+
+      // await windowManager.setMinimumSize(const Size(500, 600));
+
+      await windowManager.show();
+      await windowManager.setPreventClose(true);
+      await windowManager.setSkipTaskbar(false);
+    });
     JustAudioMediaKit.ensureInitialized();
     JustAudioMediaKit.bufferSize = 8 * 1024 * 1024;
     JustAudioMediaKit.title = 'Gyawun Beta';
@@ -100,35 +125,96 @@ class Gyawun extends StatelessWidget {
   const Gyawun({super.key});
   @override
   Widget build(BuildContext context) {
+    SettingsManager settingsManager = context.watch<SettingsManager>();
     return DynamicColorBuilder(builder: (lightScheme, darkScheme) {
       return Shortcuts(
         shortcuts: <LogicalKeySet, Intent>{
           LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent(),
         },
-        child: MaterialApp.router(
-          title: 'Gyawun',
-          routerConfig: router,
-          locale: Locale(context.watch<SettingsManager>().language['value']!),
-          localizationsDelegates: const [
-            S.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: S.delegate.supportedLocales,
-          debugShowCheckedModeBanner: false,
-          themeMode: context.watch<SettingsManager>().themeMode,
-          theme: lightTheme(primaryBlack,
-              colorScheme: context.watch<SettingsManager>().dynamicColors
-                  ? lightScheme
-                  : null),
-          darkTheme: darkTheme(primaryWhite,
-              colorScheme: context.watch<SettingsManager>().dynamicColors
-                  ? darkScheme
-                  : null),
-        ),
+        child: Platform.isWindows
+            ? _buildFluentApp(
+                settingsManager,
+                lightScheme: lightScheme,
+                darkScheme: darkScheme,
+              )
+            : MaterialApp.router(
+                title: 'Gyawun',
+                routerConfig: router,
+                locale:
+                    Locale(context.watch<SettingsManager>().language['value']!),
+                localizationsDelegates: const [
+                  S.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                ],
+                supportedLocales: S.delegate.supportedLocales,
+                debugShowCheckedModeBanner: false,
+                themeMode: context.watch<SettingsManager>().themeMode,
+                theme: lightTheme(primaryBlack,
+                    colorScheme: context.watch<SettingsManager>().dynamicColors
+                        ? lightScheme
+                        : null),
+                darkTheme: darkTheme(primaryWhite,
+                    colorScheme: context.watch<SettingsManager>().dynamicColors
+                        ? darkScheme
+                        : null),
+              ),
       );
     });
+  }
+
+  _buildFluentApp(SettingsManager settingsManager,
+      {ColorScheme? lightScheme, ColorScheme? darkScheme}) {
+    return fluent_ui.FluentApp.router(
+      title: 'Gyawun',
+      debugShowCheckedModeBanner: false,
+      routerConfig: router,
+      locale: Locale(settingsManager.language['value']!),
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      themeMode: settingsManager.themeMode,
+      theme: fluent_ui.FluentThemeData(
+        brightness: Brightness.light,
+        accentColor: settingsManager.dynamicColors
+            ? lightScheme?.primary.toAccentColor()
+            : null,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        scaffoldBackgroundColor:
+            (settingsManager.windowEffect == WindowEffect.disabled &&
+                    settingsManager.dynamicColors)
+                ? lightScheme?.surface
+                : null,
+      ),
+      darkTheme: fluent_ui.FluentThemeData(
+        brightness: Brightness.dark,
+        accentColor: settingsManager.dynamicColors
+            ? darkScheme?.primary.toAccentColor()
+            : null,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        scaffoldBackgroundColor:
+            (settingsManager.windowEffect == WindowEffect.disabled &&
+                    settingsManager.dynamicColors)
+                ? darkScheme?.surface
+                : null,
+      ),
+      builder: (context, child) {
+        return fluent_ui.NavigationPaneTheme(
+          data: fluent_ui.NavigationPaneThemeData(
+            backgroundColor:
+                settingsManager.windowEffect == WindowEffect.disabled
+                    ? null
+                    : fluent_ui.Colors.transparent,
+          ),
+          child: child!,
+        );
+      },
+    );
   }
 }
 
@@ -161,3 +247,11 @@ bool getInitialDarkness() {
   }
   return false;
 }
+
+List<WindowEffect> get windowEffectList => [
+      WindowEffect.disabled,
+      WindowEffect.acrylic,
+      WindowEffect.mica,
+      WindowEffect.tabbed,
+      WindowEffect.aero,
+    ];

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 import '../../services/bottom_message.dart';
 import '../../services/library.dart';
@@ -88,22 +92,23 @@ class _BrowseScreenState extends State<BrowseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return AdaptiveScaffold(
+      appBar: AdaptiveAppBar(
         title: header['title'] != null ? Text(header['title']) : null,
       ),
       body: initialLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              controller: _scrollController,
-              child: SafeArea(
-                  child: SizedBox(
-                width: double.infinity,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
+          ? const Center(child: AdaptiveProgressRing())
+          : Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                constraints: const BoxConstraints(maxWidth: 1000),
+                child: ListView(
+                  controller: _scrollController,
                   children: [
                     HeaderWidget(
-                        header: {'endpoint': widget.endpoint, ...header}),
+                      header: {'endpoint': widget.endpoint, ...header},
+                    ),
+                    const SizedBox(height: 8),
                     ...sections.indexed.map((sec) {
                       return SectionItem(
                           section: sec.$2,
@@ -113,10 +118,15 @@ class _BrowseScreenState extends State<BrowseScreen> {
                     }),
                     if (!nextLoading && continuation != null)
                       const SizedBox(height: 64),
-                    if (nextLoading) const CircularProgressIndicator(),
+                    if (nextLoading)
+                      const Center(
+                        child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: AdaptiveProgressRing()),
+                      ),
                   ],
                 ),
-              )),
+              ),
             ),
     );
   }
@@ -205,20 +215,22 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               runAlignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                MaterialButton(
-                  shape: const CircleBorder(),
-                  color: greyColor,
-                  padding: const EdgeInsets.all(14),
-                  onPressed: () => context
-                      .read<LibraryService>()
-                      .addToOrRemoveFromLibrary(header)
-                      .then((String message) {
-                    BottomMessage.showText(context, message);
-                  }),
-                  child: Icon(isAddedToLibrary
-                      ? Icons.library_add_check
-                      : Icons.library_add),
-                ),
+                if (header['privacy'] != 'PRIVATE' &&
+                    header['playlistId'] != 'LM')
+                  MaterialButton(
+                    shape: const CircleBorder(),
+                    color: greyColor,
+                    padding: const EdgeInsets.all(14),
+                    onPressed: () => context
+                        .read<LibraryService>()
+                        .addToOrRemoveFromLibrary(header)
+                        .then((String message) {
+                      BottomMessage.showText(context, message);
+                    }),
+                    child: Icon(isAddedToLibrary
+                        ? Icons.library_add_check
+                        : Icons.library_add),
+                  ),
                 if (header['videoId'] != null || header['playlistId'] != null)
                   MaterialButton(
                     onPressed: () async {
@@ -267,33 +279,33 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: LayoutBuilder(builder: (context, constraints) {
-        return constraints.maxWidth > 600
-            ? Row(
-                children: [
-                  if (widget.header['thumbnails'] != null)
-                    _buildImage(
-                        widget.header['thumbnails'], constraints.maxWidth,
-                        isRound: widget.header['type'] == 'ARTIST'),
-                  const SizedBox(width: 4),
-                  Expanded(
-                      child:
-                          _buildContent(widget.header, context, isRow: true)),
-                ],
-              )
-            : Column(
-                children: [
-                  if (widget.header['thumbnails'] != null)
-                    _buildImage(
-                        widget.header['thumbnails'], constraints.maxWidth,
-                        isRound: widget.header['type'] == 'ARTIST'),
-                  SizedBox(height: widget.header['thumbnails'] != null ? 4 : 0),
-                  _buildContent(widget.header, context),
-                ],
-              );
-      }),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      Widget layout = constraints.maxWidth > 600
+          ? Row(
+              children: [
+                if (widget.header['thumbnails'] != null)
+                  _buildImage(widget.header['thumbnails'], constraints.maxWidth,
+                      isRound: widget.header['type'] == 'ARTIST'),
+                const SizedBox(width: 4),
+                Expanded(
+                    child: _buildContent(widget.header, context, isRow: true)),
+              ],
+            )
+          : Column(
+              children: [
+                if (widget.header['thumbnails'] != null)
+                  _buildImage(widget.header['thumbnails'], constraints.maxWidth,
+                      isRound: widget.header['type'] == 'ARTIST'),
+                SizedBox(height: widget.header['thumbnails'] != null ? 4 : 0),
+                _buildContent(widget.header, context),
+              ],
+            );
+      if (Platform.isWindows) {
+        return fluent_ui.Card(
+          child: layout,
+        );
+      }
+      return layout;
+    });
   }
 }

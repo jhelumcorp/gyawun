@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
 import '../../generated/l10n.dart';
 import '../../themes/colors.dart';
@@ -98,18 +101,19 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _horizontalChipsRow(List data) {
     var list = <Widget>[const SizedBox(width: 16)];
     for (var element in data) {
-      list.add(InkWell(
-        customBorder:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        onTap: () => context.go('/chip', extra: element),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-              color: darkGreyColor.withAlpha(100),
-              borderRadius: BorderRadius.circular(10)),
-          child: Text(element['title']),
+      list.add(
+        AdaptiveInkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () => context.go('/chip', extra: element),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10)),
+            child: Text(element['title']),
+          ),
         ),
-      ));
+      );
       list.add(const SizedBox(
         width: 8,
       ));
@@ -128,33 +132,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AdaptiveScaffold(
       appBar: PreferredSize(
-        preferredSize: AppBar().preferredSize,
+        preferredSize: const AdaptiveAppBar().preferredSize,
         child: LayoutBuilder(builder: (context, constraints) {
-          return AppBar(
+          return AdaptiveAppBar(
+            automaticallyImplyLeading: false,
             title: Hero(
               tag: "SearchField",
               child: Material(
                 color: Colors.transparent,
-                child: SizedBox(
-                  width: constraints.maxWidth > 400 ? 350 : null,
-                  child: TextField(
-                    onTap: () => context.go('/search'),
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      fillColor: darkGreyColor.withAlpha(100),
-                      filled: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 2, horizontal: 16),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35),
-                        borderSide: BorderSide.none,
+                child: Row(
+                  children: [
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 300),
+                      child: AdaptiveTextField(
+                        onTap: () => context.go('/search'),
+                        readOnly: true,
+                        keyboardType: TextInputType.text,
+                        maxLines: 1,
+                        autofocus: false,
+                        textInputAction: TextInputAction.search,
+                        fillColor: Platform.isWindows
+                            ? null
+                            : darkGreyColor.withAlpha(100),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 8),
+                        borderRadius: BorderRadius.circular(
+                            Platform.isWindows ? 4.0 : 35),
+                        hintText: S.of(context).searchGyawun,
+                        prefix: Icon(AdaptiveIcons.search),
                       ),
-                      hintText: S.of(context).searchGyawun,
-                      prefixIcon: const Icon(Icons.search),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -163,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }),
       ),
       body: initialLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: AdaptiveProgressRing())
           : RefreshIndicator(
               onRefresh: () => refresh(),
               child: SingleChildScrollView(
@@ -180,7 +190,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           }),
                           if (!nextLoading && continuation != null)
                             const SizedBox(height: 50),
-                          if (nextLoading) const CircularProgressIndicator(),
+                          if (nextLoading)
+                            const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: AdaptiveProgressRing()),
                         ],
                       )
                     ],

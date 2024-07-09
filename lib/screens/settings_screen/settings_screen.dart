@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:gyawun_beta/utils/bottom_modals.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 import '../../generated/l10n.dart';
 import '../../themes/colors.dart';
@@ -29,11 +33,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return AdaptiveScaffold(
+      appBar: AdaptiveAppBar(
         title: Text(S.of(context).settings,
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Container(
@@ -44,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: TextField(
+                child: AdaptiveTextField(
                   controller: searchController,
                   onChanged: (value) {
                     setState(() {
@@ -55,53 +60,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   keyboardType: TextInputType.text,
                   maxLines: 1,
                   textInputAction: TextInputAction.search,
-                  decoration: InputDecoration(
-                    fillColor: darkGreyColor.withAlpha(100),
-                    filled: true,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(35),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: S.of(context).searchSettings,
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: searchController.text.trim().isNotEmpty
-                        ? GestureDetector(
-                            onTap: () {
-                              searchController.text = "";
-                              searchText = "";
-                              setState(() {});
-                            },
-                            child: const Icon(CupertinoIcons.clear),
-                          )
-                        : null,
-                  ),
+                  fillColor:
+                      Platform.isWindows ? null : darkGreyColor.withAlpha(100),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  borderRadius:
+                      BorderRadius.circular(Platform.isWindows ? 4.0 : 35),
+                  hintText: S.of(context).searchSettings,
+                  prefix: const Icon(Icons.search),
+                  suffix: searchController.text.trim().isNotEmpty
+                      ? GestureDetector(
+                          onTap: () {
+                            searchController.text = "";
+                            searchText = "";
+                            setState(() {});
+                          },
+                          child: const Icon(CupertinoIcons.clear),
+                        )
+                      : null,
                 ),
               ),
               if (searchText == "")
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: ListTile(
-                    tileColor: Colors.grey.withAlpha(30),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    leading:
-                        ColorIcon(icon: Icons.money, color: Colors.accents[14]),
-                    title: Text(
-                      S.of(context).donate,
-                      style: textStyle(context, bold: false)
-                          .copyWith(fontSize: 16),
-                    ),
-                    subtitle: Text(
-                      S.of(context).donateSubtitle,
-                      style: tinyTextStyle(context),
-                    ),
-                    onTap: () => showPaymentsModal(context),
+                AdaptiveListTile(
+                  leading:
+                      ColorIcon(icon: Icons.money, color: Colors.accents[14]),
+                  title: Text(
+                    S.of(context).donate,
+                    style:
+                        textStyle(context, bold: false).copyWith(fontSize: 16),
                   ),
+                  subtitle: Text(
+                    S.of(context).donateSubtitle,
+                    style: tinyTextStyle(context),
+                  ),
+                  onTap: () => showPaymentsModal(context),
+                  margin: const EdgeInsets.symmetric(vertical: 4),
                 ),
-              if (searchText == "") const Divider(),
               ...(searchText == ""
                       ? settingScreenData(context)
                       : allSettingsData(context)
@@ -110,47 +104,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               .contains(searchText.toLowerCase()))
                           .toList())
                   .map((e) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: ListTile(
-                    tileColor: Colors.grey.withAlpha(30),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    title: Text(
-                      e.title,
-                      style: textStyle(context, bold: false)
-                          .copyWith(fontSize: 16),
-                    ),
-                    leading: (e.icon != null)
-                        ? ColorIcon(
-                            color: e.color,
-                            icon: e.icon!,
-                          )
-                        : null,
-                    trailing: e.trailing != null
-                        ? e.trailing!(context)
-                        : (e.hasNavigation
-                            ? const Icon(
-                                CupertinoIcons.chevron_right,
-                                size: 30,
-                              )
-                            : null),
-                    onTap: () {
-                      if (e.hasNavigation && e.location != null) {
-                        context.go(e.location!);
-                      } else if (e.onTap != null) {
-                        e.onTap!(context);
-                      }
-                    },
-                    subtitle: e.subtitle != null
-                        ? Text(
-                            e.subtitle!(context),
-                            style: tinyTextStyle(context),
-                            maxLines: 2,
-                          )
-                        : null,
+                return AdaptiveListTile(
+                  margin: const EdgeInsets.symmetric(vertical: 2),
+                  title: Text(
+                    e.title,
+                    style:
+                        textStyle(context, bold: false).copyWith(fontSize: 16),
                   ),
+                  leading: (e.icon != null)
+                      ? ColorIcon(
+                          color: e.color,
+                          icon: e.icon!,
+                        )
+                      : null,
+                  trailing: e.trailing != null
+                      ? e.trailing!(context)
+                      : (e.hasNavigation
+                          ? Icon(
+                              AdaptiveIcons.chevron_right,
+                              size: 30,
+                            )
+                          : null),
+                  onTap: () {
+                    if (e.hasNavigation && e.location != null) {
+                      context.go(e.location!);
+                    } else if (e.onTap != null) {
+                      e.onTap!(context);
+                    }
+                  },
+                  subtitle: e.subtitle != null
+                      ? Text(
+                          e.subtitle!(context),
+                          style: tinyTextStyle(context),
+                          maxLines: 2,
+                        )
+                      : null,
                 );
               }),
             ],
@@ -162,89 +150,94 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 
 showPaymentsModal(BuildContext context) {
+  Widget title = AdaptiveListTile(
+    contentPadding: EdgeInsets.zero,
+    title: Text(
+      S.of(context).paymentMethods,
+      style: mediumTextStyle(context),
+    ),
+    leading: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 40,
+          width: 40,
+          child: ColorIcon(color: Colors.accents[14], icon: Icons.money),
+        ),
+      ],
+    ),
+  );
+  Widget child = Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      AdaptiveListTile(
+        leading: ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: Image.asset('assets/images/upi.jpg', height: 30, width: 30)),
+        title: Text(
+          'Pay with UPI',
+          style: subtitleTextStyle(context),
+        ),
+        onTap: () async {
+          Navigator.pop(context);
+          await launchUrl(
+            Uri.parse(
+                'upi://pay?cu=INR&pa=sheikhhaziq520@oksbi&pn=Gyawun&am=&tn=Gyawun'),
+            mode: LaunchMode.externalApplication,
+          );
+        },
+      ),
+      AdaptiveListTile(
+        leading: Container(
+            decoration: BoxDecoration(
+              color: const Color.fromRGBO(19, 195, 255, 1),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child:
+                Image.asset('assets/images/kofi.png', height: 30, width: 30)),
+        title: Text(
+          S.of(context).supportMeOnKofi,
+          style: subtitleTextStyle(context),
+        ),
+        onTap: () async {
+          Navigator.pop(context);
+          await launchUrl(
+            Uri.parse('https://ko-fi.com/sheikhhaziq'),
+            mode: LaunchMode.externalApplication,
+          );
+        },
+      ),
+      AdaptiveListTile(
+        leading: ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child:
+                Image.asset('assets/images/coffee.png', height: 30, width: 30)),
+        title: Text(
+          S.of(context).buyMeACoffee,
+          style: subtitleTextStyle(context),
+        ),
+        onTap: () async {
+          Navigator.pop(context);
+          await launchUrl(
+            Uri.parse('https://buymeacoffee.com/sheikhhaziq'),
+            mode: LaunchMode.externalApplication,
+          );
+        },
+      ),
+    ],
+  );
+  if (Platform.isWindows) {
+    return fluent_ui.showDialog(
+      context: context,
+      useRootNavigator: false,
+      barrierDismissible: true,
+      builder: (context) => BottomModalLayout(title: title, child: child),
+    );
+  }
   showModalBottomSheet(
     useSafeArea: true,
     backgroundColor: Colors.transparent,
     context: context,
-    builder: (context) => BottomModalLayout(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AppBar(
-            title: Text(
-              S.of(context).paymentMethods,
-              style: mediumTextStyle(context),
-            ),
-            leading: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 40,
-                  width: 40,
-                  child:
-                      ColorIcon(color: Colors.accents[14], icon: Icons.money),
-                ),
-              ],
-            ),
-          ),
-          const Divider(),
-          ListTile(
-            leading: ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.asset('assets/images/upi.jpg',
-                    height: 30, width: 30)),
-            title: Text(
-              'Pay with UPI',
-              style: subtitleTextStyle(context),
-            ),
-            onTap: () async {
-              Navigator.pop(context);
-              await launchUrl(
-                Uri.parse(
-                    'upi://pay?cu=INR&pa=sheikhhaziq520@oksbi&pn=Gyawun&am=&tn=Gyawun'),
-                mode: LaunchMode.externalApplication,
-              );
-            },
-          ),
-          ListTile(
-            leading: Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(19, 195, 255, 1),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Image.asset('assets/images/kofi.png',
-                    height: 30, width: 30)),
-            title: Text(
-              S.of(context).supportMeOnKofi,
-              style: subtitleTextStyle(context),
-            ),
-            onTap: () async {
-              Navigator.pop(context);
-              await launchUrl(
-                Uri.parse('https://ko-fi.com/sheikhhaziq'),
-                mode: LaunchMode.externalApplication,
-              );
-            },
-          ),
-          ListTile(
-            leading: ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.asset('assets/images/coffee.png',
-                    height: 30, width: 30)),
-            title: Text(
-              S.of(context).buyMeACoffee,
-              style: subtitleTextStyle(context),
-            ),
-            onTap: () async {
-              Navigator.pop(context);
-              await launchUrl(
-                Uri.parse('https://buymeacoffee.com/sheikhhaziq'),
-                mode: LaunchMode.externalApplication,
-              );
-            },
-          ),
-        ],
-      ),
-    ),
+    builder: (context) => BottomModalLayout(title: title, child: child),
   );
 }
