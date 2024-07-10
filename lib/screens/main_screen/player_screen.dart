@@ -601,11 +601,9 @@ class NameAndControls extends StatelessWidget {
                                   ? AdaptiveIcons.repeat_all
                                   : AdaptiveIcons.repeat_one,
                               size: 30,
-                              color:
-                                  value == LoopMode.one || value == LoopMode.all
-                                      ? (AdaptiveTheme.of(context).primaryColor)
-                                          .withOpacity(0.5)
-                                      : null,
+                              color: value == LoopMode.off
+                                  ? Colors.white.withOpacity(0.3)
+                                  : null,
                             ),
                           );
                         }),

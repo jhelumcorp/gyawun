@@ -85,10 +85,13 @@ class _YoutubeHistoryState extends State<YoutubeHistory> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 8),
                       child: Column(
-                        children: sections.map((history) {
+                        children: sections.indexed.map((section) {
+                          int index = section.$1;
+                          Map history = section.$2;
                           return Column(
                             children: [
-                              if (history['title'] != null)
+                              if (history['title'] != null &&
+                                  history['contents'].isNotEmpty)
                                 AdaptiveListTile(
                                   title: Text(
                                     history['title']!,
@@ -119,7 +122,8 @@ class _YoutubeHistoryState extends State<YoutubeHistory> {
                                               );
                                               if (deleted) {
                                                 setState(() {
-                                                  history.remove(item);
+                                                  sections[index]['contents']
+                                                      .remove(item);
                                                 });
                                               }
                                               if (context.mounted) {
