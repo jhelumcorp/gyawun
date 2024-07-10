@@ -103,6 +103,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     return AdaptiveScaffold(
       appBar: AdaptiveAppBar(
         title: header['title'] != null ? Text(header['title']) : null,
+        centerTitle: true,
       ),
       body: initialLoading
           ? const Center(child: AdaptiveProgressRing())
