@@ -415,12 +415,24 @@ class MediaPlayer extends ChangeNotifier {
     await _playlist.insertAll(
         index,
         songs.map((song) {
-          Uri uri = Uri.parse(
-              song['status'] == 'DOWNLOADED' && song['path'] != null
-                  ? song['path']
-                  : 'http://$serverAddress?id=${song['videoId']}');
+          if (song['status'] == 'DOWNLOADED' && song['path'] != null) {
+            return AudioSource.file(
+              song['path'].toString(),
+              tag: MediaItem(
+                id: song['videoId'],
+                title: song['title'] ?? 'Title',
+                album: song['album']?['name'],
+                artUri: Uri.parse(song['thumbnails']
+                    ?.first['url']
+                    .replaceAll('w60-h60', 'w225-h225')),
+                artist:
+                    song['artists']?.map((artist) => artist['name']).join(','),
+                extras: Map.from(song),
+              ),
+            );
+          }
           return AudioSource.uri(
-            uri,
+            Uri.parse('http://$serverAddress?id=${song['videoId']}'),
             tag: MediaItem(
               id: song['videoId'],
               title: song['title'] ?? 'Title',

@@ -124,7 +124,7 @@ class BottomPlayer extends StatelessWidget {
                                   builder: (context, buttonState, child) {
                                     return (buttonState == ButtonState.loading)
                                         ? const AdaptiveProgressRing()
-                                        : IconButton(
+                                        : AdaptiveIconButton(
                                             onPressed: () {
                                               GetIt.I<MediaPlayer>()
                                                       .player
@@ -138,21 +138,24 @@ class BottomPlayer extends StatelessWidget {
                                             },
                                             icon: Icon(
                                               buttonState == ButtonState.playing
-                                                  ? Icons.pause
-                                                  : Icons.play_arrow,
+                                                  ? AdaptiveIcons.pause
+                                                  : AdaptiveIcons.play,
                                               size: 30,
                                             ),
                                           );
                                   },
                                 ),
                                 if (context.watch<MediaPlayer>().player.hasNext)
-                                  IconButton(
+                                  AdaptiveIconButton(
                                     onPressed: () {
                                       GetIt.I<MediaPlayer>()
                                           .player
                                           .seekToNext();
                                     },
-                                    icon: const Icon(Icons.skip_next),
+                                    icon: Icon(
+                                      AdaptiveIcons.skip_next,
+                                      size: 25,
+                                    ),
                                   )
                               ],
                             ),

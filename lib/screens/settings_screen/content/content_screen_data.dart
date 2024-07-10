@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/switch.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -23,113 +24,150 @@ List<SettingItem> contentScreenData(BuildContext context) => [
         icon: CupertinoIcons.placemark,
         hasNavigation: false,
         trailing: (context) {
-          return Text(
-            context.watch<SettingsManager>().location['name']!,
-            style: smallTextStyle(context),
-          );
-        },
-        onTap: (context) {
-          showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            builder: (context) {
-              return BottomModalLayout(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width > 600 ? 600 : null,
-                  child: Column(
-                    children: [
-                      AppBar(
-                        title: Text(
-                          "Location",
-                          style: textStyle(context).copyWith(fontSize: 18),
-                        ),
-                        centerTitle: true,
-                        automaticallyImplyLeading: false,
-                      ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(children: [
-                            ...context
-                                .read<SettingsManager>()
-                                .locations
-                                .map((location) {
-                              return ListTile(
-                                dense: true,
-                                visualDensity: VisualDensity.compact,
-                                title: Text(location['name']!),
-                                onTap: () async {
-                                  Navigator.pop(context);
-                                  context.read<SettingsManager>().location =
-                                      location;
-                                },
-                              );
-                            }),
-                          ]),
-                        ),
-                      ),
-                    ],
+          return AdaptiveDropdownButton(
+            value: context.watch<SettingsManager>().location,
+            items: context
+                .read<SettingsManager>()
+                .locations
+                .map(
+                  (location) => AdaptiveDropdownMenuItem(
+                    value: location,
+                    child: Text(location['name']!),
                   ),
-                ),
-              );
+                )
+                .toList(),
+            onChanged: (location) {
+              context.read<SettingsManager>().location = location!;
             },
           );
         },
+        // trailing: (context) {
+        //   return Text(
+        //     context.watch<SettingsManager>().location['name']!,
+        //     style: smallTextStyle(context),
+        //   );
+        // },
+        // onTap: (context) {
+        //   showModalBottomSheet(
+        //     context: context,
+        //     backgroundColor: Colors.transparent,
+        //     builder: (context) {
+        //       return BottomModalLayout(
+        //         child: SizedBox(
+        //           width: MediaQuery.of(context).size.width > 600 ? 600 : null,
+        //           child: Column(
+        //             children: [
+        //               AppBar(
+        //                 title: Text(
+        //                   "Location",
+        //                   style: textStyle(context).copyWith(fontSize: 18),
+        //                 ),
+        //                 centerTitle: true,
+        //                 automaticallyImplyLeading: false,
+        //               ),
+        //               Expanded(
+        //                 child: SingleChildScrollView(
+        //                   child: Column(children: [
+        //                     ...context
+        //                         .read<SettingsManager>()
+        //                         .locations
+        //                         .map((location) {
+        //                       return ListTile(
+        //                         dense: true,
+        //                         visualDensity: VisualDensity.compact,
+        //                         title: Text(location['name']!),
+        //                         onTap: () async {
+        //                           Navigator.pop(context);
+        //                           context.read<SettingsManager>().location =
+        //                               location;
+        //                         },
+        //                       );
+        //                     }),
+        //                   ]),
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       );
+        //     },
+        //   );
+        // },
       ),
       SettingItem(
-          title: S.of(context).language,
-          icon: CupertinoIcons.globe,
-          onTap: (context) {
-            showModalBottomSheet(
-              context: context,
-              backgroundColor: Colors.transparent,
-              builder: (context) {
-                return BottomModalLayout(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width > 600 ? 600 : null,
-                    child: Column(
-                      children: [
-                        AppBar(
-                          title: Text(
-                            S.of(context).selectLanguage,
-                            style: textStyle(context).copyWith(fontSize: 18),
-                          ),
-                          centerTitle: true,
-                          automaticallyImplyLeading: false,
-                        ),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(children: [
-                              ...context
-                                  .read<SettingsManager>()
-                                  .languages
-                                  .map((language) {
-                                return ListTile(
-                                  dense: true,
-                                  visualDensity: VisualDensity.compact,
-                                  title: Text(language['name']!),
-                                  onTap: () async {
-                                    Navigator.pop(context);
-                                    context.read<SettingsManager>().language =
-                                        language;
-                                  },
-                                );
-                              }),
-                            ]),
-                          ),
-                        ),
-                      ],
-                    ),
+        title: S.of(context).language,
+        icon: CupertinoIcons.globe,
+        trailing: (context) {
+          return AdaptiveDropdownButton(
+            value: context.watch<SettingsManager>().language,
+            items: context
+                .read<SettingsManager>()
+                .languages
+                .map(
+                  (language) => AdaptiveDropdownMenuItem(
+                    value: language,
+                    child: Text(language['name']!),
                   ),
-                );
-              },
-            );
-          },
-          trailing: (context) {
-            return Text(
-              context.watch<SettingsManager>().language['name']!,
-              style: smallTextStyle(context),
-            );
-          }),
+                )
+                .toList(),
+            onChanged: (language) {
+              context.read<SettingsManager>().language = language!;
+            },
+          );
+        },
+        // onTap: (context) {
+        //   showModalBottomSheet(
+        //     context: context,
+        //     backgroundColor: Colors.transparent,
+        //     builder: (context) {
+        //       return BottomModalLayout(
+        //         child: SizedBox(
+        //           width: MediaQuery.of(context).size.width > 600 ? 600 : null,
+        //           child: Column(
+        //             children: [
+        //               AppBar(
+        //                 title: Text(
+        //                   S.of(context).selectLanguage,
+        //                   style: textStyle(context).copyWith(fontSize: 18),
+        //                 ),
+        //                 centerTitle: true,
+        //                 automaticallyImplyLeading: false,
+        //               ),
+        //               Expanded(
+        //                 child: SingleChildScrollView(
+        //                   child: Column(children: [
+        //                     ...context
+        //                         .read<SettingsManager>()
+        //                         .languages
+        //                         .map((language) {
+        //                       return ListTile(
+        //                         dense: true,
+        //                         visualDensity: VisualDensity.compact,
+        //                         title: Text(language['name']!),
+        //                         onTap: () async {
+        //                           Navigator.pop(context);
+        //                           context.read<SettingsManager>().language =
+        //                               language;
+        //                         },
+        //                       );
+        //                     }),
+        //                   ]),
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       );
+        //     },
+        //   );
+        // },
+        // trailing: (context) {
+        //   return Text(
+        //     context.watch<SettingsManager>().language['name']!,
+        //     style: smallTextStyle(context),
+        //   );
+        // },
+      ),
       SettingItem(
         title: 'Personalised Content',
         icon: Icons.recommend_outlined,

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'buttons.dart';
@@ -55,7 +56,9 @@ class AdaptiveAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: title,
               ),
               commandBar: actions != null || actions?.isNotEmpty == false
-                  ? Row(children: actions ?? [])
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: actions ?? [])
                   : null,
             ),
             if (bottom != null) bottom!,

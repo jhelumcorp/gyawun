@@ -47,13 +47,16 @@ class AppearenceScreen extends StatelessWidget {
                                 size: 30,
                               )
                             : null),
-                    onTap: () {
-                      if (e.hasNavigation && e.location != null) {
-                        context.go(e.location!);
-                      } else if (e.onTap != null) {
-                        e.onTap!(context);
-                      }
-                    },
+                    onTap: (e.hasNavigation && e.location != null) ||
+                            e.onTap != null
+                        ? () {
+                            if (e.hasNavigation && e.location != null) {
+                              context.go(e.location!);
+                            } else if (e.onTap != null) {
+                              e.onTap!(context);
+                            }
+                          }
+                        : null,
                     subtitle: e.subtitle != null ? e.subtitle!(context) : null,
                   ),
                 );

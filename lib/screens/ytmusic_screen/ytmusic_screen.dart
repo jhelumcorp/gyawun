@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:gyawun_beta/utils/extensions.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
-import '../../../../generated/l10n.dart';
 import '../../../../services/yt_account.dart';
 import '../../../../themes/colors.dart';
 import '../browse_screen/browse_screen.dart';
@@ -46,10 +45,7 @@ class YTMScreen extends StatelessWidget {
                                       (context) => const YoutubeHistory()),
                                 );
                               },
-                              title: Text(
-                                S.of(context).history,
-                                maxLines: 2,
-                              ),
+                              title: const Text('Recently Played'),
                               leading: Container(
                                 height: 50,
                                 width: 50,

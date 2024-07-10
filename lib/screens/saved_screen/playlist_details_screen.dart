@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 import '../../services/bottom_message.dart';
 import '../../services/library.dart';
@@ -37,48 +35,54 @@ class PlaylistDetailsScreen extends StatelessWidget {
               title: Text(playlist['title']),
               centerTitle: true,
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  MyPlayistHeader(playlist: playlist),
-                  ReorderableListView(
-                    shrinkWrap: true,
-                    primary: false,
-                    children: [
-                      ...playlist['songs'].map<Widget>((song) {
-                        return SwipeActionCell(
-                          key: ObjectKey(song['videoId']),
-                          trailingActions: <SwipeAction>[
-                            SwipeAction(
-                                title: "Remove",
-                                onTap: (CompletionHandler handler) async {
-                                  Modals.showConfirmBottomModal(
-                                    context,
-                                    message:
-                                        'Are you sure you want to remove it?',
-                                    isDanger: true,
-                                  ).then((bool confirm) {
-                                    if (confirm) {
-                                      context
-                                          .read<LibraryService>()
-                                          .removeFromPlaylist(
-                                              item: song,
-                                              playlistId: playlistkey)
-                                          .then((message) =>
-                                              BottomMessage.showText(
-                                                  context, message));
-                                    }
-                                  });
-                                },
-                                color: Colors.red),
-                          ],
-                          child: SongTile(song: song, playlistId: playlistkey),
-                        );
-                      }).toList()
-                    ],
-                    onReorder: (oldIndex, newIndex) {},
-                  )
-                ],
+            body: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                constraints: const BoxConstraints(maxWidth: 1000),
+                child: ListView(
+                  children: [
+                    MyPlayistHeader(playlist: playlist),
+                    const SizedBox(height: 8),
+                    ListView(
+                      shrinkWrap: true,
+                      primary: false,
+                      children: [
+                        ...playlist['songs'].map<Widget>((song) {
+                          return SwipeActionCell(
+                            backgroundColor: Colors.transparent,
+                            key: ObjectKey(song['videoId']),
+                            trailingActions: <SwipeAction>[
+                              SwipeAction(
+                                  title: "Remove",
+                                  onTap: (CompletionHandler handler) async {
+                                    Modals.showConfirmBottomModal(
+                                      context,
+                                      message:
+                                          'Are you sure you want to remove it?',
+                                      isDanger: true,
+                                    ).then((bool confirm) {
+                                      if (confirm) {
+                                        context
+                                            .read<LibraryService>()
+                                            .removeFromPlaylist(
+                                                item: song,
+                                                playlistId: playlistkey)
+                                            .then((message) =>
+                                                BottomMessage.showText(
+                                                    context, message));
+                                      }
+                                    });
+                                  },
+                                  color: Colors.red),
+                            ],
+                            child:
+                                SongTile(song: song, playlistId: playlistkey),
+                          );
+                        }).toList()
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           );
@@ -97,14 +101,13 @@ class MyPlayistHeader extends StatelessWidget {
       {bool isRound = false, bool isDark = false}) {
     return (songs.isNotEmpty)
         ? ClipRRect(
-            borderRadius: BorderRadius.circular(3),
+            borderRadius: BorderRadius.circular(8),
             child: SizedBox(
-              height: 200,
-              width: 200,
+              height: 225,
+              width: 225,
               child: StaggeredGrid.count(
-                mainAxisSpacing: 2,
-                crossAxisSpacing: 2,
                 crossAxisCount: songs.length > 1 ? 2 : 1,
+                axisDirection: AxisDirection.down,
                 children:
                     songs.sublist(0, min(songs.length, 4)).indexed.map((ind) {
                   int index = ind.$1;
@@ -112,12 +115,13 @@ class MyPlayistHeader extends StatelessWidget {
                   return CachedNetworkImage(
                     imageUrl: song['thumbnails']
                         .first['url']
-                        .replaceAll('w540-h225', 'w60-h60')
+                        .replaceAll('w540-h225', 'w225-h225')
                         .replaceAll('w60-h60', 'w225-h225'),
                     height:
                         (songs.length <= 2 || (songs.length == 3 && index == 0))
-                            ? 255
-                            : null,
+                            ? 225
+                            : 225 / 2,
+                    width: 255 / 2,
                     fit: BoxFit.cover,
                   );
                 }).toList(),
@@ -190,34 +194,34 @@ class MyPlayistHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      Widget layout = constraints.maxWidth > 600
-          ? Row(
-              children: [
-                if (playlist['songs'] != null)
-                  _buildImage(playlist['songs'], constraints.maxWidth,
-                      isRound: playlist['type'] == 'ARTIST',
-                      isDark: context.isDarkMode),
-                const SizedBox(width: 4),
-                Expanded(child: _buildContent(playlist, context, isRow: true)),
-              ],
-            )
-          : Column(
-              children: [
-                if (playlist['songs'] != null)
-                  _buildImage(playlist['songs'], constraints.maxWidth,
-                      isRound: playlist['type'] == 'ARTIST',
-                      isDark: context.isDarkMode),
-                SizedBox(height: playlist['thumbnails'] != null ? 4 : 0),
-                _buildContent(playlist, context),
-              ],
-            );
-      if (Platform.isWindows) {
-        return fluent_ui.Card(
-          child: layout,
-        );
-      }
-      return layout;
-    });
+    return SizedBox(
+      width: double.maxFinite,
+      child: Adaptivecard(
+        child: LayoutBuilder(builder: (context, constraints) {
+          return constraints.maxWidth > 600
+              ? Row(
+                  children: [
+                    if (playlist['songs'] != null)
+                      _buildImage(playlist['songs'], constraints.maxWidth,
+                          isRound: playlist['type'] == 'ARTIST',
+                          isDark: context.isDarkMode),
+                    const SizedBox(width: 4),
+                    Expanded(
+                        child: _buildContent(playlist, context, isRow: true)),
+                  ],
+                )
+              : Column(
+                  children: [
+                    if (playlist['songs'] != null)
+                      _buildImage(playlist['songs'], constraints.maxWidth,
+                          isRound: playlist['type'] == 'ARTIST',
+                          isDark: context.isDarkMode),
+                    SizedBox(height: playlist['thumbnails'] != null ? 4 : 0),
+                    _buildContent(playlist, context),
+                  ],
+                );
+        }),
+      ),
+    );
   }
 }

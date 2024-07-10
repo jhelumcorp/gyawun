@@ -50,7 +50,7 @@ mixin LibraryMixin on YTMusicServices {
     Map<String, dynamic> body = {'browseId': 'FEmusic_history'};
     var response = await sendRequest('browse', body);
 
-    var contents = nav(response, [
+    List allContents = nav(response, [
       'contents',
       'singleColumnBrowseResultsRenderer',
       'tabs',
@@ -59,16 +59,39 @@ mixin LibraryMixin on YTMusicServices {
       'content',
       'sectionListRenderer',
       'contents',
-      0,
-      'musicShelfRenderer',
-      'contents'
     ]);
-
-    List result = handleContents(contents);
+    List result = [];
+    for (var content in allContents) {
+      List contents = nav(content, ['musicShelfRenderer', 'contents']);
+      Map header = nav(content, ['musicShelfRenderer']);
+      Map section = {
+        'title': nav(header, ['title', 'runs', 0, 'text']),
+        'contents': handleContents(contents),
+      };
+      result.add(section);
+    }
     return result;
-
-    // return List.empty();
   }
+
+  Future<bool> removeHistoryItem(List feedbackTokens) async {
+    if (!isLogged.value) return false;
+    Map<String, dynamic> body = {'feedbackTokens': feedbackTokens};
+    final response = await sendRequest('feedback', body);
+    return nav(response, ['feedbackResponses', 0, 'isProcessed']) == true;
+  }
+  //     def remove_history_items(self, feedbackTokens: List[str]) -> Dict:  # pragma: no cover
+//         """
+//         Remove an item from the account's history. This method does currently not work with brand accounts
+
+//         :param feedbackTokens: Token to identify the item to remove, obtained from :py:func:`get_history`
+//         :return: Full response
+//         """
+//         self._check_auth()
+//         body = {'feedbackTokens': feedbackTokens}
+//         endpoint = 'feedback'
+//         response = self._send_request(endpoint, body)
+
+//         return response
 //     def get_library_playlists(self, limit: int = 25) -> List[Dict]:
 //         """
 //         Retrieves the playlists in the user's library.

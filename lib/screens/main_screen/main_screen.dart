@@ -4,12 +4,9 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_beta/services/yt_account.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -35,6 +32,7 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
   void initState() {
     windowManager.addListener(this);
     super.initState();
+
     _update();
   }
 
@@ -243,25 +241,7 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
             width: 25,
           ),
         ),
-        actions: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FutureBuilder(
-                future: windowManager.isFullScreen(),
-                builder: (context, AsyncSnapshot<bool> snapshot) {
-                  return AdaptiveIconButton(
-                    icon: Icon(snapshot.data == true
-                        ? Icons.fullscreen_exit_sharp
-                        : fluent_ui.FluentIcons.full_screen),
-                    onPressed: () {
-                      bool isMaximized = snapshot.data == true;
-                      WindowManager.instance.setFullScreen(!isMaximized);
-                    },
-                  );
-                }),
-            const WindowButtons(),
-          ],
-        ),
+        actions: const WindowButtons(),
       ),
       paneBodyBuilder: (item, body) {
         return Column(

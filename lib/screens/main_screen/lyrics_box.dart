@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lyric/lyrics_reader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gyawun_beta/services/media_player.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 
@@ -128,10 +129,10 @@ class _LyricsBoxState extends State<LyricsBox> {
                         if (snapshot.hasError) {
                           return const Text('No Lyrics');
                         }
-                        return const CircularProgressIndicator();
+                        return const AdaptiveProgressRing();
                       },
                     )
-                  : const CircularProgressIndicator();
+                  : const AdaptiveProgressRing();
             }),
       ),
     );

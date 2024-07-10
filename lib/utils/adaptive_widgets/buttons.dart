@@ -83,8 +83,10 @@ class AdaptiveOutlinedButton extends fluent_ui.StatelessWidget {
       key: key,
       onPressed: onPressed,
       style: ButtonStyle(
-        backgroundColor: color != null ? WidgetStateProperty.all(color) : null,
-      ),
+          backgroundColor:
+              color != null ? WidgetStateProperty.all(color) : null,
+          foregroundColor:
+              WidgetStateProperty.all(Theme.of(context).colorScheme.primary)),
       child: child,
     );
   }
@@ -95,9 +97,13 @@ class AdaptiveIconButton extends StatelessWidget {
     super.key,
     required this.icon,
     required this.onPressed,
+    this.isSelected,
+    this.color,
   });
   final Widget icon;
   final void Function()? onPressed;
+  final bool? isSelected;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +111,10 @@ class AdaptiveIconButton extends StatelessWidget {
       return fluent_ui.IconButton(
         key: key,
         onPressed: onPressed,
+        style: isSelected == true
+            ? fluent_ui.ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(color))
+            : null,
         icon: icon,
       );
     }
@@ -112,6 +122,8 @@ class AdaptiveIconButton extends StatelessWidget {
       key: key,
       icon: icon,
       onPressed: onPressed,
+      isSelected: isSelected,
+      color: color,
     );
   }
 }
