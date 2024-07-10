@@ -32,7 +32,12 @@ List<SettingItem> contentScreenData(BuildContext context) => [
                 .map(
                   (location) => AdaptiveDropdownMenuItem(
                     value: location,
-                    child: Text(location['name']!),
+                    child: Text(
+                      textAlign: TextAlign.right,
+                      location['name']!,
+                      style: smallTextStyle(context),
+                      maxLines: 2,
+                    ),
                   ),
                 )
                 .toList(),
@@ -106,7 +111,11 @@ List<SettingItem> contentScreenData(BuildContext context) => [
                 .map(
                   (language) => AdaptiveDropdownMenuItem(
                     value: language,
-                    child: Text(language['name']!),
+                    child: Text(
+                      language['name']!,
+                      style: smallTextStyle(context),
+                      textAlign: TextAlign.end,
+                    ),
                   ),
                 )
                 .toList(),

@@ -20,6 +20,7 @@ class AdaptiveListTile extends StatelessWidget {
   final GestureLongPressCallback? onDoubleTap;
   final GestureLongPressCallback? onSecondaryTap;
   final bool selected;
+  final Color? backgroundColor;
 
   const AdaptiveListTile({
     super.key,
@@ -38,6 +39,7 @@ class AdaptiveListTile extends StatelessWidget {
     this.onDoubleTap,
     this.onSecondaryTap,
     this.selected = false,
+    this.backgroundColor,
   });
 
   @override
@@ -66,58 +68,62 @@ class AdaptiveListTile extends StatelessWidget {
           onSecondaryTap: enabled ? onSecondaryTap : null,
           borderRadius: BorderRadius.circular(4),
           splashFactory: Platform.isWindows ? const NoSplashFactory() : null,
-          child: Container(
-            padding: contentPadding ??
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-            decoration: BoxDecoration(
-              color:
-                  selected ? theme.colorScheme.primary.withOpacity(0.1) : null,
-            ),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    if (leading != null) ...[
-                      leading!,
-                      const SizedBox(width: 16.0),
-                    ],
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (title != null) ...[
-                            DefaultTextStyle(
-                              style: titleStyle!,
-                              child: title!,
-                            ),
-                            if (subtitle != null || isThreeLine)
-                              SizedBox(height: dense ? 2.0 : 4.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: Container(
+              padding: contentPadding ??
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+              decoration: BoxDecoration(
+                color: selected
+                    ? theme.colorScheme.primary.withOpacity(0.1)
+                    : backgroundColor,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      if (leading != null) ...[
+                        leading!,
+                        const SizedBox(width: 16.0),
+                      ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (title != null) ...[
+                              DefaultTextStyle(
+                                style: titleStyle!,
+                                child: title!,
+                              ),
+                              if (subtitle != null || isThreeLine)
+                                SizedBox(height: dense ? 2.0 : 4.0),
+                            ],
+                            if (subtitle != null || isThreeLine) ...[
+                              DefaultTextStyle(
+                                style: subtitleStyle!,
+                                child: subtitle ?? Container(),
+                              ),
+                            ],
                           ],
-                          if (subtitle != null || isThreeLine) ...[
-                            DefaultTextStyle(
-                              style: subtitleStyle!,
-                              child: subtitle ?? Container(),
-                            ),
-                          ],
-                        ],
+                        ),
                       ),
-                    ),
-                    if (trailing != null) ...[
-                      const SizedBox(width: 16.0),
-                      trailing!,
+                      if (trailing != null) ...[
+                        const SizedBox(width: 16.0),
+                        trailing!,
+                      ],
                     ],
-                  ],
-                ),
-                if (subtitle != null || isThreeLine)
-                  SizedBox(height: dense ? 2.0 : 4.0),
-                if (description != null) ...[
-                  DefaultTextStyle(
-                    style: descriptionStyle!,
-                    child: description!,
                   ),
+                  if (subtitle != null || isThreeLine)
+                    SizedBox(height: dense ? 2.0 : 4.0),
+                  if (description != null) ...[
+                    DefaultTextStyle(
+                      style: descriptionStyle!,
+                      child: description!,
+                    ),
+                  ],
+                  if (description != null) const Divider(),
                 ],
-                if (description != null) const Divider(),
-              ],
+              ),
             ),
           ),
         ),

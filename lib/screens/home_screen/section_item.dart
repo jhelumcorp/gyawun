@@ -365,7 +365,7 @@ class _ItemListState extends State<ItemList> {
       double height = constraints.maxWidth > 600 ? 200 : 150;
 
       return SizedBox(
-        height: height + 94,
+        height: height + (Platform.isWindows ? 94 : 70),
         child: ListView.separated(
           controller: widget.controller,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
@@ -374,10 +374,12 @@ class _ItemListState extends State<ItemList> {
             double width = height * (items[index]?['aspectRatio'] ?? 1);
             String? subtitle = _buildSubtitle(items[index]);
             return Adaptivecard(
+              // elevation: 0,
               borderRadius: BorderRadius.circular(8),
+              // backgroundColor: Platform.isAndroid ? Colors.transparent : null,
               padding: EdgeInsets.zero,
               child: AdaptiveInkWell(
-                padding: const EdgeInsets.all(12),
+                padding: EdgeInsets.all(Platform.isWindows ? 12 : 0),
                 onTap: () async {
                   if (items[index]['endpoint'] != null &&
                       items[index]['videoId'] == null) {
@@ -414,8 +416,13 @@ class _ItemListState extends State<ItemList> {
                       height: height,
                       decoration: BoxDecoration(
                         color: Colors.grey.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(
-                            items[index]['type'] == 'ARTIST' ? height / 2 : 8),
+                        borderRadius: items[index]['type'] == 'ARTIST'
+                            ? BorderRadius.circular(height / 2)
+                            : Platform.isWindows
+                                ? BorderRadius.circular(8)
+                                : const BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8)),
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: CachedNetworkImageProvider(
@@ -447,8 +454,8 @@ class _ItemListState extends State<ItemList> {
                     SizedBox(
                       width: width,
                       child: AdaptiveListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 0,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: Platform.isWindows ? 0 : 8,
                           vertical: 8,
                         ),
                         title: Text(

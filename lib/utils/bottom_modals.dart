@@ -699,7 +699,9 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
         return fluent_ui.ContentDialog(
           title: Column(
             children: [
-              Text(updateInfo != null ? 'Update Available' : 'Update Info'),
+              Center(
+                  child: Text(
+                      updateInfo != null ? 'Update Available' : 'Update Info')),
               if (updateInfo != null)
                 Text(
                   '${updateInfo.name}\n${f.format(DateTime.parse(updateInfo.publishedAt))}\n${updateInfo.downloadCount} downloads',
@@ -726,7 +728,7 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
               : const Text("You are already up to date."),
           actions: [
             if (updateInfo != null)
-              AdaptiveFilledButton(
+              AdaptiveButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -790,14 +792,10 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
               ),
         actions: [
           if (updateInfo != null)
-            AdaptiveFilledButton(
+            AdaptiveButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              // style: ButtonStyle(
-              //     backgroundColor: WidgetStatePropertyAll(
-              //   Theme.of(context).colorScheme.primary.withOpacity(0.5),
-              // )),
               child: const Text('Cancel'),
             ),
           AdaptiveFilledButton(
