@@ -76,16 +76,26 @@ class Modals {
     String? title,
     String? hintText,
     String doneText = 'Done',
-  }) =>
-      showModalBottomSheet<String?>(
+  }) {
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog(
         context: context,
         useRootNavigator: false,
-        backgroundColor: Colors.transparent,
-        isScrollControlled: true,
-        useSafeArea: true,
+        barrierDismissible: true,
         builder: (context) =>
             _textFieldBottomModal(context, title: title, hintText: hintText),
       );
+    }
+    return showModalBottomSheet<String?>(
+      context: context,
+      useRootNavigator: false,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) =>
+          _textFieldBottomModal(context, title: title, hintText: hintText),
+    );
+  }
 
   static showSongBottomModal(BuildContext context, Map song) {
     if (Platform.isWindows) {
@@ -174,7 +184,6 @@ class Modals {
     if (Platform.isWindows) {
       return fluent_ui.showDialog(
         context: context,
-        useRootNavigator: false,
         barrierDismissible: true,
         builder: (context) => _createPlaylistModal(title, context, item),
       );
@@ -256,14 +265,21 @@ class Modals {
     BuildContext context, {
     required String message,
     bool isDanger = false,
+    String? doneText,
+    String? cancelText,
   }) async {
     if (Platform.isWindows) {
       return await fluent_ui.showDialog<bool>(
               context: context,
               useRootNavigator: false,
               barrierDismissible: true,
-              builder: (context) => _confirmBottomModal(context,
-                  message: message, isDanger: isDanger)) ??
+              builder: (context) => _confirmBottomModal(
+                    context,
+                    message: message,
+                    isDanger: isDanger,
+                    doneText: doneText,
+                    cancelText: cancelText,
+                  )) ??
           false;
     }
     return await showModalBottomSheet(
@@ -278,8 +294,13 @@ class Modals {
   }
 }
 
-_confirmBottomModal(BuildContext context,
-    {required String message, bool isDanger = false}) {
+_confirmBottomModal(
+  BuildContext context, {
+  required String message,
+  bool isDanger = false,
+  String? doneText,
+  String? cancelText,
+}) {
   return BottomModalLayout(
     title: Center(
       child: Text(
@@ -296,7 +317,7 @@ _confirmBottomModal(BuildContext context,
           Navigator.pop(context, false);
         },
         child: Text(
-          S.of(context).no,
+          cancelText ?? S.of(context).no,
         ),
       ),
       const SizedBox(width: 16),
@@ -306,7 +327,8 @@ _confirmBottomModal(BuildContext context,
         },
         color: isDanger ? Colors.red : Theme.of(context).colorScheme.primary,
         child: Text(
-          S.of(context).yes,
+          doneText ?? S.of(context).yes,
+          style: TextStyle(color: isDanger ? Colors.white : null),
         ),
       )
     ],
@@ -557,18 +579,21 @@ Widget _importPlaylistModal(BuildContext context) {
 
 _addToPlaylist(BuildContext context, Map item) {
   return BottomModalLayout(
-    title: AppBar(
-      title: const Text('Add to Playlist'),
-      centerTitle: true,
-      automaticallyImplyLeading: false,
-      actions: [
-        IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Modals.showCreateplaylistModal(context, item: item);
-            },
-            icon: const Icon(Icons.playlist_add))
-      ],
+    title: AdaptiveListTile(
+      contentPadding: EdgeInsets.zero,
+      title: Text(
+        'Add to Playlist',
+        style: mediumTextStyle(context),
+      ),
+      trailing: AdaptiveIconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            Modals.showCreateplaylistModal(context, item: item);
+          },
+          icon: const Icon(
+            Icons.playlist_add,
+            size: 20,
+          )),
     ),
     child: SingleChildScrollView(
       child: Column(
@@ -579,91 +604,84 @@ _addToPlaylist(BuildContext context, Map item) {
               key,
               playlist['songs'].contains(item)
                   ? const SizedBox.shrink()
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: ListTile(
-                        title: Text(playlist['title']),
-                        leading: playlist['isPredefined'] == true ||
-                                (playlist['songs'] != null &&
-                                    playlist['songs']?.length > 0)
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                    playlist['type'] == 'ARTIST' ? 50 : 3),
-                                child: playlist['isPredefined'] == true
-                                    ? CachedNetworkImage(
-                                        imageUrl: playlist['thumbnails']
-                                            .first['url']
-                                            .replaceAll('w540-h225', 'w60-h60'),
-                                        height: 50,
-                                        width: 50,
-                                      )
-                                    : SizedBox(
-                                        height: 50,
-                                        width: 50,
-                                        child: StaggeredGrid.count(
-                                          mainAxisSpacing: 2,
-                                          crossAxisSpacing: 2,
-                                          crossAxisCount:
-                                              playlist['songs'].length > 1
-                                                  ? 2
-                                                  : 1,
-                                          children: (playlist['songs'] as List)
-                                              .sublist(
-                                                  0,
-                                                  min(playlist['songs'].length,
-                                                      4))
-                                              .indexed
-                                              .map((ind) {
-                                            int index = ind.$1;
-                                            Map song = ind.$2;
-                                            return CachedNetworkImage(
-                                              imageUrl: song['thumbnails']
-                                                  .first['url']
-                                                  .replaceAll(
-                                                      'w540-h225', 'w60-h60'),
-                                              height:
-                                                  (playlist['songs'].length <=
-                                                              2 ||
-                                                          (playlist['songs']
-                                                                      .length ==
-                                                                  3 &&
-                                                              index == 0))
-                                                      ? 50
-                                                      : null,
-                                              fit: BoxFit.cover,
-                                            );
-                                          }).toList(),
-                                        ),
+                  : AdaptiveListTile(
+                      title: Text(playlist['title']),
+                      leading: playlist['isPredefined'] == true ||
+                              (playlist['songs'] != null &&
+                                  playlist['songs']?.length > 0)
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  playlist['type'] == 'ARTIST' ? 50 : 3),
+                              child: playlist['isPredefined'] == true
+                                  ? CachedNetworkImage(
+                                      imageUrl: playlist['thumbnails']
+                                          .first['url']
+                                          .replaceAll('w540-h225', 'w60-h60'),
+                                      height: 50,
+                                      width: 50,
+                                    )
+                                  : SizedBox(
+                                      height: 50,
+                                      width: 50,
+                                      child: StaggeredGrid.count(
+                                        crossAxisCount:
+                                            playlist['songs'].length > 1
+                                                ? 2
+                                                : 1,
+                                        children: (playlist['songs'] as List)
+                                            .sublist(
+                                                0,
+                                                min(playlist['songs'].length,
+                                                    4))
+                                            .indexed
+                                            .map((ind) {
+                                          int index = ind.$1;
+                                          Map song = ind.$2;
+                                          return CachedNetworkImage(
+                                            imageUrl: song['thumbnails']
+                                                .first['url']
+                                                .replaceAll(
+                                                    'w540-h225', 'w60-h60'),
+                                            height: (playlist['songs'].length <=
+                                                        2 ||
+                                                    (playlist['songs'].length ==
+                                                            3 &&
+                                                        index == 0))
+                                                ? 50
+                                                : null,
+                                            fit: BoxFit.cover,
+                                          );
+                                        }).toList(),
                                       ),
-                              )
-                            : Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: greyColor,
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                                child: Icon(
-                                  CupertinoIcons.music_note_list,
-                                  color: context.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
+                                    ),
+                            )
+                          : Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: greyColor,
+                                borderRadius: BorderRadius.circular(3),
                               ),
-                        onTap: () async {
-                          await context
-                              .read<LibraryService>()
-                              .addToPlaylist(item: item, key: key)
-                              .then((String message) {
-                            Navigator.pop(context);
-                            BottomMessage.showText(context, message);
-                          });
-                        },
-                      ),
+                              child: Icon(
+                                CupertinoIcons.music_note_list,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                      onTap: () async {
+                        await context
+                            .read<LibraryService>()
+                            .addToPlaylist(item: item, key: key)
+                            .then((String message) {
+                          Navigator.pop(context);
+                          BottomMessage.showText(context, message);
+                        });
+                      },
                     ),
             );
           }).values,
-          const SizedBox(height: 8)
+          // const SizedBox(height: 8)
         ],
       ),
     ),
@@ -803,25 +821,25 @@ _textFieldBottomModal(BuildContext context,
   String? text;
   return BottomModalLayout(
     title: (title != null)
-        ? AppBar(
-            title: Text(title),
-            centerTitle: true,
-            automaticallyImplyLeading: false,
+        ? AdaptiveListTile(
+            title: Center(
+              child: Text(
+                title,
+                style: mediumTextStyle(context),
+              ),
+            ),
           )
         : null,
     actions: [
-      MaterialButton(
-        minWidth: double.maxFinite,
-        color: Theme.of(context).colorScheme.primary,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      AdaptiveFilledButton(
+        // minWidth: double.maxFinite,
+        // color: Theme.of(context).colorScheme.primary,
+        // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         onPressed: () async {
           Navigator.pop(context, text);
         },
-        child: Text(
-          doneText,
-          style: TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
-        ),
+        child: Text(doneText),
       )
     ],
     child: SingleChildScrollView(
@@ -832,20 +850,13 @@ _textFieldBottomModal(BuildContext context,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               children: [
-                TextField(
+                AdaptiveTextField(
                   onChanged: (value) => text = value,
-                  decoration: InputDecoration(
-                    fillColor: greyColor,
-                    filled: true,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: hintText,
-                    prefixIcon: const Icon(Icons.title),
-                  ),
+                  fillColor: greyColor,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+                  hintText: hintText,
+                  prefix: const Icon(Icons.title),
                 ),
               ],
             ),

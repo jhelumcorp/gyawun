@@ -249,6 +249,15 @@ Map<String, dynamic> checkRuns(List? runs) {
         'playlistId'
       ])?.replaceAll('RDAMPL', '');
     }
+    if (nav(run, ['menuServiceItemRenderer', 'icon', 'iconType']) ==
+        'REMOVE_FROM_HISTORY') {
+      runResult['feedbackToken'] = nav(run, [
+        'menuServiceItemRenderer',
+        'serviceEndpoint',
+        'feedbackEndpoint',
+        'feedbackToken'
+      ]);
+    }
   }
   runResult.removeWhere((key, val) => val == null || val.isEmpty);
   return runResult;
@@ -257,6 +266,7 @@ Map<String, dynamic> checkRuns(List? runs) {
 Map itemCategory = {
   'MUSIC_PAGE_TYPE_ARTIST': 'ARTIST',
   'MUSIC_VIDEO_TYPE_OMV': 'VIDEO',
+  'MUSIC_VIDEO_TYPE_UGC': 'VIDEO',
   'MUSIC_PAGE_TYPE_ALBUM': 'ALBUM',
   'MUSIC_VIDEO_TYPE_ATV': 'SONG',
   'MUSIC_PAGE_TYPE_PLAYLIST': 'PLAYLIST',
@@ -310,8 +320,6 @@ handleContinuationContents(Map item) {
 }
 
 handleMusicPlaylistShelfRenderer(Map item) {
-  // pprint(item.keys.toList());
-
   Map<String, dynamic> section = {'contents': []};
   if (nav(item, ['playlistId']) != null) {
     section['playlistId'] = nav(item, ['playlistId']);
@@ -334,10 +342,7 @@ Map<String, dynamic> handleMusicResponsiveListItemRenderer(Map item,
       .toList();
   allRuns.removeWhere((element) => element == null);
   allRuns = allRuns.expand((x) => x).toList();
-  // pprint(allRuns);
-  // if(allRuns.map((e) {}).toList() ){
-  //   allRuns = allRuns.expand((x) => x).toList();
-  // }
+
   Map firstRun = allRuns[0];
   Map<String, dynamic> itemresult = {
     'thumbnails': nav(item, [
@@ -444,6 +449,13 @@ handleMusicTwoRowItemRenderer(Map item, {List? thumbnails}) {
           'browseEndpointContextSupportedConfigs',
           'browseEndpointContextMusicConfig',
           'pageType'
+        ]) ??
+        nav(item, [
+          'navigationEndpoint',
+          'watchEndpoint',
+          'watchEndpointMusicSupportedConfigs',
+          'watchEndpointMusicConfig',
+          'musicVideoType'
         ])],
     'description': nav(item, ['runs', 0, 'text']),
     ...checkRuns(nav(item, ['subtitle', 'runs'])),

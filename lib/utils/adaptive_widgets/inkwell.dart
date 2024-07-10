@@ -6,7 +6,7 @@ import 'no_splash_factory.dart';
 
 class AdaptiveInkWell extends StatelessWidget {
   final Widget? child;
-  final EdgeInsetsGeometry? contentPadding;
+  final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final bool enabled;
   final GestureTapCallback? onTap;
@@ -19,7 +19,7 @@ class AdaptiveInkWell extends StatelessWidget {
   const AdaptiveInkWell({
     super.key,
     this.child,
-    this.contentPadding,
+    this.padding,
     this.margin,
     this.enabled = true,
     this.onTap,
@@ -43,7 +43,10 @@ class AdaptiveInkWell extends StatelessWidget {
           onSecondaryTap: enabled ? onSecondaryTap : null,
           borderRadius: borderRadius ?? BorderRadius.circular(4),
           splashFactory: Platform.isWindows ? const NoSplashFactory() : null,
-          child: child,
+          child: Padding(
+            padding: padding ?? const EdgeInsets.all(0),
+            child: child,
+          ),
         ),
       ),
     );

@@ -35,6 +35,13 @@ class _SectionItemState extends State<SectionItem> {
   }
 
   @override
+  void dispose() {
+    horizontalPageController.dispose();
+    horizontalScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     horizontalPageController = PageController(
         viewportFraction: 350 / MediaQuery.of(context).size.width);
@@ -45,7 +52,7 @@ class _SectionItemState extends State<SectionItem> {
               if (widget.section['title'] != null)
                 AdaptiveListTile(
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                   title: widget.section['strapline'] == null
                       ? Text(widget.section['title'] ?? '',
                           style: const TextStyle(
@@ -158,6 +165,7 @@ class _SectionItemState extends State<SectionItem> {
   }
 }
 
+// ignore: must_be_immutable
 class SongList extends StatefulWidget {
   SongList({required this.songs, required this.controller, super.key});
   final List songs;
@@ -194,12 +202,15 @@ class _SongListState extends State<SongList> {
       itemBuilder: (context, index) {
         int start = index * num;
         int end = start + num;
-        return Column(
-          children: widget.songs
-              .sublist(start, min(end, widget.songs.length))
-              .map((pageSongs) {
-            return SongTile(song: pageSongs);
-          }).toList(),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            children: widget.songs
+                .sublist(start, min(end, widget.songs.length))
+                .map((pageSongs) {
+              return SongTile(song: pageSongs);
+            }).toList(),
+          ),
         );
       },
     );
@@ -269,11 +280,27 @@ class SongTile extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          subtitle: Text(
-            _buildSubtitle(song),
-            maxLines: 1,
-            style: TextStyle(color: Colors.grey.withAlpha(250)),
-            overflow: TextOverflow.ellipsis,
+          subtitle: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (song['explicit'] == true)
+                Padding(
+                  padding: const EdgeInsets.only(right: 2),
+                  child: Icon(
+                    Icons.explicit,
+                    size: 18,
+                    color: Colors.grey.withOpacity(0.9),
+                  ),
+                ),
+              Expanded(
+                child: Text(
+                  _buildSubtitle(song),
+                  maxLines: 1,
+                  style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
           trailing: song['endpoint'] != null && song['videoId'] == null
               ? const Icon(CupertinoIcons.chevron_right)
@@ -338,83 +365,122 @@ class _ItemListState extends State<ItemList> {
       double height = constraints.maxWidth > 600 ? 200 : 150;
 
       return SizedBox(
-        height: height + 72,
+        height: height + 94,
         child: ListView.separated(
           controller: widget.controller,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             double width = height * (items[index]?['aspectRatio'] ?? 1);
             String? subtitle = _buildSubtitle(items[index]);
-            return AdaptiveInkWell(
-              onTap: () async {
-                if (items[index]['endpoint'] != null &&
-                    items[index]['videoId'] == null) {
-                  Navigator.push(
-                      context,
-                      AdaptivePageRoute.create(
-                        (context) =>
-                            BrowseScreen(endpoint: items[index]['endpoint']),
-                      ));
-                } else {
-                  await GetIt.I<MediaPlayer>().playSong(Map.from(items[index]));
-                }
-              },
-              onSecondaryTap: () {
-                if (items[index]['videoId'] != null) {
-                  Modals.showSongBottomModal(context, items[index]);
-                } else if (items[index]['playlistId'] != null) {
-                  Modals.showPlaylistBottomModal(context, items[index]);
-                }
-              },
-              onLongPress: () {
-                if (items[index]['videoId'] != null) {
-                  Modals.showSongBottomModal(context, items[index]);
-                } else if (items[index]['playlistId'] != null) {
-                  Modals.showPlaylistBottomModal(context, items[index]);
-                }
-              },
+            return Adaptivecard(
               borderRadius: BorderRadius.circular(8),
-              child: Column(
-                children: [
-                  items[index]['type'] == 'ARTIST'
-                      ? CircleAvatar(
-                          backgroundImage: CachedNetworkImageProvider(
+              padding: EdgeInsets.zero,
+              child: AdaptiveInkWell(
+                padding: const EdgeInsets.all(12),
+                onTap: () async {
+                  if (items[index]['endpoint'] != null &&
+                      items[index]['videoId'] == null) {
+                    Navigator.push(
+                        context,
+                        AdaptivePageRoute.create(
+                          (context) =>
+                              BrowseScreen(endpoint: items[index]['endpoint']),
+                        ));
+                  } else {
+                    await GetIt.I<MediaPlayer>()
+                        .playSong(Map.from(items[index]));
+                  }
+                },
+                onSecondaryTap: () {
+                  if (items[index]['videoId'] != null) {
+                    Modals.showSongBottomModal(context, items[index]);
+                  } else if (items[index]['playlistId'] != null) {
+                    Modals.showPlaylistBottomModal(context, items[index]);
+                  }
+                },
+                onLongPress: () {
+                  if (items[index]['videoId'] != null) {
+                    Modals.showSongBottomModal(context, items[index]);
+                  } else if (items[index]['playlistId'] != null) {
+                    Modals.showPlaylistBottomModal(context, items[index]);
+                  }
+                },
+                borderRadius: BorderRadius.circular(8),
+                child: Column(
+                  children: [
+                    Ink(
+                      width: width,
+                      height: height,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(
+                            items[index]['type'] == 'ARTIST' ? height / 2 : 8),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: CachedNetworkImageProvider(
                             getEnhancedImage(
-                                items[index]['thumbnails'].first['url'],
-                                width: width.toInt()),
-                          ),
-                          radius: height / 2,
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: CachedNetworkImage(
-                            imageUrl: getEnhancedImage(
                               items[index]['thumbnails'].first['url'],
-                              width: width.toInt(),
+                              width: width.ceil(),
                             ),
-                            height: height,
-                            width: width,
-                            fit: BoxFit.cover,
                           ),
                         ),
-                  SizedBox(
-                    width: width,
-                    child: AdaptiveListTile(
-                      title: Text(
-                        items[index]['title'],
-                        maxLines: 1,
                       ),
-                      subtitle: subtitle != null
-                          ? Text(subtitle,
-                              maxLines: 1,
-                              style:
-                                  TextStyle(color: Colors.grey.withAlpha(250)),
-                              overflow: TextOverflow.ellipsis)
+                      child: ['SONG', 'VIDEO', 'EPISODE']
+                              .contains(items[index]['type'])
+                          ? Container(
+                              padding: const EdgeInsets.all(8),
+                              alignment: items[index]['type'] == 'SONG'
+                                  ? Alignment.bottomRight
+                                  : Alignment.center,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white.withOpacity(0.8),
+                                child: Icon(
+                                  AdaptiveIcons.play,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
+                              ),
+                            )
                           : null,
                     ),
-                  )
-                ],
+                    SizedBox(
+                      width: width,
+                      child: AdaptiveListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 0,
+                          vertical: 8,
+                        ),
+                        title: Text(
+                          items[index]['title'],
+                          maxLines: 1,
+                        ),
+                        subtitle: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (items[index]['explicit'] == true)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 2),
+                                child: Icon(
+                                  Icons.explicit,
+                                  size: 18,
+                                  color: Colors.grey.withOpacity(0.9),
+                                ),
+                              ),
+                            if (subtitle != null)
+                              Expanded(
+                                child: Text(subtitle,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        color: Colors.grey.withOpacity(0.9)),
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
           },

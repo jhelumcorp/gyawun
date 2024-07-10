@@ -13,6 +13,7 @@ import 'package:gyawun_beta/screens/main_screen/lyrics_box.dart';
 import 'package:gyawun_beta/screens/main_screen/main_screen.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:gyawun_beta/utils/enhanced_image.dart';
+import 'package:gyawun_beta/utils/extensions.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -97,7 +98,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     }
   }
 
-  Future<Color?> getColor(String? image) async {
+  Future<Color?> getColor(String? image, bool isDark) async {
     if (image == null) return Theme.of(context).scaffoldBackgroundColor;
     PaletteGenerator paletteGenerator =
         await PaletteGenerator.fromImageProvider(
@@ -112,12 +113,21 @@ class _PlayerScreenState extends State<PlayerScreen> {
         },
       ),
     );
+
     if (mounted) {
-      return paletteGenerator.lightMutedColor?.color ??
-          paletteGenerator.darkVibrantColor?.color ??
-          paletteGenerator.dominantColor?.color ??
-          paletteGenerator.darkMutedColor?.color ??
-          paletteGenerator.lightVibrantColor?.color;
+      if (isDark) {
+        return paletteGenerator.darkVibrantColor?.color ??
+            paletteGenerator.dominantColor?.color ??
+            paletteGenerator.darkMutedColor?.color ??
+            paletteGenerator.lightVibrantColor?.color ??
+            paletteGenerator.lightMutedColor?.color;
+      } else {
+        return paletteGenerator.lightMutedColor?.color ??
+            paletteGenerator.darkVibrantColor?.color ??
+            paletteGenerator.dominantColor?.color ??
+            paletteGenerator.darkMutedColor?.color ??
+            paletteGenerator.lightVibrantColor?.color;
+      }
     } else {
       return Colors.transparent;
     }
@@ -158,9 +168,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
           systemNavigationBarColor: Colors.transparent,
         ),
         child: FutureBuilder<Color?>(
-            future: getColor(image),
+            future: getColor(image, context.isDarkMode),
             builder: (context, snapshot) {
               if (!mounted) return Container();
+              // pprint(snapshot.data?.toString());
               return Theme(
                 data: darkTheme(primaryWhite),
                 child: Container(
@@ -200,7 +211,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     showLyrics = !showLyrics;
                                   });
                                 },
-                                icon: const Icon(Icons.lyrics_outlined),
+                                icon: Icon(AdaptiveIcons.lyrics),
                               ),
                               if (MediaQuery.of(context).size.width >
                                       MediaQuery.of(context).size.height ||
@@ -209,8 +220,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   onPressed: () {
                                     _key.currentState?.openEndDrawer();
                                   },
-                                  icon: const Icon(
-                                    Icons.queue_music_outlined,
+                                  icon: Icon(
+                                    AdaptiveIcons.queue,
                                   ),
                                 ),
                               if (Platform.isWindows) const WindowButtons()
@@ -534,10 +545,13 @@ class NameAndControls extends StatelessWidget {
                       valueListenable: Hive.box('FAVOURITES').listenable(),
                       builder: (context, value, child) {
                         Map? item = value.get(song!.extras!['videoId']);
-                        return IconButton(
-                          icon: Icon(item == null
-                              ? CupertinoIcons.heart
-                              : CupertinoIcons.heart_fill),
+                        return AdaptiveIconButton(
+                          icon: Icon(
+                            item == null
+                                ? AdaptiveIcons.heart
+                                : AdaptiveIcons.heart_fill,
+                            size: 30,
+                          ),
                           onPressed: () async {
                             if (item == null) {
                               await Hive.box('FAVOURITES').put(
@@ -555,35 +569,43 @@ class NameAndControls extends StatelessWidget {
                         );
                       },
                     ),
-                    IconButton(
+                    AdaptiveIconButton(
                       onPressed: () {
                         mediaPlayer.player.seekToPrevious();
                       },
-                      icon: const Icon(Icons.skip_previous),
+                      icon: Icon(
+                        AdaptiveIcons.skip_previous,
+                        size: 30,
+                      ),
                     ),
                     const PlayButton(size: 40),
-                    IconButton(
-                        onPressed: () {
-                          mediaPlayer.player.seekToNext();
-                        },
-                        icon: const Icon(Icons.skip_next)),
+                    AdaptiveIconButton(
+                      onPressed: () {
+                        mediaPlayer.player.seekToNext();
+                      },
+                      icon: Icon(
+                        AdaptiveIcons.skip_next,
+                        size: 30,
+                      ),
+                    ),
                     ValueListenableBuilder(
                         valueListenable: mediaPlayer.loopMode,
                         builder: (context, value, child) {
-                          return IconButton(
+                          return AdaptiveIconButton(
                             onPressed: () {
                               mediaPlayer.changeLoopMode();
                             },
                             isSelected: value != LoopMode.off,
-                            color: value == LoopMode.off
-                                ? null
-                                : Theme.of(context).primaryColor,
                             icon: Icon(
-                              value == LoopMode.off
-                                  ? Icons.repeat_outlined
-                                  : value == LoopMode.all
-                                      ? Icons.repeat_on_outlined
-                                      : Icons.repeat_one_on_outlined,
+                              value == LoopMode.off || value == LoopMode.all
+                                  ? AdaptiveIcons.repeat_all
+                                  : AdaptiveIcons.repeat_one,
+                              size: 30,
+                              color:
+                                  value == LoopMode.one || value == LoopMode.all
+                                      ? (AdaptiveTheme.of(context).primaryColor)
+                                          .withOpacity(0.5)
+                                      : null,
                             ),
                           );
                         }),
@@ -616,22 +638,28 @@ class NameAndControls extends StatelessWidget {
                           return const Icon(Icons.download_done_outlined);
                         }
                       }
-                      return IconButton(
+                      return AdaptiveIconButton(
                           onPressed: () {
                             GetIt.I<DownloadManager>()
                                 .downloadSong(song!.extras!);
                           },
-                          icon: const Icon(Icons.download_outlined));
+                          icon: Icon(
+                            AdaptiveIcons.download,
+                            size: 30,
+                          ));
                     },
                   ),
-                IconButton(
+                AdaptiveIconButton(
                     onPressed: () {
                       Modals.showPlayerOptionsModal(
                         context,
                         mediaPlayer.currentSongNotifier.value!.extras!,
                       );
                     },
-                    icon: const Icon(Icons.more_vert_outlined))
+                    icon: Icon(
+                      AdaptiveIcons.more_vertical,
+                      size: 30,
+                    ))
               ],
             ),
             if (song != null && !isRow)

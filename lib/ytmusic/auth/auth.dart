@@ -101,9 +101,12 @@ class AuthMixin {
     var url = "${code['verification_url']}?user_code=${code['user_code']}";
     Navigator.pop(context);
     if (context.mounted) {
-      bool confirm1 = await Modals.showConfirmBottomModal(context,
-          message:
-              'Login via youtube music. your code is:\n${code["user_code"]}');
+      bool confirm1 = await Modals.showConfirmBottomModal(
+        context,
+        message: 'Login via youtube music. your code is:\n${code["user_code"]}',
+        doneText: 'Proceed',
+        cancelText: 'Cancel',
+      );
       if (confirm1 == true) {
         await launchUrl(Uri.parse(url), mode: LaunchMode.inAppBrowserView);
         await Future.delayed(const Duration(milliseconds: 1000));

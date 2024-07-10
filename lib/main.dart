@@ -155,7 +155,7 @@ class Gyawun extends StatelessWidget {
                     colorScheme: context.watch<SettingsManager>().dynamicColors
                         ? lightScheme
                         : null),
-                darkTheme: darkTheme(primaryWhite,
+                darkTheme: darkTheme(Colors.white,
                     colorScheme: context.watch<SettingsManager>().dynamicColors
                         ? darkScheme
                         : null),

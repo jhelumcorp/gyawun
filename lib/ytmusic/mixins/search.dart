@@ -54,7 +54,6 @@ mixin SearchMixin on YTMusicServices {
         }
       }
     }
-    // pprint(suggestions);
     return suggestions;
   }
 
@@ -67,7 +66,6 @@ mixin SearchMixin on YTMusicServices {
       Map<String, dynamic>? endpoint}) async {
     final data = Map.of(context);
 
-    // final Map<String, dynamic> searchResults = {};
     final filters = [
       'albums',
       'artists',
@@ -167,7 +165,6 @@ mixin SearchMixin on YTMusicServices {
     return result;
   }
 
-  // _handleContents(){}
   Map<String, dynamic> _handleMusicCardShelfRenderer(Map item) {
     Map<String, dynamic> section = {};
     section.addAll(_handleHeader(

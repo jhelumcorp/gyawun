@@ -369,7 +369,6 @@ handleMusicCarouselShelfRenderer(Map item) {
     'thumbnails'
   ]);
   section['contents'] = [];
-  // Map header = nav(musicCarouselShelfRenderer, ['header']);
   List? contents = nav(item, ['contents']);
 
   if (contents != null) {

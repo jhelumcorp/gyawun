@@ -1,7 +1,7 @@
 name: gyawun_beta
 description: "A new Flutter project."
 publish_to: 'none'
-version: 2.0.0-beta-2+22
+version: 2.0.0-beta-3+23
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
