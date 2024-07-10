@@ -11,6 +11,7 @@ class Adaptivecard extends StatelessWidget {
     this.borderRadius,
     this.margin,
     this.padding,
+    this.elevation,
   });
 
   final Widget child;
@@ -18,6 +19,7 @@ class Adaptivecard extends StatelessWidget {
   final BorderRadius? borderRadius;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
+  final double? elevation;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class Adaptivecard extends StatelessWidget {
     return Card(
       margin: margin ?? const EdgeInsets.all(1),
       color: backgroundColor,
+      elevation: elevation,
       shape: RoundedRectangleBorder(
           borderRadius:
               borderRadius ?? const BorderRadius.all(Radius.circular(8.0))),

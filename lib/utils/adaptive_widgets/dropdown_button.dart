@@ -38,6 +38,9 @@ class AdaptiveDropdownButton<T> extends StatelessWidget {
       style: style,
       underline: const SizedBox(),
       value: value,
+      isDense: true,
+      borderRadius: BorderRadius.circular(8),
+      alignment: AlignmentDirectional.centerEnd,
       items: items
           ?.map(
             (item) => DropdownMenuItem(

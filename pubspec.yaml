@@ -1,7 +1,7 @@
 name: gyawun_beta
 description: "A new Flutter project."
 publish_to: 'none'
-version: 2.0.0-beta-3+23
+version: 2.0.0-beta-4+24
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
@@ -55,6 +55,7 @@ dependencies:
   flutter_acrylic: ^1.1.4
   fluent_ui: ^4.9.0
   window_manager: ^0.3.9
+  disable_battery_optimization: ^1.1.1
 
 dev_dependencies:
   flutter_test:

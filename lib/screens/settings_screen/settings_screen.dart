@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -23,12 +24,26 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   TextEditingController searchController = TextEditingController();
+  bool? isBatteryOptimisationDisabled;
 
   String searchText = "";
+
+  @override
+  void initState() {
+    super.initState();
+    checkBatteryOptimisation();
+  }
+
   @override
   void dispose() {
     super.dispose();
     searchController.dispose();
+  }
+
+  checkBatteryOptimisation() async {
+    isBatteryOptimisationDisabled =
+        await DisableBatteryOptimization.isBatteryOptimizationDisabled;
+    setState(() {});
   }
 
   @override
@@ -80,6 +95,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       : null,
                 ),
               ),
+              if (searchText == "" && isBatteryOptimisationDisabled != true)
+                AdaptiveListTile(
+                  backgroundColor: Colors.red.withOpacity(0.3),
+                  leading: const ColorIcon(
+                    icon: Icons.battery_alert,
+                    color: Colors.red,
+                  ),
+                  title: const Text('Battery Optimisation Detected'),
+                  subtitle: Text(
+                    'Click here to disable battery optimisation.',
+                    style: tinyTextStyle(context),
+                  ),
+                  onTap: () async {
+                    await DisableBatteryOptimization
+                        .showDisableBatteryOptimizationSettings();
+
+                    await checkBatteryOptimisation();
+                  },
+                ),
               if (searchText == "")
                 AdaptiveListTile(
                   leading:
@@ -132,13 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       e.onTap!(context);
                     }
                   },
-                  subtitle: e.subtitle != null
-                      ? Text(
-                          e.subtitle!(context),
-                          style: tinyTextStyle(context),
-                          maxLines: 2,
-                        )
-                      : null,
+                  subtitle: e.subtitle != null ? e.subtitle!(context) : null,
                 );
               }),
             ],
