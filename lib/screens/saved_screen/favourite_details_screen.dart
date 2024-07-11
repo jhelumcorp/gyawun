@@ -31,7 +31,7 @@ class FavouriteDetailsScreen extends StatelessWidget {
                 ValueListenableBuilder(
                   valueListenable: Hive.box('FAVOURITES').listenable(),
                   builder: (context, box, child) {
-                    Map songs = box.toMap();
+                    Map<String, dynamic> songs = Map.from(box.toMap());
                     return Column(
                       children: songs
                           .map((key, song) {

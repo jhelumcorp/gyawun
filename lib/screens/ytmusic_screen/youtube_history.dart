@@ -93,6 +93,8 @@ class _YoutubeHistoryState extends State<YoutubeHistory> {
                               if (history['title'] != null &&
                                   history['contents'].isNotEmpty)
                                 AdaptiveListTile(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 4),
                                   title: Text(
                                     history['title']!,
                                     style: mediumTextStyle(context),
@@ -146,11 +148,16 @@ class _YoutubeHistoryState extends State<YoutubeHistory> {
                                         : item['subtitle'] ??
                                             item['album']?['name'] ??
                                             ''),
-                                    leading: CachedNetworkImage(
-                                      imageUrl: item['thumbnails'].first['url'],
-                                      height: 50,
-                                      width: 50,
-                                      fit: BoxFit.cover,
+                                    leading: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          item['type'] == 'ARTIST' ? 50 : 3),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            item['thumbnails'].first['url'],
+                                        height: 50,
+                                        width: 50,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                     onTap: () {
                                       GetIt.I<MediaPlayer>().playSong(item);

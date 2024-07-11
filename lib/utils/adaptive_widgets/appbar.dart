@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'buttons.dart';
@@ -79,9 +78,10 @@ class AdaptiveAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize {
     if (Platform.isWindows) {
-      return const Size.fromHeight(50.0);
+      return Size.fromHeight(50.0 + (bottom == null ? 0 : kTextTabBarHeight));
     } else {
-      return const Size.fromHeight(kToolbarHeight);
+      return Size.fromHeight(
+          kToolbarHeight + (bottom == null ? 0 : kTextTabBarHeight));
     }
   }
 }

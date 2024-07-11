@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
+import 'package:gyawun_beta/utils/extensions.dart';
 
 import '../../services/bottom_message.dart';
 import '../../services/download_manager.dart';
 import '../../services/media_player.dart';
 import '../../utils/bottom_modals.dart';
-import '../../utils/extensions.dart';
 
 class DownloadScreen extends StatelessWidget {
   const DownloadScreen({super.key});

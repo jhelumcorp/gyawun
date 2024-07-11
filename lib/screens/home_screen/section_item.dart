@@ -433,23 +433,6 @@ class _ItemListState extends State<ItemList> {
                           ),
                         ),
                       ),
-                      child: ['SONG', 'VIDEO', 'EPISODE']
-                              .contains(items[index]['type'])
-                          ? Container(
-                              padding: const EdgeInsets.all(8),
-                              alignment: items[index]['type'] == 'SONG'
-                                  ? Alignment.bottomRight
-                                  : Alignment.center,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white.withOpacity(0.8),
-                                child: Icon(
-                                  AdaptiveIcons.play,
-                                  color: Colors.black,
-                                  size: 20,
-                                ),
-                              ),
-                            )
-                          : null,
                     ),
                     SizedBox(
                       width: width,

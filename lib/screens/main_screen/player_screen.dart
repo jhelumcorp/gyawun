@@ -630,7 +630,7 @@ class NameAndControls extends StatelessWidget {
                                 ? item['progress']
                                 : null,
                             color: Colors.white,
-                            backgroundColor: Colors.white.withAlpha(50),
+                            backgroundColor: Colors.black,
                           );
                         } else if (item['status'] == 'DOWNLOADED') {
                           return const Icon(Icons.download_done_outlined);

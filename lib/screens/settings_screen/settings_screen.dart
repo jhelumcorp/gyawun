@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:gyawun_beta/utils/bottom_modals.dart';
+import 'package:gyawun_beta/ytmusic/ytmusic.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
@@ -54,6 +56,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        actions: [
+          AdaptiveIconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () async {
+                await GetIt.I<YTMusic>().getLibrarySubscriptions();
+              })
+        ],
       ),
       body: Center(
         child: Container(
@@ -95,7 +104,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       : null,
                 ),
               ),
-              if (searchText == "" && isBatteryOptimisationDisabled != true)
+              if (searchText == "" &&
+                  isBatteryOptimisationDisabled != true &&
+                  Platform.isAndroid)
                 AdaptiveListTile(
                   backgroundColor: Colors.red.withOpacity(0.3),
                   leading: const ColorIcon(
