@@ -30,10 +30,13 @@ class CustomAudioStream extends StreamAudioSource {
     }
     AudioOnlyStreamInfo streamInfo = streamInfos[qualityIndex];
     start ??= 0;
+
     end ??= (streamInfo.isThrottled
-            ? (start + 10379935)
-            : streamInfo.size.totalBytes) -
-        1;
+        ? (start + 10379935)
+        : streamInfo.size.totalBytes);
+    if (end > streamInfo.size.totalBytes) {
+      end = streamInfo.size.totalBytes;
+    }
     return StreamAudioResponse(
       sourceLength: streamInfo.size.totalBytes,
       contentLength: end - start,
