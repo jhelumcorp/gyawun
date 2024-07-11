@@ -149,6 +149,7 @@ Map<String, dynamic> handlePageHeader(Map<String, dynamic> header,
 handleContents(List contents, {List? thumbnails}) {
   List contentsResult = [];
   for (Map content in contents) {
+    Map result = {};
     Map? musicResponsiveListItemRenderer =
         nav(content, ['musicResponsiveListItemRenderer']);
     Map? musicTwoRowItemRenderer = nav(content, ['musicTwoRowItemRenderer']);
@@ -157,19 +158,20 @@ handleContents(List contents, {List? thumbnails}) {
     Map? playlistPanelVideoRenderer =
         nav(content, ['playlistPanelVideoRenderer']);
     if (musicResponsiveListItemRenderer != null) {
-      contentsResult.add(handleMusicResponsiveListItemRenderer(
+      result = handleMusicResponsiveListItemRenderer(
           musicResponsiveListItemRenderer,
-          thumbnails: thumbnails));
+          thumbnails: thumbnails);
     } else if (musicTwoRowItemRenderer != null) {
-      contentsResult.add(handleMusicTwoRowItemRenderer(musicTwoRowItemRenderer,
-          thumbnails: thumbnails));
+      result = handleMusicTwoRowItemRenderer(musicTwoRowItemRenderer,
+          thumbnails: thumbnails);
     } else if (musicMultiRowListItemRenderer != null) {
-      contentsResult.add(
-          handleMusicMultiRowListItemRenderer(musicMultiRowListItemRenderer));
+      result =
+          handleMusicMultiRowListItemRenderer(musicMultiRowListItemRenderer);
     } else if (playlistPanelVideoRenderer != null) {
-      contentsResult
-          .add(handlePlaylistPanelVideoRenderer(playlistPanelVideoRenderer));
+      result = handlePlaylistPanelVideoRenderer(playlistPanelVideoRenderer);
     }
+    if (result['thumbnails'] == null) continue;
+    contentsResult.add(result);
   }
   return contentsResult;
 }
@@ -265,6 +267,7 @@ Map<String, dynamic> checkRuns(List? runs) {
 
 Map itemCategory = {
   'MUSIC_PAGE_TYPE_ARTIST': 'ARTIST',
+  'MUSIC_PAGE_TYPE_LIBRARY_ARTIST': 'ARTIST',
   'MUSIC_VIDEO_TYPE_OMV': 'VIDEO',
   'MUSIC_VIDEO_TYPE_UGC': 'VIDEO',
   'MUSIC_PAGE_TYPE_ALBUM': 'ALBUM',

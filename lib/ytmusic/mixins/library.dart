@@ -4,6 +4,69 @@ import '../yt_service_provider.dart';
 import 'utils.dart';
 
 mixin LibraryMixin on YTMusicServices {
+  Future<List> getLibrarySongs() async {
+    Map<String, dynamic> body = {'browseId': 'FEmusic_liked_videos'};
+    final response = await sendRequest('browse', body);
+    List contents = nav(response, [
+      'contents',
+      'singleColumnBrowseResultsRenderer',
+      'tabs',
+      0,
+      'tabRenderer',
+      'content',
+      'sectionListRenderer',
+      'contents',
+      0,
+      'musicShelfRenderer',
+      'contents'
+    ]);
+
+    List result = handleContents(contents);
+    return result;
+  }
+
+  Future<List> getLibraryAlbums() async {
+    Map<String, dynamic> body = {'browseId': 'FEmusic_liked_albums'};
+    final response = await sendRequest('browse', body);
+    List contents = nav(response, [
+      'contents',
+      'singleColumnBrowseResultsRenderer',
+      'tabs',
+      0,
+      'tabRenderer',
+      'content',
+      'sectionListRenderer',
+      'contents',
+      0,
+      'itemSectionRenderer',
+      'contents'
+    ]);
+    List result = handleContents(contents);
+    return result;
+  }
+
+  Future<List> getLibraryArtists() async {
+    Map<String, dynamic> body = {
+      'browseId': 'FEmusic_library_corpus_track_artists'
+    };
+    final response = await sendRequest('browse', body);
+    List contents = nav(response, [
+      'contents',
+      'singleColumnBrowseResultsRenderer',
+      'tabs',
+      0,
+      'tabRenderer',
+      'content',
+      'sectionListRenderer',
+      'contents',
+      0,
+      'musicShelfRenderer',
+      'contents'
+    ]);
+    List result = handleContents(contents);
+    return result;
+  }
+
   Future<List> getLibraryPlaylists({int limit = 25}) async {
     Map<String, dynamic> body = {'browseId': 'FEmusic_liked_playlists'};
     var response = await sendRequest('browse', body);
@@ -20,7 +83,28 @@ mixin LibraryMixin on YTMusicServices {
       'gridRenderer',
       'items'
     ]);
+
     List result = handleContents(contents.sublist(1));
+    return result;
+  }
+
+  Future<List> getLibrarySubscriptions() async {
+    Map<String, dynamic> body = {'browseId': 'FEmusic_library_corpus_artists'};
+    final response = await sendRequest('browse', body);
+    List contents = nav(response, [
+      'contents',
+      'singleColumnBrowseResultsRenderer',
+      'tabs',
+      0,
+      'tabRenderer',
+      'content',
+      'sectionListRenderer',
+      'contents',
+      0,
+      'musicShelfRenderer',
+      'contents'
+    ]);
+    List result = handleContents(contents);
     return result;
   }
 
@@ -79,53 +163,6 @@ mixin LibraryMixin on YTMusicServices {
     final response = await sendRequest('feedback', body);
     return nav(response, ['feedbackResponses', 0, 'isProcessed']) == true;
   }
-  //     def remove_history_items(self, feedbackTokens: List[str]) -> Dict:  # pragma: no cover
-//         """
-//         Remove an item from the account's history. This method does currently not work with brand accounts
-
-//         :param feedbackTokens: Token to identify the item to remove, obtained from :py:func:`get_history`
-//         :return: Full response
-//         """
-//         self._check_auth()
-//         body = {'feedbackTokens': feedbackTokens}
-//         endpoint = 'feedback'
-//         response = self._send_request(endpoint, body)
-
-//         return response
-//     def get_library_playlists(self, limit: int = 25) -> List[Dict]:
-//         """
-//         Retrieves the playlists in the user's library.
-
-//         :param limit: Number of playlists to retrieve. `None` retrieves them all.
-//         :return: List of owned playlists.
-
-//         Each item is in the following format::
-
-//             {
-//                 'playlistId': 'PLQwVIlKxHM6rz0fDJVv_0UlXGEWf-bFys',
-//                 'title': 'Playlist title',
-//                 'thumbnails: [...],
-//                 'count': 5
-//             }
-//         """
-//         self._check_auth()
-//         body = {'browseId': 'FEmusic_liked_playlists'}
-//         endpoint = 'browse'
-//         response = self._send_request(endpoint, body)
-
-//         results = get_library_contents(response, GRID)
-//         playlists = parse_content_list(results['items'][1:], parse_playlist)
-
-//         if 'continuations' in results:
-//             request_func = lambda additionalParams: self._send_request(
-//                 endpoint, body, additionalParams)
-//             parse_func = lambda contents: parse_content_list(contents, parse_playlist)
-//             remaining_limit = None if limit is None else (limit - len(playlists))
-//             playlists.extend(
-//                 get_continuations(results, 'gridContinuation', remaining_limit, request_func,
-//                                   parse_func))
-
-//         return playlists
 
 //     def get_library_songs(self,
 //                           limit: int = 25,

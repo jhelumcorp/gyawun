@@ -32,8 +32,7 @@ class FileStorage {
     Directory directory = Directory("dir");
     if (Platform.isAndroid) {
       directory = Directory('/storage/emulated/0/Download/Gyawun');
-    }
-    if (Platform.isWindows) {
+    } else if (Platform.isWindows) {
       directory =
           Directory(path.join((await getDownloadsDirectory())!.path, 'Gyawun'));
     } else {

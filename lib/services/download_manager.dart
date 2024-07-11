@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import 'file_storage.dart';
 import 'settings_manager.dart';
+import 'stream_client.dart';
 
 Box _box = Hive.box('DOWNLOADS');
+YoutubeExplode ytExplode = YoutubeExplode();
 
 class DownloadManager {
   Client client = Client();
@@ -23,17 +26,22 @@ class DownloadManager {
     if (!(await FileStorage.requestPermissions())) {
       return;
     }
-    HttpServer server = GetIt.I<HttpServer>();
-    StreamedResponse response = await client.send(
-      Request(
-        'GET',
-        Uri.parse(
-            'http://${server.address.address}:${server.port}?id=${song['videoId']}&quality=${GetIt.I<SettingsManager>().downloadQuality.name.toLowerCase()}'),
-      ),
-    );
-    int total = response.contentLength ?? 0;
+    AudioOnlyStreamInfo audioSource = await _getSongInfo(song['videoId'],
+        quality: GetIt.I<SettingsManager>().downloadQuality.name.toLowerCase());
+    int start = 0;
+    int end = audioSource.size.totalBytes;
+    Stream<List<int>> stream =
+        AudioStreamClient().getAudioStream(audioSource, start: start, end: end);
+    // HttpServer server = GetIt.I<HttpServer>();
+    // StreamedResponse response = await client.send(
+    //   Request(
+    //     'GET',
+    //     Uri.parse(
+    //         'http://${server.address.address}:${server.port}?id=${song['videoId']}&quality=${GetIt.I<SettingsManager>().downloadQuality.name.toLowerCase()}'),
+    //   ),
+    // );
+    int total = audioSource.size.totalBytes;
     List<int> recieved = [];
-    ByteStream stream = response.stream;
     await _box.put(
       song['videoId'],
       {
@@ -77,6 +85,25 @@ class DownloadManager {
         await _box.delete(song['videoId']);
       },
     );
+  }
+
+  Future<AudioOnlyStreamInfo> _getSongInfo(String videoId,
+      {String quality = 'high'}) async {
+    StreamManifest manifest =
+        await ytExplode.videos.streamsClient.getManifest(videoId);
+
+    List<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly
+        .sortByBitrate()
+        .reversed
+        .where((stream) => stream.container == StreamContainer.mp4)
+        .toList();
+    int qualityIndex = streamInfos.length - 1;
+    if (quality == 'low') {
+      qualityIndex = 0;
+    } else {
+      qualityIndex = streamInfos.length - 1;
+    }
+    return streamInfos[qualityIndex];
   }
 
   Future<String> deleteSong(String key, String path) async {

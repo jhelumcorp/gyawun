@@ -62,6 +62,13 @@ abstract class YTMusicServices extends AuthMixin {
     return response;
   }
 
+  Future<Response> addPlayingStats(String videoId, Duration time) async {
+    final Uri uri = Uri.parse(
+        'https://music.youtube.com/api/stats/watchtime?ns=yt&ver=2&c=WEB_REMIX&cmt=${(time.inMilliseconds / 1000)}&docid=$videoId');
+    final Response response = await get(uri, headers: headers);
+    return response;
+  }
+
   Future<String?> getVisitorId(Map<String, String>? headers) async {
     final response = await sendGetRequest(httpsYtmDomain, headers);
     final reg = RegExp(r'ytcfg\.set\s*\(\s*({.+?})\s*\)\s*;');

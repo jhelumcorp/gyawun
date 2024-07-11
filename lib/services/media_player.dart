@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/services/custom_audio_stream.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
@@ -37,8 +38,8 @@ class MediaPlayer extends ChangeNotifier {
       ValueNotifier(ProgressBarState());
 
   bool _shuffleModeEnabled = false;
-  String serverAddress;
-  MediaPlayer(this.serverAddress) {
+
+  MediaPlayer() {
     if (Platform.isAndroid) {
       _equalizer = AndroidEqualizer();
     }
@@ -58,7 +59,6 @@ class MediaPlayer extends ChangeNotifier {
   AudioPlayer get player => _player;
   ConcatenatingAudioSource get playlist => _playlist;
   List<IndexedAudioSource>? get songList => _songList;
-  // MediaItem? get currentSong => _currentSong;
   ValueNotifier<MediaItem?> get currentSongNotifier => _currentSongNotifier;
   ValueNotifier<int?> get currentIndex => _currentIndex;
   ValueNotifier<ButtonState> get buttonState => _buttonState;
@@ -78,6 +78,12 @@ class MediaPlayer extends ChangeNotifier {
     _listenToTotalDuration();
     _listenToChangesInSong();
     _listenToShuffle();
+    Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (currentSongNotifier.value != null && _player.playing) {
+        GetIt.I<YTMusic>()
+            .addPlayingStats(currentSongNotifier.value!.id, _player.position);
+      }
+    });
   }
 
   _loadLoudnessEnhancer() async {
@@ -255,33 +261,39 @@ class MediaPlayer extends ChangeNotifier {
     GetIt.I<SettingsManager>().skipSilence = value;
   }
 
+  Future<AudioSource> _getAudioSource(Map<String, dynamic> song) async {
+    MediaItem tag = MediaItem(
+      id: song['videoId'],
+      title: song['title'] ?? 'Title',
+      album: song['album']?['name'],
+      artUri: Uri.parse(
+          song['thumbnails']?.first['url'].replaceAll('w60-h60', 'w225-h225')),
+      artist: song['artists']?.map((artist) => artist['name']).join(','),
+      extras: song,
+    );
+    AudioSource audioSource;
+    bool isDownloaded = song['status'] == 'DOWNLOADED' &&
+        song['path'] != null &&
+        (await File(song['path']).exists());
+    if (isDownloaded) {
+      audioSource = AudioSource.uri(Uri.parse(song['path']), tag: tag);
+    } else {
+      audioSource = CustomAudioStream(
+        song['videoId'],
+        GetIt.I<SettingsManager>().audioQuality.name.toLowerCase(),
+        tag: tag,
+      );
+    }
+    return audioSource;
+  }
+
   Future<void> playSong(Map<String, dynamic> song,
       {bool autoFetch = true}) async {
-    // await YTMusic.getData();
-    // return;
     if (song['videoId'] != null) {
       await _player.pause();
       await _playlist.clear();
-      Uri uri = Uri.parse(song['status'] == 'DOWNLOADED' &&
-              song['path'] != null &&
-              (await File(song['path']).exists())
-          ? song['path']
-          : 'http://$serverAddress?id=${song['videoId']}&quality=${GetIt.I<SettingsManager>().audioQuality.name.toLowerCase()}');
-      await _playlist.add(
-        AudioSource.uri(
-          uri,
-          tag: MediaItem(
-            id: song['videoId'],
-            title: song['title'] ?? 'Title',
-            album: song['album']?['name'],
-            artUri: Uri.parse(song['thumbnails']
-                ?.first['url']
-                .replaceAll('w60-h60', 'w225-h225')),
-            artist: song['artists']?.map((artist) => artist['name']).join(','),
-            extras: song,
-          ),
-        ),
-      );
+
+      await _playlist.add(await _getAudioSource(song));
       await _player.load();
       _player.play();
       if (autoFetch == true && song['status'] != 'DOWNLOADED') {
@@ -295,31 +307,13 @@ class MediaPlayer extends ChangeNotifier {
 
   Future<void> playNext(Map<String, dynamic> song) async {
     if (song['videoId'] != null) {
-      Uri uri = Uri.parse(song['status'] == 'DOWNLOADED' &&
-              song['path'] != null &&
-              (await File(song['path']).exists())
-          ? song['path']
-          : 'http://$serverAddress?id=${song['videoId']}');
-      AudioSource audioSource = AudioSource.uri(
-        uri,
-        tag: MediaItem(
-          id: song['videoId'],
-          title: song['title'] ?? 'Title',
-          album: song['album']?['name'],
-          artUri: Uri.parse(song['thumbnails']
-              ?.first['url']
-              .replaceAll('w60-h60', 'w225-h225')),
-          artist: song['artists']?.map((artist) => artist['name']).join(','),
-          extras: song,
-        ),
-      );
+      AudioSource audioSource = await _getAudioSource(song);
 
       if (_playlist.length > 0) {
         await _playlist.insert((_player.currentIndex ?? -1) + 1, audioSource);
       } else {
         await _playlist.add(audioSource);
       }
-      // pprint(_playlist.children.first);
     } else if (song['playlistId'] != null) {
       List songs =
           await GetIt.I<YTMusic>().getPlaylistSongs(song['playlistId']);
@@ -336,33 +330,13 @@ class MediaPlayer extends ChangeNotifier {
     await _addSongListToQueue(songs);
     await _player.seek(Duration.zero, index: index);
     if (!(_player.playing)) {
-      await _player.load();
       _player.play();
     }
   }
 
   Future<void> addToQueue(Map<String, dynamic> song) async {
     if (song['videoId'] != null) {
-      Uri uri = Uri.parse(song['status'] == 'DOWNLOADED' &&
-              song['path'] != null &&
-              (await File(song['path']).exists())
-          ? song['path']
-          : 'http://$serverAddress?id=${song['videoId']}');
-      await _playlist.add(
-        AudioSource.uri(
-          uri,
-          tag: MediaItem(
-            id: song['videoId'],
-            title: song['title'] ?? 'Title',
-            album: song['album']?['name'],
-            artUri: Uri.parse(song['thumbnails']
-                ?.first['url']
-                .replaceAll('w60-h60', 'w225-h225')),
-            artist: song['artists']?.map((artist) => artist['name']).join(','),
-            extras: song,
-          ),
-        ),
-      );
+      await _playlist.add(await _getAudioSource(song));
     } else if (song['playlistId'] != null) {
       List songs =
           await GetIt.I<YTMusic>().getPlaylistSongs(song['playlistId']);
@@ -412,40 +386,11 @@ class MediaPlayer extends ChangeNotifier {
           ? 0
           : currentIndex.value! + 1;
     }
-    await _playlist.insertAll(
-        index,
-        songs.map((song) {
-          if (song['status'] == 'DOWNLOADED' && song['path'] != null) {
-            return AudioSource.file(
-              song['path'].toString(),
-              tag: MediaItem(
-                id: song['videoId'],
-                title: song['title'] ?? 'Title',
-                album: song['album']?['name'],
-                artUri: Uri.parse(song['thumbnails']
-                    ?.first['url']
-                    .replaceAll('w60-h60', 'w225-h225')),
-                artist:
-                    song['artists']?.map((artist) => artist['name']).join(','),
-                extras: Map.from(song),
-              ),
-            );
-          }
-          return AudioSource.uri(
-            Uri.parse('http://$serverAddress?id=${song['videoId']}'),
-            tag: MediaItem(
-              id: song['videoId'],
-              title: song['title'] ?? 'Title',
-              album: song['album']?['name'],
-              artUri: Uri.parse(song['thumbnails']
-                  ?.first['url']
-                  .replaceAll('w60-h60', 'w225-h225')),
-              artist:
-                  song['artists']?.map((artist) => artist['name']).join(','),
-              extras: Map.from(song),
-            ),
-          );
-        }).toList());
+    await Future.forEach(songs, (song) async {
+      Map<String, dynamic> mapSong = Map.from(song);
+      await _playlist.insert(index, await _getAudioSource(mapSong));
+      index++;
+    });
   }
 
   setTimer(Duration duration) {

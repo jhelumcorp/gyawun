@@ -91,12 +91,9 @@ void main() async {
 
   await FileStorage.initialise();
   FileStorage fileStorage = FileStorage();
-  HttpServer server = await YTMusic.startServer();
-  GetIt.I.registerSingleton<HttpServer>(server);
   SettingsManager settingsManager = SettingsManager();
   GetIt.I.registerSingleton<SettingsManager>(settingsManager);
-  MediaPlayer mediaPlayer =
-      MediaPlayer('${server.address.address}:${server.port}');
+  MediaPlayer mediaPlayer = MediaPlayer();
   GetIt.I.registerSingleton<MediaPlayer>(mediaPlayer);
   LibraryService libraryService = LibraryService();
   GetIt.I.registerSingleton<DownloadManager>(DownloadManager());
