@@ -33,7 +33,7 @@ class SettingsManager extends ChangeNotifier {
   AudioQuality _downloadQuality = AudioQuality.high;
   bool _skipSilence = false;
   bool _dynamicColors = true;
-  WindowEffect _windowEffect = WindowEffect.acrylic;
+  WindowEffect _windowEffect = WindowEffect.disabled;
   bool _equalizerEnabled = false;
   List<double> _equalizerBandsGain = [];
   bool _loudnessEnabled = false;
@@ -68,7 +68,7 @@ class SettingsManager extends ChangeNotifier {
     _windowEffect = windowEffectList.firstWhere((el) =>
         el.name.toUpperCase() ==
         _box.get('WINDOW_EFFECT',
-            defaultValue: WindowEffect.acrylic.name.toUpperCase()));
+            defaultValue: WindowEffect.disabled.name.toUpperCase()));
 
     _location = _countries.firstWhere((country) =>
         country['value'] == _box.get('LOCATION', defaultValue: 'IN'));
