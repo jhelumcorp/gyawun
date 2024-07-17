@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:gyawun_beta/utils/bottom_modals.dart';
-import 'package:gyawun_beta/ytmusic/ytmusic.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
@@ -33,7 +31,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    checkBatteryOptimisation();
+    if (Platform.isAndroid) {
+      checkBatteryOptimisation();
+    }
   }
 
   @override
@@ -52,17 +52,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
       appBar: AdaptiveAppBar(
-        title: Text(S.of(context).settings,
+        title: Text(S.of(context).Settings,
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
         automaticallyImplyLeading: false,
-        actions: [
-          AdaptiveIconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () async {
-                await GetIt.I<YTMusic>().getLibrarySubscriptions();
-              })
-        ],
       ),
       body: Center(
         child: Container(
@@ -90,7 +83,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   borderRadius:
                       BorderRadius.circular(Platform.isWindows ? 4.0 : 35),
-                  hintText: S.of(context).searchSettings,
+                  hintText: S.of(context).Search_Settings,
                   prefix: const Icon(Icons.search),
                   suffix: searchController.text.trim().isNotEmpty
                       ? GestureDetector(
@@ -113,9 +106,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     icon: Icons.battery_alert,
                     color: Colors.red,
                   ),
-                  title: const Text('Battery Optimisation Detected'),
+                  title: Text(S.of(context).Battery_Optimisation_title),
                   subtitle: Text(
-                    'Click here to disable battery optimisation.',
+                    S.of(context).Battery_Optimisation_message,
                     style: tinyTextStyle(context),
                   ),
                   onTap: () async {
@@ -130,12 +123,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   leading:
                       ColorIcon(icon: Icons.money, color: Colors.accents[14]),
                   title: Text(
-                    S.of(context).donate,
+                    S.of(context).Donate,
                     style:
                         textStyle(context, bold: false).copyWith(fontSize: 16),
                   ),
                   subtitle: Text(
-                    S.of(context).donateSubtitle,
+                    S.of(context).Donate_Message,
                     style: tinyTextStyle(context),
                   ),
                   onTap: () => showPaymentsModal(context),
@@ -192,7 +185,7 @@ showPaymentsModal(BuildContext context) {
   Widget title = AdaptiveListTile(
     contentPadding: EdgeInsets.zero,
     title: Text(
-      S.of(context).paymentMethods,
+      S.of(context).Payment_Methods,
       style: mediumTextStyle(context),
     ),
     leading: Column(
@@ -214,7 +207,7 @@ showPaymentsModal(BuildContext context) {
             borderRadius: BorderRadius.circular(6),
             child: Image.asset('assets/images/upi.jpg', height: 30, width: 30)),
         title: Text(
-          'Pay with UPI',
+          S.of(context).Pay_With_UPI,
           style: subtitleTextStyle(context),
         ),
         onTap: () async {
@@ -235,7 +228,7 @@ showPaymentsModal(BuildContext context) {
             child:
                 Image.asset('assets/images/kofi.png', height: 30, width: 30)),
         title: Text(
-          S.of(context).supportMeOnKofi,
+          S.of(context).Support_Me_On_Kofi,
           style: subtitleTextStyle(context),
         ),
         onTap: () async {
@@ -252,7 +245,7 @@ showPaymentsModal(BuildContext context) {
             child:
                 Image.asset('assets/images/coffee.png', height: 30, width: 30)),
         title: Text(
-          S.of(context).buyMeACoffee,
+          S.of(context).Buy_Me_A_Coffee,
           style: subtitleTextStyle(context),
         ),
         onTap: () async {

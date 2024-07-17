@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/services/media_player.dart';
 import 'package:gyawun_beta/themes/text_styles.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
@@ -38,7 +39,7 @@ class _YoutubeHistoryState extends State<YoutubeHistory> {
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
         appBar: AdaptiveAppBar(
-          title: const Text('Recently Played'),
+          title: Text(S.of(context).History),
           centerTitle: true,
           actions: [
             if (sections.isNotEmpty)
@@ -46,8 +47,7 @@ class _YoutubeHistoryState extends State<YoutubeHistory> {
                 icon: Icon(AdaptiveIcons.delete),
                 onPressed: () {
                   Modals.showConfirmBottomModal(context,
-                          message:
-                              'Are you sure you want to clear Recently Played history?',
+                          message: S.of(context).Remove_All_History_Message,
                           isDanger: true)
                       .then((bool confirm) async {
                     if (confirm) {
@@ -106,12 +106,13 @@ class _YoutubeHistoryState extends State<YoutubeHistory> {
                                   backgroundColor: Colors.transparent,
                                   trailingActions: <SwipeAction>[
                                     SwipeAction(
-                                        title: "Remove",
+                                        title: S.of(context).Remove,
                                         onTap:
                                             (CompletionHandler handler) async {
                                           Modals.showConfirmBottomModal(context,
-                                                  message:
-                                                      'Are you sure you want to remove it from YTMusic?',
+                                                  message: S
+                                                      .of(context)
+                                                      .Remove_From_YTMusic_Message,
                                                   isDanger: true)
                                               .then((bool confirm) async {
                                             if (confirm) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/screens/ytmusic_screen/albums_screen.dart';
 import 'package:gyawun_beta/screens/ytmusic_screen/artists_screen.dart';
 import 'package:gyawun_beta/screens/ytmusic_screen/playlists_screen.dart';
@@ -27,12 +28,15 @@ class _YTMScreenState extends State<YTMScreen> with TickerProviderStateMixin {
       length: 5,
       child: AdaptiveScaffold(
         appBar: AdaptiveAppBar(
-          title: const Text('YTMusic'),
+          title: Text(S.of(context).YTMusic),
           centerTitle: true,
           automaticallyImplyLeading: false,
           actions: [
             AdaptiveIconButton(
-                icon: const Icon(Icons.history),
+                icon: const Icon(
+                  Icons.history,
+                  size: 25,
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -41,19 +45,26 @@ class _YTMScreenState extends State<YTMScreen> with TickerProviderStateMixin {
                   );
                 })
           ],
-          bottom: TabBar(
-            labelColor: AdaptiveTheme.of(context).primaryColor,
-            labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-            unselectedLabelStyle:
-                const TextStyle(fontWeight: FontWeight.normal),
-            isScrollable: true,
-            tabs: const [
-              Tab(text: 'Songs'),
-              Tab(text: 'Albums'),
-              Tab(text: 'Playlists'),
-              Tab(text: 'Artists'),
-              Tab(text: 'Subscriptions')
-            ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(48),
+            child: Material(
+              color: Colors.transparent,
+              elevation: 0,
+              child: TabBar(
+                labelColor: AdaptiveTheme.of(context).primaryColor,
+                labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                unselectedLabelStyle:
+                    const TextStyle(fontWeight: FontWeight.normal),
+                isScrollable: true,
+                tabs: [
+                  Tab(text: S.of(context).Songs),
+                  Tab(text: S.of(context).Albums),
+                  Tab(text: S.of(context).Playlists),
+                  Tab(text: S.of(context).Artists),
+                  Tab(text: S.of(context).Subscriptions)
+                ],
+              ),
+            ),
           ),
         ),
         body: const TabBarView(

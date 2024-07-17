@@ -1,111 +1,187 @@
 import 'package:gyawun_beta/ytmusic/helpers.dart';
-
 import '../yt_service_provider.dart';
 import 'utils.dart';
 
 mixin LibraryMixin on YTMusicServices {
-  Future<List> getLibrarySongs() async {
+  Future<Map> getLibrarySongs({String? continuationParams}) async {
     Map<String, dynamic> body = {'browseId': 'FEmusic_liked_videos'};
-    final response = await sendRequest('browse', body);
-    List contents = nav(response, [
-      'contents',
-      'singleColumnBrowseResultsRenderer',
-      'tabs',
-      0,
-      'tabRenderer',
-      'content',
-      'sectionListRenderer',
-      'contents',
-      0,
-      'musicShelfRenderer',
-      'contents'
-    ]);
+    final response = await sendRequest('browse', body,
+        additionalParams: continuationParams ?? '');
+    Map outerContents = {};
+    if (continuationParams != null) {
+      outerContents =
+          nav(response, ['continuationContents', 'musicShelfContinuation']);
+    } else {
+      outerContents = nav(response, [
+        'contents',
+        'singleColumnBrowseResultsRenderer',
+        'tabs',
+        0,
+        'tabRenderer',
+        'content',
+        'sectionListRenderer',
+        'contents',
+        0,
+        'musicShelfRenderer'
+      ]);
+    }
 
-    List result = handleContents(contents);
-    return result;
+    String? continuation = nav(outerContents,
+        ['continuations', 0, 'nextContinuationData', 'continuation']);
+    if (continuation != null) {
+      continuation = getContinuationString(continuation);
+    }
+    List contents = nav(outerContents, ['contents']);
+
+    return {
+      'contents': handleContents(contents),
+      'continuation': continuation,
+    };
   }
 
-  Future<List> getLibraryAlbums() async {
+  Future<Map> getLibraryAlbums({String? continuationParams}) async {
     Map<String, dynamic> body = {'browseId': 'FEmusic_liked_albums'};
     final response = await sendRequest('browse', body);
-    List contents = nav(response, [
-      'contents',
-      'singleColumnBrowseResultsRenderer',
-      'tabs',
-      0,
-      'tabRenderer',
-      'content',
-      'sectionListRenderer',
-      'contents',
-      0,
-      'itemSectionRenderer',
-      'contents'
-    ]);
-    List result = handleContents(contents);
-    return result;
+    Map outerContents = {};
+    if (continuationParams != null) {
+      outerContents =
+          nav(response, ['continuationContents', 'gridContinuation']);
+    } else {
+      outerContents = nav(response, [
+        'contents',
+        'singleColumnBrowseResultsRenderer',
+        'tabs',
+        0,
+        'tabRenderer',
+        'content',
+        'sectionListRenderer',
+        'contents',
+        0,
+        'gridRenderer',
+      ]);
+    }
+    String? continuation = nav(outerContents,
+        ['continuations', 0, 'nextContinuationData', 'continuation']);
+    if (continuation != null) {
+      continuation = getContinuationString(continuation);
+    }
+    List contents = nav(outerContents, ['items']);
+
+    return {
+      'contents': handleContents(contents),
+      'continuation': continuation,
+    };
   }
 
-  Future<List> getLibraryArtists() async {
+  Future<Map> getLibraryArtists({String? continuationParams}) async {
     Map<String, dynamic> body = {
       'browseId': 'FEmusic_library_corpus_track_artists'
     };
-    final response = await sendRequest('browse', body);
-    List contents = nav(response, [
-      'contents',
-      'singleColumnBrowseResultsRenderer',
-      'tabs',
-      0,
-      'tabRenderer',
-      'content',
-      'sectionListRenderer',
-      'contents',
-      0,
-      'musicShelfRenderer',
-      'contents'
-    ]);
-    List result = handleContents(contents);
-    return result;
+
+    final response = await sendRequest('browse', body,
+        additionalParams: continuationParams ?? '');
+    Map outerContents = {};
+    if (continuationParams != null) {
+      outerContents =
+          nav(response, ['continuationContents', 'musicShelfContinuation']);
+    } else {
+      outerContents = nav(response, [
+        'contents',
+        'singleColumnBrowseResultsRenderer',
+        'tabs',
+        0,
+        'tabRenderer',
+        'content',
+        'sectionListRenderer',
+        'contents',
+        0,
+        'musicShelfRenderer',
+      ]);
+    }
+    String? continuation = nav(outerContents,
+        ['continuations', 0, 'nextContinuationData', 'continuation']);
+    if (continuation != null) {
+      continuation = getContinuationString(continuation);
+    }
+    List contents = nav(outerContents, ['contents']);
+    return {
+      'contents': handleContents(contents),
+      'continuation': continuation,
+    };
   }
 
-  Future<List> getLibraryPlaylists({int limit = 25}) async {
+  Future<Map> getLibraryPlaylists(
+      {int limit = 25, String? continuationParams}) async {
     Map<String, dynamic> body = {'browseId': 'FEmusic_liked_playlists'};
-    var response = await sendRequest('browse', body);
-    List contents = nav(response, [
-      'contents',
-      'singleColumnBrowseResultsRenderer',
-      'tabs',
-      0,
-      'tabRenderer',
-      'content',
-      'sectionListRenderer',
-      'contents',
-      0,
-      'gridRenderer',
-      'items'
-    ]);
+    var response = await sendRequest('browse', body,
+        additionalParams: continuationParams ?? '');
+    Map outerContents = {};
+    if (continuationParams != null) {
+      outerContents =
+          nav(response, ['continuationContents', 'gridContinuation']);
+    } else {
+      outerContents = nav(response, [
+        'contents',
+        'singleColumnBrowseResultsRenderer',
+        'tabs',
+        0,
+        'tabRenderer',
+        'content',
+        'sectionListRenderer',
+        'contents',
+        0,
+        'gridRenderer'
+      ]);
+    }
+    String? continuation = nav(outerContents,
+        ['continuations', 0, 'nextContinuationData', 'continuation']);
+    if (continuation != null) {
+      continuation = getContinuationString(continuation);
+    }
+    List contents = nav(outerContents, ['items']);
+    if (continuationParams == null) {
+      contents = contents.sublist(1);
+    }
 
-    List result = handleContents(contents.sublist(1));
-    return result;
+    return {
+      'contents': handleContents(contents),
+      'continuation': continuation,
+    };
   }
 
-  Future<List> getLibrarySubscriptions() async {
+  Future<Map> getLibrarySubscriptions({String? continuationParams}) async {
     Map<String, dynamic> body = {'browseId': 'FEmusic_library_corpus_artists'};
-    final response = await sendRequest('browse', body);
-    List contents = nav(response, [
-      'contents',
-      'singleColumnBrowseResultsRenderer',
-      'tabs',
-      0,
-      'tabRenderer',
-      'content',
-      'sectionListRenderer',
-      'contents',
-      0,
-      'musicShelfRenderer',
-      'contents'
-    ]);
-    List result = handleContents(contents);
-    return result;
+    final response = await sendRequest('browse', body,
+        additionalParams: continuationParams ?? '');
+    Map outerContents = {};
+    if (continuationParams != null) {
+      outerContents = outerContents =
+          nav(response, ['continuationContents', 'musicShelfContinuation']);
+    } else {
+      outerContents = nav(response, [
+        'contents',
+        'singleColumnBrowseResultsRenderer',
+        'tabs',
+        0,
+        'tabRenderer',
+        'content',
+        'sectionListRenderer',
+        'contents',
+        0,
+        'musicShelfRenderer',
+      ]);
+    }
+    String? continuation = nav(outerContents,
+        ['continuations', 0, 'nextContinuationData', 'continuation']);
+    if (continuation != null) {
+      continuation = getContinuationString(continuation);
+    }
+    List contents = nav(outerContents, ['contents']);
+
+    return {
+      'contents': handleContents(contents),
+      'continuation': continuation,
+    };
   }
 
   Future<Map<String, dynamic>> importPlaylist(String browseId) async {

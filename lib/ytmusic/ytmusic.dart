@@ -7,8 +7,4 @@ import 'mixins/user.dart';
 import 'yt_service_provider.dart';
 
 class YTMusic extends YTMusicServices
-    with BrowsingMixin, SearchMixin, LibraryMixin, UserMixin {
-  YTMusic() {
-    checkLogged();
-  }
-}
+    with BrowsingMixin, SearchMixin, LibraryMixin, UserMixin {}

@@ -6,9 +6,10 @@ import '../yt_service_provider.dart';
 mixin UserMixin on YTMusicServices {
   Future<User?> getUserInfo() async {
     if (isLogged.value == false) return null;
+
     String endpoint = 'account/account_menu';
     var response = await sendRequest(endpoint, {});
-
+    // pprint(response);
     Map? header = nav(response, [
       'actions',
       0,

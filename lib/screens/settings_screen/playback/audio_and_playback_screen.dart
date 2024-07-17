@@ -14,7 +14,7 @@ class AudioAndPlaybackScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
       appBar: AdaptiveAppBar(
-        title: Text(S.of(context).audioAndPlayback,
+        title: Text(S.of(context).Audio_And_Playback,
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),

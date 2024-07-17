@@ -56,4 +56,33 @@ abstract final class AdaptiveIcons {
       Platform.isWindows ? FluentIcons.more_vertical : Icons.more_vert;
   static IconData delete =
       Platform.isWindows ? FluentIcons.delete : Icons.delete;
+  static IconData volume(range) {
+    if (range == 0) {
+      return Platform.isWindows ? FluentIcons.volume0 : Icons.volume_off;
+    } else if (range < .2) {
+      return Platform.isWindows ? FluentIcons.volume1 : Icons.volume_down;
+    } else if (range < .6) {
+      return Platform.isWindows ? FluentIcons.volume2 : Icons.volume_down;
+    }
+    return Platform.isWindows ? FluentIcons.volume3 : Icons.volume_up;
+  }
+
+  static IconData library_add =
+      Platform.isWindows ? FluentIcons.library_add_to : Icons.library_add;
+  static IconData library_add_check =
+      Platform.isWindows ? FluentIcons.check_mark : Icons.library_add_check;
+  static IconData playlist_play =
+      Platform.isWindows ? FluentIcons.playlist_music : Icons.playlist_play;
+  static IconData queue_add =
+      Platform.isWindows ? FluentIcons.build_queue : Icons.queue;
+  static IconData radio =
+      Platform.isWindows ? FluentIcons.radio_btn_on : Icons.radar;
+  static IconData person = Icons.person;
+  static IconData people =
+      Platform.isWindows ? FluentIcons.people : Icons.people;
+  static IconData album = Platform.isWindows ? FluentIcons.album : Icons.album;
+  static IconData equalizer =
+      Platform.isWindows ? FluentIcons.equalizer : Icons.equalizer;
+  static IconData timer = Platform.isWindows ? FluentIcons.timer : Icons.timer;
+  static IconData share = Platform.isWindows ? FluentIcons.share : Icons.share;
 }

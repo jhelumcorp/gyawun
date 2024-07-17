@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -6,7 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/screens/browse_screen/browse_screen.dart';
 import 'package:gyawun_beta/services/yt_account.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -28,17 +32,53 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with WindowListener {
+  late StreamSubscription _intentSub;
   @override
   void initState() {
     windowManager.addListener(this);
     super.initState();
+    if (Platform.isAndroid) {
+      _intentSub =
+          ReceiveSharingIntent.instance.getMediaStream().listen((value) {
+        if (value.isNotEmpty) _handleIntent(value.first);
+      });
+
+      ReceiveSharingIntent.instance.getInitialMedia().then((value) {
+        if (value.isNotEmpty) _handleIntent(value.first);
+        ReceiveSharingIntent.instance.reset();
+      });
+    }
 
     _update();
+  }
+
+  _handleIntent(SharedMediaFile value) {
+    if (value.mimeType == 'text/plain' &&
+        value.path.contains('music.youtube.com')) {
+      Uri? uri = Uri.tryParse(value.path);
+      if (uri != null) {
+        if (uri.pathSegments.first == 'watch' &&
+            uri.queryParameters['v'] != null) {
+          context.push('/player', extra: uri.queryParameters['v']);
+        } else if (uri.pathSegments.first == 'playlist' &&
+            uri.queryParameters['list'] != null) {
+          String id = uri.queryParameters['list']!;
+          Navigator.push(
+            context,
+            AdaptivePageRoute.create(
+              (_) => BrowseScreen(
+                  endpoint: {'browseId': id.startsWith('VL') ? id : 'VL$id'}),
+            ),
+          );
+        }
+      }
+    }
   }
 
   @override
   void dispose() {
     windowManager.removeListener(this);
+    _intentSub.cancel();
     super.dispose();
   }
 
@@ -109,7 +149,7 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
                                     icon:
                                         const Icon(CupertinoIcons.music_house),
                                     label: Text(
-                                      S.of(context).home,
+                                      S.of(context).Home,
                                       style:
                                           smallTextStyle(context, bold: false),
                                     ),
@@ -120,7 +160,7 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
                                     icon: const Icon(
                                         Icons.library_music_outlined),
                                     label: Text(
-                                      S.of(context).saved,
+                                      S.of(context).Saved,
                                       style:
                                           smallTextStyle(context, bold: false),
                                     ),
@@ -132,7 +172,7 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
                                       icon:
                                           const Icon(CupertinoIcons.music_note),
                                       label: Text(
-                                        'YTMusic',
+                                        S.of(context).YTMusic,
                                         style: smallTextStyle(context,
                                             bold: false),
                                       ),
@@ -142,7 +182,7 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
                                         CupertinoIcons.gear_alt_fill),
                                     icon: const Icon(CupertinoIcons.gear_alt),
                                     label: Text(
-                                      S.of(context).settings,
+                                      S.of(context).Settings,
                                       style:
                                           smallTextStyle(context, bold: false),
                                     ),
@@ -183,29 +223,29 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
                               activeIcon:
                                   const Icon(CupertinoIcons.music_house_fill),
                               icon: const Icon(CupertinoIcons.music_house),
-                              title: Text(S.of(context).home),
+                              title: Text(S.of(context).Home),
                             ),
                             SalomonBottomBarItem(
                               activeIcon: const Icon(Icons.library_music),
                               icon: const Icon(Icons.library_music_outlined),
-                              title: Text(S.of(context).saved),
+                              title: Text(S.of(context).Saved),
                             ),
                             if (isLogged)
                               SalomonBottomBarItem(
                                 activeIcon:
                                     const Icon(CupertinoIcons.music_note_2),
                                 icon: const Icon(CupertinoIcons.music_note),
-                                title: const Text('YTMusic'),
+                                title: Text(S.of(context).YTMusic),
                               ),
                             SalomonBottomBarItem(
                               activeIcon:
                                   const Icon(CupertinoIcons.settings_solid),
                               icon: const Icon(CupertinoIcons.settings),
-                              title: Text(S.of(context).settings),
-                            )
+                              title: Text(S.of(context).Settings),
+                            ),
                           ],
                           backgroundColor:
-                              Theme.of(context).colorScheme.surface,
+                              Theme.of(context).colorScheme.surfaceContainerLow,
                           onTap: (index) {
                             int currentIndex = isLogged
                                 ? index
@@ -225,71 +265,89 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
     StatefulNavigationShell navigationShell, {
     bool isLogged = false,
   }) {
-    return fluent_ui.NavigationView(
-      appBar: fluent_ui.NavigationAppBar(
-        title: const DragToMoveArea(
-          child: Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: Text('Gyawun'),
-          ),
-        ),
-        leading: fluent_ui.Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Image.asset(
-            'assets/images/icon.png',
-            height: 25,
-            width: 25,
-          ),
-        ),
-        actions: const WindowButtons(),
-      ),
-      paneBodyBuilder: (item, body) {
-        return Column(
-          children: [
-            fluent_ui.Expanded(child: navigationShell),
-            const BottomPlayer()
-          ],
-        );
-      },
-      pane: fluent_ui.NavigationPane(
-          selected: isLogged
-              ? widget.navigationShell.currentIndex
-              : widget.navigationShell.currentIndex >= 2
-                  ? widget.navigationShell.currentIndex - 1
-                  : widget.navigationShell.currentIndex,
-          items: [
-            fluent_ui.PaneItem(
-              key: const ValueKey('/'),
-              icon: const Icon(fluent_ui.FluentIcons.home),
-              title: Text(S.of(context).home),
-              body: const SizedBox.shrink(),
-              onTap: () => goTOBranch(0),
+    return Directionality(
+      textDirection: fluent_ui.TextDirection.ltr,
+      child: fluent_ui.NavigationView(
+        appBar: fluent_ui.NavigationAppBar(
+          title: DragToMoveArea(
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(S.of(context).Gyawun),
             ),
-            fluent_ui.PaneItem(
-              key: const ValueKey('/saved'),
-              icon: const Icon(fluent_ui.FluentIcons.library),
-              title: Text(S.of(context).saved),
-              body: const SizedBox.shrink(),
-              onTap: () => goTOBranch(1),
+          ),
+          leading: fluent_ui.Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Image.asset(
+              'assets/images/icon.png',
+              height: 25,
+              width: 25,
             ),
-            if (isLogged)
+          ),
+          actions: const WindowButtons(),
+        ),
+        paneBodyBuilder: (item, body) {
+          return Column(
+            children: [
+              fluent_ui.Expanded(child: navigationShell),
+              const BottomPlayer()
+            ],
+          );
+        },
+        pane: fluent_ui.NavigationPane(
+            selected: isLogged
+                ? widget.navigationShell.currentIndex
+                : widget.navigationShell.currentIndex >= 2
+                    ? widget.navigationShell.currentIndex - 1
+                    : widget.navigationShell.currentIndex,
+            size: const fluent_ui.NavigationPaneSize(
+              compactWidth: 60,
+            ),
+            items: [
               fluent_ui.PaneItem(
-                key: const ValueKey('/ytmusic'),
-                icon: const Icon(fluent_ui.FluentIcons.music_note),
-                title: const Text('YTMusic'),
+                key: const ValueKey('/'),
+                icon: const Icon(
+                  fluent_ui.FluentIcons.home_solid,
+                  size: 30,
+                ),
+                title: Text(S.of(context).Home),
                 body: const SizedBox.shrink(),
-                onTap: () => goTOBranch(2),
+                onTap: () => goTOBranch(0),
               ),
-          ],
-          footerItems: [
-            fluent_ui.PaneItem(
-              key: const ValueKey('/settings'),
-              icon: const Icon(fluent_ui.FluentIcons.settings),
-              title: const Text('Settings'),
-              body: const SizedBox.shrink(),
-              onTap: () => goTOBranch(3),
-            )
-          ]),
+              fluent_ui.PaneItem(
+                key: const ValueKey('/saved'),
+                icon: const Icon(
+                  fluent_ui.FluentIcons.library,
+                  size: 30,
+                ),
+                title: Text(S.of(context).Saved),
+                body: const SizedBox.shrink(),
+                onTap: () => goTOBranch(1),
+              ),
+              if (isLogged)
+                fluent_ui.PaneItem(
+                  key: const ValueKey('/ytmusic'),
+                  icon: const Icon(
+                    fluent_ui.FluentIcons.music_note,
+                    size: 30,
+                  ),
+                  title: Text(S.of(context).YTMusic),
+                  body: const SizedBox.shrink(),
+                  onTap: () => goTOBranch(2),
+                ),
+            ],
+            footerItems: [
+              fluent_ui.PaneItem(
+                key: const ValueKey('/settings'),
+                icon: const Icon(
+                  fluent_ui.FluentIcons.settings,
+                  size: 30,
+                ),
+                title: Text(S.of(context).Settings),
+                body: const SizedBox.shrink(),
+                onTap: () => goTOBranch(3),
+              )
+            ]),
+      ),
     );
   }
 }

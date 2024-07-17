@@ -24,7 +24,7 @@ class BottomPlayer extends StatelessWidget {
                   color: Platform.isWindows
                       ? fluent_ui.FluentTheme.of(context)
                           .scaffoldBackgroundColor
-                      : Theme.of(context).colorScheme.surfaceTint.withAlpha(20),
+                      : Theme.of(context).colorScheme.surfaceContainerLow,
                   child: GestureDetector(
                     onTap: () {
                       context.push('/player');
@@ -50,74 +50,54 @@ class BottomPlayer extends StatelessWidget {
                             }
                             return Future.value(false);
                           },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
-                            padding: const EdgeInsets.symmetric(
+                          child: AdaptiveListTile(
+                            contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 8),
-                            child: Row(
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: currentSong.extras?['offline'] == true &&
+                                      !currentSong.artUri
+                                          .toString()
+                                          .startsWith('https')
+                                  ? Image.file(
+                                      File.fromUri(currentSong.artUri!),
+                                      height: 50,
+                                      width: 50,
+                                      fit: BoxFit.fill,
+                                    )
+                                  : CachedNetworkImage(
+                                      imageUrl: getEnhancedImage(currentSong
+                                          .extras!['thumbnails'].first['url']),
+                                      height: 50,
+                                      width: 50,
+                                      fit: BoxFit.fill,
+                                      errorWidget: (context, url, error) {
+                                        return CachedNetworkImage(
+                                          imageUrl: getEnhancedImage(
+                                              currentSong.extras!['thumbnails']
+                                                  .first['url'],
+                                              quality: 'medium'),
+                                        );
+                                      },
+                                    ),
+                            ),
+                            title: Text(
+                              currentSong.title,
+                              // style: textStyle(context, bold: true),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            subtitle: (currentSong.artist != null ||
+                                    currentSong.extras!['subtitle'] != null)
+                                ? Text(
+                                    currentSong.artist ??
+                                        currentSong.extras!['subtitle'],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : null,
+                            trailing: Row(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: currentSong.extras?['offline'] ==
-                                              true &&
-                                          !currentSong.artUri
-                                              .toString()
-                                              .startsWith('https')
-                                      ? Image.file(
-                                          File.fromUri(currentSong.artUri!),
-                                          height: 50,
-                                          width: 50,
-                                          fit: BoxFit.fill,
-                                        )
-                                      : CachedNetworkImage(
-                                          imageUrl: getEnhancedImage(currentSong
-                                              .extras!['thumbnails']
-                                              .first['url']),
-                                          height: 50,
-                                          width: 50,
-                                          fit: BoxFit.fill,
-                                          errorWidget: (context, url, error) {
-                                            return CachedNetworkImage(
-                                              imageUrl: getEnhancedImage(
-                                                  currentSong
-                                                      .extras!['thumbnails']
-                                                      .first['url'],
-                                                  quality: 'medium'),
-                                            );
-                                          },
-                                        ),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.transparent,
-                                        child: Text(
-                                          currentSong.title,
-                                          // style: textStyle(context, bold: true),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      if (currentSong.artist != null ||
-                                          currentSong.extras!['subtitle'] !=
-                                              null)
-                                        Material(
-                                          color: Colors.transparent,
-                                          child: Text(
-                                            currentSong.artist ??
-                                                currentSong.extras!['subtitle'],
-                                            // style: smallTextStyle(context),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        )
-                                    ],
-                                  ),
-                                ),
                                 ValueListenableBuilder(
                                   valueListenable:
                                       GetIt.I<MediaPlayer>().buttonState,

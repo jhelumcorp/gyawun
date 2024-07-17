@@ -56,6 +56,10 @@ dependencies:
   fluent_ui: ^4.9.0
   window_manager: ^0.3.9
   disable_battery_optimization: ^1.1.1
+  receive_sharing_intent: ^1.8.0
+  flutter_audio_output: ^0.0.2
+  fl_toast: ^3.2.0
+  flutter_colorpicker: ^1.1.0
 
 dev_dependencies:
   flutter_test:

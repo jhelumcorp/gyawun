@@ -1,8 +1,6 @@
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +25,7 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
           topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(S().LoudnessAndEqualizer,
+          title: Text(S().Loudness_And_Equalizer,
               style: mediumTextStyle(context, bold: false)),
           centerTitle: true,
         ),
@@ -40,9 +38,9 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    ListTile(
-                      title: Text(S.of(context).loudnessEnhancer),
-                      trailing: CupertinoSwitch(
+                    AdaptiveListTile(
+                      title: Text(S.of(context).Loudness_Enhancer),
+                      trailing: AdaptiveSwitch(
                         value: settingsManager.loudnessEnabled,
                         onChanged: (value) async {
                           await GetIt.I<MediaPlayer>()
@@ -56,9 +54,9 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
                     ),
                     LoudnessControls(
                         disabled: settingsManager.loudnessEnabled == false),
-                    ListTile(
-                      title: Text(S.of(context).enableEqualizer),
-                      trailing: CupertinoSwitch(
+                    AdaptiveListTile(
+                      title: Text(S.of(context).Enable_Equalizer),
+                      trailing: AdaptiveSwitch(
                         value: settingsManager.equalizerEnabled,
                         onChanged: (value) async {
                           await GetIt.I<MediaPlayer>()
@@ -113,9 +111,9 @@ class EqualizerControls extends StatelessWidget {
                           value: band['gain'],
                           bandIndex: band['index'] as int,
                           disabled: disabled,
+                          centerFrequency: band['centerFrequency'].round(),
                         ),
                       ),
-                      Text('${band['centerFrequency'].round()} Hz'),
                     ],
                   ),
                 ),
@@ -143,21 +141,6 @@ class LoudnessControls extends StatelessWidget {
             },
       label: context.watch<SettingsManager>().loudnessTargetGain.toString(),
     );
-    //  StreamBuilder(
-    //     stream: GetIt.I<AndroidLoudnessEnhancer>().targetGainStream,
-    //     builder: (context, snapshot) {
-    //       final targetGain = snapshot.data ?? 0.0;
-    //       return Slider(
-    //         min: -1,
-    //         max: 1,
-    //         value: targetGain,
-    //         onChanged: (val) async {
-    //           await GetIt.I<AndroidLoudnessEnhancer>().setTargetGain(val);
-    //           await Hive.box('settings').put('loudness', val);
-    //         },
-    //         label: targetGain.toString(),
-    //       );
-    //     });
   }
 }
 
@@ -167,6 +150,7 @@ class VerticalSlider extends StatefulWidget {
   final double max;
   final int bandIndex;
   final bool disabled;
+  final int centerFrequency;
 
   const VerticalSlider({
     super.key,
@@ -174,6 +158,7 @@ class VerticalSlider extends StatefulWidget {
     this.min = 0.0,
     this.max = 1.0,
     required this.bandIndex,
+    required this.centerFrequency,
     this.disabled = false,
   });
 
@@ -189,32 +174,21 @@ class _VerticalSliderState extends State<VerticalSlider> {
       children: [
         Text((sliderValue ?? widget.value).toStringAsFixed(2)),
         Expanded(
-          child: FittedBox(
-            fit: BoxFit.fitHeight,
-            alignment: Alignment.bottomCenter,
-            child: Transform.rotate(
-              angle: -pi / 2,
-              child: Container(
-                width: 800.0,
-                height: 800.0,
-                alignment: Alignment.center,
-                child: Slider(
-                  value: sliderValue ?? widget.value,
-                  min: widget.min,
-                  max: widget.max,
-                  onChanged: widget.disabled
-                      ? null
-                      : (val) {
-                          setState(() {
-                            sliderValue = val;
-                            setGain(widget.bandIndex, val);
-                          });
-                        },
-                ),
-              ),
-            ),
+          child: AdaptiveSlider(
+            value: sliderValue ?? widget.value,
+            min: widget.min,
+            max: widget.max,
+            disabled: widget.disabled,
+            vertical: true,
+            onChanged: (val) {
+              setState(() {
+                sliderValue = val;
+                setGain(widget.bandIndex, val);
+              });
+            },
           ),
         ),
+        Text('${widget.centerFrequency} Hz'),
       ],
     );
   }

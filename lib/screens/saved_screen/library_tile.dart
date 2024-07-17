@@ -3,6 +3,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
 import '../../services/media_player.dart';
@@ -72,8 +73,8 @@ class LibraryTile extends StatelessWidget {
       description: song['type'] == 'EPISODE' && song['description'] != null
           ? ExpandableText(
               song['description'].split('\n')?[0] ?? '',
-              expandText: 'Show More',
-              collapseText: 'Show Less',
+              expandText: S.of(context).Show_More,
+              collapseText: S.of(context).Show_Less,
               maxLines: 3,
               style: TextStyle(color: context.subtitleColor),
             )

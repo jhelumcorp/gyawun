@@ -4,12 +4,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/services/settings_manager.dart';
 import 'package:gyawun_beta/themes/text_styles.dart';
-import 'package:gyawun_beta/utils/enhanced_image.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
@@ -31,15 +32,15 @@ import 'format_duration.dart';
 import '../utils/extensions.dart';
 
 class Modals {
-  static Future showCenterLoadingModal(BuildContext context) {
+  static Future showCenterLoadingModal(BuildContext context, {String? title}) {
     if (Platform.isWindows) {
       return fluent_ui.showDialog(
         context: context,
         useRootNavigator: false,
         builder: (context) {
-          return const fluent_ui.ContentDialog(
-            title: Text('Progress'),
-            content: Row(
+          return fluent_ui.ContentDialog(
+            title: Text(title ?? S.of(context).Progress),
+            content: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [fluent_ui.ProgressRing()],
             ),
@@ -51,9 +52,9 @@ class Modals {
       context: context,
       useRootNavigator: false,
       builder: (context) {
-        return const AlertDialog(
-          title: Text('Progress'),
-          content: Row(
+        return AlertDialog(
+          title: Text(title ?? S.of(context).Progress),
+          content: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [CircularProgressIndicator()],
           ),
@@ -75,15 +76,15 @@ class Modals {
     BuildContext context, {
     String? title,
     String? hintText,
-    String doneText = 'Done',
+    String? doneText,
   }) {
     if (Platform.isWindows) {
       return fluent_ui.showDialog(
         context: context,
         useRootNavigator: false,
         barrierDismissible: true,
-        builder: (context) =>
-            _textFieldBottomModal(context, title: title, hintText: hintText),
+        builder: (context) => _textFieldBottomModal(context,
+            title: title, hintText: hintText, doneText: doneText),
       );
     }
     return showModalBottomSheet<String?>(
@@ -92,8 +93,28 @@ class Modals {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (context) =>
-          _textFieldBottomModal(context, title: title, hintText: hintText),
+      builder: (context) => _textFieldBottomModal(context,
+          title: title, hintText: hintText, doneText: doneText),
+    );
+  }
+
+  static Future<T?> showSelection<T>(
+      BuildContext context, List<SelectionItem> items) {
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog<T>(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: true,
+        builder: (context) => _showSelection(context, items),
+      );
+    }
+    return showModalBottomSheet<T>(
+      context: context,
+      useRootNavigator: false,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => _showSelection(context, items),
     );
   }
 
@@ -125,7 +146,13 @@ class Modals {
         context: context,
         useRootNavigator: false,
         barrierDismissible: true,
-        builder: (context) => _playerOptionsModal(context, song),
+        builder: (context) => fluent_ui.FluentTheme(
+          data: fluent_ui.FluentThemeData(
+            brightness: Brightness.dark,
+            accentColor: AdaptiveTheme.of(context).primaryColor.toAccentColor(),
+          ),
+          child: _playerOptionsModal(context, song),
+        ),
       );
     }
     showModalBottomSheet(
@@ -218,17 +245,17 @@ class Modals {
   }
 
   static showPlaylistRenameBottomModal(BuildContext context,
-      {required String playlistId,
-      title = 'Enter here',
-      String doneText = 'Done',
-      String? name}) {
+      {required String playlistId, String? name}) {
     if (Platform.isWindows) {
       return fluent_ui.showDialog(
         context: context,
         useRootNavigator: false,
         barrierDismissible: true,
-        builder: (context) => _playlistRenameBottomModal(context,
-            name: name, playlistId: playlistId),
+        builder: (context) => _playlistRenameBottomModal(
+          context,
+          name: name,
+          playlistId: playlistId,
+        ),
       );
     }
     showModalBottomSheet(
@@ -289,8 +316,30 @@ class Modals {
             isScrollControlled: true,
             context: context,
             builder: (context) => _confirmBottomModal(context,
-                message: message, isDanger: isDanger)) ??
+                message: message,
+                isDanger: isDanger,
+                doneText: doneText,
+                cancelText: cancelText)) ??
         false;
+  }
+
+  static showAccentSelector(BuildContext context) {
+    if (Platform.isWindows) {
+      return fluent_ui.showDialog(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: true,
+        builder: (context) => _accentSelector(context),
+      );
+    }
+    showModalBottomSheet(
+      context: context,
+      useRootNavigator: false,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => _accentSelector(context),
+    );
   }
 }
 
@@ -304,7 +353,7 @@ _confirmBottomModal(
   return BottomModalLayout(
     title: Center(
       child: Text(
-        S.of(context).confirm,
+        S.of(context).Confirm,
         style: bigTextStyle(context),
       ),
     ),
@@ -317,7 +366,7 @@ _confirmBottomModal(
           Navigator.pop(context, false);
         },
         child: Text(
-          cancelText ?? S.of(context).no,
+          cancelText ?? S.of(context).No,
         ),
       ),
       const SizedBox(width: 16),
@@ -327,7 +376,7 @@ _confirmBottomModal(
         },
         color: isDanger ? Colors.red : Theme.of(context).colorScheme.primary,
         child: Text(
-          doneText ?? S.of(context).yes,
+          doneText ?? S.of(context).Yes,
           style: TextStyle(color: isDanger ? Colors.white : null),
         ),
       )
@@ -350,18 +399,14 @@ _playlistRenameBottomModal(BuildContext context,
   TextEditingController controller = TextEditingController();
   controller.text = name ?? '';
   return BottomModalLayout(
-      title: AppBar(
-        title: const Text('Rename Playlist'),
-        automaticallyImplyLeading: false,
-        centerTitle: true,
+      title: Center(
+        child: Text(
+          S.of(context).Rename_Playlist,
+          style: mediumTextStyle(context),
+        ),
       ),
       actions: [
-        MaterialButton(
-          minWidth: double.maxFinite,
-          color: Theme.of(context).colorScheme.primary,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        AdaptiveFilledButton(
           onPressed: () async {
             String text = controller.text;
             controller.dispose();
@@ -374,10 +419,7 @@ _playlistRenameBottomModal(BuildContext context,
                 .then((String message) =>
                     BottomMessage.showText(context, message));
           },
-          child: Text(
-            'Rename',
-            style: TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
-          ),
+          child: Text(S.of(context).Rename),
         )
       ],
       child: SingleChildScrollView(
@@ -388,20 +430,13 @@ _playlistRenameBottomModal(BuildContext context,
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
               child: Column(
                 children: [
-                  TextField(
+                  AdaptiveTextField(
                     controller: controller,
-                    decoration: InputDecoration(
-                      fillColor: greyColor,
-                      filled: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 2, horizontal: 16),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintText: 'New Playlist Name',
-                      prefixIcon: const Icon(Icons.title),
-                    ),
+                    fillColor: greyColor,
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+                    hintText: S.of(context).Playlist_Name,
+                    prefix: const Icon(Icons.title),
                   ),
                 ],
               ),
@@ -431,8 +466,8 @@ _artistsBottomModal(BuildContext context, List<dynamic> artists,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  leading: const Icon(CupertinoIcons.person),
-                  trailing: const Icon(CupertinoIcons.right_chevron),
+                  leading: Icon(AdaptiveIcons.person),
+                  trailing: Icon(AdaptiveIcons.chevron_right),
                   onTap: () {
                     if (shouldPop) {
                       context.go('/browse',
@@ -442,8 +477,8 @@ _artistsBottomModal(BuildContext context, List<dynamic> artists,
 
                       Navigator.push(
                         context,
-                        CupertinoPageRoute(
-                          builder: (context) => BrowseScreen(
+                        AdaptivePageRoute.create(
+                          (context) => BrowseScreen(
                               endpoint:
                                   artist['endpoint'].cast<String, dynamic>()),
                         ),
@@ -461,7 +496,7 @@ Widget _createPlaylistModal(
   return BottomModalLayout(
     title: Center(
         child: Text(
-      'Create a Playlist',
+      S.of(context).Create_Playlist,
       style: mediumTextStyle(context),
     )),
     actions: [
@@ -469,7 +504,7 @@ Widget _createPlaylistModal(
         onPressed: () async {
           Navigator.pop(context);
         },
-        child: const Text('Cancel'),
+        child: Text(S.of(context).Cancel),
       ),
       AdaptiveFilledButton(
         color: Theme.of(context).colorScheme.primary,
@@ -483,7 +518,7 @@ Widget _createPlaylistModal(
           });
         },
         child: Text(
-          'Create',
+          S.of(context).Create,
           style: TextStyle(
               color: context.isDarkMode ? Colors.black : Colors.white),
         ),
@@ -497,7 +532,7 @@ Widget _createPlaylistModal(
               AdaptiveTextField(
                 onChanged: (value) => title = value,
                 fillColor: Platform.isAndroid ? greyColor : null,
-                hintText: 'Playlist Name',
+                hintText: S.of(context).Playlist_Name,
                 prefix: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -519,7 +554,7 @@ Widget _importPlaylistModal(BuildContext context) {
   return BottomModalLayout(
     title: Center(
       child: Text(
-        'Import Playlist',
+        S.of(context).Import_Playlist,
         style: mediumTextStyle(context),
       ),
     ),
@@ -528,7 +563,7 @@ Widget _importPlaylistModal(BuildContext context) {
         onPressed: () async {
           Navigator.pop(context);
         },
-        child: const Text('Cancel'),
+        child: Text(S.of(context).Cancel),
       ),
       AdaptiveFilledButton(
         color: Theme.of(context).colorScheme.primary,
@@ -543,7 +578,7 @@ Widget _importPlaylistModal(BuildContext context) {
           }
         },
         child: Text(
-          'Import',
+          S.of(context).Import,
           style: TextStyle(
               color: context.isDarkMode ? Colors.black : Colors.white),
         ),
@@ -557,7 +592,7 @@ Widget _importPlaylistModal(BuildContext context) {
               AdaptiveTextField(
                 onChanged: (value) => title = value,
                 keyboardType: TextInputType.url,
-                hintText: 'YT Playlist url with http(s)',
+                hintText: 'https://music.youtube.com/playlist?list=',
                 prefix: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -582,7 +617,7 @@ _addToPlaylist(BuildContext context, Map item) {
     title: AdaptiveListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(
-        'Add to Playlist',
+        S.of(context).Add_To_Playlist,
         style: mediumTextStyle(context),
       ),
       trailing: AdaptiveIconButton(
@@ -605,6 +640,7 @@ _addToPlaylist(BuildContext context, Map item) {
               playlist['songs'].contains(item)
                   ? const SizedBox.shrink()
                   : AdaptiveListTile(
+                      dense: true,
                       title: Text(playlist['title']),
                       leading: playlist['isPredefined'] == true ||
                               (playlist['songs'] != null &&
@@ -681,7 +717,6 @@ _addToPlaylist(BuildContext context, Map item) {
                     ),
             );
           }).values,
-          // const SizedBox(height: 8)
         ],
       ),
     ),
@@ -704,7 +739,7 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
                       updateInfo != null ? 'Update Available' : 'Update Info')),
               if (updateInfo != null)
                 Text(
-                  '${updateInfo.name}\n${f.format(DateTime.parse(updateInfo.publishedAt))}\n${updateInfo.downloadCount} downloads',
+                  '${updateInfo.name}\n${f.format(DateTime.parse(updateInfo.publishedAt))}',
                   style: TextStyle(fontSize: 16, color: context.subtitleColor),
                 )
             ],
@@ -719,8 +754,10 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
                     softLineBreak: true,
                     onTapLink: (text, href, title) {
                       if (href != null) {
-                        launchUrl(Uri.parse(href),
-                            mode: LaunchMode.platformDefault);
+                        launchUrl(
+                          Uri.parse(href),
+                          mode: LaunchMode.externalApplication,
+                        );
                       }
                     },
                   ),
@@ -766,7 +803,7 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
             Text(updateInfo != null ? 'Update Available' : 'Update Info'),
             if (updateInfo != null)
               Text(
-                '${updateInfo.name}\n${f.format(DateTime.parse(updateInfo.publishedAt))}\n${updateInfo.downloadCount} downloads',
+                '${updateInfo.name}\n${f.format(DateTime.parse(updateInfo.publishedAt))}',
                 style: TextStyle(fontSize: 16, color: context.subtitleColor),
               )
           ],
@@ -815,29 +852,23 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
 }
 
 _textFieldBottomModal(BuildContext context,
-    {String? title, String? hintText, String doneText = 'Done'}) {
+    {String? title, String? hintText, String? doneText}) {
   String? text;
   return BottomModalLayout(
     title: (title != null)
-        ? AdaptiveListTile(
-            title: Center(
-              child: Text(
-                title,
-                style: mediumTextStyle(context),
-              ),
+        ? Center(
+            child: Text(
+              title,
+              style: mediumTextStyle(context),
             ),
           )
         : null,
     actions: [
       AdaptiveFilledButton(
-        // minWidth: double.maxFinite,
-        // color: Theme.of(context).colorScheme.primary,
-        // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         onPressed: () async {
           Navigator.pop(context, text);
         },
-        child: Text(doneText),
+        child: Text(doneText ?? S.of(context).Done),
       )
     ],
     child: SingleChildScrollView(
@@ -867,123 +898,188 @@ _textFieldBottomModal(BuildContext context,
 
 _playerOptionsModal(BuildContext context, Map song) {
   return BottomModalLayout(
-      title: AdaptiveListTile(
-        contentPadding: EdgeInsets.zero,
-        title:
-            Text(song['title'], maxLines: 1, overflow: TextOverflow.ellipsis),
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: CachedNetworkImage(
-            imageUrl: getEnhancedImage(song['thumbnails'].first['url']),
-            height: 50,
-            width: 50,
-            errorWidget: (context, url, error) {
-              return CachedNetworkImage(
-                imageUrl: getEnhancedImage(song['thumbnails'].first['url'],
-                    quality: 'medium'),
-              );
-            },
-          ),
-        ),
-        subtitle: song['subtitle'] != null
-            ? Text(song['subtitle'],
-                maxLines: 1, overflow: TextOverflow.ellipsis)
-            : null,
-        trailing: IconButton(
-            onPressed: () => Share.shareUri(Uri.parse(
-                'https://music.youtube.com/watch?v=${song['videoId']}')),
-            icon: const Icon(CupertinoIcons.share)),
-      ),
       child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Column(
           children: [
-            if (Platform.isAndroid)
-              AdaptiveListTile(
-                dense: true,
-                title: Text(S.of(context).equalizer),
-                leading: const Icon(Icons.equalizer_outlined),
-                onTap: () {
-                  Navigator.of(context).push(CupertinoPageRoute(
-                      builder: (context) => const EqualizerScreen()));
-                },
-                trailing: const Icon(CupertinoIcons.right_chevron),
-              ),
-            if (song['artists'] != null)
-              AdaptiveListTile(
-                dense: true,
-                title: Text(S.of(context).Artists),
-                leading: const Icon(CupertinoIcons.person_3),
-                trailing: const Icon(CupertinoIcons.right_chevron),
-                onTap: () {
-                  Navigator.pop(context);
-                  Modals.showArtistsBottomModal(
-                    context,
-                    song['artists'],
-                    leading: song['thumbnails'].first['url'],
-                    shouldPop: true,
-                  );
-                },
-              ),
-            if (song['album'] != null)
-              AdaptiveListTile(
+            StreamBuilder(
+              stream: GetIt.I<MediaPlayer>().player.volumeStream,
+              builder: (context, progress) {
+                return AdaptiveListTile(
                   dense: true,
-                  title: Text(S.of(context).Album,
-                      maxLines: 1, overflow: TextOverflow.ellipsis),
-                  leading: const Icon(CupertinoIcons.music_albums),
-                  trailing: const Icon(CupertinoIcons.right_chevron),
-                  onTap: () {
-                    context.go('/browse',
-                        extra:
-                            song['album']['endpoint'].cast<String, dynamic>());
-                  }),
-            AdaptiveListTile(
-              dense: true,
-              title: const Text('Add to Playlist'),
-              leading: const Icon(Icons.playlist_add),
-              onTap: () {
-                Navigator.pop(context);
-                Modals.addToPlaylist(context, song);
-              },
-            ),
-            AdaptiveListTile(
-              dense: true,
-              leading: const Icon(CupertinoIcons.timer),
-              title: Text(S.of(context).sleepTimer),
-              onTap: () {
-                showDurationPicker(
-                    context: context,
-                    initialTime: const Duration(minutes: 30),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).colorScheme.surface,
-                    )).then(
-                  (duration) {
-                    if (duration != null) {
-                      context.read<MediaPlayer>().setTimer(duration);
-                    }
-                  },
+                  leading: Icon(
+                    AdaptiveIcons.volume(
+                        (progress.hasData && progress.data != null)
+                            ? progress.data!
+                            : GetIt.I<MediaPlayer>().player.volume),
+                  ),
+                  title: AdaptiveSlider(
+                    label: (((progress.hasData && progress.data != null)
+                                ? progress.data!
+                                : GetIt.I<MediaPlayer>().player.volume) *
+                            100)
+                        .toStringAsFixed(1),
+                    value: (progress.hasData && progress.data != null)
+                        ? progress.data!
+                        : GetIt.I<MediaPlayer>().player.volume,
+                    onChanged: (volume) {
+                      GetIt.I<MediaPlayer>().player.setVolume(volume);
+                    },
+                  ),
                 );
               },
-              trailing: ValueListenableBuilder(
-                valueListenable: GetIt.I<MediaPlayer>().timerDuration,
-                builder: (context, value, child) {
-                  return value == null
-                      ? const SizedBox.shrink()
-                      : TextButton.icon(
-                          onPressed: () {
-                            GetIt.I<MediaPlayer>().cancelTimer();
-                          },
-                          label: Text(formatDuration(value)),
-                          icon: const Icon(CupertinoIcons.clear),
-                          iconAlignment: IconAlignment.end,
-                        );
-                },
-              ),
+            ),
+            StreamBuilder(
+              stream: GetIt.I<MediaPlayer>().player.speedStream,
+              builder: (context, progress) {
+                return AdaptiveListTile(
+                  dense: true,
+                  leading: const Icon(Icons.speed),
+                  title: AdaptiveSlider(
+                    max: 2,
+                    min: 0.25,
+                    divisions: 7,
+                    label: ((progress.hasData && progress.data != null)
+                            ? progress.data!
+                            : GetIt.I<MediaPlayer>().player.speed)
+                        .toString(),
+                    value: (progress.hasData && progress.data != null)
+                        ? progress.data!
+                        : GetIt.I<MediaPlayer>().player.speed,
+                    onChanged: (speed) {
+                      GetIt.I<MediaPlayer>().player.setSpeed(speed);
+                    },
+                  ),
+                );
+              },
             ),
           ],
         ),
-      ));
+        if (Platform.isAndroid)
+          AdaptiveListTile(
+            dense: true,
+            title: Text(S.of(context).Equalizer),
+            leading: Icon(AdaptiveIcons.equalizer),
+            onTap: () {
+              Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => const EqualizerScreen()));
+            },
+            trailing: Icon(AdaptiveIcons.chevron_right),
+          ),
+        if (song['artists'] != null)
+          AdaptiveListTile(
+            dense: true,
+            title: Text(S.of(context).Artists),
+            leading: Icon(AdaptiveIcons.people),
+            trailing: Icon(AdaptiveIcons.chevron_right),
+            onTap: () {
+              Navigator.pop(context);
+              Modals.showArtistsBottomModal(
+                context,
+                song['artists'],
+                leading: song['thumbnails'].first['url'],
+                shouldPop: true,
+              );
+            },
+          ),
+        if (song['album'] != null)
+          AdaptiveListTile(
+              dense: true,
+              title: Text(S.of(context).Album,
+                  maxLines: 1, overflow: TextOverflow.ellipsis),
+              leading: Icon(AdaptiveIcons.album),
+              trailing: Icon(AdaptiveIcons.chevron_right),
+              onTap: () {
+                context.go('/browse',
+                    extra: song['album']['endpoint'].cast<String, dynamic>());
+              }),
+        AdaptiveListTile(
+          dense: true,
+          title: Text(S.of(context).Add_To_Playlist),
+          leading: Icon(AdaptiveIcons.library_add),
+          onTap: () {
+            Navigator.pop(context);
+            Modals.addToPlaylist(context, song);
+          },
+        ),
+        AdaptiveListTile(
+          dense: true,
+          leading: Icon(AdaptiveIcons.timer),
+          title: Text(S.of(context).Sleep_Timer),
+          onTap: () {
+            showDurationPicker(
+                context: context,
+                initialTime: const Duration(minutes: 30),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AdaptiveTheme.of(context).inactiveBackgroundColor,
+                )).then(
+              (duration) {
+                if (duration != null) {
+                  context.read<MediaPlayer>().setTimer(duration);
+                }
+              },
+            );
+          },
+          trailing: ValueListenableBuilder(
+            valueListenable: GetIt.I<MediaPlayer>().timerDuration,
+            builder: (context, value, child) {
+              return value == null
+                  ? const SizedBox.shrink()
+                  : TextButton.icon(
+                      onPressed: () {
+                        GetIt.I<MediaPlayer>().cancelTimer();
+                      },
+                      label: Text(formatDuration(value)),
+                      icon: const Icon(CupertinoIcons.clear),
+                      iconAlignment: IconAlignment.end,
+                    );
+            },
+          ),
+        ),
+        AdaptiveListTile(
+          dense: true,
+          title: const Text('Share'),
+          leading: Icon(AdaptiveIcons.share),
+          onTap: () {
+            Navigator.pop(context);
+            Share.shareUri(
+              Uri.parse('https://music.youtube.com/watch?v=${song['videoId']}'),
+            );
+          },
+        ),
+      ],
+    ),
+  ));
+}
+
+_showSelection(BuildContext context, List<SelectionItem> items) {
+  return BottomModalLayout(
+    title: Center(
+      child: Text(
+        "Select",
+        style: mediumTextStyle(context),
+      ),
+    ),
+    child: SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ...items.map(
+            (item) => AdaptiveListTile(
+              dense: true,
+              title: Text(item.title),
+              onTap: () {
+                Navigator.pop(context, item.data);
+              },
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 _songBottomModal(BuildContext context, Map song) {
@@ -1013,8 +1109,8 @@ _songBottomModal(BuildContext context, Map song) {
         children: [
           AdaptiveListTile(
             dense: true,
-            title: Text(S.of(context).playNext),
-            leading: const Icon(Icons.playlist_play),
+            title: Text(S.of(context).Play_Next),
+            leading: Icon(AdaptiveIcons.playlist_play),
             onTap: () async {
               Navigator.pop(context);
               await GetIt.I<MediaPlayer>().playNext(Map.from(song));
@@ -1022,8 +1118,8 @@ _songBottomModal(BuildContext context, Map song) {
           ),
           AdaptiveListTile(
             dense: true,
-            title: Text(S.of(context).addToQueue),
-            leading: const Icon(Icons.queue_music_sharp),
+            title: Text(S.of(context).Add_To_Queue),
+            leading: Icon(AdaptiveIcons.queue_add),
             onTap: () async {
               Navigator.pop(context);
               await GetIt.I<MediaPlayer>().addToQueue(Map.from(song));
@@ -1036,11 +1132,11 @@ _songBottomModal(BuildContext context, Map song) {
               return AdaptiveListTile(
                 dense: true,
                 title: Text(item == null
-                    ? S.of(context).addToFavourites
-                    : S.of(context).removeFromFavourites),
+                    ? S.of(context).Add_To_Favourites
+                    : S.of(context).Remove_From_Favourites),
                 leading: Icon(item == null
-                    ? CupertinoIcons.heart
-                    : CupertinoIcons.heart_fill),
+                    ? AdaptiveIcons.heart
+                    : AdaptiveIcons.heart_fill),
                 onTap: () async {
                   Navigator.pop(context);
                   if (item == null) {
@@ -1062,8 +1158,8 @@ _songBottomModal(BuildContext context, Map song) {
               .contains(song['status']))
             AdaptiveListTile(
               dense: true,
-              title: const Text('Download'),
-              leading: const Icon(Icons.playlist_add),
+              title: Text(S.of(context).Download),
+              leading: Icon(AdaptiveIcons.download),
               onTap: () {
                 Navigator.pop(context);
                 GetIt.I<DownloadManager>().downloadSong(song);
@@ -1071,8 +1167,8 @@ _songBottomModal(BuildContext context, Map song) {
             ),
           AdaptiveListTile(
             dense: true,
-            title: const Text('Add to Playlist'),
-            leading: const Icon(Icons.playlist_add),
+            title: Text(S.of(context).Add_To_Playlist),
+            leading: Icon(AdaptiveIcons.library_add),
             onTap: () {
               Navigator.pop(context);
               Modals.addToPlaylist(context, song);
@@ -1080,8 +1176,8 @@ _songBottomModal(BuildContext context, Map song) {
           ),
           AdaptiveListTile(
             dense: true,
-            title: Text(S.of(context).startRadio),
-            leading: const Icon(Icons.radar_outlined),
+            title: Text(S.of(context).Start_Radio),
+            leading: Icon(AdaptiveIcons.radio),
             onTap: () {
               Navigator.pop(context);
               GetIt.I<MediaPlayer>().startRelated(Map.from(song), radio: true);
@@ -1091,8 +1187,8 @@ _songBottomModal(BuildContext context, Map song) {
             AdaptiveListTile(
               dense: true,
               title: Text(S.of(context).Artists),
-              leading: const Icon(CupertinoIcons.person_3),
-              trailing: const Icon(CupertinoIcons.right_chevron),
+              leading: Icon(AdaptiveIcons.people),
+              trailing: Icon(AdaptiveIcons.chevron_right),
               onTap: () {
                 Navigator.pop(context);
                 Modals.showArtistsBottomModal(context, song['artists'],
@@ -1104,14 +1200,14 @@ _songBottomModal(BuildContext context, Map song) {
                 dense: true,
                 title: Text(S.of(context).Album,
                     maxLines: 1, overflow: TextOverflow.ellipsis),
-                leading: const Icon(CupertinoIcons.music_albums),
-                trailing: const Icon(CupertinoIcons.right_chevron),
+                leading: Icon(AdaptiveIcons.album),
+                trailing: Icon(AdaptiveIcons.chevron_right),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(
                       context,
-                      CupertinoPageRoute(
-                        builder: (context) => BrowseScreen(
+                      AdaptivePageRoute.create(
+                        (context) => BrowseScreen(
                             endpoint: song['album']['endpoint']
                                 .cast<String, dynamic>()),
                       ));
@@ -1177,8 +1273,8 @@ _playlistBottomModal(BuildContext context, Map playlist) {
         children: [
           AdaptiveListTile(
             dense: true,
-            title: Text(S.of(context).playNext),
-            leading: const Icon(Icons.playlist_play),
+            title: Text(S.of(context).Play_Next),
+            leading: Icon(AdaptiveIcons.playlist_play),
             onTap: () async {
               Navigator.pop(context);
               await GetIt.I<MediaPlayer>().playNext(Map.from(playlist));
@@ -1187,8 +1283,8 @@ _playlistBottomModal(BuildContext context, Map playlist) {
           ),
           AdaptiveListTile(
             dense: true,
-            title: Text(S.of(context).addToQueue),
-            leading: const Icon(Icons.queue_music_sharp),
+            title: Text(S.of(context).Add_To_Queue),
+            leading: Icon(AdaptiveIcons.queue_add),
             onTap: () async {
               Navigator.pop(context);
               await GetIt.I<MediaPlayer>().addToQueue(Map.from(playlist));
@@ -1198,7 +1294,7 @@ _playlistBottomModal(BuildContext context, Map playlist) {
             AdaptiveListTile(
               dense: true,
               leading: const Icon(Icons.title),
-              title: const Text('Rename'),
+              title: Text(S.of(context).Rename),
               onTap: () {
                 Navigator.pop(context);
                 Modals.showPlaylistRenameBottomModal(context,
@@ -1208,18 +1304,20 @@ _playlistBottomModal(BuildContext context, Map playlist) {
             ),
           AdaptiveListTile(
             dense: true,
-            title: Text(context.watch<LibraryService>().getPlaylist(
-                        playlist['playlistId'] ??
-                            playlist['endpoint']['browseId']) ==
-                    null
-                ? 'Add to Library'
-                : 'Remove from Library'),
+            title: Text(
+              context.watch<LibraryService>().getPlaylist(
+                          playlist['playlistId'] ??
+                              playlist['endpoint']['browseId']) ==
+                      null
+                  ? S.of(context).Add_To_Library
+                  : S.of(context).Remove_From_Library,
+            ),
             leading: Icon(context.watch<LibraryService>().getPlaylist(
                         playlist['playlistId'] ??
                             playlist['endpoint']['browseId']) ==
                     null
-                ? Icons.playlist_add
-                : Icons.playlist_add_check),
+                ? AdaptiveIcons.library_add
+                : AdaptiveIcons.library_add_check),
             onTap: () {
               Navigator.pop(context);
               if (context
@@ -1234,7 +1332,7 @@ _playlistBottomModal(BuildContext context, Map playlist) {
               } else {
                 Modals.showConfirmBottomModal(
                   context,
-                  message: 'Are you sure you want to delete this item?',
+                  message: S.of(context).Delete_Item_Message,
                   isDanger: true,
                 ).then((bool confirm) {
                   if (confirm) {
@@ -1248,15 +1346,15 @@ _playlistBottomModal(BuildContext context, Map playlist) {
               }
             },
           ),
-          if (playlist['playlistId'] != null)
+          if (playlist['playlistId'] != null && playlist['type'] == 'ARTIST')
             AdaptiveListTile(
               dense: true,
-              title: Text(S.of(context).startRadio),
-              leading: const Icon(Icons.radar_outlined),
+              title: Text(S.of(context).Start_Radio),
+              leading: Icon(AdaptiveIcons.radio),
               onTap: () async {
                 Navigator.pop(context);
                 BottomMessage.showText(
-                    context, 'Songs will start playing soon.');
+                    context, S.of(context).Songs_Will_Start_Playing_Soon);
                 await GetIt.I<MediaPlayer>().startRelated(Map.from(playlist),
                     radio: true, isArtist: playlist['type'] == 'ARTIST');
               },
@@ -1265,8 +1363,8 @@ _playlistBottomModal(BuildContext context, Map playlist) {
             AdaptiveListTile(
               dense: true,
               title: Text(S.of(context).Artists),
-              leading: const Icon(CupertinoIcons.person_3),
-              trailing: const Icon(CupertinoIcons.right_chevron),
+              leading: Icon(AdaptiveIcons.people),
+              trailing: Icon(AdaptiveIcons.chevron_right),
               onTap: () {
                 Navigator.pop(context);
                 Modals.showArtistsBottomModal(context, playlist['artists'],
@@ -1278,17 +1376,57 @@ _playlistBottomModal(BuildContext context, Map playlist) {
               dense: true,
               title: Text(S.of(context).Album,
                   maxLines: 1, overflow: TextOverflow.ellipsis),
-              leading: const Icon(Icons.album_outlined),
-              trailing: const Icon(CupertinoIcons.right_chevron),
+              leading: Icon(AdaptiveIcons.album),
+              trailing: Icon(AdaptiveIcons.chevron_right),
               onTap: () => Navigator.push(
                   context,
-                  CupertinoPageRoute(
-                    builder: (context) =>
+                  AdaptivePageRoute.create(
+                    (context) =>
                         BrowseScreen(endpoint: playlist['album']['endpoint']),
                   )),
             ),
         ],
       ),
+    ),
+  );
+}
+
+_accentSelector(BuildContext context) {
+  Color? accentColor = GetIt.I<SettingsManager>().accentColor;
+  return BottomModalLayout(
+    title: Center(
+      child: Text('Select Color', style: mediumTextStyle(context)),
+    ),
+    actions: [
+      AdaptiveButton(
+        onPressed: () {
+          Navigator.pop(context);
+          GetIt.I<SettingsManager>().accentColor = null;
+        },
+        child: const Text('Reset'),
+      ),
+      AdaptiveFilledButton(
+        child: Text(S.of(context).Done),
+        onPressed: () => Navigator.pop(context),
+      ),
+    ],
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ColorPicker(
+          pickerColor: accentColor ?? Colors.white,
+          onColorChanged: (color) {
+            GetIt.I<SettingsManager>().accentColor = color;
+          },
+          labelTypes: const [],
+          portraitOnly: true,
+          colorPickerWidth: min(300, MediaQuery.of(context).size.width - 32),
+          pickerAreaHeightPercent: 0.7,
+          enableAlpha: false,
+          displayThumbColor: false,
+          paletteType: PaletteType.hueWheel,
+        ),
+      ],
     ),
   );
 }
@@ -1337,29 +1475,39 @@ class BottomModalLayout extends StatelessWidget {
           bottomRight: Radius.circular(0),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (title != null)
-                Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (title != null)
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 0),
+                      child: title!),
+                child,
+                if (actions != null)
+                  Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-                    child: title!),
-              child,
-              if (actions != null)
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: actions!,
-                  ),
-                )
-            ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: actions!,
+                    ),
+                  )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+}
+
+class SelectionItem<T> {
+  final String title;
+  final IconData? icon;
+  final T data;
+
+  SelectionItem({required this.title, this.icon, required this.data});
 }

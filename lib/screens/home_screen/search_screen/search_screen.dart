@@ -146,7 +146,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     vertical: 2, horizontal: 8),
                                 borderRadius: BorderRadius.circular(
                                     Platform.isWindows ? 4.0 : 35),
-                                hintText: S.of(context).searchGyawun,
+                                hintText: S.of(context).Search_Gyawun,
                                 prefix: constraints.maxWidth > 400
                                     ? null
                                     : const AdaptiveBackButton(),

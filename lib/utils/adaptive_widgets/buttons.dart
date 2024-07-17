@@ -34,8 +34,16 @@ class AdaptiveFilledButton extends fluent_ui.StatelessWidget {
   final Widget child;
   final void Function()? onPressed;
   final Color? color;
-  const AdaptiveFilledButton(
-      {super.key, required this.child, required this.onPressed, this.color});
+  final OutlinedBorder? shape;
+  final EdgeInsetsGeometry? padding;
+  const AdaptiveFilledButton({
+    super.key,
+    required this.child,
+    required this.onPressed,
+    this.color,
+    this.shape,
+    this.padding,
+  });
 
   @override
   Widget build(fluent_ui.BuildContext context) {
@@ -45,6 +53,8 @@ class AdaptiveFilledButton extends fluent_ui.StatelessWidget {
         onPressed: onPressed,
         style: fluent_ui.ButtonStyle(
           backgroundColor: WidgetStateProperty.all(color),
+          shape: WidgetStateProperty.all(shape),
+          padding: WidgetStateProperty.all(padding),
         ),
         child: child,
       );
@@ -54,6 +64,8 @@ class AdaptiveFilledButton extends fluent_ui.StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.all(color),
+        shape: WidgetStateProperty.all(shape),
+        padding: WidgetStateProperty.all(padding),
       ),
       child: child,
     );

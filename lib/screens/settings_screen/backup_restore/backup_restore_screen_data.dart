@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../services/bottom_message.dart';
@@ -15,12 +16,12 @@ import '../setting_item.dart';
 
 List<SettingItem> backupRestoreScreenData(BuildContext context) => [
       SettingItem(
-        title: 'Back Up',
+        title: S.of(context).Backup,
         icon: Icons.backup_outlined,
         onTap: (context) => _backup(context),
       ),
       SettingItem(
-        title: 'Restore',
+        title: S.of(context).Restore,
         icon: Icons.restore_outlined,
         onTap: (context) => GetIt.I<FileStorage>().loadBackup(context),
       )
@@ -44,7 +45,7 @@ _backup(BuildContext context) async {
               mainAxisSize: MainAxisSize.min,
               children: [
                 AppBar(
-                  title: const Text('Select backup'),
+                  title: Text(S.of(context).Select_Backup),
                   centerTitle: true,
                   automaticallyImplyLeading: false,
                 ),
@@ -115,6 +116,7 @@ _backup(BuildContext context) async {
   }
   if (items.contains('settings')) {
     Map settings = GetIt.I<SettingsManager>().settings;
+    settings.remove('YTMUSIC_AUTH');
     backup['data']['settings'] = settings;
   }
   if (items.contains('favourites')) {

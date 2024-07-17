@@ -49,9 +49,10 @@ GoRouter router = GoRouter(
     GoRoute(
       path: '/player',
       pageBuilder: (context, state) {
-        return const CupertinoPage(
+        String? videoId = state.extra as String?;
+        return CupertinoPage(
           name: 'player',
-          child: PlayerScreen(),
+          child: PlayerScreen(videoId: videoId),
           fullscreenDialog: true,
         );
       },

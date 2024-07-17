@@ -7,7 +7,9 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/services/bottom_message.dart';
+import 'package:gyawun_beta/themes/text_styles.dart';
 import 'package:gyawun_beta/utils/enhanced_image.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
@@ -64,8 +66,8 @@ class _SectionItemState extends State<SectionItem> {
                         ),
                   subtitle: widget.section['strapline'] != null
                       ? Text(widget.section['title'] ?? '',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20))
+                          style:
+                              mediumTextStyle(context).copyWith(fontSize: 20))
                       : null,
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -240,89 +242,85 @@ class SongTile extends StatelessWidget {
     double height =
         (song['aspectRatio'] != null ? 50 / song['aspectRatio'] : 50)
             .toDouble();
-    return Material(
-      color: Colors.transparent,
-      child: AdaptiveListTile(
-          // borderRadius: BorderRadius.circular(5),
-          // focusColor: greyColor,
-          onTap: () async {
-            if (song['endpoint'] != null && song['videoId'] == null) {
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) =>
-                        BrowseScreen(endpoint: song['endpoint']),
-                  ));
-            } else {
-              await GetIt.I<MediaPlayer>().playSong(Map.from(song));
-            }
-          },
-          onSecondaryTap: () {
-            if (song['videoId'] != null) {
-              Modals.showSongBottomModal(context, song);
-            }
-          },
-          onLongPress: () {
-            if (song['videoId'] != null) {
-              Modals.showSongBottomModal(context, song);
-            }
-          },
-          title: Text(song['title'] ?? "", maxLines: 1),
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(3),
-            child: CachedNetworkImage(
-              imageUrl: thumbnails
-                  .where((el) => el['width'] >= 50)
-                  .toList()
-                  .first['url'],
-              height: height,
-              width: 50,
-              fit: BoxFit.cover,
-            ),
+    return AdaptiveListTile(
+        // borderRadius: BorderRadius.circular(5),
+        // focusColor: greyColor,
+        onTap: () async {
+          if (song['endpoint'] != null && song['videoId'] == null) {
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) =>
+                      BrowseScreen(endpoint: song['endpoint']),
+                ));
+          } else {
+            await GetIt.I<MediaPlayer>().playSong(Map.from(song));
+          }
+        },
+        onSecondaryTap: () {
+          if (song['videoId'] != null) {
+            Modals.showSongBottomModal(context, song);
+          }
+        },
+        onLongPress: () {
+          if (song['videoId'] != null) {
+            Modals.showSongBottomModal(context, song);
+          }
+        },
+        title: Text(song['title'] ?? "", maxLines: 1),
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(3),
+          child: CachedNetworkImage(
+            imageUrl: thumbnails
+                .where((el) => el['width'] >= 50)
+                .toList()
+                .first['url'],
+            height: height,
+            width: 50,
+            fit: BoxFit.cover,
           ),
-          subtitle: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (song['explicit'] == true)
-                Padding(
-                  padding: const EdgeInsets.only(right: 2),
-                  child: Icon(
-                    Icons.explicit,
-                    size: 18,
-                    color: Colors.grey.withOpacity(0.9),
-                  ),
-                ),
-              Expanded(
-                child: Text(
-                  _buildSubtitle(song),
-                  maxLines: 1,
-                  style: TextStyle(color: Colors.grey.withOpacity(0.9)),
-                  overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (song['explicit'] == true)
+              Padding(
+                padding: const EdgeInsets.only(right: 2),
+                child: Icon(
+                  Icons.explicit,
+                  size: 18,
+                  color: Colors.grey.withOpacity(0.9),
                 ),
               ),
-            ],
-          ),
-          trailing: song['endpoint'] != null && song['videoId'] == null
-              ? const Icon(CupertinoIcons.chevron_right)
-              : null,
-          description:
-              (song['type'] == 'EPISODE' && song['description'] != null)
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Column(
-                        children: [
-                          ExpandableText(
-                            song['description'].split('\n')?[0] ?? '',
-                            expandText: 'Show More',
-                            collapseText: 'Show Less',
-                            maxLines: 3,
-                            style: TextStyle(color: context.subtitleColor),
-                          ),
-                        ],
-                      ),
-                    )
-                  : null),
-    );
+            Expanded(
+              child: Text(
+                _buildSubtitle(song),
+                maxLines: 1,
+                style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+        trailing: song['endpoint'] != null && song['videoId'] == null
+            ? Icon(AdaptiveIcons.chevron_right)
+            : null,
+        description: (song['type'] == 'EPISODE' && song['description'] != null)
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  children: [
+                    ExpandableText(
+                      song['description'].split('\n')?[0] ?? '',
+                      expandText: S.of(context).Show_More,
+                      collapseText: S.of(context).Show_Less,
+                      maxLines: 3,
+                      style: TextStyle(color: context.subtitleColor),
+                    ),
+                  ],
+                ),
+              )
+            : null);
   }
 
   String _buildSubtitle(Map item) {
@@ -365,7 +363,7 @@ class _ItemListState extends State<ItemList> {
       double height = constraints.maxWidth > 600 ? 200 : 150;
 
       return SizedBox(
-        height: height + (Platform.isWindows ? 94 : 70),
+        height: height + (Platform.isWindows ? 102 : 78),
         child: ListView.separated(
           controller: widget.controller,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
@@ -374,9 +372,9 @@ class _ItemListState extends State<ItemList> {
             double width = height * (items[index]?['aspectRatio'] ?? 1);
             String? subtitle = _buildSubtitle(items[index]);
             return Adaptivecard(
-              // elevation: 0,
+              elevation: 0,
               borderRadius: BorderRadius.circular(8),
-              // backgroundColor: Platform.isAndroid ? Colors.transparent : null,
+              backgroundColor: Platform.isAndroid ? Colors.transparent : null,
               padding: EdgeInsets.zero,
               child: AdaptiveInkWell(
                 padding: EdgeInsets.all(Platform.isWindows ? 12 : 0),
@@ -418,11 +416,7 @@ class _ItemListState extends State<ItemList> {
                         color: Colors.grey.withOpacity(0.1),
                         borderRadius: items[index]['type'] == 'ARTIST'
                             ? BorderRadius.circular(height / 2)
-                            : Platform.isWindows
-                                ? BorderRadius.circular(8)
-                                : const BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(8)),
+                            : BorderRadius.circular(8),
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: CachedNetworkImageProvider(
@@ -434,37 +428,49 @@ class _ItemListState extends State<ItemList> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: width,
-                      child: AdaptiveListTile(
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: Platform.isWindows ? 0 : 8,
-                          vertical: 8,
-                        ),
-                        title: Text(
-                          items[index]['title'],
-                          maxLines: 1,
-                        ),
-                        subtitle: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                    Expanded(
+                      child: SizedBox(
+                        width: width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (items[index]['explicit'] == true)
-                              Padding(
-                                padding: const EdgeInsets.only(right: 2),
-                                child: Icon(
-                                  Icons.explicit,
-                                  size: 18,
-                                  color: Colors.grey.withOpacity(0.9),
-                                ),
+                            AdaptiveListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: Platform.isWindows ? 0 : 8,
+                                vertical: 4,
                               ),
-                            if (subtitle != null)
-                              Expanded(
-                                child: Text(subtitle,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        color: Colors.grey.withOpacity(0.9)),
-                                    overflow: TextOverflow.ellipsis),
+                              title: Text(
+                                items[index]['title'].toString().breakWord,
+                                maxLines: 2,
+                                style: const TextStyle(height: 1.3),
+                                softWrap: true,
                               ),
+                              subtitle: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  if (items[index]['explicit'] == true)
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 2),
+                                      child: Icon(
+                                        Icons.explicit,
+                                        size: 14,
+                                        color: Colors.grey.withOpacity(0.9),
+                                      ),
+                                    ),
+                                  if (subtitle != null)
+                                    Expanded(
+                                      child: Text(subtitle,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color:
+                                                  Colors.grey.withOpacity(0.9),
+                                              fontSize: 13,
+                                              height: 1.2),
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),

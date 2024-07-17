@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
+import 'package:flutter/material.dart';
 
 class AdaptiveSwitch extends StatelessWidget {
   final bool value;
@@ -11,14 +11,8 @@ class AdaptiveSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Platform.isWindows) {
-      return fluent_ui.ToggleSwitch(
-        checked: value,
-        onChanged: onChanged,
-      );
+      return fluent_ui.ToggleSwitch(checked: value, onChanged: onChanged);
     }
-    return CupertinoSwitch(
-      value: value,
-      onChanged: onChanged,
-    );
+    return Switch(value: value, onChanged: onChanged);
   }
 }

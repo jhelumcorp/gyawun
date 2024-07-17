@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/services/yt_account.dart';
 import 'package:gyawun_beta/themes/text_styles.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
@@ -13,8 +14,13 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
       appBar: AdaptiveAppBar(
-        title: Text('Google Account',
-            style: mediumTextStyle(context, bold: false)),
+        title: Text(
+          S.of(context).Google_Account,
+          style: mediumTextStyle(
+            context,
+            bold: false,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Center(
@@ -44,7 +50,7 @@ class AccountScreen extends StatelessWidget {
                               icon: Icons.login,
                             ),
                       trailing: user != null
-                          ? FilledButton(
+                          ? AdaptiveFilledButton(
                               onPressed: () async {
                                 await GetIt.I<YTAccount>().logOut(context);
                               },

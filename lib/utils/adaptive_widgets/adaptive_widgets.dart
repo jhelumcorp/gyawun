@@ -8,6 +8,7 @@ export 'listtile.dart';
 export 'page_route.dart';
 export 'progress_ring.dart';
 export 'scaffold.dart';
+export 'slider.dart';
 export 'switch.dart';
 export 'text_field.dart';
 export 'theme.dart';

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -53,12 +55,11 @@ class PlaylistDetailsScreen extends StatelessWidget {
                             key: ObjectKey(song['videoId']),
                             trailingActions: <SwipeAction>[
                               SwipeAction(
-                                  title: "Remove",
+                                  title: S.of(context).Remove,
                                   onTap: (CompletionHandler handler) async {
                                     Modals.showConfirmBottomModal(
                                       context,
-                                      message:
-                                          'Are you sure you want to remove it?',
+                                      message: S.of(context).Remove_Message,
                                       isDanger: true,
                                     ).then((bool confirm) {
                                       if (confirm) {
@@ -140,14 +141,6 @@ class MyPlayistHeader extends StatelessWidget {
               color: isDark ? Colors.white : Colors.black,
             ),
           );
-    // return ClipRRect(
-    //     borderRadius: BorderRadius.circular(
-    //         isRound ? min((thumbnail['height'] as int), 250).toDouble() : 8),
-    //     child: CachedNetworkImage(
-    //       imageUrl: thumbnail['url'].replaceAll('w60-h60', 'w225-h225'),
-    //       width: min((thumbnail['height'] as int), 250).toDouble(),
-    //       height: min((thumbnail['height'] as int), 250).toDouble(),
-    //     ));
   }
 
   _buildContent(Map playlist, BuildContext context, {bool isRow = false}) {
@@ -162,7 +155,8 @@ class MyPlayistHeader extends StatelessWidget {
           if (playlist['songs'] != null)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Text('${playlist['songs'].length} Songs', maxLines: 2),
+              child: Text(S.of(context).nSongs(playlist['songs'].length),
+                  maxLines: 2),
             ),
           Wrap(
             spacing: 8,
@@ -172,17 +166,29 @@ class MyPlayistHeader extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               if (playlist['songs'].isNotEmpty)
-                MaterialButton(
+                AdaptiveFilledButton(
                   onPressed: () {
                     GetIt.I<MediaPlayer>().playAll(playlist['songs']);
                   },
-                  padding: const EdgeInsets.all(16),
-                  shape: const CircleBorder(),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(Platform.isWindows ? 8 : 35),
+                  ),
                   color: context.isDarkMode ? Colors.white : Colors.black,
-                  child: Icon(
-                    Icons.play_arrow_outlined,
-                    color: context.isDarkMode ? Colors.black : Colors.white,
-                    size: 32,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        AdaptiveIcons.play,
+                        color: context.isDarkMode ? Colors.black : Colors.white,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text("Play All", style: TextStyle(fontSize: 18))
+                    ],
                   ),
                 ),
             ],

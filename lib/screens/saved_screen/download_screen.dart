@@ -5,6 +5,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:gyawun_beta/utils/extensions.dart';
 
@@ -19,8 +20,8 @@ class DownloadScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
-      appBar: const AdaptiveAppBar(
-        title: Text('Downloads'),
+      appBar: AdaptiveAppBar(
+        title: Text(S.of(context).Downloads),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -54,13 +55,13 @@ class DownloadScreen extends StatelessWidget {
                                 trailingActions: <SwipeAction>[
                                   if (snapshot.data == true)
                                     SwipeAction(
-                                        title: "Remove",
+                                        title: S.of(context).Remove,
                                         onTap:
                                             (CompletionHandler handler) async {
                                           Modals.showConfirmBottomModal(
                                             context,
                                             message:
-                                                'Are you sure you want to remove it?',
+                                                S.of(context).Remove_Message,
                                             isDanger: true,
                                           ).then((bool confirm) {
                                             if (confirm) {
@@ -148,8 +149,8 @@ class DownloadedSongTile extends StatelessWidget {
       description: song['type'] == 'EPISODE' && song['description'] != null
           ? ExpandableText(
               song['description'].split('\n')?[0] ?? '',
-              expandText: 'Show More',
-              collapseText: 'Show Less',
+              expandText: S.of(context).Show_More,
+              collapseText: S.of(context).Show_Less,
               maxLines: 3,
               style: TextStyle(color: context.subtitleColor),
             )
