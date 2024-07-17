@@ -276,11 +276,11 @@ class MediaPlayer extends ChangeNotifier {
         song['path'] != null &&
         (await File(song['path']).exists());
     if (isDownloaded) {
-      audioSource = AudioSource.uri(Uri.parse(song['path']), tag: tag);
+      audioSource = AudioSource.file(song['path'], tag: tag);
     } else {
       audioSource = CustomAudioStream(
         song['videoId'],
-        GetIt.I<SettingsManager>().audioQuality.name.toLowerCase(),
+        GetIt.I<SettingsManager>().streamingQuality.name.toLowerCase(),
         tag: tag,
       );
     }

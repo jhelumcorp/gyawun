@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
 import '../../../themes/text_styles.dart';
@@ -13,7 +14,7 @@ class BackupRestoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
       appBar: AdaptiveAppBar(
-        title: Text('Back up and Restore',
+        title: Text(S.of(context).Backup_And_Restore,
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),

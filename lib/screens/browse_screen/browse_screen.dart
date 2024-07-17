@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:gyawun_beta/utils/pprint.dart';
 import 'package:provider/provider.dart';
@@ -115,9 +118,10 @@ class _BrowseScreenState extends State<BrowseScreen> {
                   constraints: const BoxConstraints(maxWidth: 1000),
                   child: Column(
                     children: [
-                      HeaderWidget(
-                        header: {'endpoint': widget.endpoint, ...header},
-                      ),
+                      if (header['thumbnails'] != null)
+                        HeaderWidget(
+                          header: {'endpoint': widget.endpoint, ...header},
+                        ),
                       const SizedBox(height: 8),
                       ...sections.indexed.map((sec) {
                         return SectionItem(
@@ -163,7 +167,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     super.initState();
   }
 
-  _buildImage(List thumbnails, double maxWidth, {bool isRound = false}) {
+  _buildImage(BuildContext context, List thumbnails, double maxWidth,
+      {bool isRound = false}) {
     return isRound
         ? CircleAvatar(
             backgroundImage: CachedNetworkImageProvider(
@@ -218,8 +223,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: ExpandableText(
                 header['description'].split('\n')[0],
-                expandText: 'Show More',
-                collapseText: 'Show Less',
+                expandText: S.of(context).Show_More,
+                collapseText: S.of(context).Show_Less,
                 maxLines: isRow ? 3 : 2,
                 style: TextStyle(color: context.subtitleColor),
                 textAlign: TextAlign.center,
@@ -237,7 +242,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                 children: [
                   if (header['privacy'] != 'PRIVATE' &&
                       header['playlistId'] != 'LM')
-                    MaterialButton(
+                    AdaptiveFilledButton(
                       shape: const CircleBorder(),
                       color: greyColor,
                       padding: const EdgeInsets.all(14),
@@ -247,49 +252,58 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                           .then((String message) {
                         BottomMessage.showText(context, message);
                       }),
-                      child: Icon(isAddedToLibrary
-                          ? Icons.library_add_check
-                          : Icons.library_add),
+                      child: Icon(
+                        isAddedToLibrary
+                            ? AdaptiveIcons.library_add_check
+                            : AdaptiveIcons.library_add,
+                        size: 20,
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
                     ),
                   if (header['videoId'] != null || header['playlistId'] != null)
-                    MaterialButton(
+                    AdaptiveFilledButton(
                       onPressed: () async {
-                        BottomMessage.showText(
-                            context, 'Songs will start playing soon.');
+                        BottomMessage.showText(context,
+                            S.of(context).Songs_Will_Start_Playing_Soon);
                         await GetIt.I<MediaPlayer>()
                             .startPlaylistSongs(Map.from(header));
                       },
-                      padding: const EdgeInsets.all(16),
-                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(Platform.isWindows ? 8 : 35),
+                      ),
                       color: context.isDarkMode ? Colors.white : Colors.black,
-                      child: Icon(
-                        Icons.play_arrow_outlined,
-                        color: context.isDarkMode ? Colors.black : Colors.white,
-                        size: 32,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            AdaptiveIcons.play,
+                            color: context.isDarkMode
+                                ? Colors.black
+                                : Colors.white,
+                            size: 26,
+                          ),
+                          const SizedBox(width: 8),
+                          const Text("Play All", style: TextStyle(fontSize: 18))
+                        ],
                       ),
                     ),
-                  MaterialButton(
+                  AdaptiveFilledButton(
                     shape: const CircleBorder(),
                     color: greyColor,
                     padding: const EdgeInsets.all(14),
                     onPressed: () {
                       Modals.showPlaylistBottomModal(context, header);
                     },
-                    child: const Icon(
-                      Icons.more_vert_outlined,
+                    child: Icon(
+                      AdaptiveIcons.more_vertical,
                       size: 20,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
                     ),
                   )
-                  // if (header['shiffleId'] != null)
-                  //   OutlinedButton(
-                  //     onPressed: () {},
-                  //     child: const Text('SHUFFLE'),
-                  //   ),
-                  // if (header['mixId'] != null)
-                  //   OutlinedButton(
-                  //     onPressed: () {},
-                  //     child: const Text('MIX'),
-                  //   ),
                 ],
               ),
             )
@@ -309,8 +323,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               ? Row(
                   children: [
                     if (widget.header['thumbnails'] != null)
-                      _buildImage(
-                          widget.header['thumbnails'], constraints.maxWidth,
+                      _buildImage(context, widget.header['thumbnails'],
+                          constraints.maxWidth,
                           isRound: widget.header['type'] == 'ARTIST'),
                     const SizedBox(width: 4),
                     Expanded(
@@ -321,8 +335,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               : Column(
                   children: [
                     if (widget.header['thumbnails'] != null)
-                      _buildImage(
-                          widget.header['thumbnails'], constraints.maxWidth,
+                      _buildImage(context, widget.header['thumbnails'],
+                          constraints.maxWidth,
                           isRound: widget.header['type'] == 'ARTIST'),
                     SizedBox(
                         height: widget.header['thumbnails'] != null ? 4 : 0),

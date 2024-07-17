@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gyawun_beta/themes/text_styles.dart';
 
 import 'no_splash_factory.dart';
 
@@ -45,15 +46,15 @@ class AdaptiveListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final TextStyle? titleStyle = theme.textTheme.titleMedium?.copyWith(
+    final TextStyle titleStyle = mediumTextStyle(context, bold: false).copyWith(
       fontSize: dense ? 14.0 : 16.0,
     );
 
-    final TextStyle? subtitleStyle = theme.textTheme.bodyMedium?.copyWith(
+    final TextStyle subtitleStyle = subtitleTextStyle(context).copyWith(
       fontSize: dense ? 12.0 : 14.0,
     );
 
-    final TextStyle? descriptionStyle = theme.textTheme.bodyMedium?.copyWith(
+    final TextStyle descriptionStyle = smallTextStyle(context).copyWith(
       fontSize: dense ? 12.0 : 14.0,
     );
 
@@ -83,16 +84,22 @@ class AdaptiveListTile extends StatelessWidget {
                   Row(
                     children: [
                       if (leading != null) ...[
-                        leading!,
+                        IconTheme(
+                            data: Theme.of(context)
+                                .iconTheme
+                                .copyWith(size: dense ? 24 : 28),
+                            child: leading!),
                         const SizedBox(width: 16.0),
                       ],
                       Expanded(
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (title != null) ...[
                               DefaultTextStyle(
-                                style: titleStyle!,
+                                style: titleStyle,
                                 child: title!,
                               ),
                               if (subtitle != null || isThreeLine)
@@ -100,7 +107,7 @@ class AdaptiveListTile extends StatelessWidget {
                             ],
                             if (subtitle != null || isThreeLine) ...[
                               DefaultTextStyle(
-                                style: subtitleStyle!,
+                                style: subtitleStyle,
                                 child: subtitle ?? Container(),
                               ),
                             ],
@@ -117,7 +124,7 @@ class AdaptiveListTile extends StatelessWidget {
                     SizedBox(height: dense ? 2.0 : 4.0),
                   if (description != null) ...[
                     DefaultTextStyle(
-                      style: descriptionStyle!,
+                      style: descriptionStyle,
                       child: description!,
                     ),
                   ],

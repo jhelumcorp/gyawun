@@ -15,7 +15,7 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
       appBar: AdaptiveAppBar(
-        title: Text(S.of(context).about),
+        title: Text(S.of(context).About),
         centerTitle: true,
       ),
       body: Center(
@@ -52,11 +52,11 @@ class AboutScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       leading: const Icon(Icons.title),
                       title: Text(
-                        S.of(context).name,
+                        S.of(context).Name,
                         style: subtitleTextStyle(context),
                       ),
                       trailing: Text(
-                        S.of(context).gyawun,
+                        S.of(context).Gyawun,
                         style: smallTextStyle(context),
                       ),
                     ),
@@ -64,7 +64,7 @@ class AboutScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       leading: const Icon(Icons.new_releases),
                       title: Text(
-                        S.of(context).version,
+                        S.of(context).Version,
                         style: subtitleTextStyle(context),
                       ),
                       trailing: Text(
@@ -76,7 +76,7 @@ class AboutScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       leading: const Icon(CupertinoIcons.person),
                       title: Text(
-                        S.of(context).developer,
+                        S.of(context).Developer,
                         style: subtitleTextStyle(context),
                       ),
                       trailing: Wrap(
@@ -85,7 +85,7 @@ class AboutScreen extends StatelessWidget {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
-                            S.of(context).sheikhhaziq,
+                            S.of(context).Sheikh_Haziq,
                             style: smallTextStyle(context),
                           ),
                           const SizedBox(width: 8),
@@ -100,7 +100,7 @@ class AboutScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       leading: const Icon(Icons.other_houses),
                       title: Text(
-                        S.of(context).organisation,
+                        S.of(context).Organisation,
                         style: subtitleTextStyle(context),
                       ),
                       trailing: Wrap(
@@ -109,7 +109,7 @@ class AboutScreen extends StatelessWidget {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
-                            S.of(context).jhelumCorp,
+                            S.of(context).Jhelum_Corp,
                             style: smallTextStyle(context),
                           ),
                           const SizedBox(width: 8),
@@ -124,7 +124,7 @@ class AboutScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       leading: const Icon(Icons.telegram_outlined),
                       title: Text(
-                        S.of(context).telegram,
+                        S.of(context).Telegram,
                         style: subtitleTextStyle(context),
                       ),
                       trailing: Icon(AdaptiveIcons.chevron_right),
@@ -136,7 +136,7 @@ class AboutScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       leading: const Icon(CupertinoIcons.person_3),
                       title: Text(
-                        S.of(context).contributors,
+                        S.of(context).Contributors,
                         style: subtitleTextStyle(context),
                       ),
                       trailing: Icon(AdaptiveIcons.chevron_right),
@@ -149,7 +149,7 @@ class AboutScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       leading: const Icon(Icons.code),
                       title: Text(
-                        S.of(context).sourceCode,
+                        S.of(context).Source_Code,
                         style: subtitleTextStyle(context),
                       ),
                       trailing: Icon(AdaptiveIcons.chevron_right),
@@ -161,7 +161,7 @@ class AboutScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       leading: const Icon(Icons.bug_report),
                       title: Text(
-                        S.of(context).bugReport,
+                        S.of(context).Bug_Report,
                         style: subtitleTextStyle(context),
                       ),
                       trailing: Icon(AdaptiveIcons.chevron_right),
@@ -174,7 +174,7 @@ class AboutScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       leading: const Icon(Icons.request_page),
                       title: Text(
-                        S.of(context).featureRequest,
+                        S.of(context).Feature_Request,
                         style: subtitleTextStyle(context),
                       ),
                       trailing: Icon(AdaptiveIcons.chevron_right),
@@ -186,7 +186,7 @@ class AboutScreen extends StatelessWidget {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(16),
-                        child: Text(S.of(context).madeInKashmir),
+                        child: Text(S.of(context).Made_In_Kashmir),
                       ),
                     ),
                   ],

@@ -14,9 +14,29 @@ extension DarkMode on BuildContext {
     return brightness == Brightness.dark;
   }
 
+  bool get isDarkModeOnce {
+    final brightness = read<SettingsManager>().themeMode == ThemeMode.system
+        ? MediaQuery.of(this).platformBrightness
+        : read<SettingsManager>().themeMode == ThemeMode.dark
+            ? Brightness.dark
+            : Brightness.light;
+    return brightness == Brightness.dark;
+  }
+
   Color get subtitleColor =>
       isDarkMode ? Colors.white.withAlpha(150) : Colors.black.withAlpha(150);
   Color get bottomModalBackgroundColor => isDarkMode
       ? Color.alphaBlend(Colors.black.withAlpha(220), Colors.white)
       : Colors.white;
+}
+
+extension StringMani on String {
+  String get breakWord {
+    String breakWord = '';
+    for (var element in runes) {
+      breakWord += String.fromCharCode(element);
+      breakWord += '\u200B';
+    }
+    return breakWord;
+  }
 }

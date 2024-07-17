@@ -21,6 +21,7 @@ const OAUTH_USER_AGENT = "$USER_AGENT Cobalt/Version";
 
 bool isOAuth() {
   Map headers = Hive.box('SETTINGS').get('YTMUSIC_AUTH', defaultValue: {});
+
   var oauthStructure = {
     "access_token",
     "expires_at",
@@ -33,68 +34,6 @@ bool isOAuth() {
 
 class AuthMixin {
   ValueNotifier<bool> isLogged = ValueNotifier(false);
-  AuthMixin() {
-    checkLogged();
-  }
-  Future<http.Response> _sendRequest(
-      String url, Map<String, String> data) async {
-    data["client_id"] = OAUTH_CLIENT_ID;
-    var headers = {"User-Agent": OAUTH_USER_AGENT};
-    return await http.post(Uri.parse(url), body: data, headers: headers);
-  }
-
-  checkLogged() {
-    Map headers = Hive.box('SETTINGS').get('YTMUSIC_AUTH', defaultValue: {});
-
-    isLogged.value = isOAuth() &&
-        ((DateTime.now().millisecondsSinceEpoch / 1000).round() <
-            headers["expires_at"] - 3600);
-  }
-
-  Future<Map<String, dynamic>> getCode() async {
-    var codeResponse =
-        await _sendRequest(OAUTH_CODE_URL, {"scope": OAUTH_SCOPE});
-    var responseJson = jsonDecode(codeResponse.body);
-    return responseJson;
-  }
-
-  Map<String, dynamic> _parseToken(http.Response response) {
-    var token = jsonDecode(response.body);
-    token["expires_at"] = token["expires_in"] != null
-        ? (DateTime.now().millisecondsSinceEpoch / 1000).round() +
-            int.parse(token["expires_in"].toString())
-        : null;
-    return token;
-  }
-
-  Future<Map<String, dynamic>> getTokenFromCode(String deviceCode) async {
-    var response = await _sendRequest(
-      OAUTH_TOKEN_URL,
-      {
-        "client_secret": OAUTH_CLIENT_SECRET,
-        "grant_type": "http://oauth.net/grant_type/device/1.0",
-        "code": deviceCode,
-      },
-    );
-    return _parseToken(response);
-  }
-
-  Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
-    var response = await _sendRequest(
-      OAUTH_TOKEN_URL,
-      {
-        "client_secret": OAUTH_CLIENT_SECRET,
-        "grant_type": "refresh_token",
-        "refresh_token": refreshToken,
-      },
-    );
-    return _parseToken(response);
-  }
-
-  Future<void> dumpToken(Map token) async {
-    await Hive.box('SETTINGS').put('YTMUSIC_AUTH', token);
-  }
-
   Future<bool> login(BuildContext context) async {
     Modals.showCenterLoadingModal(context);
     var code = await getCode();
@@ -113,23 +52,93 @@ class AuthMixin {
         if (context.mounted) {
           bool confirm2 = await Modals.showConfirmBottomModal(context,
               message: 'Did you logged in successfully');
-          Modals.showCenterLoadingModal(context);
+
           if (confirm2 == true) {
+            Modals.showCenterLoadingModal(context);
             var token = await getTokenFromCode(code["device_code"]);
-            await dumpToken(token);
-            checkLogged();
+            await saveToken(token);
+            await checkLogged();
+            Navigator.pop(context);
           }
-          Navigator.pop(context);
         }
       }
     }
     return isLogged.value;
   }
 
+  Future<http.Response> _sendRequest(
+      String url, Map<String, String> data) async {
+    data["client_id"] = OAUTH_CLIENT_ID;
+    var headers = {"User-Agent": OAUTH_USER_AGENT};
+    return await http.post(Uri.parse(url), body: data, headers: headers);
+  }
+
+  checkLogged() async {
+    if (isOAuth()) {
+      await checkToken();
+      isLogged.value = isOAuth();
+    }
+  }
+
+  Future<Map<String, dynamic>> getCode() async {
+    var codeResponse =
+        await _sendRequest(OAUTH_CODE_URL, {"scope": OAUTH_SCOPE});
+    var responseJson = jsonDecode(codeResponse.body);
+    return responseJson;
+  }
+
+  Map<String, dynamic> _parseToken(Map<String, dynamic> token) {
+    token["expires_at"] = token["expires_in"] != null
+        ? (DateTime.now().millisecondsSinceEpoch / 1000).round() +
+            int.parse(token["expires_in"].toString())
+        : null;
+    return token;
+  }
+
+  Future<Map<String, dynamic>> getTokenFromCode(String deviceCode) async {
+    var response = await _sendRequest(
+      OAUTH_TOKEN_URL,
+      {
+        "client_secret": OAUTH_CLIENT_SECRET,
+        "grant_type": "http://oauth.net/grant_type/device/1.0",
+        "code": deviceCode,
+      },
+    );
+    return _parseToken(jsonDecode(response.body));
+  }
+
+  Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
+    var response = await _sendRequest(
+      OAUTH_TOKEN_URL,
+      {
+        "client_secret": OAUTH_CLIENT_SECRET,
+        "grant_type": "refresh_token",
+        "refresh_token": refreshToken,
+      },
+    );
+    return _parseToken(jsonDecode(response.body));
+  }
+
+  Future<void> saveToken(Map token) async {
+    await Hive.box('SETTINGS').put('YTMUSIC_AUTH', token);
+  }
+
+  Future<Map> checkToken() async {
+    Map headers = Hive.box('SETTINGS').get('YTMUSIC_AUTH', defaultValue: {});
+    if ((DateTime.now().millisecondsSinceEpoch / 1000).round() >
+        (headers["expires_at"] - 3600)) {
+      Map<String, dynamic> rToken =
+          await refreshToken(headers["refresh_token"]);
+      headers.updateAll((key, value) => rToken[key] ?? value);
+      await saveToken(headers);
+    }
+    return headers;
+  }
+
   Future<bool> toggleLogin(BuildContext context) async {
     if (isLogged.value) {
       await Hive.box('SETTINGS').delete('YTMUSIC_AUTH');
-      checkLogged();
+      isLogged.value = false;
     } else {
       await login(context);
     }
@@ -138,15 +147,10 @@ class AuthMixin {
 
   Future<Map<String, String>> loadHeaders() async {
     var headers = initializeHeaders();
+    await checkLogged();
     if (isLogged.value) {
-      Map token = Hive.box('SETTINGS').get('YTMUSIC_AUTH', defaultValue: {});
-      if ((DateTime.now().millisecondsSinceEpoch / 1000).round() >
-          (token["expires_at"] - 3600)) {
-        Map<String, dynamic> rToken =
-            await refreshToken(token["refresh_token"]);
-        token.updateAll((key, value) => rToken[key] ?? value);
-        await dumpToken(token);
-      }
+      Map token = await checkToken();
+
       headers["Authorization"] =
           "${token['token_type']} ${token['access_token']}";
       headers["Content-Type"] = "application/json";

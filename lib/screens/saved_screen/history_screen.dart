@@ -14,7 +14,7 @@ class HistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
       appBar: AdaptiveAppBar(
-        title: Text(S.of(context).history),
+        title: Text(S.of(context).History),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -35,11 +35,11 @@ class HistoryScreen extends StatelessWidget {
                       key: ObjectKey(song['videoId']),
                       trailingActions: <SwipeAction>[
                         SwipeAction(
-                            title: "Remove",
+                            title: S.of(context).Remove,
                             onTap: (CompletionHandler handler) async {
                               Modals.showConfirmBottomModal(
                                 context,
-                                message: 'Are you sure you want to remove it?',
+                                message: S.of(context).Remove_Message,
                                 isDanger: true,
                               ).then((bool confirm) async {
                                 if (confirm) {

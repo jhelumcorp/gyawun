@@ -14,7 +14,7 @@ class AppearenceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
       appBar: AdaptiveAppBar(
-        title: Text(S.of(context).appearence,
+        title: Text(S.of(context).Appearence,
             style: mediumTextStyle(context, bold: false)),
         centerTitle: true,
       ),

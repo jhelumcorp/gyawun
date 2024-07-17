@@ -8,8 +8,10 @@ import 'package:flutter_acrylic/window.dart';
 import 'package:flutter_acrylic/window_effect.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gyawun_beta/services/lyrics.dart';
 import 'package:gyawun_beta/services/yt_account.dart';
+import 'package:gyawun_beta/themes/colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
@@ -23,7 +25,6 @@ import 'services/file_storage.dart';
 import 'services/library.dart';
 import 'services/media_player.dart';
 import 'services/settings_manager.dart';
-import 'themes/colors.dart';
 import 'themes/dark.dart';
 import 'themes/light.dart';
 import 'utils/router.dart';
@@ -61,8 +62,6 @@ void main() async {
         effect: windowEffect,
         dark: getInitialDarkness(),
       );
-
-      // await windowManager.setMinimumSize(const Size(500, 600));
 
       await windowManager.show();
       await windowManager.setPreventClose(true);
@@ -148,14 +147,37 @@ class Gyawun extends StatelessWidget {
                 supportedLocales: S.delegate.supportedLocales,
                 debugShowCheckedModeBanner: false,
                 themeMode: context.watch<SettingsManager>().themeMode,
-                theme: lightTheme(primaryBlack,
-                    colorScheme: context.watch<SettingsManager>().dynamicColors
-                        ? lightScheme
-                        : null),
-                darkTheme: darkTheme(Colors.white,
-                    colorScheme: context.watch<SettingsManager>().dynamicColors
-                        ? darkScheme
-                        : null),
+                theme: lightTheme(
+                  colorScheme: context.watch<SettingsManager>().dynamicColors &&
+                          lightScheme != null
+                      ? lightScheme
+                      : ColorScheme.fromSeed(
+                          seedColor:
+                              context.watch<SettingsManager>().accentColor ??
+                                  Colors.black,
+                          primary:
+                              context.watch<SettingsManager>().accentColor ??
+                                  Colors.black,
+                          brightness: Brightness.light,
+                        ),
+                ),
+                darkTheme: darkTheme(
+                  colorScheme: context.watch<SettingsManager>().dynamicColors &&
+                          darkScheme != null
+                      ? darkScheme
+                      : ColorScheme.fromSeed(
+                          seedColor:
+                              context.watch<SettingsManager>().accentColor ??
+                                  primaryWhite,
+                          primary:
+                              context.watch<SettingsManager>().accentColor ??
+                                  primaryWhite,
+                          brightness: Brightness.dark,
+                          surface: context.watch<SettingsManager>().amoledBlack
+                              ? Colors.black
+                              : null,
+                        ),
+                ),
               ),
       );
     });
@@ -180,7 +202,12 @@ class Gyawun extends StatelessWidget {
         brightness: Brightness.light,
         accentColor: settingsManager.dynamicColors
             ? lightScheme?.primary.toAccentColor()
-            : null,
+            : settingsManager.accentColor?.toAccentColor(),
+        fontFamily: GoogleFonts.poppins().fontFamily,
+        typography: fluent_ui.Typography.fromBrightness(
+          brightness: Brightness.light,
+        ),
+        iconTheme: const fluent_ui.IconThemeData(color: Colors.black),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor:
             (settingsManager.windowEffect == WindowEffect.disabled &&
@@ -192,12 +219,20 @@ class Gyawun extends StatelessWidget {
         brightness: Brightness.dark,
         accentColor: settingsManager.dynamicColors
             ? darkScheme?.primary.toAccentColor()
-            : null,
+            : settingsManager.accentColor?.toAccentColor(),
+        fontFamily: GoogleFonts.poppins().fontFamily,
+        typography: fluent_ui.Typography.fromBrightness(
+          brightness: Brightness.dark,
+        ),
+        iconTheme: const fluent_ui.IconThemeData(color: Colors.white),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor:
-            (settingsManager.windowEffect == WindowEffect.disabled &&
-                    settingsManager.dynamicColors)
-                ? darkScheme?.surface
+            (settingsManager.windowEffect == WindowEffect.disabled)
+                ? (settingsManager.dynamicColors
+                    ? darkScheme?.surface
+                    : settingsManager.amoledBlack
+                        ? Colors.black
+                        : null)
                 : null,
       ),
       builder: (context, child) {

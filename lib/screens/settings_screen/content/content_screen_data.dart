@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/switch.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +19,7 @@ Box _box = Hive.box('SETTINGS');
 
 List<SettingItem> contentScreenData(BuildContext context) => [
       SettingItem(
-        title: S.of(context).country,
+        title: S.of(context).Country,
         icon: CupertinoIcons.placemark,
         hasNavigation: false,
         trailing: (context) {
@@ -46,61 +45,9 @@ List<SettingItem> contentScreenData(BuildContext context) => [
             },
           );
         },
-        // trailing: (context) {
-        //   return Text(
-        //     context.watch<SettingsManager>().location['name']!,
-        //     style: smallTextStyle(context),
-        //   );
-        // },
-        // onTap: (context) {
-        //   showModalBottomSheet(
-        //     context: context,
-        //     backgroundColor: Colors.transparent,
-        //     builder: (context) {
-        //       return BottomModalLayout(
-        //         child: SizedBox(
-        //           width: MediaQuery.of(context).size.width > 600 ? 600 : null,
-        //           child: Column(
-        //             children: [
-        //               AppBar(
-        //                 title: Text(
-        //                   "Location",
-        //                   style: textStyle(context).copyWith(fontSize: 18),
-        //                 ),
-        //                 centerTitle: true,
-        //                 automaticallyImplyLeading: false,
-        //               ),
-        //               Expanded(
-        //                 child: SingleChildScrollView(
-        //                   child: Column(children: [
-        //                     ...context
-        //                         .read<SettingsManager>()
-        //                         .locations
-        //                         .map((location) {
-        //                       return ListTile(
-        //                         dense: true,
-        //                         visualDensity: VisualDensity.compact,
-        //                         title: Text(location['name']!),
-        //                         onTap: () async {
-        //                           Navigator.pop(context);
-        //                           context.read<SettingsManager>().location =
-        //                               location;
-        //                         },
-        //                       );
-        //                     }),
-        //                   ]),
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //   );
-        // },
       ),
       SettingItem(
-        title: S.of(context).language,
+        title: S.of(context).Language,
         icon: CupertinoIcons.globe,
         trailing: (context) {
           return AdaptiveDropdownButton(
@@ -124,61 +71,9 @@ List<SettingItem> contentScreenData(BuildContext context) => [
             },
           );
         },
-        // onTap: (context) {
-        //   showModalBottomSheet(
-        //     context: context,
-        //     backgroundColor: Colors.transparent,
-        //     builder: (context) {
-        //       return BottomModalLayout(
-        //         child: SizedBox(
-        //           width: MediaQuery.of(context).size.width > 600 ? 600 : null,
-        //           child: Column(
-        //             children: [
-        //               AppBar(
-        //                 title: Text(
-        //                   S.of(context).selectLanguage,
-        //                   style: textStyle(context).copyWith(fontSize: 18),
-        //                 ),
-        //                 centerTitle: true,
-        //                 automaticallyImplyLeading: false,
-        //               ),
-        //               Expanded(
-        //                 child: SingleChildScrollView(
-        //                   child: Column(children: [
-        //                     ...context
-        //                         .read<SettingsManager>()
-        //                         .languages
-        //                         .map((language) {
-        //                       return ListTile(
-        //                         dense: true,
-        //                         visualDensity: VisualDensity.compact,
-        //                         title: Text(language['name']!),
-        //                         onTap: () async {
-        //                           Navigator.pop(context);
-        //                           context.read<SettingsManager>().language =
-        //                               language;
-        //                         },
-        //                       );
-        //                     }),
-        //                   ]),
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //   );
-        // },
-        // trailing: (context) {
-        //   return Text(
-        //     context.watch<SettingsManager>().language['name']!,
-        //     style: smallTextStyle(context),
-        //   );
-        // },
       ),
       SettingItem(
-        title: 'Personalised Content',
+        title: S.of(context).Personalised_Content,
         icon: Icons.recommend_outlined,
         onTap: (context) async {
           Modals.showCenterLoadingModal(context);
@@ -211,13 +106,13 @@ List<SettingItem> contentScreenData(BuildContext context) => [
         },
       ),
       SettingItem(
-        title: 'Enter Visitor Id',
+        title: S.of(context).Enter_Visitor_Id,
         icon: Icons.edit,
         onTap: (context) async {
           String? text = await Modals.showTextField(
             context,
-            title: 'Enter Visitor id',
-            hintText: 'Visitor id',
+            title: S.of(context).Enter_Visitor_Id,
+            hintText: S.of(context).Visitor_Id,
           );
           if (text != null) {
             await _box.put('VISITOR_ID', text);
@@ -226,7 +121,7 @@ List<SettingItem> contentScreenData(BuildContext context) => [
         },
       ),
       SettingItem(
-        title: 'Reset Visitor Id',
+        title: S.of(context).Reset_Visitor_Id,
         icon: CupertinoIcons.refresh_thick,
         onTap: (context) async {
           Modals.showCenterLoadingModal(context);
@@ -244,7 +139,8 @@ List<SettingItem> contentScreenData(BuildContext context) => [
                                 _box.get('VISITOR_ID', defaultValue: '') ?? ''))
                         .then((val) {
                       GetIt.I<YTMusic>().refreshHeaders();
-                      BottomMessage.showText(context, 'Copied to clipboard');
+                      BottomMessage.showText(
+                          context, S.of(context).Copied_To_Clipboard);
                     });
                   },
                   icon: const Icon(Icons.copy),

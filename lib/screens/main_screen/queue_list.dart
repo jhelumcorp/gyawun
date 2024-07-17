@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/utils/enhanced_image.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
@@ -173,7 +174,7 @@ class QueueList extends StatelessWidget {
                                         !mediaPlayer.shuffleModeEnabled);
                                   },
                                   icon: const Icon(Icons.shuffle_outlined),
-                                  label: const Text('Shuffle'),
+                                  label: Text(S.of(context).Shuffle),
                                 ),
                               ],
                             ),

@@ -21,47 +21,57 @@ Box _box = Hive.box('SETTINGS');
 List<SettingItem> audioandplaybackScreenData(BuildContext context) => [
       if (!Platform.isWindows)
         SettingItem(
-          title: S.of(context).LoudnessAndEqualizer,
+          title: S.of(context).Loudness_And_Equalizer,
           icon: Icons.equalizer_outlined,
           location: '/settings/playback/equalizer',
           hasNavigation: true,
         ),
       SettingItem(
-        title: "Audio Quality",
+        title: S.of(context).Streaming_Quality,
         icon: CupertinoIcons.speaker_zzz,
+        hasNavigation: false,
         trailing: (context) {
           return AdaptiveDropdownButton(
-              style: textStyle(context, bold: false).copyWith(fontSize: 16),
-              // underline: const SizedBox(),
-              value: context.watch<SettingsManager>().audioQuality,
-              items: context
-                  .read<SettingsManager>()
-                  .audioQualities
-                  .map(
-                    (e) => AdaptiveDropdownMenuItem(
-                        value: e, child: Text(e.name.toUpperCase())),
-                  )
-                  .toList(),
-              onChanged: (value) async {
-                if (value == null) return;
-                context.read<SettingsManager>().audioQuality = value;
-              });
+            value: context.watch<SettingsManager>().streamingQuality,
+            items: context
+                .read<SettingsManager>()
+                .audioQualities
+                .map(
+                  (e) => AdaptiveDropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      textAlign: TextAlign.right,
+                      e.name.toUpperCase(),
+                      style: smallTextStyle(context),
+                      maxLines: 2,
+                    ),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) {
+              if (value == null) return;
+              context.read<SettingsManager>().streamingQuality = value;
+            },
+          );
         },
       ),
       SettingItem(
-        title: "Download Quality",
+        title: S.of(context).DOwnload_Quality,
         icon: CupertinoIcons.speaker_zzz,
         trailing: (context) {
           return AdaptiveDropdownButton(
-              style: textStyle(context, bold: false).copyWith(fontSize: 16),
-              // underline: const SizedBox(),
               value: context.watch<SettingsManager>().downloadQuality,
               items: context
                   .read<SettingsManager>()
                   .audioQualities
                   .map(
                     (e) => AdaptiveDropdownMenuItem(
-                        value: e, child: Text(e.name.toUpperCase())),
+                      value: e,
+                      child: Text(
+                        e.name.toUpperCase(),
+                        style: smallTextStyle(context, bold: false),
+                      ),
+                    ),
                   )
                   .toList(),
               onChanged: (value) async {
@@ -72,7 +82,7 @@ List<SettingItem> audioandplaybackScreenData(BuildContext context) => [
       ),
       if (!Platform.isWindows)
         SettingItem(
-          title: 'Skip Silence',
+          title: S.of(context).Skip_Silence,
           icon: CupertinoIcons.forward_end_alt,
           onTap: (context) async {
             await GetIt.I<MediaPlayer>()
@@ -87,7 +97,7 @@ List<SettingItem> audioandplaybackScreenData(BuildContext context) => [
           },
         ),
       SettingItem(
-        title: S.of(context).enablePlaybackHistory,
+        title: S.of(context).Enable_Playback_History,
         icon: Icons.manage_history_sharp,
         onTap: (context) async {
           bool isEnabled = _box.get('PLAYBACK_HISTORY', defaultValue: true);
@@ -110,24 +120,25 @@ List<SettingItem> audioandplaybackScreenData(BuildContext context) => [
         },
       ),
       SettingItem(
-        title: S.of(context).deletePlaybackHistory,
+        title: S.of(context).Delete_Playback_History,
         icon: Icons.playlist_remove,
         onTap: (context) async {
           bool? confirm = await Modals.showConfirmBottomModal(
             context,
-            message: S.of(context).deletePlaybackHistoryDialogText,
+            message: S.of(context).Delete_Playback_History_Confirm_Message,
             isDanger: true,
           );
           if (confirm == true) {
             await Hive.box('SONG_HISTORY').clear();
             if (context.mounted) {
-              BottomMessage.showText(context, 'Playback History deleted');
+              BottomMessage.showText(
+                  context, S.of(context).Playback_History_Deleted);
             }
           }
         },
       ),
       SettingItem(
-        title: S.of(context).enableSearchHistory,
+        title: S.of(context).Enable_Search_History,
         icon: Icons.search_off_sharp,
         onTap: (context) async {
           bool isEnabled = _box.get('SEARCH_HISTORY', defaultValue: true);
@@ -149,18 +160,19 @@ List<SettingItem> audioandplaybackScreenData(BuildContext context) => [
         },
       ),
       SettingItem(
-        title: S.of(context).deleteSearchHistory,
+        title: S.of(context).Delete_Search_History,
         icon: Icons.highlight_remove_sharp,
         onTap: (context) async {
           bool? confirm = await Modals.showConfirmBottomModal(
             context,
-            message: S.of(context).deleteSearchHistoryDialogText,
+            message: S.of(context).Delete_Search_History_Confirm_Message,
             isDanger: true,
           );
           if (confirm == true) {
             await Hive.box('SEARCH_HISTORY').clear();
             if (context.mounted) {
-              BottomMessage.showText(context, 'Search History deleted');
+              BottomMessage.showText(
+                  context, S.of(context).Search_History_Deleted);
             }
           }
         },

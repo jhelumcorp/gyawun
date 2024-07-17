@@ -19,8 +19,9 @@ mixin BrowsingMixin on YTMusicServices {
 
     var response =
         await sendRequest(endpoint, body, additionalParams: additionalParams);
+
     Map<String, dynamic> result = {};
-    Map<String, dynamic> contents = response['contents'];
+    Map<String, dynamic>? contents = response['contents'];
 
     Map<String, dynamic>? header = response['header'] ??
         nav(response, [
@@ -49,8 +50,7 @@ mixin BrowsingMixin on YTMusicServices {
               ?['editHeader']?['musicPlaylistEditHeaderRenderer']);
     }
 
-    if (contents.containsKey('singleColumnBrowseResultsRenderer') ||
-        contents.containsKey('twoColumnBrowseResultsRenderer')) {
+    if (contents != null) {
       Map? tabRenderer = nav(contents,
           ['singleColumnBrowseResultsRenderer', 'tabs', 0, 'tabRenderer']);
       Map? sectionListRenderer =
@@ -111,7 +111,7 @@ mixin BrowsingMixin on YTMusicServices {
         result['continuation'] = data['continuation'];
       }
     } else {
-      // pprint(contents);
+      result['sections'] = List<Map<String, dynamic>>.empty();
     }
     return result;
   }
@@ -211,6 +211,25 @@ mixin BrowsingMixin on YTMusicServices {
       url += '&$k=$v';
     });
     await sendGetRequest(url, headers);
+  }
+
+  Future<Map<String, dynamic>?> getSongDetails(String videoId) async {
+    Map<String, dynamic> body = {"videoId": videoId};
+    final Map response = await sendRequest('player', body);
+    Map? videoDetails = response['videoDetails'];
+    if (videoDetails != null) {
+      return {
+        'videoId': videoDetails['videoId'],
+        'channelId': videoDetails['channelId'],
+        'title': videoDetails['title'],
+        'subtitle': videoDetails['author'],
+        'length': videoDetails['lengthSeconds'],
+        'viewCount': videoDetails['viewCount'],
+        'thumbnails': videoDetails['thumbnail']['thumbnails'],
+        'type': itemCategory[videoDetails['musicVideoType']],
+      };
+    }
+    return null;
   }
 
   Future<List> getNextSongList({

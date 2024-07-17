@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
 import '../../../themes/text_styles.dart';
@@ -13,7 +14,10 @@ class ContentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
       appBar: AdaptiveAppBar(
-        title: Text('Content', style: mediumTextStyle(context, bold: false)),
+        title: Text(
+          S.of(context).Content,
+          style: mediumTextStyle(context, bold: false),
+        ),
         centerTitle: true,
       ),
       body: Center(

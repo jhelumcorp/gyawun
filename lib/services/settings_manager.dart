@@ -29,10 +29,12 @@ class SettingsManager extends ChangeNotifier {
         WindowEffect.tabbed,
         WindowEffect.aero,
       ];
-  AudioQuality _audioQuality = AudioQuality.high;
+  AudioQuality _streamingQuality = AudioQuality.high;
   AudioQuality _downloadQuality = AudioQuality.high;
   bool _skipSilence = false;
-  bool _dynamicColors = true;
+  Color? _accentColor;
+  bool _amoledBlack = true;
+  bool _dynamicColors = false;
   WindowEffect _windowEffect = WindowEffect.disabled;
   bool _equalizerEnabled = false;
   List<double> _equalizerBandsGain = [];
@@ -46,9 +48,12 @@ class SettingsManager extends ChangeNotifier {
   Map<String, String> get language => _language;
   List<Map<String, String>> get languages => _languages;
   List<AudioQuality> get audioQualities => _audioQualities;
-  AudioQuality get audioQuality => _audioQuality;
+  AudioQuality get streamingQuality => _streamingQuality;
   AudioQuality get downloadQuality => _downloadQuality;
   bool get skipSilence => _skipSilence;
+
+  Color? get accentColor => _accentColor;
+  bool get amoledBlack => _amoledBlack;
   bool get dynamicColors => _dynamicColors;
   WindowEffect get windowEffect => _windowEffect;
   bool get equalizerEnabled => _equalizerEnabled;
@@ -64,7 +69,11 @@ class SettingsManager extends ChangeNotifier {
     _themeMode = _themeModes[_box.get('THEME_MODE', defaultValue: 0)];
     _language = _languages.firstWhere((language) =>
         language['value'] == _box.get('LANGUAGE', defaultValue: 'en-IN'));
-    _dynamicColors = _box.get('DYNAMIC_COLORS', defaultValue: true);
+    _accentColor = _box.get('ACCENT_COLOR') != null
+        ? Color(_box.get('ACCENT_COLOR'))
+        : null;
+    _amoledBlack = _box.get('AMOLED_BLACK', defaultValue: true);
+    _dynamicColors = _box.get('DYNAMIC_COLORS', defaultValue: false);
     _windowEffect = windowEffectList.firstWhere((el) =>
         el.name.toUpperCase() ==
         _box.get('WINDOW_EFFECT',
@@ -73,7 +82,8 @@ class SettingsManager extends ChangeNotifier {
     _location = _countries.firstWhere((country) =>
         country['value'] == _box.get('LOCATION', defaultValue: 'IN'));
 
-    _audioQuality = _audioQualities[_box.get('AUDIO_QUALITY', defaultValue: 0)];
+    _streamingQuality =
+        _audioQualities[_box.get('STREAMING_QUALITY', defaultValue: 0)];
     _downloadQuality =
         _audioQualities[_box.get('DOWNLOAD_QUALITY', defaultValue: 0)];
     _skipSilence = _box.get('SKIP_SILENCE', defaultValue: false);
@@ -122,9 +132,9 @@ class SettingsManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  set audioQuality(AudioQuality value) {
-    _box.put('AUDIO_QUALITY', _audioQualities.indexOf(value));
-    _audioQuality = value;
+  set streamingQuality(AudioQuality value) {
+    _box.put('STREAMING_QUALITY', _audioQualities.indexOf(value));
+    _streamingQuality = value;
     notifyListeners();
   }
 
@@ -137,6 +147,19 @@ class SettingsManager extends ChangeNotifier {
   set skipSilence(bool value) {
     _box.put('SKIP_SILENCE', value);
     _skipSilence = value;
+    notifyListeners();
+  }
+
+  set accentColor(Color? color) {
+    int? c = color?.value;
+    _box.put('ACCENT_COLOR', c);
+    _accentColor = color;
+    notifyListeners();
+  }
+
+  set amoledBlack(bool val) {
+    _box.put('AMOLED_BLACK', val);
+    _amoledBlack = val;
     notifyListeners();
   }
 

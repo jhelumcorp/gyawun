@@ -11,49 +11,49 @@ import 'setting_item.dart';
 
 List<SettingItem> settingScreenData(BuildContext context) => [
       SettingItem(
-        title: 'Google Account',
+        title: S.of(context).Google_Account,
         icon: CupertinoIcons.person,
         color: Colors.accents[6],
         hasNavigation: true,
         location: '/settings/account',
       ),
       SettingItem(
-        title: S.of(context).appearence,
+        title: S.of(context).Appearence,
         icon: Icons.looks,
         color: Colors.accents[0],
         hasNavigation: true,
         location: '/settings/appearence',
       ),
       SettingItem(
-        title: 'Content',
+        title: S.of(context).Content,
         icon: CupertinoIcons.music_note_list,
         color: Colors.accents[1],
         hasNavigation: true,
         location: '/settings/content',
       ),
       SettingItem(
-        title: S.of(context).audioAndPlayback,
+        title: S.of(context).Audio_And_Playback,
         icon: CupertinoIcons.music_note,
         color: Colors.accents[2],
         hasNavigation: true,
         location: '/settings/playback',
       ),
       SettingItem(
-        title: 'Back up and Restore',
+        title: S.of(context).Backup_And_Restore,
         icon: Icons.settings_backup_restore_outlined,
         color: Colors.accents[3],
         hasNavigation: true,
         location: '/settings/backup_restore',
       ),
       SettingItem(
-        title: S.of(context).about,
+        title: S.of(context).About,
         icon: Icons.info_rounded,
         color: Colors.accents[4],
         hasNavigation: true,
         location: '/settings/about',
       ),
       SettingItem(
-        title: 'Check for Update',
+        title: S.of(context).Check_For_Update,
         icon: Icons.update_outlined,
         color: Colors.accents[5],
         onTap: (context) async {

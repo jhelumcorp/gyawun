@@ -4,8 +4,6 @@ import 'package:gyawun_beta/screens/ytmusic_screen/song_tile.dart';
 import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:gyawun_beta/ytmusic/ytmusic.dart';
 
-import '../../../../services/yt_account.dart';
-
 class PlaylistsScreen extends StatefulWidget {
   const PlaylistsScreen({super.key});
 
@@ -15,59 +13,101 @@ class PlaylistsScreen extends StatefulWidget {
 
 class _PlaylistsScreenState extends State<PlaylistsScreen>
     with AutomaticKeepAliveClientMixin<PlaylistsScreen> {
+  late ScrollController _scrollController;
   List items = [];
-  bool loading = true;
+  bool initialLoading = true;
+  bool nextLoading = false;
+  String? continuation;
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
     fetchData();
   }
 
+  _scrollListener() async {
+    if (initialLoading || nextLoading || continuation == null) {
+      return;
+    }
+
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      await fetchNext();
+    }
+  }
+
   Future<void> fetchData() async {
-    // setState(() {
-    //   loading=true;
-    // });
-    List data = await GetIt.I<YTMusic>().getLibraryPlaylists();
+    setState(() {
+      initialLoading = true;
+    });
+    Map data = await GetIt.I<YTMusic>().getLibraryPlaylists();
     if (mounted) {
       setState(() {
-        items = data;
-        loading = false;
+        items = data['contents'];
+        continuation = data['continuation'];
+        initialLoading = false;
       });
     }
+  }
+
+  fetchNext() async {
+    if (continuation == null) return;
+    setState(() {
+      nextLoading = true;
+    });
+    Map data = await GetIt.I<YTMusic>()
+        .getLibraryPlaylists(continuationParams: continuation);
+    if (mounted) {
+      setState(() {
+        items.addAll(data['contents']);
+        continuation = data['continuation'];
+        nextLoading = false;
+      });
+    }
+    setState(() {
+      nextLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return AdaptiveScaffold(
-      body: ValueListenableBuilder(
-        valueListenable: GetIt.I<YTAccount>().isLogged,
-        builder: (context, value, child) {
-          if (value) {
-            return Center(
-              child: loading
-                  ? const AdaptiveProgressRing()
-                  : RefreshIndicator(
-                      onRefresh: () => fetchData(),
-                      child: Container(
-                        constraints: const BoxConstraints(maxWidth: 1000),
-                        child: ListView(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          children: items.indexed.map((playlist) {
-                            return YTMSongTile(
-                              items: items,
-                              index: playlist.$1,
-                              mainBrowse: true,
-                            );
-                          }).toList(),
-                        ),
-                      ),
+      body: initialLoading
+          ? const Center(child: AdaptiveProgressRing())
+          : RefreshIndicator(
+              onRefresh: () => fetchData(),
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Center(
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 1000),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Column(
+                      children: [
+                        ...items.indexed.map((playlist) {
+                          return YTMSongTile(
+                            items: items,
+                            index: playlist.$1,
+                            mainBrowse: true,
+                          );
+                        }),
+                        if (!nextLoading && continuation != null)
+                          const SizedBox(height: 64),
+                        if (nextLoading)
+                          const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: AdaptiveProgressRing(),
+                            ),
+                          ),
+                      ],
                     ),
-            );
-          }
-          return const SizedBox.shrink();
-        },
-      ),
+                  ),
+                ),
+              ),
+            ),
     );
   }
 

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/screens/ytmusic_screen/browse_songs_screen.dart';
 
 import '../../services/media_player.dart';
 import '../../utils/adaptive_widgets/adaptive_widgets.dart';
@@ -22,21 +21,13 @@ class YTMSongTile extends StatelessWidget {
     return AdaptiveListTile(
       margin: const EdgeInsets.symmetric(vertical: 4),
       onTap: () {
-        if (mainBrowse) {
-          Navigator.push(
-            context,
-            AdaptivePageRoute.create(
-              (context) => BrowseScreen(
-                  endpoint: item['endpoint'].cast<String, dynamic>()),
-            ),
-          );
-        } else if (item['videoId'] != null) {
+        if (item['videoId'] != null) {
           GetIt.I<MediaPlayer>().playAll(List.from(items), index: index);
         } else {
           Navigator.push(
             context,
             AdaptivePageRoute.create(
-              (context) => BrowseSongsScreen(
+              (context) => BrowseScreen(
                   endpoint: item['endpoint'].cast<String, dynamic>()),
             ),
           );
@@ -57,7 +48,7 @@ class YTMSongTile extends StatelessWidget {
             width: 50,
           )),
       subtitle: Text(
-        item['subtitle'],
+        item['subtitle'] ?? '',
         maxLines: 1,
       ),
       trailing:

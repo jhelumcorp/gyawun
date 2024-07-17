@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           vertical: 2, horizontal: 8),
                       borderRadius:
                           BorderRadius.circular(Platform.isWindows ? 4.0 : 35),
-                      hintText: S.of(context).searchGyawun,
+                      hintText: S.of(context).Search_Gyawun,
                       prefix: Icon(AdaptiveIcons.search),
                     ),
                   ),

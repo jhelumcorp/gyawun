@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun_beta/utils/enhanced_image.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -70,7 +71,7 @@ class FileStorage {
 
   Future<File?> saveMusic(List<int> data, Map song) async {
     String fileName = song['title'];
-    final RegExp avoid = RegExp(r'[\.\\\*\:\"\?#/;\|]');
+    final RegExp avoid = RegExp(r'[\.\\\*\:\(\)\"\?#/;\|]');
     fileName = fileName.replaceAll(avoid, '').replaceAll("'", '');
     fileName = Uri.decodeFull(fileName);
     if (!(await requestPermissions())) return null;
@@ -87,28 +88,28 @@ class FileStorage {
         await file.delete();
       }
       await file.writeAsBytes(data, flush: true);
-      try {
-        Response res = await get(Uri.parse(song['thumbnails'].last['url']));
-        Tag tag = Tag(
-            title: song['title'],
-            trackArtist:
-                song['artists']?.map((artist) => artist['name']).join(','),
-            album: song['album']?['name'],
-            pictures: [
-              Picture(
-                bytes: res.bodyBytes,
-                mimeType: MimeType.jpeg,
-                pictureType: PictureType.coverFront,
-              )
-            ]);
 
-        AudioTags.write(file.path, tag);
-      } catch (e) {
-        pprint(e.toString());
-      }
+      Response res = await get(
+          Uri.parse(getEnhancedImage(song['thumbnails'].first['url'])));
+      Tag tag = Tag(
+          title: song['title'],
+          trackArtist:
+              song['artists']?.map((artist) => artist['name']).join(','),
+          album: song['album']?['name'],
+          pictures: [
+            Picture(
+              bytes: res.bodyBytes,
+              pictureType: PictureType.coverFront,
+            )
+          ]);
+      pprint(tag.title);
+      pprint(tag.trackArtist);
+      pprint(tag.album);
+      await AudioTags.write(file.path, tag);
+
       return file;
     } catch (e) {
-      rethrow;
+      return null;
     }
   }
 

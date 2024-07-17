@@ -39,7 +39,7 @@ class _SavedScreenState extends State<SavedScreen> {
     Map playlists = context.watch<LibraryService>().playlists;
     return AdaptiveScaffold(
       appBar: AdaptiveAppBar(
-        title: Text(S.of(context).saved),
+        title: Text(S.of(context).Saved),
         centerTitle: true,
         automaticallyImplyLeading: false,
         actions: [
@@ -72,7 +72,7 @@ class _SavedScreenState extends State<SavedScreen> {
               children: [
                 AdaptiveListTile(
                   margin: const EdgeInsets.symmetric(vertical: 4),
-                  title: Text(S.of(context).favourites),
+                  title: Text(S.of(context).Favourites),
                   leading: Container(
                     height: 50,
                     width: 50,
@@ -88,7 +88,7 @@ class _SavedScreenState extends State<SavedScreen> {
                   subtitle: ValueListenableBuilder(
                     valueListenable: Hive.box('FAVOURITES').listenable(),
                     builder: (context, box, child) {
-                      return Text('${box.length} ${S.of(context).songs}');
+                      return Text(S.of(context).nSongs(box.length));
                     },
                   ),
                   trailing: Icon(AdaptiveIcons.chevron_right),
@@ -100,7 +100,7 @@ class _SavedScreenState extends State<SavedScreen> {
                 ),
                 AdaptiveListTile(
                   margin: const EdgeInsets.symmetric(vertical: 4),
-                  title: Text(S.of(context).downloads),
+                  title: Text(S.of(context).Downloads),
                   leading: Container(
                     height: 50,
                     width: 50,
@@ -116,7 +116,7 @@ class _SavedScreenState extends State<SavedScreen> {
                   subtitle: ValueListenableBuilder(
                     valueListenable: Hive.box('DOWNLOADS').listenable(),
                     builder: (context, box, child) {
-                      return Text('${box.length} ${S.of(context).songs}');
+                      return Text(S.of(context).nSongs(box.length));
                     },
                   ),
                   trailing: Icon(AdaptiveIcons.chevron_right),
@@ -128,7 +128,7 @@ class _SavedScreenState extends State<SavedScreen> {
                 ),
                 AdaptiveListTile(
                   margin: const EdgeInsets.symmetric(vertical: 4),
-                  title: Text(S.of(context).history),
+                  title: Text(S.of(context).History),
                   leading: Container(
                     height: 50,
                     width: 50,
@@ -144,7 +144,7 @@ class _SavedScreenState extends State<SavedScreen> {
                   subtitle: ValueListenableBuilder(
                     valueListenable: Hive.box('SONG_HISTORY').listenable(),
                     builder: (context, box, child) {
-                      return Text('${box.length} ${S.of(context).songs}');
+                      return Text(S.of(context).nSongs(box.length));
                     },
                   ),
                   trailing: Icon(AdaptiveIcons.chevron_right),
@@ -287,7 +287,9 @@ class _SavedScreenState extends State<SavedScreen> {
                                       ? Text(
                                           item['isPredefined'] == true
                                               ? item['subtitle']
-                                              : '${item['songs'].length} ${S.of(context).songs}',
+                                              : S
+                                                  .of(context)
+                                                  .nSongs(item['songs'].length),
                                           maxLines: 1,
                                         )
                                       : null,
@@ -303,31 +305,6 @@ class _SavedScreenState extends State<SavedScreen> {
           ),
         ),
       ),
-      // floatingActionButtonLocation: ExpandableFab.location,
-      // floatingActionButton: ExpandableFab(
-      //   openButtonBuilder: RotateFloatingActionButtonBuilder(
-      //     child: const Icon(CupertinoIcons.add),
-      //   ),
-      //   closeButtonBuilder: DefaultFloatingActionButtonBuilder(
-      //     child: const Icon(CupertinoIcons.clear),
-      //   ),
-      //   distance: 70,
-      //   type: ExpandableFabType.up,
-      //   children: [
-      //     FloatingActionButton.small(
-      //       onPressed: () {
-      //         Modals.showCreateplaylistModal(context);
-      //       },
-      //       child: const Icon(CupertinoIcons.create),
-      //     ),
-      //     FloatingActionButton.small(
-      //       onPressed: () {
-      //         Modals.showImportplaylistModal(context);
-      //       },
-      //       child: const Icon(Icons.import_export),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
