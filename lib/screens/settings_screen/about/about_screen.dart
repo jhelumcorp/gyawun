@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gyawun_beta/screens/settings_screen/color_icon.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../app_config.dart';
@@ -50,10 +51,11 @@ class AboutScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     AdaptiveListTile(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      leading: const Icon(Icons.title),
+                      leading: const ColorIcon(icon: Icons.title, color: null),
                       title: Text(
                         S.of(context).Name,
-                        style: subtitleTextStyle(context),
+                        style: textStyle(context, bold: false)
+                            .copyWith(fontSize: 16),
                       ),
                       trailing: Text(
                         S.of(context).Gyawun,
@@ -62,10 +64,12 @@ class AboutScreen extends StatelessWidget {
                     ),
                     AdaptiveListTile(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      leading: const Icon(Icons.new_releases),
+                      leading: const ColorIcon(
+                          color: null, icon: Icons.new_releases),
                       title: Text(
                         S.of(context).Version,
-                        style: subtitleTextStyle(context),
+                        style: textStyle(context, bold: false)
+                            .copyWith(fontSize: 16),
                       ),
                       trailing: Text(
                         appConfig.codeName,
@@ -74,10 +78,12 @@ class AboutScreen extends StatelessWidget {
                     ),
                     AdaptiveListTile(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      leading: const Icon(CupertinoIcons.person),
+                      leading: const ColorIcon(
+                          color: null, icon: CupertinoIcons.person),
                       title: Text(
                         S.of(context).Developer,
-                        style: subtitleTextStyle(context),
+                        style: textStyle(context, bold: false)
+                            .copyWith(fontSize: 16),
                       ),
                       trailing: Wrap(
                         alignment: WrapAlignment.center,
@@ -98,10 +104,12 @@ class AboutScreen extends StatelessWidget {
                     ),
                     AdaptiveListTile(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      leading: const Icon(Icons.other_houses),
+                      leading: const ColorIcon(
+                          color: null, icon: Icons.other_houses),
                       title: Text(
                         S.of(context).Organisation,
-                        style: subtitleTextStyle(context),
+                        style: textStyle(context, bold: false)
+                            .copyWith(fontSize: 16),
                       ),
                       trailing: Wrap(
                         alignment: WrapAlignment.center,
@@ -122,10 +130,12 @@ class AboutScreen extends StatelessWidget {
                     ),
                     AdaptiveListTile(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      leading: const Icon(Icons.telegram_outlined),
+                      leading: const ColorIcon(
+                          color: null, icon: Icons.telegram_outlined),
                       title: Text(
                         S.of(context).Telegram,
-                        style: subtitleTextStyle(context),
+                        style: textStyle(context, bold: false)
+                            .copyWith(fontSize: 16),
                       ),
                       trailing: Icon(AdaptiveIcons.chevron_right),
                       onTap: () => launchUrl(
@@ -134,10 +144,12 @@ class AboutScreen extends StatelessWidget {
                     ),
                     AdaptiveListTile(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      leading: const Icon(CupertinoIcons.person_3),
+                      leading: const ColorIcon(
+                          color: null, icon: CupertinoIcons.person_3),
                       title: Text(
                         S.of(context).Contributors,
-                        style: subtitleTextStyle(context),
+                        style: textStyle(context, bold: false)
+                            .copyWith(fontSize: 16),
                       ),
                       trailing: Icon(AdaptiveIcons.chevron_right),
                       onTap: () => launchUrl(
@@ -147,10 +159,11 @@ class AboutScreen extends StatelessWidget {
                     ),
                     AdaptiveListTile(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      leading: const Icon(Icons.code),
+                      leading: const ColorIcon(color: null, icon: Icons.code),
                       title: Text(
                         S.of(context).Source_Code,
-                        style: subtitleTextStyle(context),
+                        style: textStyle(context, bold: false)
+                            .copyWith(fontSize: 16),
                       ),
                       trailing: Icon(AdaptiveIcons.chevron_right),
                       onTap: () => launchUrl(
@@ -159,10 +172,12 @@ class AboutScreen extends StatelessWidget {
                     ),
                     AdaptiveListTile(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      leading: const Icon(Icons.bug_report),
+                      leading:
+                          const ColorIcon(color: null, icon: Icons.bug_report),
                       title: Text(
                         S.of(context).Bug_Report,
-                        style: subtitleTextStyle(context),
+                        style: textStyle(context, bold: false)
+                            .copyWith(fontSize: 16),
                       ),
                       trailing: Icon(AdaptiveIcons.chevron_right),
                       onTap: () => launchUrl(
@@ -172,10 +187,12 @@ class AboutScreen extends StatelessWidget {
                     ),
                     AdaptiveListTile(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      leading: const Icon(Icons.request_page),
+                      leading: const ColorIcon(
+                          color: null, icon: Icons.request_page),
                       title: Text(
                         S.of(context).Feature_Request,
-                        style: subtitleTextStyle(context),
+                        style: textStyle(context, bold: false)
+                            .copyWith(fontSize: 16),
                       ),
                       trailing: Icon(AdaptiveIcons.chevron_right),
                       onTap: () => launchUrl(
