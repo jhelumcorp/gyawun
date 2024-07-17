@@ -435,14 +435,13 @@ class _ItemListState extends State<ItemList> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             AdaptiveListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: Platform.isWindows ? 0 : 8,
-                                vertical: 4,
-                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 4),
                               title: Text(
                                 items[index]['title'].toString().breakWord,
                                 maxLines: 2,
                                 style: const TextStyle(height: 1.3),
+                                overflow: TextOverflow.ellipsis,
                                 softWrap: true,
                               ),
                               subtitle: Row(

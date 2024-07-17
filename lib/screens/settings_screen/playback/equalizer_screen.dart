@@ -32,49 +32,47 @@ class _EqualizerScreenState extends State<EqualizerScreen> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: LayoutBuilder(builder: (context, constraints) {
-              return SizedBox(
-                height: constraints.maxHeight > 600 ? 600 : null,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    AdaptiveListTile(
-                      title: Text(S.of(context).Loudness_Enhancer),
-                      trailing: AdaptiveSwitch(
-                        value: settingsManager.loudnessEnabled,
-                        onChanged: (value) async {
-                          await GetIt.I<MediaPlayer>()
-                              .setLoudnessEnabled(value);
-                        },
-                      ),
-                      onTap: () async {
-                        await GetIt.I<MediaPlayer>().setLoudnessEnabled(
-                            !settingsManager.loudnessEnabled);
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  AdaptiveListTile(
+                    title: Text(S.of(context).Loudness_Enhancer),
+                    trailing: AdaptiveSwitch(
+                      value: settingsManager.loudnessEnabled,
+                      onChanged: (value) async {
+                        await GetIt.I<MediaPlayer>().setLoudnessEnabled(value);
                       },
                     ),
-                    LoudnessControls(
-                        disabled: settingsManager.loudnessEnabled == false),
-                    AdaptiveListTile(
-                      title: Text(S.of(context).Enable_Equalizer),
-                      trailing: AdaptiveSwitch(
-                        value: settingsManager.equalizerEnabled,
-                        onChanged: (value) async {
-                          await GetIt.I<MediaPlayer>()
-                              .setEqualizerEnabled(value);
-                        },
-                      ),
-                      onTap: () async {
-                        await GetIt.I<MediaPlayer>().setEqualizerEnabled(
-                            !settingsManager.equalizerEnabled);
+                    onTap: () async {
+                      await GetIt.I<MediaPlayer>()
+                          .setLoudnessEnabled(!settingsManager.loudnessEnabled);
+                    },
+                  ),
+                  LoudnessControls(
+                      disabled: settingsManager.loudnessEnabled == false),
+                  AdaptiveListTile(
+                    title: Text(S.of(context).Enable_Equalizer),
+                    trailing: AdaptiveSwitch(
+                      value: settingsManager.equalizerEnabled,
+                      onChanged: (value) async {
+                        await GetIt.I<MediaPlayer>().setEqualizerEnabled(value);
                       },
                     ),
-                    EqualizerControls(
+                    onTap: () async {
+                      await GetIt.I<MediaPlayer>().setEqualizerEnabled(
+                          !settingsManager.equalizerEnabled);
+                    },
+                  ),
+                  SizedBox(
+                    height: 400,
+                    child: EqualizerControls(
                       disabled: !settingsManager.equalizerEnabled,
                     ),
-                  ],
-                ),
-              );
-            }),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -96,28 +94,32 @@ class EqualizerControls extends StatelessWidget {
       builder: (context, snapshot) {
         final parameters = snapshot.data;
         if (parameters == null) return const SizedBox();
-        return Expanded(
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              for (var band in parameters['bands'])
-                Expanded(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: VerticalSlider(
-                          min: parameters['minDecibels'],
-                          max: parameters['maxDecibels'],
-                          value: band['gain'],
-                          bandIndex: band['index'] as int,
-                          disabled: disabled,
-                          centerFrequency: band['centerFrequency'].round(),
+
+        return ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: Expanded(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                for (var band in parameters['bands'])
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: VerticalSlider(
+                            min: parameters['minDecibels'],
+                            max: parameters['maxDecibels'],
+                            value: band['gain'],
+                            bandIndex: band['index'] as int,
+                            disabled: disabled,
+                            centerFrequency: band['centerFrequency'].round(),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         );
       },

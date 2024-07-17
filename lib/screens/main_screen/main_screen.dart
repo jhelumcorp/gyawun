@@ -198,13 +198,6 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
                             Expanded(
                               child: widget.navigationShell,
                             ),
-                            // if (screenWidth >= 700 &&
-                            //     MediaQuery.of(context).size.height >= 600 &&
-                            //     context.watch<MediaPlayer>().currentSongNotifier.value !=
-                            //         null)
-                            //   SizedBox(
-                            //       width: Platform.isWindows ? 450 : 350,
-                            //       child: const PlayerScreen())
                           ],
                         ),
                       ),
