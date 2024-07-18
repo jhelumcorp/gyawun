@@ -22,11 +22,7 @@ def flutterVersionName = localProperties.getProperty("flutter.versionName")
 if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
+
 
 android {
     namespace = "com.jhelum.gyawun"
@@ -49,12 +45,43 @@ android {
     }
     signingConfigs {
        release {
-           keyAlias keystoreProperties['keyAlias']
-           keyPassword keystoreProperties['keyPassword']
-           storeFile file(keystoreProperties['storeFile'])
-           storePassword keystoreProperties['storePassword']
-       }
+            def keystoreProperties = new Properties()
+            def keystorePropertiesFile = rootProject.file('key.properties')
+            if (keystorePropertiesFile.exists()) {
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+            }
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+        unsigned {
+           storePassword ""
+           keyAlias ""
+           storeFile null
+           keyPassword ""
+        }
    }
+
+    flavorDimensions "deploy"
+    productFlavors {
+        github {
+            dimension "deploy"
+            signingConfig signingConfigs.release
+        }
+        fdroid {
+            dimension "deploy"
+            signingConfig signingConfigs.unsigned
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        if (variant.buildType.name == "fdroid") {
+            variant.outputs.all { output ->
+                output.outputFileName = "app-fdroid-release.apk"
+            }
+        }
+    }
 
     buildTypes {
         release {
