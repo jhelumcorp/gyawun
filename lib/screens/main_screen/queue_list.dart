@@ -80,11 +80,14 @@ class QueueList extends StatelessWidget {
                                                       },
                                                     )
                                                   : CachedNetworkImage(
-                                                      imageUrl:
-                                                          getEnhancedImage(song
+                                                      imageUrl: getEnhancedImage(
+                                                          song
                                                               .extras![
                                                                   'thumbnails']
-                                                              .first['url']),
+                                                              .first['url'],
+                                                          dp: MediaQuery.of(
+                                                                  context)
+                                                              .devicePixelRatio),
                                                       width: 50,
                                                       height: 50,
                                                       fit: BoxFit.fill,
@@ -96,8 +99,10 @@ class QueueList extends StatelessWidget {
                                                                   .extras![
                                                                       'thumbnails']
                                                                   .first['url'],
-                                                              quality:
-                                                                  'medium'),
+                                                              dp: MediaQuery.of(
+                                                                      context)
+                                                                  .devicePixelRatio,
+                                                              width: 50),
                                                         );
                                                       },
                                                     ),

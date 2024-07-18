@@ -134,7 +134,7 @@ class Gyawun extends StatelessWidget {
                 darkScheme: darkScheme,
               )
             : MaterialApp.router(
-                title: 'Gyawun',
+                title: 'Gyawun Music',
                 routerConfig: router,
                 locale:
                     Locale(context.watch<SettingsManager>().language['value']!),
@@ -186,7 +186,7 @@ class Gyawun extends StatelessWidget {
   _buildFluentApp(SettingsManager settingsManager,
       {ColorScheme? lightScheme, ColorScheme? darkScheme}) {
     return fluent_ui.FluentApp.router(
-      title: 'Gyawun',
+      title: 'Gyawun Music',
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       locale: Locale(settingsManager.language['value']!),
