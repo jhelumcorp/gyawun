@@ -4,11 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../services/media_player.dart';
+import '../../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../../utils/bottom_modals.dart';
 import '../../../ytmusic/ytmusic.dart';
 import '../../browse_screen/browse_screen.dart';

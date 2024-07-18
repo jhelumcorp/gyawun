@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gyawun_beta/generated/l10n.dart';
-import 'package:gyawun_beta/screens/ytmusic_screen/albums_screen.dart';
-import 'package:gyawun_beta/screens/ytmusic_screen/artists_screen.dart';
-import 'package:gyawun_beta/screens/ytmusic_screen/playlists_screen.dart';
-import 'package:gyawun_beta/screens/ytmusic_screen/songs_screen.dart';
-import 'package:gyawun_beta/screens/ytmusic_screen/subscriptions_screen.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
+import '../../generated/l10n.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
+import 'albums_screen.dart';
+import 'artists_screen.dart';
+import 'playlists_screen.dart';
+import 'songs_screen.dart';
+import 'subscriptions_screen.dart';
 import 'youtube_history.dart';
 
 class YTMScreen extends StatefulWidget {

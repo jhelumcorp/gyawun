@@ -2,12 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/generated/l10n.dart';
-import 'package:gyawun_beta/services/media_player.dart';
-import 'package:gyawun_beta/themes/text_styles.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
-import 'package:gyawun_beta/utils/bottom_modals.dart';
-import 'package:gyawun_beta/ytmusic/ytmusic.dart';
+
+import '../../generated/l10n.dart';
+import '../../services/media_player.dart';
+import '../../themes/text_styles.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
+import '../../utils/bottom_modals.dart';
+import '../../ytmusic/ytmusic.dart';
 
 class YoutubeHistory extends StatefulWidget {
   const YoutubeHistory({super.key});

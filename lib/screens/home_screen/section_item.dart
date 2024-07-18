@@ -7,12 +7,12 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/generated/l10n.dart';
-import 'package:gyawun_beta/services/bottom_message.dart';
-import 'package:gyawun_beta/themes/text_styles.dart';
-import 'package:gyawun_beta/utils/enhanced_image.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
+import '../../generated/l10n.dart';
+import '../../services/bottom_message.dart';
+import '../../themes/text_styles.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
+import '../../utils/enhanced_image.dart';
 import '../../utils/extensions.dart';
 import '../../services/media_player.dart';
 import '../../utils/bottom_modals.dart';

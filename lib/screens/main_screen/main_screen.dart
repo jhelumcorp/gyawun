@@ -7,17 +7,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_beta/screens/browse_screen/browse_screen.dart';
-import 'package:gyawun_beta/services/yt_account.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../../generated/l10n.dart';
+import '../../services/yt_account.dart';
 import '../../themes/text_styles.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../utils/bottom_modals.dart';
 import '../../utils/check_update.dart';
+import '../browse_screen/browse_screen.dart';
 import 'bottom_player.dart';
 
 class MainScreen extends StatefulWidget {

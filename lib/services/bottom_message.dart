@@ -1,7 +1,8 @@
 import 'package:fl_toast/fl_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:gyawun_beta/themes/text_styles.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
+
+import '../themes/text_styles.dart';
+import '../utils/adaptive_widgets/theme.dart';
 
 class BottomMessage {
   static showText(BuildContext context, String text,

@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/generated/l10n.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
 import '../../services/bottom_message.dart';
 import '../../services/library.dart';
 import '../../services/media_player.dart';
 import '../../themes/colors.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../utils/bottom_modals.dart';
 import '../home_screen/section_item.dart';
 import '../../utils/extensions.dart';

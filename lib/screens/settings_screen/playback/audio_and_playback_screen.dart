@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../themes/text_styles.dart';
+import '../../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../color_icon.dart';
 import 'audio_and_playback_screen_data.dart';
 

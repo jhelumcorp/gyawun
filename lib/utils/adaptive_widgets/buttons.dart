@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/material.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
+
+import 'icons.dart';
 
 class AdaptiveButton extends fluent_ui.StatelessWidget {
   final Widget child;

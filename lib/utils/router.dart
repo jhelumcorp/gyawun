@@ -4,9 +4,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_beta/screens/settings_screen/account/account_screen.dart';
-import 'package:gyawun_beta/screens/ytmusic_screen/ytmusic_screen.dart';
-import 'package:gyawun_beta/services/yt_account.dart';
 
 import '../screens/home_screen/chip_screen.dart';
 import '../screens/home_screen/home_screen.dart';
@@ -16,12 +13,15 @@ import '../screens/main_screen/main_screen.dart';
 import '../screens/main_screen/player_screen.dart';
 import '../screens/browse_screen/browse_screen.dart';
 import '../screens/settings_screen/about/about_screen.dart';
+import '../screens/settings_screen/account/account_screen.dart';
 import '../screens/settings_screen/appearence/appearence_screen.dart';
 import '../screens/settings_screen/backup_restore/backup_restore_screen.dart';
 import '../screens/settings_screen/content/content_screen.dart';
 import '../screens/settings_screen/playback/audio_and_playback_screen.dart';
 import '../screens/settings_screen/playback/equalizer_screen.dart';
 import '../screens/settings_screen/settings_screen.dart';
+import '../screens/ytmusic_screen/ytmusic_screen.dart';
+import '../services/yt_account.dart';
 
 GoRouter router = GoRouter(
   initialLocation: '/',

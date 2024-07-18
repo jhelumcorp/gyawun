@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/screens/ytmusic_screen/song_tile.dart';
 
 import '../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../ytmusic/ytmusic.dart';
+import 'song_tile.dart';
 
 class ArtistsScreen extends StatefulWidget {
   const ArtistsScreen({super.key});

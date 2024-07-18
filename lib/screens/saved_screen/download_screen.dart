@@ -5,13 +5,13 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/generated/l10n.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
-import 'package:gyawun_beta/utils/extensions.dart';
+import 'package:gyawun/utils/extensions.dart';
 
+import '../../generated/l10n.dart';
 import '../../services/bottom_message.dart';
 import '../../services/download_manager.dart';
 import '../../services/media_player.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../utils/bottom_modals.dart';
 
 class DownloadScreen extends StatelessWidget {

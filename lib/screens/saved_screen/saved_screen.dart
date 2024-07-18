@@ -6,14 +6,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:gyawun_beta/utils/extensions.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
+import 'package:gyawun/utils/extensions.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
 import '../../services/library.dart';
 import '../../themes/colors.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../utils/bottom_modals.dart';
 import '../browse_screen/browse_screen.dart';
 import 'download_screen.dart';

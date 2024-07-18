@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lyric/lyrics_reader.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/services/media_player.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/lyrics.dart';
+import '../../services/media_player.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
 
 class LyricsBox extends StatefulWidget {
   const LyricsBox({required this.currentSong, required this.size, super.key});

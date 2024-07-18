@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gyawun_beta/screens/settings_screen/color_icon.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../app_config.dart';
@@ -8,6 +7,7 @@ import '../../../generated/l10n.dart';
 import '../../../themes/colors.dart';
 import '../../../themes/text_styles.dart';
 import '../../../utils/adaptive_widgets/adaptive_widgets.dart';
+import '../color_icon.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -53,7 +53,7 @@ class AboutScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       leading: const ColorIcon(icon: Icons.title, color: null),
                       title: Text(
-                        S.of(context).Name,
+                        "Gyawun Music",
                         style: textStyle(context, bold: false)
                             .copyWith(fontSize: 16),
                       ),

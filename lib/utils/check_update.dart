@@ -10,12 +10,14 @@ import '../app_config.dart';
 Future<UpdateInfo?> checkUpdate({BaseDeviceInfo? deviceInfo}) async {
   final response = await http.get(appConfig.updateUri,
       headers: {'Accept': 'application/vnd.github+json'});
-  List updates = jsonDecode(response.body);
-  Map update = updates.firstWhere((element) => element['prerelease'] == true);
+  Map update = jsonDecode(response.body);
   Version currentVersion = Version.parse(appConfig.codeName);
+
   Version remoteVersion =
       Version.parse(update['tag_name'].toString().replaceAll('v', ''));
+
   int comparison = remoteVersion.compareTo(currentVersion);
+
   if (comparison > 0) {
     if (deviceInfo == null) {
       final deviceInfoPlugin = DeviceInfoPlugin();

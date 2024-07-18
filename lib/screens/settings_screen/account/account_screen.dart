@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/generated/l10n.dart';
-import 'package:gyawun_beta/services/yt_account.dart';
-import 'package:gyawun_beta/themes/text_styles.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
+import '../../../generated/l10n.dart';
+import '../../../services/yt_account.dart';
+import '../../../themes/text_styles.dart';
+import '../../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../color_icon.dart';
 
 class AccountScreen extends StatelessWidget {

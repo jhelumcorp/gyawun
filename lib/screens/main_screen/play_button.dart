@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 
 import '../../services/media_player.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../utils/extensions.dart';
 
 class PlayButton extends StatefulWidget {

@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
-import 'package:gyawun_beta/utils/bottom_modals.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
@@ -12,6 +10,8 @@ import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import '../../generated/l10n.dart';
 import '../../themes/colors.dart';
 import '../../themes/text_styles.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
+import '../../utils/bottom_modals.dart';
 import 'color_icon.dart';
 import 'setting_screen_data.dart';
 

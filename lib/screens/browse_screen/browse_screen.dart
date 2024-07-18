@@ -4,15 +4,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/generated/l10n.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
-import 'package:gyawun_beta/utils/pprint.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
 import '../../services/bottom_message.dart';
 import '../../services/library.dart';
 import '../../services/media_player.dart';
 import '../../themes/colors.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../utils/bottom_modals.dart';
 import '../../utils/enhanced_image.dart';
 import '../../ytmusic/ytmusic.dart';
@@ -48,8 +47,6 @@ class _BrowseScreenState extends State<BrowseScreen> {
   void didUpdateWidget(covariant BrowseScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.endpoint['browseId'] != widget.endpoint['browseId']) {
-      pprint(oldWidget.endpoint);
-      pprint(widget.endpoint);
       fetchData();
     }
   }

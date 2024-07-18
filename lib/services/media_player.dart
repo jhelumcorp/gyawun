@@ -6,12 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun_beta/services/custom_audio_stream.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
 import '../utils/add_history.dart';
 import '../ytmusic/ytmusic.dart';
+import 'custom_audio_stream.dart';
 import 'settings_manager.dart';
 
 class MediaPlayer extends ChangeNotifier {

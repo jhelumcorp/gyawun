@@ -2,14 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/dropdown_button.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/switch.dart';
-import 'package:gyawun_beta/utils/bottom_modals.dart';
+import '../../../generated/l10n.dart';
+import '../../../utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
-import '../../../generated/l10n.dart';
 import '../../../services/settings_manager.dart';
+import '../../../utils/bottom_modals.dart';
 import '../setting_item.dart';
 
 List<SettingItem> appearenceScreenData(BuildContext context) => [

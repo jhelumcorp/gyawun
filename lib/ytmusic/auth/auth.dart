@@ -2,11 +2,11 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:gyawun_beta/utils/bottom_modals.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../utils/bottom_modals.dart';
 import '../helpers.dart';
 
 const USER_AGENT =

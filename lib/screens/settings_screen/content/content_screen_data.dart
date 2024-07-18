@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +10,7 @@ import '../../../generated/l10n.dart';
 import '../../../services/bottom_message.dart';
 import '../../../services/settings_manager.dart';
 import '../../../themes/text_styles.dart';
+import '../../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../../utils/bottom_modals.dart';
 import '../../../ytmusic/ytmusic.dart';
 import '../setting_item.dart';

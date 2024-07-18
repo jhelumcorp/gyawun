@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:gyawun_beta/themes/text_styles.dart';
 
+import '../../themes/text_styles.dart';
 import 'no_splash_factory.dart';
 
 class AdaptiveListTile extends StatelessWidget {

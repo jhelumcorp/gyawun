@@ -1,22 +1,4 @@
-<div align="center">
-    <img src="./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="128" height="128" style="display: block; margin: 0 auto"/>
-    <h1>Gyawun Music</h1>
-    <p>A Flutter application for streaming music from YouTube Music</p>
-    <img src="https://hits.dwyl.com/jhelumcorp/gyawun.svg?style=flat-square" />
-    <a href="https://github.com/sheikhhaziq/gyavyn/releases/latest"><img src="https://img.shields.io/github/v/release/sheikhhaziq/gyawun?style=flat" alt="Latest release" /></a>
-    <a href="https://github.com/sheikhhaziq/gyawun/commits"><img src="https://img.shields.io/github/commits-since/sheikhhaziq/gyawun/latest?style=flat" alt="Commits since latest release" /></a>
-    <a href="https://github.com/sheikhhaziq/gyawun/commits"><img src="https://img.shields.io/github/commit-activity/m/sheikhhaziq/gyawun?color=g" alt="Commits per month" /></a>
-    <a href="https://github.com/sheikhhaziq/gyawun/releases/latest"><img src="https://img.shields.io/github/release-date/sheikhhaziq/gyawun" alt="Last release" /></a>
 
-
-
-  
-  
-  <a href="https://t.me/jhelumcorp"><img src="https://img.shields.io/badge/Join_us_on_Telegram-0088cc?style=social&logo=telegram" alt="Telergram" height="50"/></a>
-
-
-
-</div>
 
 ---
 
@@ -24,11 +6,16 @@
    <img src="./cover.png" width="100%" />
 </p>
 
-<p align="center">
-  <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/01.jpg" width="30%" />
-  <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/02.jpg" width="30%" />
-  <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/03.jpg" width="30%" />
-<p>
+<div align="center">
+<h1>Gyawun Music</h1>
+  <img src="https://hits.dwyl.com/jhelumcorp/gyawun.svg?style=flat-square" />
+    <a href="https://github.com/sheikhhaziq/gyavyn/releases/latest"><img src="https://img.shields.io/github/v/release/sheikhhaziq/gyawun?style=flat" alt="Latest release" /></a>
+    <a href="https://github.com/sheikhhaziq/gyawun/commits"><img src="https://img.shields.io/github/commits-since/sheikhhaziq/gyawun/latest?style=flat" alt="Commits since latest release" /></a>
+    <a href="https://github.com/sheikhhaziq/gyawun/commits"><img src="https://img.shields.io/github/commit-activity/m/sheikhhaziq/gyawun?color=g" alt="Commits per month" /></a>
+    <a href="https://github.com/sheikhhaziq/gyawun/releases/latest"><img src="https://img.shields.io/github/release-date/sheikhhaziq/gyawun" alt="Last release" /></a>
+
+  <a href="https://t.me/jhelumcorp"><img src="https://img.shields.io/badge/Join_us_on_Telegram-0088cc?style=social&logo=telegram" alt="Telergram" height="50"/></a>
+</div>
 
 
 ## Features / TODO

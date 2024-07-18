@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_beta/generated/l10n.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../services/bottom_message.dart';
 import '../../../services/file_storage.dart';
 import '../../../services/library.dart';

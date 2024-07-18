@@ -5,11 +5,11 @@ import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_beta/utils/adaptive_widgets/adaptive_widgets.dart';
-import 'package:gyawun_beta/utils/enhanced_image.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/media_player.dart';
+import '../../utils/adaptive_widgets/adaptive_widgets.dart';
+import '../../utils/enhanced_image.dart';
 
 class BottomPlayer extends StatelessWidget {
   const BottomPlayer({super.key});
