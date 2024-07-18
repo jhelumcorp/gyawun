@@ -10,6 +10,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+
   cupertino_icons: ^1.0.6
   go_router: ^14.1.4
   google_fonts: ^6.2.1
