@@ -105,7 +105,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
       if (mounted) {
         setState(() {
           image = getEnhancedImage(
-              currentSong?.extras?['thumbnails']?.first['url']);
+            currentSong?.extras?['thumbnails']?.first['url'],
+          );
         });
       }
     }
@@ -120,7 +121,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
         errorListener: (p0) {
           if (mounted) {
             setState(() {
-              image = getEnhancedImage(image!, quality: 'medium');
+              image = getEnhancedImage(image!,
+                  dp: MediaQuery.of(context).devicePixelRatio,
+                  quality: 'medium');
             });
           }
         },
@@ -498,9 +501,10 @@ class Artwork extends StatelessWidget {
                                       )
                                     : CachedNetworkImage(
                                         filterQuality: FilterQuality.high,
-                                        imageUrl: getEnhancedImage(song!
-                                            .extras!['thumbnails']
-                                            .first['url']),
+                                        imageUrl: getEnhancedImage(
+                                          song!.extras!['thumbnails']
+                                              .first['url'],
+                                        ),
                                         errorWidget: (context, url, error) {
                                           return CachedNetworkImage(
                                             imageUrl: getEnhancedImage(

@@ -421,9 +421,9 @@ class _ItemListState extends State<ItemList> {
                           fit: BoxFit.cover,
                           image: CachedNetworkImageProvider(
                             getEnhancedImage(
-                              items[index]['thumbnails'].first['url'],
-                              width: width.ceil(),
-                            ),
+                                items[index]['thumbnails'].first['url'],
+                                dp: MediaQuery.of(context).devicePixelRatio,
+                                width: width),
                           ),
                         ),
                       ),

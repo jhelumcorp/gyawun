@@ -97,29 +97,27 @@ class EqualizerControls extends StatelessWidget {
 
         return ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
-          child: Expanded(
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                for (var band in parameters['bands'])
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: VerticalSlider(
-                            min: parameters['minDecibels'],
-                            max: parameters['maxDecibels'],
-                            value: band['gain'],
-                            bandIndex: band['index'] as int,
-                            disabled: disabled,
-                            centerFrequency: band['centerFrequency'].round(),
-                          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              for (var band in parameters['bands'])
+                Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: VerticalSlider(
+                          min: parameters['minDecibels'],
+                          max: parameters['maxDecibels'],
+                          value: band['gain'],
+                          bandIndex: band['index'] as int,
+                          disabled: disabled,
+                          centerFrequency: band['centerFrequency'].round(),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         );
       },

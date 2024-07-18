@@ -172,7 +172,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     return isRound
         ? CircleAvatar(
             backgroundImage: CachedNetworkImageProvider(
-              getEnhancedImage(thumbnails.first['url'], width: 250),
+              getEnhancedImage(thumbnails.first['url'],
+                  dp: MediaQuery.of(context).devicePixelRatio, width: 250),
             ),
             radius: 125,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -180,7 +181,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         : ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: CachedNetworkImage(
-              imageUrl: getEnhancedImage(thumbnails.last['url'], width: 250),
+              imageUrl: getEnhancedImage(thumbnails.last['url'],
+                  dp: MediaQuery.of(context).devicePixelRatio, width: 250),
               filterQuality: FilterQuality.high,
               width: 250,
               height: 250,

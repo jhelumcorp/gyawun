@@ -66,17 +66,24 @@ class BottomPlayer extends StatelessWidget {
                                       fit: BoxFit.fill,
                                     )
                                   : CachedNetworkImage(
-                                      imageUrl: getEnhancedImage(currentSong
-                                          .extras!['thumbnails'].first['url']),
+                                      imageUrl: getEnhancedImage(
+                                          currentSong.extras!['thumbnails']
+                                              .first['url'],
+                                          dp: MediaQuery.of(context)
+                                              .devicePixelRatio,
+                                          width: 50),
                                       height: 50,
                                       width: 50,
                                       fit: BoxFit.fill,
                                       errorWidget: (context, url, error) {
                                         return CachedNetworkImage(
                                           imageUrl: getEnhancedImage(
-                                              currentSong.extras!['thumbnails']
-                                                  .first['url'],
-                                              quality: 'medium'),
+                                            currentSong.extras!['thumbnails']
+                                                .first['url'],
+                                            dp: MediaQuery.of(context)
+                                                .devicePixelRatio,
+                                            width: 50,
+                                          ),
                                         );
                                       },
                                     ),
