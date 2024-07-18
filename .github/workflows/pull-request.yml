@@ -1,8 +1,9 @@
 name: Flutter CI
 
 on:
-  status
-
+  push:
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
