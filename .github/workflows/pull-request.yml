@@ -17,6 +17,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17.0.10
+      - run: java --version
       - run: flutter pub get
       - run: flutter build apk
       - uses: actions/upload-artifact@v4
