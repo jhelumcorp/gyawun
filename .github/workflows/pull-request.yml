@@ -16,9 +16,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '17'
-          cache: 'gradle'
-          check-latest: true
+          java-version: 17.0.10
       - run: flutter pub get
       - run: flutter build apk
       - uses: actions/upload-artifact@v4
