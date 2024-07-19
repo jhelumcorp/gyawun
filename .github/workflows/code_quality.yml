@@ -1,11 +1,12 @@
-name: Flutter CI
-
+name: Code quality check
 on:
-  push:
+  workflow_dispatch:
+  pull_request:
     branches:
       - main
 jobs:
-  build:
+  text:
+    name: Check the source code quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,9 +18,12 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17.0.10
-      - run: java --version
-      - run: flutter pub get
-      - run: flutter build apk
+      - name: Install packages
+        run: flutter pub get
+      - name: Linter
+        run: flutter analyze
+      - name: build check
+        run: flutter build apk
       - uses: actions/upload-artifact@v4
         with:
           name: release-apk
