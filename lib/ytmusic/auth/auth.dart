@@ -38,7 +38,9 @@ class AuthMixin {
     Modals.showCenterLoadingModal(context);
     var code = await getCode();
     var url = "${code['verification_url']}?user_code=${code['user_code']}";
-    Navigator.pop(context);
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
     if (context.mounted) {
       bool confirm1 = await Modals.showConfirmBottomModal(
         context,
@@ -54,11 +56,15 @@ class AuthMixin {
               message: 'Did you logged in successfully');
 
           if (confirm2 == true) {
-            Modals.showCenterLoadingModal(context);
+            if (context.mounted) {
+              Modals.showCenterLoadingModal(context);
+            }
             var token = await getTokenFromCode(code["device_code"]);
             await saveToken(token);
             await checkLogged();
-            Navigator.pop(context);
+            if (context.mounted) {
+              Navigator.pop(context);
+            }
           }
         }
       }

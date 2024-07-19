@@ -117,9 +117,3 @@ List<ThemeMode> themeModes = [
   ThemeMode.light,
   ThemeMode.dark
 ];
-
-Widget _colorCircle(Color color) {
-  return CircleAvatar(
-    backgroundColor: color,
-  );
-}
