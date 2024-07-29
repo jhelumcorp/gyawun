@@ -51,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
       nextLoading = false;
     });
     Map<String, dynamic> home = await ytMusic.browse();
-    // pprint(home);
     if (mounted) {
       setState(() {
         initialLoading = false;
@@ -61,8 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
         continuation = home['continuation'];
       });
     }
-    // pprint(home['sections'][1]['contents']);
-    // await fetchNext();
   }
 
   refresh() async {

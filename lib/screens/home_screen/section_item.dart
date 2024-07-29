@@ -349,14 +349,6 @@ class ItemList extends StatefulWidget {
 }
 
 class _ItemListState extends State<ItemList> {
-  late List items;
-
-  @override
-  void initState() {
-    super.initState();
-    items = widget.items;
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -369,8 +361,8 @@ class _ItemListState extends State<ItemList> {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            double width = height * (items[index]?['aspectRatio'] ?? 1);
-            String? subtitle = _buildSubtitle(items[index]);
+            double width = height * (widget.items[index]?['aspectRatio'] ?? 1);
+            String? subtitle = _buildSubtitle(widget.items[index]);
             return Adaptivecard(
               elevation: 0,
               borderRadius: BorderRadius.circular(8),
@@ -379,31 +371,33 @@ class _ItemListState extends State<ItemList> {
               child: AdaptiveInkWell(
                 padding: EdgeInsets.all(Platform.isWindows ? 12 : 0),
                 onTap: () async {
-                  if (items[index]['endpoint'] != null &&
-                      items[index]['videoId'] == null) {
+                  if (widget.items[index]['endpoint'] != null &&
+                      widget.items[index]['videoId'] == null) {
                     Navigator.push(
                         context,
                         AdaptivePageRoute.create(
-                          (context) =>
-                              BrowseScreen(endpoint: items[index]['endpoint']),
+                          (context) => BrowseScreen(
+                              endpoint: widget.items[index]['endpoint']),
                         ));
                   } else {
                     await GetIt.I<MediaPlayer>()
-                        .playSong(Map.from(items[index]));
+                        .playSong(Map.from(widget.items[index]));
                   }
                 },
                 onSecondaryTap: () {
-                  if (items[index]['videoId'] != null) {
-                    Modals.showSongBottomModal(context, items[index]);
-                  } else if (items[index]['playlistId'] != null) {
-                    Modals.showPlaylistBottomModal(context, items[index]);
+                  if (widget.items[index]['videoId'] != null) {
+                    Modals.showSongBottomModal(context, widget.items[index]);
+                  } else if (widget.items[index]['playlistId'] != null) {
+                    Modals.showPlaylistBottomModal(
+                        context, widget.items[index]);
                   }
                 },
                 onLongPress: () {
-                  if (items[index]['videoId'] != null) {
-                    Modals.showSongBottomModal(context, items[index]);
-                  } else if (items[index]['playlistId'] != null) {
-                    Modals.showPlaylistBottomModal(context, items[index]);
+                  if (widget.items[index]['videoId'] != null) {
+                    Modals.showSongBottomModal(context, widget.items[index]);
+                  } else if (widget.items[index]['playlistId'] != null) {
+                    Modals.showPlaylistBottomModal(
+                        context, widget.items[index]);
                   }
                 },
                 borderRadius: BorderRadius.circular(8),
@@ -414,14 +408,14 @@ class _ItemListState extends State<ItemList> {
                       height: height,
                       decoration: BoxDecoration(
                         color: Colors.grey.withOpacity(0.1),
-                        borderRadius: items[index]['type'] == 'ARTIST'
+                        borderRadius: widget.items[index]['type'] == 'ARTIST'
                             ? BorderRadius.circular(height / 2)
                             : BorderRadius.circular(8),
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: CachedNetworkImageProvider(
                             getEnhancedImage(
-                                items[index]['thumbnails'].first['url'],
+                                widget.items[index]['thumbnails'].first['url'],
                                 dp: MediaQuery.of(context).devicePixelRatio,
                                 width: width),
                           ),
@@ -438,7 +432,9 @@ class _ItemListState extends State<ItemList> {
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 0, vertical: 4),
                               title: Text(
-                                items[index]['title'].toString().breakWord,
+                                widget.items[index]['title']
+                                    .toString()
+                                    .breakWord,
                                 maxLines: 2,
                                 style: const TextStyle(height: 1.3),
                                 overflow: TextOverflow.ellipsis,
@@ -447,7 +443,7 @@ class _ItemListState extends State<ItemList> {
                               subtitle: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  if (items[index]['explicit'] == true)
+                                  if (widget.items[index]['explicit'] == true)
                                     Padding(
                                       padding: const EdgeInsets.only(right: 2),
                                       child: Icon(
@@ -480,7 +476,7 @@ class _ItemListState extends State<ItemList> {
             );
           },
           separatorBuilder: (context, index) => const SizedBox(width: 8),
-          itemCount: items.length,
+          itemCount: widget.items.length,
         ),
       );
     });
