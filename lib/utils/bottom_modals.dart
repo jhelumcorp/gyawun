@@ -1290,6 +1290,15 @@ _playlistBottomModal(BuildContext context, Map playlist) {
               await GetIt.I<MediaPlayer>().addToQueue(Map.from(playlist));
             },
           ),
+          AdaptiveListTile(
+            dense: true,
+            title: Text(S.of(context).Download),
+            leading: Icon(AdaptiveIcons.download),
+            onTap: () async {
+              Navigator.pop(context);
+              GetIt.I<DownloadManager>().downloadPlaylist(playlist);
+            },
+          ),
           if (playlist['isPredefined'] == false)
             AdaptiveListTile(
               dense: true,
