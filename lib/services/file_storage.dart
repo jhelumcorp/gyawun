@@ -73,7 +73,7 @@ class FileStorage {
     String fileName = song['title'];
     final RegExp avoid = RegExp(r'[\.\\\*\:\(\)\"\?#/;\|]');
     fileName = fileName.replaceAll(avoid, '').replaceAll("'", '');
-    fileName = Uri.decodeFull(fileName);
+    //fileName = Uri.decodeFull(fileName);
     if (!(await requestPermissions())) return null;
     Directory directory = await _getDirectory(storagePaths.musicPath);
 
