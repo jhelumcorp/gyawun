@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun/ytmusic/ytmusic.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -87,6 +88,14 @@ class DownloadManager {
     );
   }
 
+  //Download every song in playlist
+  Future<void> downloadPlaylist(Map playlist) async {
+    //Get songs in playlist
+    List songs = await GetIt.I<YTMusic>().getPlaylistSongs(playlist['playlistId']);
+    for (Map song in songs) {
+      downloadSong(song);
+    }
+  }
   Future<AudioOnlyStreamInfo> _getSongInfo(String videoId,
       {String quality = 'high'}) async {
     StreamManifest manifest =
