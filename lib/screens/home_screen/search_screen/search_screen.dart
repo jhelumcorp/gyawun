@@ -117,11 +117,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     color: Colors.transparent,
                     child: Row(
                       children: [
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                              maxWidth: constraints.maxWidth > 500
-                            ? (400)
-                            : constraints.maxWidth - 100),
+                        Expanded(
                           child: TypeAheadField(
                             suggestionsCallback: (query) =>
                                 GetIt.I<YTMusic>().getSearchSuggestions(query),

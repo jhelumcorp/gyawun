@@ -318,14 +318,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.4"
-  flutter_audio_output:
-    dependency: "direct main"
-    description:
-      name: flutter_audio_output
-      sha256: "5e24ea31211438c98b525bd91e3c80fa921b83ba510ddfb9ffb1d4dcf3fbe058"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -593,10 +585,10 @@ packages:
     dependency: "direct main"
     description:
       name: just_audio
-      sha256: ee50602364ba83fa6308f5512dd560c713ec3e1f2bc75f0db43618f0d82ef71a
+      sha256: d8e8aaf417d33e345299c17f6457f72bd4ba0c549dc34607abb5183a354edc4d
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.39"
+    version: "0.9.40"
   just_audio_background:
     dependency: "direct main"
     description:
@@ -976,10 +968,11 @@ packages:
   receive_sharing_intent:
     dependency: "direct main"
     description:
-      name: receive_sharing_intent
-      sha256: f127989f8662ea15e193bd1e10605e5a0ab6bb92dffd51f3ce002feb0ce24c93
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "0cdb9fd64104336d4762bd6710065d1db8d65d66"
+      url: "https://github.com/sheikhhaziq/receive_sharing_intent.git"
+    source: git
     version: "1.8.0"
   rxdart:
     dependency: transitive
