@@ -140,8 +140,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                        maxWidth: constraints.maxWidth > 400
-                            ? 400
+                        maxWidth: constraints.maxWidth > 500
+                            ? (400)
                             : constraints.maxWidth - 32),
                     child: AdaptiveTextField(
                       onTap: () => context.go('/search'),

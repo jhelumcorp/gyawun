@@ -1,7 +1,7 @@
 name: gyawun
 description: "A new Flutter project."
 publish_to: 'none'
-version: 2.0.1+26
+version: 2.0.2+27
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
@@ -18,7 +18,7 @@ dependencies:
   http: ^1.2.2
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  youtube_explode_dart: ^2.2.1
+  youtube_explode_dart: ^2.2.2
   expandable_page_view: ^1.0.17
   get_it: ^7.7.0
   cached_network_image: ^3.3.1
@@ -53,7 +53,7 @@ dependencies:
   just_audio_media_kit: ^2.0.5
   media_kit_native_event_loop: ^1.0.8
   flutter_acrylic: ^1.1.4
-  fluent_ui: ^4.9.0
+  fluent_ui: ^4.9.1
   window_manager: ^0.3.9
   receive_sharing_intent: ^1.8.0
   flutter_audio_output: ^0.0.2
