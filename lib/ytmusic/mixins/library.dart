@@ -1,3 +1,5 @@
+import 'package:gyawun/utils/pprint.dart';
+
 import '../helpers.dart';
 import '../yt_service_provider.dart';
 import 'utils.dart';
@@ -5,14 +7,16 @@ import 'utils.dart';
 mixin LibraryMixin on YTMusicServices {
   Future<Map> getLibrarySongs({String? continuationParams}) async {
     Map<String, dynamic> body = {'browseId': 'FEmusic_liked_videos'};
+    
     final response = await sendRequest('browse', body,
         additionalParams: continuationParams ?? '');
+    
     Map outerContents = {};
     if (continuationParams != null) {
       outerContents =
           nav(response, ['continuationContents', 'musicShelfContinuation']);
     } else {
-      outerContents = nav(response, [
+      Map contents = nav(response, [
         'contents',
         'singleColumnBrowseResultsRenderer',
         'tabs',
@@ -22,8 +26,13 @@ mixin LibraryMixin on YTMusicServices {
         'sectionListRenderer',
         'contents',
         0,
-        'musicShelfRenderer'
       ]);
+      outerContents = nav(contents, [
+        'musicShelfRenderer'
+      ])??nav(contents, [
+        'itemSectionRenderer'
+      ]);
+      
     }
 
     String? continuation = nav(outerContents,
@@ -47,8 +56,7 @@ mixin LibraryMixin on YTMusicServices {
       outerContents =
           nav(response, ['continuationContents', 'gridContinuation']);
     } else {
-      outerContents = nav(response, [
-        'contents',
+      Map contents = nav(response, ['contents',
         'singleColumnBrowseResultsRenderer',
         'tabs',
         0,
@@ -56,8 +64,11 @@ mixin LibraryMixin on YTMusicServices {
         'content',
         'sectionListRenderer',
         'contents',
-        0,
+        0,]);
+      outerContents = nav(contents, [
         'gridRenderer',
+      ])??nav(contents, [
+        'itemSectionRenderer',
       ]);
     }
     String? continuation = nav(outerContents,
@@ -65,7 +76,7 @@ mixin LibraryMixin on YTMusicServices {
     if (continuation != null) {
       continuation = getContinuationString(continuation);
     }
-    List contents = nav(outerContents, ['items']);
+    List contents = nav(outerContents, ['items'])??nav(outerContents, ['contents']);
 
     return {
       'contents': handleContents(contents),
@@ -85,8 +96,7 @@ mixin LibraryMixin on YTMusicServices {
       outerContents =
           nav(response, ['continuationContents', 'musicShelfContinuation']);
     } else {
-      outerContents = nav(response, [
-        'contents',
+      Map contents = nav(response,['contents',
         'singleColumnBrowseResultsRenderer',
         'tabs',
         0,
@@ -94,8 +104,11 @@ mixin LibraryMixin on YTMusicServices {
         'content',
         'sectionListRenderer',
         'contents',
-        0,
+        0,]);
+      outerContents = nav(contents, [
         'musicShelfRenderer',
+      ])??nav(contents,[
+        'itemSectionRenderer',
       ]);
     }
     String? continuation = nav(outerContents,
@@ -120,8 +133,7 @@ mixin LibraryMixin on YTMusicServices {
       outerContents =
           nav(response, ['continuationContents', 'gridContinuation']);
     } else {
-      outerContents = nav(response, [
-        'contents',
+      Map contents = nav(response,[ 'contents',
         'singleColumnBrowseResultsRenderer',
         'tabs',
         0,
@@ -129,9 +141,14 @@ mixin LibraryMixin on YTMusicServices {
         'content',
         'sectionListRenderer',
         'contents',
-        0,
+        0,]);
+      outerContents = nav(contents, [
         'gridRenderer'
+      ])??
+      nav(contents, [
+        'itemSectionRenderer',
       ]);
+    
     }
     String? continuation = nav(outerContents,
         ['continuations', 0, 'nextContinuationData', 'continuation']);
@@ -158,7 +175,7 @@ mixin LibraryMixin on YTMusicServices {
       outerContents = outerContents =
           nav(response, ['continuationContents', 'musicShelfContinuation']);
     } else {
-      outerContents = nav(response, [
+      Map contents = nav(response,[
         'contents',
         'singleColumnBrowseResultsRenderer',
         'tabs',
@@ -168,7 +185,11 @@ mixin LibraryMixin on YTMusicServices {
         'sectionListRenderer',
         'contents',
         0,
+      ]);
+      outerContents = nav(contents, [
         'musicShelfRenderer',
+      ])??nav(contents, [
+        'itemSectionRenderer',
       ]);
     }
     String? continuation = nav(outerContents,

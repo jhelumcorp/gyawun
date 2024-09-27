@@ -60,8 +60,6 @@ mixin BrowsingMixin on YTMusicServices {
                 'secondaryContents',
                 'sectionListRenderer'
               ]);
-      // pprint(nav(sectionListRenderer,
-      //     ['contents', 0, 'musicShelfRenderer', 'continuations']));
       List? chips =
           nav(sectionListRenderer, ['header', 'chipCloudRenderer', 'chips']);
       if (chips != null) {
