@@ -212,7 +212,7 @@ showPaymentsModal(BuildContext context) {
           Navigator.pop(context);
           await launchUrl(
             Uri.parse(
-                'upi://pay?cu=INR&pa=sheikhhaziq520@oksbi&pn=Gyawun&am=&tn=Gyawun'),
+                'upi://pay?cu=INR&pa=sheikhhaziq76@okaxis&pn=Gyawun&am=&tn=Gyawun'),
             mode: LaunchMode.externalApplication,
           );
         },

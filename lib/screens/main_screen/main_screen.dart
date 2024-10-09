@@ -121,7 +121,7 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
                   isLogged: isLogged,
                 )
               : Scaffold(
-                  body: Column(
+                  body: Column (
                     children: [
                       Expanded(
                         child: Row(
