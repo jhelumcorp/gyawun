@@ -1,5 +1,7 @@
 import 'dart:core';
 
+import 'package:gyawun/utils/pprint.dart';
+
 import '../helpers.dart';
 
 Map<String, dynamic> handlePageHeader(Map<String, dynamic> header,
@@ -328,6 +330,11 @@ handleMusicPlaylistShelfRenderer(Map item) {
     section['playlistId'] = nav(item, ['playlistId']);
     section['viewType'] = 'COLUMN';
   }
+  String? cont = nav(item,
+              ['continuations', 0, 'nextContinuationData', 'continuation']);
+  String? continuationparams =cont !=null ?  getContinuationString(cont):null;
+    section['continuation'] = continuationparams;
+
   List? contents = nav(item, ['contents']);
   if (contents != null) {
     section['contents'].addAll(handleContents(contents));

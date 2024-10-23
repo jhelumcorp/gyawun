@@ -1,4 +1,4 @@
-AppConfig appConfig = AppConfig(version: 29, codeName: '2.0.4');
+AppConfig appConfig = AppConfig(version: 30, codeName: '2.0.5');
 
 class AppConfig {
   int version;

@@ -1,6 +1,8 @@
 import 'dart:core';
 import 'dart:math';
 
+import 'package:gyawun/utils/pprint.dart';
+
 import '../helpers.dart';
 import '../yt_service_provider.dart';
 import 'utils.dart';
@@ -175,7 +177,19 @@ mixin BrowsingMixin on YTMusicServices {
 
     return result;
   }
+  Future<Map<String, dynamic>> getMoreItems(
+      {continuation=''}) async {
+    String endpoint = 'browse';
+    Map<String,dynamic>? body = {"browseId": "FEmusic_home"};
 
+    var response =
+        await sendRequest(endpoint, body, additionalParams: continuation);
+    List contents = 
+        nav(response,['continuationContents','musicPlaylistShelfContinuation','contents'])??[];
+    return {
+      'items':handleContents(contents),
+    };
+      }
   int getDatestamp() {
     final DateTime now = DateTime.now();
     final DateTime epoch = DateTime.fromMillisecondsSinceEpoch(0);
@@ -359,7 +373,6 @@ List<Map<String, dynamic>> handleOuterContents(List contents,
     } else if (gridRenderer != null) {
       results.add(handleGridRenderer(gridRenderer));
     } else {
-      // pprint(content);
     }
     results.add(result);
   }

@@ -128,6 +128,20 @@ class AboutScreen extends StatelessWidget {
                           Uri.parse('https://jhelumcorp.github.io'),
                           mode: LaunchMode.externalApplication),
                     ),
+                     AdaptiveListTile(
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                      leading: const ColorIcon(
+                          color: null, icon: Icons.link),
+                      title: Text(
+                        "Website",
+                        style: textStyle(context, bold: false)
+                            .copyWith(fontSize: 16),
+                      ),
+                      trailing: Icon(AdaptiveIcons.chevron_right),
+                      onTap: () => launchUrl(
+                          Uri.parse('https://gyawunmusic.vercel.app'),
+                          mode: LaunchMode.externalApplication),
+                    ),
                     AdaptiveListTile(
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       leading: const ColorIcon(

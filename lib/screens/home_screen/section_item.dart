@@ -7,6 +7,9 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun/main.dart';
+import 'package:gyawun/utils/pprint.dart';
+import 'package:gyawun/ytmusic/ytmusic.dart';
 
 import '../../generated/l10n.dart';
 import '../../services/bottom_message.dart';
@@ -30,6 +33,7 @@ class SectionItem extends StatefulWidget {
 class _SectionItemState extends State<SectionItem> {
   final ScrollController horizontalScrollController = ScrollController();
   PageController horizontalPageController = PageController();
+  bool loadingMore = false;
 
   @override
   void initState() {
@@ -41,6 +45,21 @@ class _SectionItemState extends State<SectionItem> {
     horizontalPageController.dispose();
     horizontalScrollController.dispose();
     super.dispose();
+  }
+
+  loadMoreItems(){
+    if(widget.section['continuation']!=null){
+      setState(() {
+        loadingMore = true;
+      });
+      GetIt.I<YTMusic>().getMoreItems(continuation: widget.section['continuation']).then((value) {
+        setState(() {
+          widget.section['contents'].addAll(value['items']);
+          widget.section['continuation'] = value['continuation'];
+          loadingMore = false;
+        });
+      });
+    }
   }
 
   @override
@@ -162,6 +181,8 @@ class _SectionItemState extends State<SectionItem> {
                   items: widget.section['contents'],
                   controller: horizontalScrollController,
                 ),
+              if(loadingMore)const AdaptiveProgressRing(),
+              if(widget.section['continuation']!=null && !loadingMore) AdaptiveButton(onPressed: loadMoreItems, child:const Text("Load More"))
             ],
           );
   }
