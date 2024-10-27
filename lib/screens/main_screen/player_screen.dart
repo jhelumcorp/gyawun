@@ -559,7 +559,7 @@ class NameAndControls extends StatelessWidget {
                   style: bigTextStyle(context, bold: true),
                   mode: TextScrollMode.endless,
                 ),
-                TextScroll(
+                Text(
                   song?.artist ??
                       song?.album ??
                       song?.extras?['subtitle'] ??

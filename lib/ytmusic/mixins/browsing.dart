@@ -1,8 +1,6 @@
 import 'dart:core';
 import 'dart:math';
 
-import 'package:gyawun/utils/pprint.dart';
-
 import '../helpers.dart';
 import '../yt_service_provider.dart';
 import 'utils.dart';
@@ -184,10 +182,12 @@ mixin BrowsingMixin on YTMusicServices {
 
     var response =
         await sendRequest(endpoint, body, additionalParams: continuation);
+    String? continuationString = nav(response,['continuationContents','musicPlaylistShelfContinuation','continuations',0,'nextContinuationData','continuation']);
     List contents = 
         nav(response,['continuationContents','musicPlaylistShelfContinuation','contents'])??[];
     return {
       'items':handleContents(contents),
+      'continuation':continuationString!=null ? getContinuationString(continuationString):null,
     };
       }
   int getDatestamp() {
