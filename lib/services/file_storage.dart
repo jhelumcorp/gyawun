@@ -32,7 +32,7 @@ class FileStorage {
   static Future<void> initialise() async {
     Directory directory = Directory("dir");
     if (Platform.isAndroid) {
-      directory = Directory('/storage/emulated/0/Download/Gyawun');
+      directory = Directory(Hive.box('SETTINGS').get('APP_FOLDER',defaultValue:'/storage/emulated/0/Download/Gyawun'));
     } else if (Platform.isWindows) {
       directory =
           Directory(path.join((await getDownloadsDirectory())!.path, 'Gyawun'));
@@ -41,6 +41,26 @@ class FileStorage {
     }
 
     _storagePaths = StoragePaths(
+      basePath: directory.path,
+      backupPath: path.join(directory.path, 'Back Up'),
+      musicPath: path.join(directory.path, 'Music'),
+    );
+    await _getDirectory(_storagePaths.backupPath);
+    await _getDirectory(_storagePaths.musicPath);
+    _initialised = true;
+  }
+
+  updateDirectories()async{
+    Directory directory = Directory("dir");
+    if (Platform.isAndroid) {
+      directory = Directory(Hive.box('SETTINGS').get('APP_FOLDER',defaultValue:'/storage/emulated/0/Download')+'/Gyawun');
+    } else if (Platform.isWindows) {
+      directory =
+          Directory(path.join((await getDownloadsDirectory())!.path, 'Gyawun'));
+    } else {
+      directory = await getApplicationDocumentsDirectory();
+    }
+     storagePaths = StoragePaths(
       basePath: directory.path,
       backupPath: path.join(directory.path, 'Back Up'),
       musicPath: path.join(directory.path, 'Music'),

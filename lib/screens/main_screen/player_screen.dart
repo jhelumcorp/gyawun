@@ -662,37 +662,39 @@ class NameAndControls extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (song != null)
-                  ValueListenableBuilder(
-                    valueListenable: GetIt.I<DownloadManager>().downloads,
-                    builder: (context, value, child) {
-                      List<Map> elements = value
-                          .where((item) => item['videoId'] == song!.id)
-                          .toList();
-                      Map? item = elements.isNotEmpty ? elements.first : null;
-                      if (item != null) {
-                        if (item['status'] == 'PROCESSING' ||
-                            item['status'] == 'DOWNLOADING') {
-                          return AdaptiveProgressRing(
-                            value: item['status'] == 'DOWNLOADING'
-                                ? item['progress']
-                                : null,
-                            color: Colors.white,
-                            backgroundColor: Colors.black,
-                          );
-                        } else if (item['status'] == 'DOWNLOADED') {
-                          return const Icon(Icons.download_done_outlined);
+                  RepaintBoundary(
+                    child: ValueListenableBuilder(
+                      valueListenable: GetIt.I<DownloadManager>().downloads,
+                      builder: (context, value, child) {
+                        List<Map> elements = value
+                            .where((item) => item['videoId'] == song!.id)
+                            .toList();
+                        Map? item = elements.isNotEmpty ? elements.first : null;
+                        if (item != null) {
+                          if (item['status'] == 'PROCESSING' ||
+                              item['status'] == 'DOWNLOADING') {
+                            return AdaptiveProgressRing(
+                              value: item['status'] == 'DOWNLOADING'
+                                  ? item['progress']/100
+                                  : null,
+                              color: Colors.white,
+                              backgroundColor: Colors.black,
+                            );
+                          } else if (item['status'] == 'DOWNLOADED') {
+                            return const Icon(Icons.download_done_outlined);
+                          }
                         }
-                      }
-                      return AdaptiveIconButton(
-                          onPressed: () {
-                            GetIt.I<DownloadManager>()
-                                .downloadSong(song!.extras!);
-                          },
-                          icon: Icon(
-                            AdaptiveIcons.download,
-                            size: 30,
-                          ));
-                    },
+                        return AdaptiveIconButton(
+                            onPressed: () {
+                              GetIt.I<DownloadManager>()
+                                  .downloadSong(song!.extras!);
+                            },
+                            icon: Icon(
+                              AdaptiveIcons.download,
+                              size: 30,
+                            ));
+                      },
+                    ),
                   ),
                 AdaptiveIconButton(
                     onPressed: () {

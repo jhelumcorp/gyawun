@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -17,115 +18,114 @@ YoutubeExplode ytExplode = YoutubeExplode();
 class DownloadManager {
   Client client = Client();
   ValueNotifier<List<Map>> downloads = ValueNotifier([]);
+  final int maxConcurrentDownloads = 3; // Limit concurrent downloads
+  int _activeDownloads = 0;
+  final Queue<Map> _downloadQueue = Queue<Map>(); // Queue for pending downloads
+
   DownloadManager() {
     downloads.value = _box.values.toList().cast<Map>();
     _box.listenable().addListener(() {
       downloads.value = _box.values.toList().cast<Map>();
     });
   }
+
   Future<void> downloadSong(Map song) async {
-    if (!(await FileStorage.requestPermissions())) {
+    if (_activeDownloads >= maxConcurrentDownloads) {
+      _downloadQueue.add(song); // Add to queue if limit reached
       return;
     }
-    AudioOnlyStreamInfo audioSource = await _getSongInfo(song['videoId'],
-        quality: GetIt.I<SettingsManager>().downloadQuality.name.toLowerCase());
-    int start = 0;
+
+    _activeDownloads++;
+    try {
+      if (!(await FileStorage.requestPermissions())) return;
+
+      AudioOnlyStreamInfo audioSource = await _getSongInfo(song['videoId'],
+          quality: GetIt.I<SettingsManager>().downloadQuality.name.toLowerCase());
+       int start = 0;
     int end = audioSource.size.totalBytes;
-    Stream<List<int>> stream =
-        AudioStreamClient().getAudioStream(audioSource, start: start, end: end);
-    // HttpServer server = GetIt.I<HttpServer>();
-    // StreamedResponse response = await client.send(
-    //   Request(
-    //     'GET',
-    //     Uri.parse(
-    //         'http://${server.address.address}:${server.port}?id=${song['videoId']}&quality=${GetIt.I<SettingsManager>().downloadQuality.name.toLowerCase()}'),
-    //   ),
-    // );
-    int total = audioSource.size.totalBytes;
-    List<int> recieved = [];
-    await _box.put(
-      song['videoId'],
-      {
+      Stream<List<int>> stream = AudioStreamClient().getAudioStream(audioSource,start:start,end: end );
+      int total = audioSource.size.totalBytes;
+      List<int> received = [];
+      await _box.put(song['videoId'], {
         ...song,
         'status': 'PROCESSING',
         'progress': 0,
-      },
-    );
+      });
 
-    stream.listen(
-      (data) async {
-        recieved.addAll(data);
-        await _box.put(
-          song['videoId'],
-          {
+      stream.listen(
+        (data) async {
+          received.addAll(data);
+          await _box.put(song['videoId'], {
             ...song,
             'status': 'DOWNLOADING',
-            'progress': (recieved.length / total) * 100,
-          },
-        );
-      },
-      onDone: () async {
-        if (recieved.length == total) {
-          File? file = await GetIt.I<FileStorage>().saveMusic(recieved, song);
-          if (file?.path != null) {
-            await _box.put(
-              song['videoId'],
-              {
+            'progress': (received.length / total) * 100,
+          });
+        },
+        onDone: () async {
+          if (received.length == total) {
+            File? file = await GetIt.I<FileStorage>().saveMusic(received, song);
+            if (file != null) {
+              await _box.put(song['videoId'], {
                 ...song,
                 'status': 'DOWNLOADED',
                 'progress': 100,
-                'path': file!.path
-              },
-            );
-          } else {
-            await _box.delete(song['videoId']);
+                'path': file.path,
+              });
+            } else {
+              await _box.delete(song['videoId']);
+            }
           }
-        }
-      },
-      onError: (err) async {
-        await _box.delete(song['videoId']);
-      },
-    );
-  }
-
-  //Download every song in playlist
-  Future<void> downloadPlaylist(Map playlist) async {
-    //Get songs in playlist
-    List songs = await GetIt.I<YTMusic>().getPlaylistSongs(playlist['playlistId']);
-    for (Map song in songs) {
-      downloadSong(song);
+          _downloadNext(); // Trigger next download
+        },
+        onError: (err) async {
+          await _box.delete(song['videoId']);
+          _downloadNext(); // Trigger next download
+        },
+      );
+    } catch (e) {
+      await _box.delete(song['videoId']); // Handle errors by removing entry
+    } finally {
+      _activeDownloads--;
     }
   }
-  Future<AudioOnlyStreamInfo> _getSongInfo(String videoId,
-      {String quality = 'high'}) async {
-    StreamManifest manifest =
-        await ytExplode.videos.streamsClient.getManifest(videoId);
 
-    List<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly
-        .sortByBitrate()
-        .reversed
-        .where((stream) => stream.container == StreamContainer.mp4)
-        .toList();
-    int qualityIndex = streamInfos.length - 1;
-    if (quality == 'low') {
-      qualityIndex = 0;
-    } else {
-      qualityIndex = streamInfos.length - 1;
+  void _downloadNext() {
+    if (_downloadQueue.isNotEmpty && _activeDownloads < maxConcurrentDownloads) {
+      downloadSong(_downloadQueue.removeFirst());
     }
-    return streamInfos[qualityIndex];
   }
-
   Future<String> deleteSong(String key, String path) async {
     await _box.delete(key);
     await File(path).delete();
     return 'Song deleted successfully.';
   }
-
   updateStatus(String key, String status) {
     Map? song = _box.get(key);
     if (song != null) {
       song['status'] = status;
       _box.put(key, song);
+    }
+  }
+
+  Future<void> downloadPlaylist(Map playlist) async {
+    List songs = await GetIt.I<YTMusic>().getPlaylistSongs(playlist['playlistId']);
+    for (Map song in songs) {
+      await downloadSong(song); // Queue each song download
+    }
+  }
+
+  Future<AudioOnlyStreamInfo> _getSongInfo(String videoId,
+      {String quality = 'high'}) async {
+    try {
+      StreamManifest manifest = await ytExplode.videos.streamsClient.getManifest(videoId);
+      List<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly
+          .sortByBitrate()
+          .where((stream) => stream.container == StreamContainer.mp4)
+          .toList();
+      int qualityIndex = (quality == 'low') ? 0 : streamInfos.length - 1;
+      return streamInfos[qualityIndex];
+    } catch (e) {
+      rethrow; // Allows for further handling in `downloadSong`
     }
   }
 }

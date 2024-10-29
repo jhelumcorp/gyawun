@@ -131,42 +131,45 @@ class _HomeScreenState extends State<HomeScreen> {
     return AdaptiveScaffold(
       appBar: PreferredSize(
         preferredSize: const AdaptiveAppBar().preferredSize,
-        child: LayoutBuilder(builder: (context, constraints) {
-          return AdaptiveAppBar(
+        child:  AdaptiveAppBar(
             automaticallyImplyLeading: false,
             title: Material(
               color: Colors.transparent,
-              child: Row(
-                children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                        maxWidth: constraints.maxWidth > 500
-                            ? (400)
-                            : constraints.maxWidth - 32),
-                    child: AdaptiveTextField(
-                      onTap: () => context.go('/search'),
-                      readOnly: true,
-                      keyboardType: TextInputType.text,
-                      maxLines: 1,
-                      autofocus: false,
-                      textInputAction: TextInputAction.search,
-                      fillColor: Platform.isWindows
-                          ? null
-                          : Colors.grey.withOpacity(0.3),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 2, horizontal: 8),
-                      borderRadius:
-                          BorderRadius.circular(Platform.isWindows ? 4.0 : 35),
-                      hintText: S.of(context).Search_Gyawun,
-                      prefix: Icon(AdaptiveIcons.search),
-                    ),
-                  ),
-                ],
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Row(
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                            maxWidth: constraints.maxWidth > 400
+                                ? (400)
+                                : constraints.maxWidth),
+                        child: AdaptiveTextField(
+                          onTap: () => context.go('/search'),
+                          readOnly: true,
+                          keyboardType: TextInputType.text,
+                          maxLines: 1,
+                          autofocus: false,
+                          textInputAction: TextInputAction.search,
+                          fillColor: Platform.isWindows
+                              ? null
+                              : Colors.grey.withOpacity(0.3),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 2, horizontal: 8),
+                          borderRadius:
+                              BorderRadius.circular(Platform.isWindows ? 4.0 : 35),
+                          hintText: S.of(context).Search_Gyawun,
+                          prefix: Icon(AdaptiveIcons.search),
+                        ),
+                      ),
+                    ],
+                  );
+                }
               ),
             ),
             centerTitle: false,
-          );
-        }),
+          ),
+       
       ),
       body: initialLoading
           ? const Center(child: AdaptiveProgressRing())

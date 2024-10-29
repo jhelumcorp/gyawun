@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:easy_folder_picker/FolderPicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun/services/file_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -77,6 +79,31 @@ List<SettingItem> audioandplaybackScreenData(BuildContext context) => [
                 if (value == null) return;
                 context.read<SettingsManager>().downloadQuality = value;
               });
+        },
+      ),
+     if(Platform.isAndroid) SettingItem(
+        title: "App Folder",
+        icon: CupertinoIcons.folder,
+        subtitle: (context) {
+          return ValueListenableBuilder(valueListenable: Hive.box('SETTINGS').listenable(keys:['APP_FOLDER']), builder:(context, value, child) {
+            return Text(value.get('APP_FOLDER',defaultValue:'/storage/emulated/0/Download'));
+          },);
+        },
+        trailing: (context) {
+          return AdaptiveOutlinedButton(child:const Text('Change'), onPressed: ()async{
+            Directory? newDirectory = await FolderPicker.pick(
+              allowFolderCreation: true,
+              context: context,
+              rootDirectory: Directory(_box.get('APP_FOLDER', defaultValue: GetIt.I<FileStorage>().storagePaths.basePath)?? FolderPicker.rootPath),
+              shape:const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              )
+            );
+            if(newDirectory!=null){
+              await _box.put('APP_FOLDER', newDirectory.path);
+              await GetIt.I<FileStorage>().updateDirectories();
+            }
+          });
         },
       ),
       if (!Platform.isWindows)

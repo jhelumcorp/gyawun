@@ -7,8 +7,6 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun/main.dart';
-import 'package:gyawun/utils/pprint.dart';
 import 'package:gyawun/ytmusic/ytmusic.dart';
 
 import '../../generated/l10n.dart';

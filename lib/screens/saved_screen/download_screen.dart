@@ -5,6 +5,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun/screens/saved_screen/downloading_screen.dart';
 import 'package:gyawun/utils/extensions.dart';
 
 import '../../generated/l10n.dart';
@@ -23,6 +24,11 @@ class DownloadScreen extends StatelessWidget {
       appBar: AdaptiveAppBar(
         title: Text(S.of(context).Downloads),
         centerTitle: true,
+        actions: [
+          AdaptiveButton(child: Icon(AdaptiveIcons.download), onPressed: (){
+            Navigator.push(context, (MaterialPageRoute(builder: (context) =>const DownloadingScreen())));
+          })
+        ],
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -106,15 +112,16 @@ class DownloadedSongTile extends StatelessWidget {
             .toDouble();
     return AdaptiveListTile(
       onTap: () async {
+        if(song['status'] == 'DOWNLOADING') return;
         await GetIt.I<MediaPlayer>().playAll(List.from(songs), index: index);
       },
       onSecondaryTap: () {
-        if (song['videoId'] != null) {
+        if (song['videoId'] != null && song['status'] != 'DOWNLOADING') {
           Modals.showSongBottomModal(context, song);
         }
       },
       onLongPress: () {
-        if (song['videoId'] != null) {
+        if (song['videoId'] != null && song['status'] != 'DOWNLOADING') {
           Modals.showSongBottomModal(context, song);
         }
       },
@@ -130,7 +137,7 @@ class DownloadedSongTile extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        song['status'] == 'DELETED' ? 'File not found' : _buildSubtitle(song),
+        song['status'] == 'DELETED' ? 'File not found' : song['status']=='DOWNLOADING'? 'Downloading':  _buildSubtitle(song),
         maxLines: 1,
         style: TextStyle(
           color: song['status'] == 'DELETED'

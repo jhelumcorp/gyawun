@@ -116,7 +116,9 @@ class _SavedScreenState extends State<SavedScreen> {
                   subtitle: ValueListenableBuilder(
                     valueListenable: Hive.box('DOWNLOADS').listenable(),
                     builder: (context, box, child) {
-                      return Text(S.of(context).nSongs(box.length));
+                      List values = box.values.toList();
+                      List downloaded = values.where((element) => element['status'] == 'DOWNLOADED').toList();
+                      return Text(S.of(context).nSongs(downloaded.length));
                     },
                   ),
                   trailing: Icon(AdaptiveIcons.chevron_right),
