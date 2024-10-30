@@ -43,6 +43,7 @@ class DownloadManager {
           quality: GetIt.I<SettingsManager>().downloadQuality.name.toLowerCase());
        int start = 0;
     int end = audioSource.size.totalBytes;
+   
       Stream<List<int>> stream = AudioStreamClient().getAudioStream(audioSource,start:start,end: end );
       int total = audioSource.size.totalBytes;
       List<int> received = [];
@@ -51,7 +52,6 @@ class DownloadManager {
         'status': 'PROCESSING',
         'progress': 0,
       });
-
       stream.listen(
         (data) async {
           received.addAll(data);
@@ -63,13 +63,15 @@ class DownloadManager {
         },
         onDone: () async {
           if (received.length == total) {
-            File? file = await GetIt.I<FileStorage>().saveMusic(received, song);
+            File? file = await GetIt.I<FileStorage>().saveMusic(received, song,extension: audioSource.container.name);
+            print(file);
             if (file != null) {
               await _box.put(song['videoId'], {
                 ...song,
                 'status': 'DOWNLOADED',
                 'progress': 100,
                 'path': file.path,
+                'timestamp':DateTime.now().millisecondsSinceEpoch
               });
             } else {
               await _box.delete(song['videoId']);
@@ -79,6 +81,7 @@ class DownloadManager {
         },
         onError: (err) async {
           await _box.delete(song['videoId']);
+          print(err);
           _downloadNext(); // Trigger next download
         },
       );
@@ -120,12 +123,11 @@ class DownloadManager {
       StreamManifest manifest = await ytExplode.videos.streamsClient.getManifest(videoId);
       List<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly
           .sortByBitrate()
-          .where((stream) => stream.container == StreamContainer.mp4)
+          .reversed
           .toList();
-      int qualityIndex = (quality == 'low') ? 0 : streamInfos.length - 1;
-      return streamInfos[qualityIndex];
+      return quality == 'low' ? streamInfos.first:streamInfos.last;
     } catch (e) {
-      rethrow; // Allows for further handling in `downloadSong`
+      rethrow;
     }
   }
 }

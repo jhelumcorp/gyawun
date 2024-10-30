@@ -86,7 +86,7 @@ List<SettingItem> audioandplaybackScreenData(BuildContext context) => [
         icon: CupertinoIcons.folder,
         subtitle: (context) {
           return ValueListenableBuilder(valueListenable: Hive.box('SETTINGS').listenable(keys:['APP_FOLDER']), builder:(context, value, child) {
-            return Text(value.get('APP_FOLDER',defaultValue:'/storage/emulated/0/Download'));
+            return Text(value.get('APP_FOLDER',defaultValue:'/storage/emulated/0/Download'),style:const TextStyle(fontSize: 10),);
           },);
         },
         trailing: (context) {

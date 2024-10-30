@@ -89,7 +89,7 @@ class FileStorage {
     }
   }
 
-  Future<File?> saveMusic(List<int> data, Map song) async {
+  Future<File?> saveMusic(List<int> data, Map song,{extension='m4a'}) async {
     String fileName = song['title'];
     final RegExp avoid = RegExp(r'[\.\\\*\:\(\)\"\?#/;\|]');
     fileName = fileName.replaceAll(avoid, '').replaceAll("'", '');
@@ -97,10 +97,10 @@ class FileStorage {
     if (!(await requestPermissions())) return null;
     Directory directory = await _getDirectory(storagePaths.musicPath);
 
-    File file = File(path.join(directory.path, '$fileName.m4a'));
+    File file = File(path.join(directory.path, '$fileName.$extension'));
     int number = 1;
     while (file.existsSync()) {
-      file = File((path.join(directory.path, '$fileName($number).m4a')));
+      file = File((path.join(directory.path, '$fileName($number).$extension')));
       number++;
     }
     try {
@@ -108,8 +108,10 @@ class FileStorage {
         await file.delete();
       }
       await file.writeAsBytes(data, flush: true);
-
-      Response res = await get(
+      
+      
+      try{
+        Response res = await get(
           Uri.parse(getEnhancedImage(song['thumbnails'].first['url'])));
       Tag tag = Tag(
           title: song['title'],
@@ -122,11 +124,10 @@ class FileStorage {
               pictureType: PictureType.coverFront,
             )
           ]);
-      pprint(tag.title);
-      pprint(tag.trackArtist);
-      pprint(tag.album);
-      await AudioTags.write(file.path, tag);
-
+        await AudioTags.write(file.path, tag);
+      }catch(e){
+        await file.writeAsBytes(data,flush: true);
+      }
       return file;
     } catch (e) {
       return null;

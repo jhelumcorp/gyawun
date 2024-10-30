@@ -7,6 +7,8 @@ import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gyawun/screens/saved_screen/downloading_screen.dart';
 import 'package:gyawun/utils/extensions.dart';
+import 'package:gyawun/utils/pprint.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../generated/l10n.dart';
 import '../../services/bottom_message.dart';
@@ -25,6 +27,26 @@ class DownloadScreen extends StatelessWidget {
         title: Text(S.of(context).Downloads),
         centerTitle: true,
         actions: [
+          AdaptiveButton(child: Icon(AdaptiveIcons.delete), onPressed: ()async{
+           bool shouldDelete = await Modals.showConfirmBottomModal(context, message: 'Are you sure you want to delete all downloaded songs.',isDanger: true,doneText: S.of(context).Yes,cancelText: S.of(context).No);
+           
+           if(shouldDelete){
+            Modals.showCenterLoadingModal(context);
+            List songs = Hive.box('DOWNLOADS').values.toList();
+            for (var song in songs) {
+              String path = song['path'];
+              await Hive.box('DOWNLOADS').delete(song['videoId']);
+              try{
+                File(path).delete();
+              }catch(e){
+                pprint(e);
+              }
+            }
+            Navigator.pop(context);
+           }
+           
+          }),
+          const SizedBox(width: 8),
           AdaptiveButton(child: Icon(AdaptiveIcons.download), onPressed: (){
             Navigator.push(context, (MaterialPageRoute(builder: (context) =>const DownloadingScreen())));
           })
@@ -42,6 +64,8 @@ class DownloadScreen extends StatelessWidget {
                       .where((song) =>
                           ['DOWNLOADED', 'DELETED'].contains(song['status']))
                       .toList();
+                  songs.sort((a, b) => (a['timestamp']??0).compareTo(b['timestamp']??0));
+                      
                   return Column(
                     children: [
                       ...songs.indexed.map<Widget>((indexedSong) {
