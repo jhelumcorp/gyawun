@@ -40,11 +40,13 @@ class DownloadManager {
       if (!(await FileStorage.requestPermissions())) return;
 
       AudioOnlyStreamInfo audioSource = await _getSongInfo(song['videoId'],
-          quality: GetIt.I<SettingsManager>().downloadQuality.name.toLowerCase());
-       int start = 0;
-    int end = audioSource.size.totalBytes;
-   
-      Stream<List<int>> stream = AudioStreamClient().getAudioStream(audioSource,start:start,end: end );
+          quality:
+              GetIt.I<SettingsManager>().downloadQuality.name.toLowerCase());
+      int start = 0;
+      int end = audioSource.size.totalBytes;
+
+      Stream<List<int>> stream = AudioStreamClient()
+          .getAudioStream(audioSource, start: start, end: end);
       int total = audioSource.size.totalBytes;
       List<int> received = [];
       await _box.put(song['videoId'], {
@@ -63,15 +65,14 @@ class DownloadManager {
         },
         onDone: () async {
           if (received.length == total) {
-            File? file = await GetIt.I<FileStorage>().saveMusic(received, song,extension: audioSource.container.name);
-            print(file);
+            File? file = await GetIt.I<FileStorage>().saveMusic(received, song);
             if (file != null) {
               await _box.put(song['videoId'], {
                 ...song,
                 'status': 'DOWNLOADED',
                 'progress': 100,
                 'path': file.path,
-                'timestamp':DateTime.now().millisecondsSinceEpoch
+                'timestamp': DateTime.now().millisecondsSinceEpoch
               });
             } else {
               await _box.delete(song['videoId']);
@@ -93,15 +94,18 @@ class DownloadManager {
   }
 
   void _downloadNext() {
-    if (_downloadQueue.isNotEmpty && _activeDownloads < maxConcurrentDownloads) {
+    if (_downloadQueue.isNotEmpty &&
+        _activeDownloads < maxConcurrentDownloads) {
       downloadSong(_downloadQueue.removeFirst());
     }
   }
+
   Future<String> deleteSong(String key, String path) async {
     await _box.delete(key);
     await File(path).delete();
     return 'Song deleted successfully.';
   }
+
   updateStatus(String key, String status) {
     Map? song = _box.get(key);
     if (song != null) {
@@ -111,7 +115,8 @@ class DownloadManager {
   }
 
   Future<void> downloadPlaylist(Map playlist) async {
-    List songs = await GetIt.I<YTMusic>().getPlaylistSongs(playlist['playlistId']);
+    List songs =
+        await GetIt.I<YTMusic>().getPlaylistSongs(playlist['playlistId']);
     for (Map song in songs) {
       await downloadSong(song); // Queue each song download
     }
@@ -120,12 +125,11 @@ class DownloadManager {
   Future<AudioOnlyStreamInfo> _getSongInfo(String videoId,
       {String quality = 'high'}) async {
     try {
-      StreamManifest manifest = await ytExplode.videos.streamsClient.getManifest(videoId);
-      List<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly
-          .sortByBitrate()
-          .reversed
-          .toList();
-      return quality == 'low' ? streamInfos.first:streamInfos.last;
+      StreamManifest manifest =
+          await ytExplode.videos.streamsClient.getManifest(videoId);
+      List<AudioOnlyStreamInfo> streamInfos =
+          manifest.audioOnly.sortByBitrate().reversed.toList();
+      return quality == 'low' ? streamInfos.first : streamInfos.last;
     } catch (e) {
       rethrow;
     }

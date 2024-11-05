@@ -13,7 +13,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as path;
 
 import '../utils/enhanced_image.dart';
-import '../utils/pprint.dart';
 import '../ytmusic/ytmusic.dart';
 import 'library.dart';
 import 'settings_manager.dart';
