@@ -5,10 +5,10 @@ import 'utils.dart';
 mixin LibraryMixin on YTMusicServices {
   Future<Map> getLibrarySongs({String? continuationParams}) async {
     Map<String, dynamic> body = {'browseId': 'FEmusic_liked_videos'};
-    
+
     final response = await sendRequest('browse', body,
         additionalParams: continuationParams ?? '');
-    
+
     Map outerContents = {};
     if (continuationParams != null) {
       outerContents =
@@ -25,12 +25,8 @@ mixin LibraryMixin on YTMusicServices {
         'contents',
         0,
       ]);
-      outerContents = nav(contents, [
-        'musicShelfRenderer'
-      ])??nav(contents, [
-        'itemSectionRenderer'
-      ]);
-      
+      outerContents = nav(contents, ['musicShelfRenderer']) ??
+          nav(contents, ['itemSectionRenderer']);
     }
 
     String? continuation = nav(outerContents,
@@ -54,7 +50,8 @@ mixin LibraryMixin on YTMusicServices {
       outerContents =
           nav(response, ['continuationContents', 'gridContinuation']);
     } else {
-      Map contents = nav(response, ['contents',
+      Map contents = nav(response, [
+        'contents',
         'singleColumnBrowseResultsRenderer',
         'tabs',
         0,
@@ -62,19 +59,22 @@ mixin LibraryMixin on YTMusicServices {
         'content',
         'sectionListRenderer',
         'contents',
-        0,]);
-      outerContents = nav(contents, [
-        'gridRenderer',
-      ])??nav(contents, [
-        'itemSectionRenderer',
+        0,
       ]);
+      outerContents = nav(contents, [
+            'gridRenderer',
+          ]) ??
+          nav(contents, [
+            'itemSectionRenderer',
+          ]);
     }
     String? continuation = nav(outerContents,
         ['continuations', 0, 'nextContinuationData', 'continuation']);
     if (continuation != null) {
       continuation = getContinuationString(continuation);
     }
-    List contents = nav(outerContents, ['items'])??nav(outerContents, ['contents']);
+    List contents =
+        nav(outerContents, ['items']) ?? nav(outerContents, ['contents']);
 
     return {
       'contents': handleContents(contents),
@@ -94,7 +94,8 @@ mixin LibraryMixin on YTMusicServices {
       outerContents =
           nav(response, ['continuationContents', 'musicShelfContinuation']);
     } else {
-      Map contents = nav(response,['contents',
+      Map contents = nav(response, [
+        'contents',
         'singleColumnBrowseResultsRenderer',
         'tabs',
         0,
@@ -102,12 +103,14 @@ mixin LibraryMixin on YTMusicServices {
         'content',
         'sectionListRenderer',
         'contents',
-        0,]);
-      outerContents = nav(contents, [
-        'musicShelfRenderer',
-      ])??nav(contents,[
-        'itemSectionRenderer',
+        0,
       ]);
+      outerContents = nav(contents, [
+            'musicShelfRenderer',
+          ]) ??
+          nav(contents, [
+            'itemSectionRenderer',
+          ]);
     }
     String? continuation = nav(outerContents,
         ['continuations', 0, 'nextContinuationData', 'continuation']);
@@ -131,7 +134,8 @@ mixin LibraryMixin on YTMusicServices {
       outerContents =
           nav(response, ['continuationContents', 'gridContinuation']);
     } else {
-      Map contents = nav(response,[ 'contents',
+      Map contents = nav(response, [
+        'contents',
         'singleColumnBrowseResultsRenderer',
         'tabs',
         0,
@@ -139,14 +143,12 @@ mixin LibraryMixin on YTMusicServices {
         'content',
         'sectionListRenderer',
         'contents',
-        0,]);
-      outerContents = nav(contents, [
-        'gridRenderer'
-      ])??
-      nav(contents, [
-        'itemSectionRenderer',
+        0,
       ]);
-    
+      outerContents = nav(contents, ['gridRenderer']) ??
+          nav(contents, [
+            'itemSectionRenderer',
+          ]);
     }
     String? continuation = nav(outerContents,
         ['continuations', 0, 'nextContinuationData', 'continuation']);
@@ -173,7 +175,7 @@ mixin LibraryMixin on YTMusicServices {
       outerContents = outerContents =
           nav(response, ['continuationContents', 'musicShelfContinuation']);
     } else {
-      Map contents = nav(response,[
+      Map contents = nav(response, [
         'contents',
         'singleColumnBrowseResultsRenderer',
         'tabs',
@@ -185,10 +187,11 @@ mixin LibraryMixin on YTMusicServices {
         0,
       ]);
       outerContents = nav(contents, [
-        'musicShelfRenderer',
-      ])??nav(contents, [
-        'itemSectionRenderer',
-      ]);
+            'musicShelfRenderer',
+          ]) ??
+          nav(contents, [
+            'itemSectionRenderer',
+          ]);
     }
     String? continuation = nav(outerContents,
         ['continuations', 0, 'nextContinuationData', 'continuation']);
@@ -252,12 +255,12 @@ mixin LibraryMixin on YTMusicServices {
     return result;
   }
 
-  Future<bool> removeHistoryItem(List feedbackTokens) async {
-    if (!isLogged.value) return false;
-    Map<String, dynamic> body = {'feedbackTokens': feedbackTokens};
-    final response = await sendRequest('feedback', body);
-    return nav(response, ['feedbackResponses', 0, 'isProcessed']) == true;
-  }
+  // Future<bool> removeHistoryItem(List feedbackTokens) async {
+  //   if (!isLogged.value) return false;
+  //   Map<String, dynamic> body = {'feedbackTokens': feedbackTokens};
+  //   final response = await sendRequest('feedback', body);
+  //   return nav(response, ['feedbackResponses', 0, 'isProcessed']) == true;
+  // }
 
 //     def get_library_songs(self,
 //                           limit: int = 25,

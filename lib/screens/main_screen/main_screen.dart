@@ -5,14 +5,12 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../../generated/l10n.dart';
-import '../../services/yt_account.dart';
 import '../../themes/text_styles.dart';
 import '../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../utils/bottom_modals.dart';
@@ -111,153 +109,96 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    return ValueListenableBuilder(
-        valueListenable: GetIt.I<YTAccount>().isLogged,
-        builder: (context, isLogged, child) {
-          return Platform.isWindows
-              ? _buildWindowsMain(
-                  _goBranch,
-                  widget.navigationShell,
-                  isLogged: isLogged,
-                )
-              : Scaffold(
-                  body: Column (
+    return Platform.isWindows
+        ? _buildWindowsMain(
+            _goBranch,
+            widget.navigationShell,
+          )
+        : Scaffold(
+            body: Column(
+              children: [
+                Expanded(
+                  child: Row(
                     children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            if (screenWidth >= 450)
-                              NavigationRail(
-                                backgroundColor:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                                labelType: NavigationRailLabelType.none,
-                                selectedLabelTextStyle:
-                                    smallTextStyle(context, bold: true),
-                                extended: (screenWidth > 1000),
-                                onDestinationSelected: (index) {
-                                  int currentIndex = isLogged
-                                      ? index
-                                      : index >= 2
-                                          ? index + 1
-                                          : index;
-                                  _goBranch(currentIndex);
-                                },
-                                destinations: [
-                                  NavigationRailDestination(
-                                    selectedIcon: const Icon(
-                                        CupertinoIcons.music_house_fill),
-                                    icon:
-                                        const Icon(CupertinoIcons.music_house),
-                                    label: Text(
-                                      S.of(context).Home,
-                                      style:
-                                          smallTextStyle(context, bold: false),
-                                    ),
-                                  ),
-                                  NavigationRailDestination(
-                                    selectedIcon: const Icon(
-                                        Icons.library_music_outlined),
-                                    icon: const Icon(
-                                        Icons.library_music_outlined),
-                                    label: Text(
-                                      S.of(context).Saved,
-                                      style:
-                                          smallTextStyle(context, bold: false),
-                                    ),
-                                  ),
-                                  if (isLogged)
-                                    NavigationRailDestination(
-                                      selectedIcon: const Icon(
-                                          CupertinoIcons.music_note_2),
-                                      icon:
-                                          const Icon(CupertinoIcons.music_note),
-                                      label: Text(
-                                        S.of(context).YTMusic,
-                                        style: smallTextStyle(context,
-                                            bold: false),
-                                      ),
-                                    ),
-                                  NavigationRailDestination(
-                                    selectedIcon: const Icon(
-                                        CupertinoIcons.gear_alt_fill),
-                                    icon: const Icon(CupertinoIcons.gear_alt),
-                                    label: Text(
-                                      S.of(context).Settings,
-                                      style:
-                                          smallTextStyle(context, bold: false),
-                                    ),
-                                  )
-                                ],
-                                selectedIndex: isLogged
-                                    ? widget.navigationShell.currentIndex
-                                    : widget.navigationShell.currentIndex >= 2
-                                        ? widget.navigationShell.currentIndex -
-                                            1
-                                        : widget.navigationShell.currentIndex,
-                              ),
-                            Expanded(
-                              child: widget.navigationShell,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const BottomPlayer()
-                    ],
-                  ),
-                  bottomNavigationBar: screenWidth < 450
-                      ? SalomonBottomBar(
-                          currentIndex: isLogged
-                              ? widget.navigationShell.currentIndex
-                              : widget.navigationShell.currentIndex >= 2
-                                  ? widget.navigationShell.currentIndex - 1
-                                  : widget.navigationShell.currentIndex,
-                          items: [
-                            SalomonBottomBarItem(
-                              activeIcon:
+                      if (screenWidth >= 450)
+                        NavigationRail(
+                          backgroundColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          labelType: NavigationRailLabelType.none,
+                          selectedLabelTextStyle:
+                              smallTextStyle(context, bold: true),
+                          extended: (screenWidth > 1000),
+                          onDestinationSelected: _goBranch,
+                          destinations: [
+                            NavigationRailDestination(
+                              selectedIcon:
                                   const Icon(CupertinoIcons.music_house_fill),
                               icon: const Icon(CupertinoIcons.music_house),
-                              title: Text(S.of(context).Home),
-                            ),
-                            SalomonBottomBarItem(
-                              activeIcon: const Icon(Icons.library_music),
-                              icon: const Icon(Icons.library_music_outlined),
-                              title: Text(S.of(context).Saved),
-                            ),
-                            if (isLogged)
-                              SalomonBottomBarItem(
-                                activeIcon:
-                                    const Icon(CupertinoIcons.music_note_2),
-                                icon: const Icon(CupertinoIcons.music_note),
-                                title: Text(S.of(context).YTMusic),
+                              label: Text(
+                                S.of(context).Home,
+                                style: smallTextStyle(context, bold: false),
                               ),
-                            SalomonBottomBarItem(
-                              activeIcon:
-                                  const Icon(CupertinoIcons.settings_solid),
-                              icon: const Icon(CupertinoIcons.settings),
-                              title: Text(S.of(context).Settings),
                             ),
+                            NavigationRailDestination(
+                              selectedIcon:
+                                  const Icon(Icons.library_music_outlined),
+                              icon: const Icon(Icons.library_music_outlined),
+                              label: Text(
+                                S.of(context).Saved,
+                                style: smallTextStyle(context, bold: false),
+                              ),
+                            ),
+                            NavigationRailDestination(
+                              selectedIcon:
+                                  const Icon(CupertinoIcons.gear_alt_fill),
+                              icon: const Icon(CupertinoIcons.gear_alt),
+                              label: Text(
+                                S.of(context).Settings,
+                                style: smallTextStyle(context, bold: false),
+                              ),
+                            )
                           ],
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surfaceContainerLow,
-                          onTap: (index) {
-                            int currentIndex = isLogged
-                                ? index
-                                : index >= 2
-                                    ? index + 1
-                                    : index;
-                            _goBranch(currentIndex);
-                          },
-                        )
-                      : null,
-                );
-        });
+                          selectedIndex: widget.navigationShell.currentIndex,
+                        ),
+                      Expanded(
+                        child: widget.navigationShell,
+                      ),
+                    ],
+                  ),
+                ),
+                const BottomPlayer()
+              ],
+            ),
+            bottomNavigationBar: screenWidth < 450
+                ? SalomonBottomBar(
+                    currentIndex: widget.navigationShell.currentIndex,
+                    items: [
+                      SalomonBottomBarItem(
+                        activeIcon: const Icon(CupertinoIcons.music_house_fill),
+                        icon: const Icon(CupertinoIcons.music_house),
+                        title: Text(S.of(context).Home),
+                      ),
+                      SalomonBottomBarItem(
+                        activeIcon: const Icon(Icons.library_music),
+                        icon: const Icon(Icons.library_music_outlined),
+                        title: Text(S.of(context).Saved),
+                      ),
+                      SalomonBottomBarItem(
+                        activeIcon: const Icon(CupertinoIcons.settings_solid),
+                        icon: const Icon(CupertinoIcons.settings),
+                        title: Text(S.of(context).Settings),
+                      ),
+                    ],
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceContainerLow,
+                    onTap: _goBranch,
+                  )
+                : null,
+          );
   }
 
   _buildWindowsMain(
-    Function goTOBranch,
-    StatefulNavigationShell navigationShell, {
-    bool isLogged = false,
-  }) {
+      Function goTOBranch, StatefulNavigationShell navigationShell) {
     return Directionality(
       textDirection: fluent_ui.TextDirection.ltr,
       child: fluent_ui.NavigationView(
@@ -287,11 +228,7 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
           );
         },
         pane: fluent_ui.NavigationPane(
-            selected: isLogged
-                ? widget.navigationShell.currentIndex
-                : widget.navigationShell.currentIndex >= 2
-                    ? widget.navigationShell.currentIndex - 1
-                    : widget.navigationShell.currentIndex,
+            selected: widget.navigationShell.currentIndex,
             size: const fluent_ui.NavigationPaneSize(
               compactWidth: 60,
             ),
@@ -316,17 +253,6 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
                 body: const SizedBox.shrink(),
                 onTap: () => goTOBranch(1),
               ),
-              if (isLogged)
-                fluent_ui.PaneItem(
-                  key: const ValueKey('/ytmusic'),
-                  icon: const Icon(
-                    fluent_ui.FluentIcons.music_note,
-                    size: 30,
-                  ),
-                  title: Text(S.of(context).YTMusic),
-                  body: const SizedBox.shrink(),
-                  onTap: () => goTOBranch(2),
-                ),
             ],
             footerItems: [
               fluent_ui.PaneItem(
@@ -337,7 +263,7 @@ class _MainScreenState extends State<MainScreen> with WindowListener {
                 ),
                 title: Text(S.of(context).Settings),
                 body: const SizedBox.shrink(),
-                onTap: () => goTOBranch(3),
+                onTap: () => goTOBranch(2),
               )
             ]),
       ),

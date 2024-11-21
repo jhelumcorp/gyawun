@@ -23,7 +23,6 @@ import 'services/library.dart';
 import 'services/lyrics.dart';
 import 'services/media_player.dart';
 import 'services/settings_manager.dart';
-import 'services/yt_account.dart';
 import 'themes/colors.dart';
 import 'themes/dark.dart';
 import 'themes/light.dart';
@@ -102,7 +101,6 @@ void main() async {
   GetIt.I.registerSingleton<FileStorage>(fileStorage);
 
   GetIt.I.registerSingleton<LibraryService>(libraryService);
-  GetIt.I.registerSingleton<YTAccount>(YTAccount());
   GetIt.I.registerSingleton<Lyrics>(Lyrics());
 
   runApp(

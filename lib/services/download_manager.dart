@@ -127,8 +127,11 @@ class DownloadManager {
     try {
       StreamManifest manifest =
           await ytExplode.videos.streamsClient.getManifest(videoId);
-      List<AudioOnlyStreamInfo> streamInfos =
-          manifest.audioOnly.sortByBitrate().reversed.toList();
+      List<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly
+          .where((a) => a.container == StreamContainer.mp4)
+          .sortByBitrate()
+          .reversed
+          .toList();
       return quality == 'low' ? streamInfos.first : streamInfos.last;
     } catch (e) {
       rethrow;

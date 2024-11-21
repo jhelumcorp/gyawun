@@ -10,13 +10,13 @@ import 'playback/audio_and_playback_screen_data.dart';
 import 'setting_item.dart';
 
 List<SettingItem> settingScreenData(BuildContext context) => [
-      SettingItem(
-        title: S.of(context).Google_Account,
-        icon: CupertinoIcons.person,
-        color: Colors.accents[6],
-        hasNavigation: true,
-        location: '/settings/account',
-      ),
+      // SettingItem(
+      //   title: S.of(context).Google_Account,
+      //   icon: CupertinoIcons.person,
+      //   color: Colors.accents[6],
+      //   hasNavigation: true,
+      //   location: '/settings/account',
+      // ),
       SettingItem(
         title: S.of(context).Appearence,
         icon: Icons.looks,

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../screens/home_screen/chip_screen.dart';
@@ -13,15 +12,12 @@ import '../screens/main_screen/main_screen.dart';
 import '../screens/main_screen/player_screen.dart';
 import '../screens/browse_screen/browse_screen.dart';
 import '../screens/settings_screen/about/about_screen.dart';
-import '../screens/settings_screen/account/account_screen.dart';
 import '../screens/settings_screen/appearence/appearence_screen.dart';
 import '../screens/settings_screen/backup_restore/backup_restore_screen.dart';
 import '../screens/settings_screen/content/content_screen.dart';
 import '../screens/settings_screen/playback/audio_and_playback_screen.dart';
 import '../screens/settings_screen/playback/equalizer_screen.dart';
 import '../screens/settings_screen/settings_screen.dart';
-import '../screens/ytmusic_screen/ytmusic_screen.dart';
-import '../services/yt_account.dart';
 
 GoRouter router = GoRouter(
   initialLocation: '/',
@@ -35,14 +31,10 @@ GoRouter router = GoRouter(
             navigationShell: navigationShell,
           ),
           navigatorContainerBuilder: (context, navigationShell, children) =>
-              ValueListenableBuilder(
-                  valueListenable: GetIt.I<YTAccount>().isLogged,
-                  builder: (context, isLogged, child) {
-                    return MyPageView(
-                      currentIndex: navigationShell.currentIndex,
-                      children: children,
-                    );
-                  }),
+              MyPageView(
+            currentIndex: navigationShell.currentIndex,
+            children: children,
+          ),
         ),
       ],
     ),
@@ -96,23 +88,23 @@ List<StatefulShellBranch> branches = [
       builder: (context, state) => const SavedScreen(),
     ),
   ]),
-  StatefulShellBranch(routes: [
-    GoRoute(
-      path: '/ytmusic',
-      builder: (context, state) => const YTMScreen(),
-    ),
-  ]),
+  // StatefulShellBranch(routes: [
+  //   GoRoute(
+  //     path: '/ytmusic',
+  //     builder: (context, state) => const YTMScreen(),
+  //   ),
+  // ]),
   StatefulShellBranch(routes: [
     GoRoute(
         path: '/settings',
         builder: (context, state) => const SettingsScreen(),
         routes: [
-          GoRoute(
-            path: 'account',
-            pageBuilder: (context, state) => Platform.isWindows
-                ? const FluentPage(child: AccountScreen())
-                : const CupertinoPage(child: AccountScreen()),
-          ),
+          // GoRoute(
+          //   path: 'account',
+          //   pageBuilder: (context, state) => Platform.isWindows
+          //       ? const FluentPage(child: AccountScreen())
+          //       : const CupertinoPage(child: AccountScreen()),
+          // ),
           GoRoute(
             path: 'appearence',
             pageBuilder: (context, state) => Platform.isWindows
