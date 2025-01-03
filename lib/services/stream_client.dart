@@ -22,9 +22,6 @@ class AudioStreamClient {
     'upgrade-insecure-requests': '1',
   };
 
-  // Existing methods...
-
-  // New method to fetch audio stream with optional byte range
   Stream<List<int>> getAudioStream(streamInfo,
           {required int start, required int end}) =>
       _getStream(streamInfo, streamClient: this, start: start, end: end);

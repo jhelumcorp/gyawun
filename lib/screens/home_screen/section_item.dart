@@ -45,12 +45,14 @@ class _SectionItemState extends State<SectionItem> {
     super.dispose();
   }
 
-  loadMoreItems(){
-    if(widget.section['continuation']!=null){
+  loadMoreItems() {
+    if (widget.section['continuation'] != null) {
       setState(() {
         loadingMore = true;
       });
-      GetIt.I<YTMusic>().getMoreItems(continuation: widget.section['continuation']).then((value) {
+      GetIt.I<YTMusic>()
+          .getMoreItems(continuation: widget.section['continuation'])
+          .then((value) {
         setState(() {
           widget.section['contents'].addAll(value['items']);
           widget.section['continuation'] = value['continuation'];
@@ -179,8 +181,10 @@ class _SectionItemState extends State<SectionItem> {
                   items: widget.section['contents'],
                   controller: horizontalScrollController,
                 ),
-              if(loadingMore)const AdaptiveProgressRing(),
-              if(widget.section['continuation']!=null && !loadingMore) AdaptiveButton(onPressed: loadMoreItems, child:const Text("Load More"))
+              if (loadingMore) const AdaptiveProgressRing(),
+              if (widget.section['continuation'] != null && !loadingMore)
+                AdaptiveButton(
+                    onPressed: loadMoreItems, child: const Text("Load More"))
             ],
           );
   }

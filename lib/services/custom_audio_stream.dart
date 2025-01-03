@@ -14,6 +14,7 @@ class CustomAudioStream extends StreamAudioSource {
 
   @override
   Future<StreamAudioResponse> request([int? start, int? end]) async {
+    print(videoId);
     StreamManifest manifest =
         await ytExplode.videos.streamsClient.getManifest(videoId);
 

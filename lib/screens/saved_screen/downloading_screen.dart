@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
@@ -28,15 +27,13 @@ class DownloadingScreen extends StatelessWidget {
                 valueListenable: GetIt.I<DownloadManager>().downloads,
                 builder: (context, allSongs, snapshot) {
                   List songs = allSongs
-                      .where((song) =>
-                          ['DOWNLOADING'].contains(song['status']))
+                      .where((song) => ['DOWNLOADING'].contains(song['status']))
                       .toList();
                   return Column(
                     children: [
                       ...songs.indexed.map<Widget>((indexedSong) {
                         int index = indexedSong.$1;
-                        return  DownloadingSongTile(
-                                    songs: songs, index: index);
+                        return DownloadingSongTile(songs: songs, index: index);
                       })
                     ],
                   );
@@ -61,10 +58,8 @@ class DownloadingSongTile extends StatelessWidget {
     double height =
         (song['aspectRatio'] != null ? 50 / song['aspectRatio'] : 50)
             .toDouble();
-  
+
     return AdaptiveListTile(
-      
-     
       title: Text(song['title'] ?? "", maxLines: 1),
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(3),
@@ -77,11 +72,11 @@ class DownloadingSongTile extends StatelessWidget {
         ),
       ),
       subtitle: LinearProgressIndicator(
-        value: (song['progress'] ?? 0)/100,
+        value: (song['progress'] ?? 0) / 100,
         color: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+        backgroundColor:
+            Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
       ),
-        
       trailing: song['status'] == 'DELETED'
           ? IconButton(
               onPressed: () async {
@@ -99,19 +94,5 @@ class DownloadingSongTile extends StatelessWidget {
             )
           : null,
     );
-  }
-
-  String _buildSubtitle(Map item) {
-    List sub = [];
-    if (sub.isEmpty && item['artists'] != null) {
-      for (Map artist in item['artists']) {
-        sub.add(artist['name']);
-      }
-    }
-    if (sub.isEmpty && item['album'] != null) {
-      sub.add(item['album']['name']);
-    }
-    String s = sub.join(' · ');
-    return item['subtitle'] ?? s;
   }
 }

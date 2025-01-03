@@ -71,11 +71,11 @@ class AdaptiveTextField extends StatelessWidget {
         autofocus: autofocus,
         maxLines: maxLines,
         textInputAction: textInputAction,
-        decoration: BoxDecoration(
+        decoration: WidgetStatePropertyAll(BoxDecoration(
           color: fillColor,
           borderRadius: borderRadius,
           border: borderWidth > 0 ? Border.all(width: borderWidth) : null,
-        ),
+        )),
       );
     }
     return TextField(
