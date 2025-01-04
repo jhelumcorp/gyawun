@@ -278,6 +278,10 @@ class SongTile extends StatelessWidget {
                 ));
           } else {
             await GetIt.I<MediaPlayer>().playSong(Map.from(song));
+
+            // final s = GetIt.I<HttpServer>();
+            // await get(Uri.parse(
+            //     'http://${s.address.host}:${s.port}/stream?videoId=${song['videoId']}'));
           }
         },
         onSecondaryTap: () {

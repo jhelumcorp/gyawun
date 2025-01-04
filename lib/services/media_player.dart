@@ -292,8 +292,8 @@ class MediaPlayer extends ChangeNotifier {
     if (song['videoId'] != null) {
       await _player.pause();
       await _playlist.clear();
-
-      await _playlist.add(await _getAudioSource(song));
+      final source = await _getAudioSource(song);
+      await _playlist.add(source);
       await _player.load();
       _player.play();
       if (autoFetch == true && song['status'] != 'DOWNLOADED') {

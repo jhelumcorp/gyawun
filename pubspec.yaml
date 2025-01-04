@@ -1,7 +1,7 @@
 name: gyawun
 description: "A new Flutter project."
 publish_to: 'none'
-version: 2.0.9+34
+version: 2.0.10+35
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
@@ -18,7 +18,10 @@ dependencies:
   http: ^1.2.2
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  youtube_explode_dart: ^2.3.6
+  youtube_explode_dart:
+    git:
+      url: https://github.com/Hexer10/youtube_explode_dart.git
+      ref: e519db6
   expandable_page_view: ^1.0.17
   get_it: ^7.7.0
   cached_network_image: ^3.3.1
@@ -50,11 +53,11 @@ dependencies:
   flutter_expandable_fab: ^2.1.0
   flutter_lyric: ^2.0.4+6
   media_kit_libs_windows_audio: any
-  just_audio_media_kit: ^2.0.6
-  media_kit_native_event_loop: ^1.0.8
+  just_audio_media_kit: ^2.0.5
+  media_kit_native_event_loop: any
   flutter_acrylic: ^1.1.4
   fluent_ui: ^4.9.2
-  window_manager: ^0.4.2
+  window_manager: ^0.4.3
   receive_sharing_intent:
     git:
       url: https://github.com/sheikhhaziq/receive_sharing_intent.git

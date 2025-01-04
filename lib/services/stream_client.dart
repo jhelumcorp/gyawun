@@ -41,10 +41,7 @@ class AudioStreamClient {
       try {
         final response = await retry(this, () async {
           final from = bytesCount;
-          final to = (streamInfo.isThrottled
-                  ? (bytesCount + 10379935)
-                  : streamInfo.size.totalBytes) -
-              1;
+          final to = end - 1;
 
           late final http.Request request;
           if (url.queryParameters['c'] == 'ANDROID') {
