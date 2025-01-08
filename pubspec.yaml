@@ -1,7 +1,7 @@
 name: gyawun
 description: "A new Flutter project."
 publish_to: 'none'
-version: 2.0.10+35
+version: 2.0.11+36
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
@@ -46,7 +46,7 @@ dependencies:
   path: ^1.9.0
   file_picker: ^8.0.6
   dynamic_color: ^1.7.0
-  audiotags: ^1.4.1
+  audiotags: ^1.4.3
   pub_semver: ^2.1.4
   device_info_plus: ^10.1.0
   flutter_markdown: ^0.7.3
