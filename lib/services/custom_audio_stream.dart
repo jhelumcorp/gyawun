@@ -14,20 +14,16 @@ class CustomAudioStream extends StreamAudioSource {
   }
 
   Future _loadStreamInfo() async {
-    StreamManifest manifest =
-        await ytExplode.videos.streamsClient.getManifest(videoId);
+    StreamManifest manifest = await ytExplode.videos.streamsClient
+        .getManifest(videoId, requireWatchPage: false);
 
     List<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly
         .sortByBitrate()
         .reversed
         .where((stream) => stream.container == StreamContainer.mp4)
         .toList();
-    int qualityIndex = streamInfos.length - 1;
-    if (quality == 'low') {
-      qualityIndex = 0;
-    } else {
-      qualityIndex = streamInfos.length - 1;
-    }
+
+    int qualityIndex = quality == 'low' ? 0 : streamInfos.length - 1;
     streamInfo = streamInfos[qualityIndex];
   }
 
@@ -38,28 +34,13 @@ class CustomAudioStream extends StreamAudioSource {
     }
 
     start ??= 0;
+    int size = streamInfo!.bitrate.bitsPerSecond * 80;
     end ??= (streamInfo!.isThrottled
-        ? (start + 10379935)
+        ? (start + size)
         : streamInfo!.size.totalBytes);
     if (end > streamInfo!.size.totalBytes) {
       end = streamInfo!.size.totalBytes;
     }
-
-    bool isFirstChunk = (start == 0);
-    if (isFirstChunk) {
-      final e = start + (1024 * 100);
-      // Send a small chunk (e.g., 100 KB) for the first request
-      end = e < streamInfo!.size.totalBytes ? e : end;
-    }
-    // var byteRange = 'bytes=$start-$end';
-    // var url = streamInfo!.url;
-    // var headers = {
-    //   HttpHeaders.contentTypeHeader: streamInfo!.codec.type,
-    //   HttpHeaders.rangeHeader: byteRange,
-    // };
-    // var request = http.Request('GET', url)..headers.addAll(headers);
-
-    // final response = await request.send();
     final response =
         AudioStreamClient().getAudioStream(streamInfo, start: start, end: end);
 
