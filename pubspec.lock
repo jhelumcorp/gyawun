@@ -77,10 +77,10 @@ packages:
     dependency: "direct main"
     description:
       name: audiotags
-      sha256: "13bc4c62b27289768044958d0a6114e047f3d27cf9847e9287edff984bb56290"
+      sha256: "92a08782be943fbd2ac00a742c04cccbd0f5be413e491d1a4fb41b78b607ba1e"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.2"
+    version: "1.4.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -153,14 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.0"
-  convert:
-    dependency: transitive
-    description:
-      name: convert
-      sha256: b30acd5944035672bc15c6b7a8b47d773e41e2f17de064350988c5d02adb1c68
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.2"
   country_picker:
     dependency: "direct main"
     description:
@@ -447,10 +439,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_rust_bridge
-      sha256: "02720226035257ad0b571c1256f43df3e1556a499f6bcb004849a0faaa0e87f0"
+      sha256: "35c257fc7f98e34c1314d6c145e5ed54e7c94e8a9f469947e31c9298177d546f"
       url: "https://pub.dev"
     source: hosted
-    version: "1.82.6"
+    version: "2.7.0"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
@@ -941,14 +933,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.10.2+1"
-  pool:
-    dependency: transitive
-    description:
-      name: pool
-      sha256: "20fe868b6314b322ea036ba325e6fc0711a22948856475e2c2b6306e8ab39c2a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.1"
   provider:
     dependency: "direct main"
     description:
@@ -965,14 +949,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.5"
-  puppeteer:
-    dependency: transitive
-    description:
-      name: puppeteer
-      sha256: "7a990c68d33882b642214c351f66492d9a738afa4226a098ab70642357337fa2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.16.0"
   recase:
     dependency: transitive
     description:
@@ -1078,30 +1054,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-  shelf:
-    dependency: transitive
-    description:
-      name: shelf
-      sha256: e7dd780a7ffb623c57850b33f43309312fc863fb6aa3d276a754bb299839ef12
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.2"
-  shelf_static:
-    dependency: transitive
-    description:
-      name: shelf_static
-      sha256: c87c3875f91262785dade62d135760c2c69cb217ac759485334c5857ad89f6e3
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.3"
-  shelf_web_socket:
-    dependency: transitive
-    description:
-      name: shelf_web_socket
-      sha256: "9ca081be41c60190ebcb4766b2486a7d50261db7bd0f5d9615f2d653637a84c1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.4"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1227,14 +1179,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
-  tuple:
-    dependency: transitive
-    description:
-      name: tuple
-      sha256: a97ce2013f240b2f3807bcbaf218765b6f301c3eff91092bcfa23a039e7dd151
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.2"
   typed_data:
     dependency: transitive
     description:
@@ -1371,14 +1315,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
-  web_socket_channel:
-    dependency: transitive
-    description:
-      name: web_socket_channel
-      sha256: "58c6666b342a38816b2e7e50ed0f1e261959630becd4c879c4f26bfa14aa5a42"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.5"
   win32:
     dependency: transitive
     description:
