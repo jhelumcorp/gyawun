@@ -775,7 +775,10 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
               onPressed: () {
                 Navigator.pop(context);
                 if (updateInfo != null) {
-                  launchUrl(Uri.parse(updateInfo.downloadUrl),
+                  String platform = Platform.isAndroid ? 'android' : 'windows';
+                  launchUrl(
+                      Uri.parse(
+                          'https://gyawunmusic.vercel.app/api/download?action=download&platform=$platform&url=${updateInfo.downloadUrl}'),
                       mode: LaunchMode.externalApplication);
                 }
               },

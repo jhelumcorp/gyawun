@@ -37,7 +37,7 @@ class AudioStreamClient {
   }) async* {
     var url = streamInfo.url;
     var bytesCount = start;
-    while (bytesCount != streamInfo.size.totalBytes) {
+    while (bytesCount != end) {
       try {
         final response = await retry(this, () async {
           final from = bytesCount;

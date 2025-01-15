@@ -6,12 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun/services/yt_audio_stream.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
 import '../utils/add_history.dart';
 import '../ytmusic/ytmusic.dart';
-import 'custom_audio_stream.dart';
 import 'settings_manager.dart';
 
 class MediaPlayer extends ChangeNotifier {
@@ -278,14 +278,41 @@ class MediaPlayer extends ChangeNotifier {
     if (isDownloaded) {
       audioSource = AudioSource.file(song['path'], tag: tag);
     } else {
-      audioSource = CustomAudioStream(
-        song['videoId'],
-        GetIt.I<SettingsManager>().streamingQuality.name.toLowerCase(),
+      // audioSource = AudioSource.uri(
+      //   Uri.parse(
+      //       'https://invidious.nerdvpn.de/latest_version?id=${song['videoId']}'),
+      //   tag: tag,
+      // );
+
+      audioSource = YouTubeAudioSource(
+        videoId: song['videoId'],
+        quality: GetIt.I<SettingsManager>().streamingQuality.name.toLowerCase(),
         tag: tag,
       );
     }
     return audioSource;
   }
+
+  // void download() async {
+  //   List<String> qualVidOptions = ['480p', '720p', '1080p', '2K', '4K'];
+  //   List<String> qualAudOptions = ['64k', '128k', '192k', '256k', '320k'];
+
+  //   String command =
+  //       'yt-dlp -f \'bestvideo[height<=${qualVid.replaceAll('p', '')}]'
+  //       '+bestaudio/best[height<=${qualVid.replaceAll('p', '')}]\' $ytUrl';
+  //   if (dlAud) command += ' -x --audio-format mp3 --audio-quality ${qualAud}';
+  //   if (dlThumb) command += ' --write-thumbnail';
+  //   if (timeStart != null && timeEnd != null) {
+  //     command +=
+  //         ' --postprocessor-args "-ss ${timeStart!.format(context)} -to ${timeEnd!.format(context)}"';
+  //   }
+  //   Shell shell = Shell();
+  //   if (kDebugMode) {
+  //     print("Running command: ==================================== ");
+  //     print(command);
+  //   }
+  //   await shell.run(command);
+  // }
 
   Future<void> playSong(Map<String, dynamic> song,
       {bool autoFetch = true}) async {
