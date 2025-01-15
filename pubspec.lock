@@ -1366,11 +1366,9 @@ packages:
   youtube_explode_dart:
     dependency: "direct main"
     description:
-      path: "."
-      ref: e519db6
-      resolved-ref: e519db65ad0b0a40b12f69285932f9db509da3cf
-      url: "https://github.com/Hexer10/youtube_explode_dart.git"
-    source: git
+      path: "../youtube_explode_dart"
+      relative: true
+    source: path
     version: "2.3.7"
 sdks:
   dart: ">=3.5.0 <4.0.0"

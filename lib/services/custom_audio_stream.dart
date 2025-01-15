@@ -1,55 +1,71 @@
-import 'dart:async';
-import 'package:gyawun/services/stream_client.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+// import 'dart:async';
+// import 'package:gyawun/services/stream_client.dart';
+// import 'package:just_audio/just_audio.dart';
+// import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-class CustomAudioStream extends StreamAudioSource {
-  late YoutubeExplode ytExplode;
-  AudioOnlyStreamInfo? streamInfo;
-  String videoId;
-  String quality;
+// mixin HlsStreamInfo on StreamInfo {
+//   /// The tag of the audio stream related to this stream.
+//   int? get audioItag => null;
+// }
 
-  CustomAudioStream(this.videoId, this.quality, {super.tag}) {
-    ytExplode = YoutubeExplode();
-  }
+// class CustomAudioStream extends StreamAudioSource {
+//   late YoutubeExplode ytExplode;
+//   StreamInfo? streamInfo;
+//   String videoId;
+//   String quality;
 
-  Future _loadStreamInfo() async {
-    StreamManifest manifest = await ytExplode.videos.streamsClient
-        .getManifest(videoId, requireWatchPage: false);
+//   CustomAudioStream(this.videoId, this.quality, {super.tag}) {
+//     ytExplode = YoutubeExplode();
+//   }
 
-    List<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly
-        .sortByBitrate()
-        .reversed
-        .where((stream) => stream.container == StreamContainer.mp4)
-        .toList();
+//   Future _loadStreamInfo() async {
+//     StreamManifest manifest =
+//         await ytExplode.videos.streamsClient.getManifest(videoId);
 
-    int qualityIndex = quality == 'low' ? 0 : streamInfos.length - 1;
-    streamInfo = streamInfos[qualityIndex];
-  }
+//     List<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly
+//         .sortByBitrate()
+//         .reversed
+//         .where((stream) => stream.container == StreamContainer.mp4)
+//         .toList();
 
-  @override
-  Future<StreamAudioResponse> request([int? start, int? end]) async {
-    if (streamInfo == null) {
-      await _loadStreamInfo();
-    }
+//     int qualityIndex = quality == 'low' ? 0 : streamInfos.length - 1;
+//     streamInfo = streamInfos[qualityIndex];
+//     if (streamInfo!.fragments.isNotEmpty) {
+//       print("Using DASH Fragmented Stream");
+//     } else if (streamInfo is HlsStreamInfo) {
+//       print("Using HLS Stream");
+//     } else {
+//       print("Using Normal Stream");
+//     }
+//     print(streamInfo!.url.toString());
+//   }
 
-    start ??= 0;
-    int size = streamInfo!.bitrate.bitsPerSecond * 80;
-    end ??= (streamInfo!.isThrottled
-        ? (start + size)
-        : streamInfo!.size.totalBytes);
-    if (end > streamInfo!.size.totalBytes) {
-      end = streamInfo!.size.totalBytes;
-    }
-    final response =
-        AudioStreamClient().getAudioStream(streamInfo, start: start, end: end);
+//   @override
+//   Future<StreamAudioResponse> request([int? start, int? end]) async {
+//     if (streamInfo == null) {
+//       await _loadStreamInfo();
+//     }
 
-    return StreamAudioResponse(
-      sourceLength: streamInfo!.size.totalBytes,
-      contentLength: end - start,
-      offset: start,
-      stream: response,
-      contentType: streamInfo!.codec.type,
-    );
-  }
-}
+//     start ??= 0;
+
+//     int size = 10379935;
+//     end = start + size.clamp(0, streamInfo!.size.totalBytes - start);
+//     // if (!streamInfo!.isThrottled) {
+
+//     // }
+//     // end ??= streamInfo!.size.totalBytes;
+//     if (end > streamInfo!.size.totalBytes) {
+//       end = streamInfo!.size.totalBytes;
+//     }
+//     print('$start-$end');
+//     final response = ytExplode.videos.streams.get(streamInfo!, start, end);
+
+//     return StreamAudioResponse(
+//       sourceLength: streamInfo!.size.totalBytes,
+//       contentLength: null,
+//       offset: null,
+//       stream: response,
+//       contentType: streamInfo!.codec.type,
+//     );
+//   }
+// }

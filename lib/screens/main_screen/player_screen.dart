@@ -12,7 +12,6 @@ import 'package:gyawun/utils/extensions.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:text_scroll/text_scroll.dart';
@@ -113,9 +112,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   Future<Color?> getColor(String? image, bool isDark) async {
     if (image == null) return Theme.of(context).scaffoldBackgroundColor;
-    PaletteGenerator paletteGenerator =
-        await PaletteGenerator.fromImageProvider(
-      CachedNetworkImageProvider(
+    final c = await ColorScheme.fromImageProvider(
+      provider: CachedNetworkImageProvider(
         image,
         errorListener: (p0) {
           if (mounted) {
@@ -128,24 +126,40 @@ class _PlayerScreenState extends State<PlayerScreen> {
         },
       ),
     );
+    return c.primary;
+    // PaletteGenerator paletteGenerator =
+    //     await PaletteGenerator.fromImageProvider(
+    //   CachedNetworkImageProvider(
+    //     image,
+    //     errorListener: (p0) {
+    //       if (mounted) {
+    //         setState(() {
+    //           image = getEnhancedImage(image!,
+    //               dp: MediaQuery.of(context).devicePixelRatio,
+    //               quality: 'medium');
+    //         });
+    //       }
+    //     },
+    //   ),
+    // );
 
-    if (mounted) {
-      if (isDark) {
-        return paletteGenerator.darkVibrantColor?.color ??
-            paletteGenerator.dominantColor?.color ??
-            paletteGenerator.darkMutedColor?.color ??
-            paletteGenerator.lightVibrantColor?.color ??
-            paletteGenerator.lightMutedColor?.color;
-      } else {
-        return paletteGenerator.lightMutedColor?.color ??
-            paletteGenerator.darkVibrantColor?.color ??
-            paletteGenerator.dominantColor?.color ??
-            paletteGenerator.darkMutedColor?.color ??
-            paletteGenerator.lightVibrantColor?.color;
-      }
-    } else {
-      return Colors.transparent;
-    }
+    // if (mounted) {
+    //   if (isDark) {
+    //     return paletteGenerator.darkVibrantColor?.color ??
+    //         paletteGenerator.dominantColor?.color ??
+    //         paletteGenerator.darkMutedColor?.color ??
+    //         paletteGenerator.lightVibrantColor?.color ??
+    //         paletteGenerator.lightMutedColor?.color;
+    //   } else {
+    //     return paletteGenerator.lightMutedColor?.color ??
+    //         paletteGenerator.darkVibrantColor?.color ??
+    //         paletteGenerator.dominantColor?.color ??
+    //         paletteGenerator.darkMutedColor?.color ??
+    //         paletteGenerator.lightVibrantColor?.color;
+    //   }
+    // } else {
+    //   return Colors.transparent;
+    // }
   }
 
   MaterialColor primaryWhite = const MaterialColor(
@@ -675,7 +689,7 @@ class NameAndControls extends StatelessWidget {
                               item['status'] == 'DOWNLOADING') {
                             return AdaptiveProgressRing(
                               value: item['status'] == 'DOWNLOADING'
-                                  ? item['progress']/100
+                                  ? item['progress'] / 100
                                   : null,
                               color: Colors.white,
                               backgroundColor: Colors.black,
