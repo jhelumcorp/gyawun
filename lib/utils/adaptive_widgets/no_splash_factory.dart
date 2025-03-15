@@ -38,7 +38,7 @@ class NoSplash extends InteractiveInkFeature {
   @override
   void paintFeature(Canvas canvas, Matrix4 transform) {
     final Paint paint = Paint()
-      ..color = color.withOpacity(0.2); // Adjust opacity as needed
+      ..color = color.withAlpha(50); // Adjust opacity as needed
     canvas.drawRect(Offset.zero & referenceBox.size, paint);
   }
 }

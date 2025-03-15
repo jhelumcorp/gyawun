@@ -68,7 +68,7 @@ class AdaptiveListTile extends StatelessWidget {
           onDoubleTap: enabled ? onDoubleTap : null,
           onSecondaryTap: enabled ? onSecondaryTap : null,
           borderRadius: BorderRadius.circular(4),
-          splashFactory: Platform.isWindows ? const NoSplashFactory() : null,
+          splashFactory: (Platform.isWindows) ? const NoSplashFactory() : null,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: Container(

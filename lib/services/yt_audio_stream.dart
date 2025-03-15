@@ -18,19 +18,19 @@ class YouTubeAudioSource extends StreamAudioSource {
   Future<StreamAudioResponse> request([int? start, int? end]) async {
     try {
       final manifest = await ytExplode.videos.streams.getManifest(videoId,
-          requireWatchPage: false, ytClients: [YoutubeApiClient.android]);
+          requireWatchPage: true, ytClients: [YoutubeApiClient.androidVr]);
       final supportedStreams = manifest.audioOnly.sortByBitrate();
 
       final audioStream = quality == 'high'
-          ? supportedStreams.lastOrNull
-          : supportedStreams.firstOrNull;
+          ? supportedStreams.firstOrNull
+          : supportedStreams.lastOrNull;
 
       if (audioStream == null) {
         throw Exception('No audio stream available for this video.');
       }
 
       start ??= 0;
-      end = (audioStream.isThrottled
+      end ??= (audioStream.isThrottled
           ? (end ?? (start + 10379935))
           : audioStream.size.totalBytes);
       if (end > audioStream.size.totalBytes) {

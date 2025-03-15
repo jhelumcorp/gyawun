@@ -67,12 +67,13 @@ void main() async {
       await windowManager.setPreventClose(true);
       await windowManager.setSkipTaskbar(false);
     });
+  }
+  if (Platform.isWindows || Platform.isLinux) {
     JustAudioMediaKit.ensureInitialized();
     JustAudioMediaKit.bufferSize = 8 * 1024 * 1024;
     JustAudioMediaKit.title = 'Gyawun Music';
     JustAudioMediaKit.prefetchPlaylist = true;
   }
-
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,
     overlays: [SystemUiOverlay.top],
@@ -251,7 +252,7 @@ class Gyawun extends StatelessWidget {
 
 initialiseHive() async {
   String? applicationDataDirectoryPath;
-  if (Platform.isWindows) {
+  if (Platform.isWindows || Platform.isLinux) {
     applicationDataDirectoryPath =
         "${(await getApplicationSupportDirectory()).path}/database";
   }
@@ -282,6 +283,7 @@ bool getInitialDarkness() {
 List<WindowEffect> get windowEffectList => [
       WindowEffect.disabled,
       WindowEffect.acrylic,
+      WindowEffect.solid,
       WindowEffect.mica,
       WindowEffect.tabbed,
       WindowEffect.aero,

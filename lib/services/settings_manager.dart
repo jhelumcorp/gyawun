@@ -24,6 +24,8 @@ class SettingsManager extends ChangeNotifier {
   ];
   List<WindowEffect> get windowEffectList => [
         WindowEffect.disabled,
+        WindowEffect.solid,
+        WindowEffect.transparent,
         WindowEffect.acrylic,
         WindowEffect.mica,
         WindowEffect.tabbed,
