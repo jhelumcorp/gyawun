@@ -78,7 +78,14 @@
             android:value="2" />
         <!-- <meta-data
             android:name="io.flutter.embedding.android.EnableImpeller"
+<<<<<<< HEAD
             android:value="false" /> -->
+=======
+            android:value="false" />
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
+>>>>>>> 41b324e2ced66f4e07db43942d0027fb03675436
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
