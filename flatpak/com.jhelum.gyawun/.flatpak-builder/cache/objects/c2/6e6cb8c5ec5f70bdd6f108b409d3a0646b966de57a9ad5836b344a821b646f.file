@@ -1,0 +1,33 @@
+{
+  "id" : "com.jhelum.gyawun",
+  "runtime" : "org.freedesktop.Platform",
+  "runtime-version" : "24.08",
+  "runtime-commit" : "d4605e010c4ba1ee5a0aedc49cdc40abf9d9261dc0e31ef74f3c835a6066a756",
+  "sdk" : "org.freedesktop.Sdk",
+  "sdk-commit" : "626426e96a398b8c878599937621136057d4673d6b953dc4ed5120cd4832b82e",
+  "command" : "gyawun",
+  "modules" : [
+    {
+      "name" : "Gyawun Music",
+      "buildsystem" : "simple",
+      "sources" : [
+        {
+          "path" : "../../build/linux/x64/release/bundle",
+          "type" : "dir"
+        }
+      ],
+      "build-commands" : [
+        "install -Dm755 gyawun /app/bin/gyawun",
+        "cp -r lib /app/lib",
+        "cp -r data /app/data"
+      ]
+    }
+  ],
+  "finish-args" : [
+    "--share=network",
+    "--socket=wayland",
+    "--socket=x11",
+    "--filesystem=host"
+  ],
+  "source-date-epoch" : 1742063398
+}

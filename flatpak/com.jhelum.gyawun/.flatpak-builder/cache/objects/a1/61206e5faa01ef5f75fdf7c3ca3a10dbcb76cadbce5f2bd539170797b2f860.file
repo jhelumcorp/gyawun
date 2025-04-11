@@ -1,0 +1,19 @@
+[Application]
+name=com.jhelum.gyawun
+runtime=org.freedesktop.Platform/x86_64/24.08
+sdk=org.freedesktop.Sdk/x86_64/24.08
+command=gyawun
+
+[Context]
+shared=network;ipc;
+sockets=x11;wayland;fallback-x11;
+devices=dri;
+filesystems=host;
+
+[Extension com.jhelum.gyawun.Debug]
+directory=lib/debug
+autodelete=true
+no-autodownload=true
+
+[Build]
+built-extensions=com.jhelum.gyawun.Debug;
