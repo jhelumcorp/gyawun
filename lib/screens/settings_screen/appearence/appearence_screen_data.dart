@@ -60,7 +60,7 @@ List<SettingItem> appearenceScreenData(BuildContext context) => [
           Modals.showAccentSelector(context);
         },
       ),
-      if (Platform.isWindows)
+      if (Platform.isWindows || Platform.isLinux)
         SettingItem(
           title: S.of(context).Window_Effect,
           icon: fluent_ui.FluentIcons.background_color,

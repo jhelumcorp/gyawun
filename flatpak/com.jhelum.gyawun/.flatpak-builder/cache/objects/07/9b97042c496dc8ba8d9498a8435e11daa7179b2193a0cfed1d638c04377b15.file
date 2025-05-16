@@ -1,0 +1,5 @@
+[Runtime]
+name=com.jhelum.gyawun.Debug
+
+[ExtensionOf]
+ref=app/com.jhelum.gyawun/x86_64/master

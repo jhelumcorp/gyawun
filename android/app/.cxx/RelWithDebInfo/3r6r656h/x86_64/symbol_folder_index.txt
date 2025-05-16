@@ -1,0 +1,1 @@
+/home/sheikh-haziq/Development/Jhelum/gyawun-app/build/app/intermediates/cxx/RelWithDebInfo/3r6r656h/obj/x86_64

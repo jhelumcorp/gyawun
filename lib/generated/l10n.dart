@@ -18,17 +18,20 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(_current != null,
-        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    assert(
+      _current != null,
+      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
+    );
     return _current!;
   }
 
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false)
-        ? locale.languageCode
-        : locale.toString();
+    final name =
+        (locale.countryCode?.isEmpty ?? false)
+            ? locale.languageCode
+            : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -41,8 +44,10 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(instance != null,
-        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    assert(
+      instance != null,
+      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
+    );
     return instance!;
   }
 
@@ -52,72 +57,37 @@ class S {
 
   /// `Gyawun`
   String get Gyawun {
-    return Intl.message(
-      'Gyawun',
-      name: 'Gyawun',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Gyawun', name: 'Gyawun', desc: '', args: []);
   }
 
   /// `Next Up`
   String get Next_Up {
-    return Intl.message(
-      'Next Up',
-      name: 'Next_Up',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Next Up', name: 'Next_Up', desc: '', args: []);
   }
 
   /// `Shuffle`
   String get Shuffle {
-    return Intl.message(
-      'Shuffle',
-      name: 'Shuffle',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Shuffle', name: 'Shuffle', desc: '', args: []);
   }
 
   /// `Home`
   String get Home {
-    return Intl.message(
-      'Home',
-      name: 'Home',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Home', name: 'Home', desc: '', args: []);
   }
 
   /// `Saved`
   String get Saved {
-    return Intl.message(
-      'Saved',
-      name: 'Saved',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Saved', name: 'Saved', desc: '', args: []);
   }
 
   /// `YTMusic`
   String get YTMusic {
-    return Intl.message(
-      'YTMusic',
-      name: 'YTMusic',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('YTMusic', name: 'YTMusic', desc: '', args: []);
   }
 
   /// `Settings`
   String get Settings {
-    return Intl.message(
-      'Settings',
-      name: 'Settings',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Settings', name: 'Settings', desc: '', args: []);
   }
 
   /// `Search Gyawun`
@@ -132,32 +102,17 @@ class S {
 
   /// `Favourites`
   String get Favourites {
-    return Intl.message(
-      'Favourites',
-      name: 'Favourites',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Favourites', name: 'Favourites', desc: '', args: []);
   }
 
   /// `Downloads`
   String get Downloads {
-    return Intl.message(
-      'Downloads',
-      name: 'Downloads',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Downloads', name: 'Downloads', desc: '', args: []);
   }
 
   /// `History`
   String get History {
-    return Intl.message(
-      'History',
-      name: 'History',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('History', name: 'History', desc: '', args: []);
   }
 
   /// `{count, plural, =0{No Songs} =1{1 Song} other{{count} Songs}}`
@@ -175,42 +130,22 @@ class S {
 
   /// `Songs`
   String get Songs {
-    return Intl.message(
-      'Songs',
-      name: 'Songs',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Songs', name: 'Songs', desc: '', args: []);
   }
 
   /// `Albums`
   String get Albums {
-    return Intl.message(
-      'Albums',
-      name: 'Albums',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Albums', name: 'Albums', desc: '', args: []);
   }
 
   /// `Playlists`
   String get Playlists {
-    return Intl.message(
-      'Playlists',
-      name: 'Playlists',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Playlists', name: 'Playlists', desc: '', args: []);
   }
 
   /// `Artists`
   String get Artists {
-    return Intl.message(
-      'Artists',
-      name: 'Artists',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Artists', name: 'Artists', desc: '', args: []);
   }
 
   /// `Subscriptions`
@@ -255,12 +190,7 @@ class S {
 
   /// `Donate`
   String get Donate {
-    return Intl.message(
-      'Donate',
-      name: 'Donate',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Donate', name: 'Donate', desc: '', args: []);
   }
 
   /// `Support the development of Gyawun`
@@ -325,22 +255,12 @@ class S {
 
   /// `Appearence`
   String get Appearence {
-    return Intl.message(
-      'Appearence',
-      name: 'Appearence',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Appearence', name: 'Appearence', desc: '', args: []);
   }
 
   /// `Theme Mode`
   String get Theme_Mode {
-    return Intl.message(
-      'Theme Mode',
-      name: 'Theme_Mode',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Theme Mode', name: 'Theme_Mode', desc: '', args: []);
   }
 
   /// `Window Effect`
@@ -365,32 +285,17 @@ class S {
 
   /// `Content`
   String get Content {
-    return Intl.message(
-      'Content',
-      name: 'Content',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Content', name: 'Content', desc: '', args: []);
   }
 
   /// `Country`
   String get Country {
-    return Intl.message(
-      'Country',
-      name: 'Country',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Country', name: 'Country', desc: '', args: []);
   }
 
   /// `Language`
   String get Language {
-    return Intl.message(
-      'Language',
-      name: 'Language',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Language', name: 'Language', desc: '', args: []);
   }
 
   /// `Personalised Content`
@@ -415,12 +320,7 @@ class S {
 
   /// `Visitor Id`
   String get Visitor_Id {
-    return Intl.message(
-      'Visitor Id',
-      name: 'Visitor_Id',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Visitor Id', name: 'Visitor_Id', desc: '', args: []);
   }
 
   /// `Reset Visitor Id`
@@ -595,22 +495,12 @@ class S {
 
   /// `Backup`
   String get Backup {
-    return Intl.message(
-      'Backup',
-      name: 'Backup',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Backup', name: 'Backup', desc: '', args: []);
   }
 
   /// `Restore`
   String get Restore {
-    return Intl.message(
-      'Restore',
-      name: 'Restore',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Restore', name: 'Restore', desc: '', args: []);
   }
 
   /// `Select Backup`
@@ -625,42 +515,22 @@ class S {
 
   /// `About`
   String get About {
-    return Intl.message(
-      'About',
-      name: 'About',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('About', name: 'About', desc: '', args: []);
   }
 
   /// `Name`
   String get Name {
-    return Intl.message(
-      'Name',
-      name: 'Name',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Name', name: 'Name', desc: '', args: []);
   }
 
   /// `Version`
   String get Version {
-    return Intl.message(
-      'Version',
-      name: 'Version',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Version', name: 'Version', desc: '', args: []);
   }
 
   /// `Developer`
   String get Developer {
-    return Intl.message(
-      'Developer',
-      name: 'Developer',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Developer', name: 'Developer', desc: '', args: []);
   }
 
   /// `Sheikh Haziq`
@@ -685,22 +555,12 @@ class S {
 
   /// `Jhelum Corp`
   String get Jhelum_Corp {
-    return Intl.message(
-      'Jhelum Corp',
-      name: 'Jhelum_Corp',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Jhelum Corp', name: 'Jhelum_Corp', desc: '', args: []);
   }
 
   /// `Telegram`
   String get Telegram {
-    return Intl.message(
-      'Telegram',
-      name: 'Telegram',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Telegram', name: 'Telegram', desc: '', args: []);
   }
 
   /// `Contributors`
@@ -715,22 +575,12 @@ class S {
 
   /// `Source Code`
   String get Source_Code {
-    return Intl.message(
-      'Source Code',
-      name: 'Source_Code',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Source Code', name: 'Source_Code', desc: '', args: []);
   }
 
   /// `Bug Report`
   String get Bug_Report {
-    return Intl.message(
-      'Bug Report',
-      name: 'Bug_Report',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Bug Report', name: 'Bug_Report', desc: '', args: []);
   }
 
   /// `Feature Request`
@@ -765,22 +615,12 @@ class S {
 
   /// `Progress`
   String get Progress {
-    return Intl.message(
-      'Progress',
-      name: 'Progress',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Progress', name: 'Progress', desc: '', args: []);
   }
 
   /// `Play Next`
   String get Play_Next {
-    return Intl.message(
-      'Play Next',
-      name: 'Play_Next',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Play Next', name: 'Play_Next', desc: '', args: []);
   }
 
   /// `Add To Queue`
@@ -815,12 +655,7 @@ class S {
 
   /// `Download`
   String get Download {
-    return Intl.message(
-      'Download',
-      name: 'Download',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Download', name: 'Download', desc: '', args: []);
   }
 
   /// `Add To Playlist`
@@ -835,32 +670,17 @@ class S {
 
   /// `Start Radio`
   String get Start_Radio {
-    return Intl.message(
-      'Start Radio',
-      name: 'Start_Radio',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Start Radio', name: 'Start_Radio', desc: '', args: []);
   }
 
   /// `Album`
   String get Album {
-    return Intl.message(
-      'Album',
-      name: 'Album',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Album', name: 'Album', desc: '', args: []);
   }
 
   /// `Rename`
   String get Rename {
-    return Intl.message(
-      'Rename',
-      name: 'Rename',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Rename', name: 'Rename', desc: '', args: []);
   }
 
   /// `Add To Library`
@@ -895,22 +715,12 @@ class S {
 
   /// `Equalizer`
   String get Equalizer {
-    return Intl.message(
-      'Equalizer',
-      name: 'Equalizer',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Equalizer', name: 'Equalizer', desc: '', args: []);
   }
 
   /// `Sleep Timer`
   String get Sleep_Timer {
-    return Intl.message(
-      'Sleep Timer',
-      name: 'Sleep_Timer',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Sleep Timer', name: 'Sleep_Timer', desc: '', args: []);
   }
 
   /// `Create Playlist`
@@ -935,12 +745,7 @@ class S {
 
   /// `Create`
   String get Create {
-    return Intl.message(
-      'Create',
-      name: 'Create',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Create', name: 'Create', desc: '', args: []);
   }
 
   /// `Import Playlist`
@@ -955,12 +760,7 @@ class S {
 
   /// `Import`
   String get Import {
-    return Intl.message(
-      'Import',
-      name: 'Import',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Import', name: 'Import', desc: '', args: []);
   }
 
   /// `Rename Playlist`
@@ -975,102 +775,52 @@ class S {
 
   /// `Done`
   String get Done {
-    return Intl.message(
-      'Done',
-      name: 'Done',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Done', name: 'Done', desc: '', args: []);
   }
 
   /// `Cancel`
   String get Cancel {
-    return Intl.message(
-      'Cancel',
-      name: 'Cancel',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Cancel', name: 'Cancel', desc: '', args: []);
   }
 
   /// `Confirm`
   String get Confirm {
-    return Intl.message(
-      'Confirm',
-      name: 'Confirm',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Confirm', name: 'Confirm', desc: '', args: []);
   }
 
   /// `Yes`
   String get Yes {
-    return Intl.message(
-      'Yes',
-      name: 'Yes',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Yes', name: 'Yes', desc: '', args: []);
   }
 
   /// `No`
   String get No {
-    return Intl.message(
-      'No',
-      name: 'No',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('No', name: 'No', desc: '', args: []);
   }
 
   /// `Show More`
   String get Show_More {
-    return Intl.message(
-      'Show More',
-      name: 'Show_More',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Show More', name: 'Show_More', desc: '', args: []);
   }
 
   /// `Show Less`
   String get Show_Less {
-    return Intl.message(
-      'Show Less',
-      name: 'Show_Less',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Show Less', name: 'Show_Less', desc: '', args: []);
   }
 
   /// `Remove`
   String get Remove {
-    return Intl.message(
-      'Remove',
-      name: 'Remove',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Remove', name: 'Remove', desc: '', args: []);
   }
 
   /// `High`
   String get High {
-    return Intl.message(
-      'High',
-      name: 'High',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('High', name: 'High', desc: '', args: []);
   }
 
   /// `Low`
   String get Low {
-    return Intl.message(
-      'Low',
-      name: 'Low',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Low', name: 'Low', desc: '', args: []);
   }
 
   /// `Songs will start playing soon.`
