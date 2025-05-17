@@ -125,8 +125,9 @@ class DownloadManager {
   Future<AudioOnlyStreamInfo> _getSongInfo(String videoId,
       {String quality = 'high'}) async {
     try {
-      StreamManifest manifest =
-          await ytExplode.videos.streamsClient.getManifest(videoId);
+      StreamManifest manifest = await ytExplode.videos.streamsClient
+          .getManifest(videoId,
+              requireWatchPage: true, ytClients: [YoutubeApiClient.androidVr]);
       List<AudioOnlyStreamInfo> streamInfos = manifest.audioOnly
           .where((a) => a.container == StreamContainer.mp4)
           .sortByBitrate()

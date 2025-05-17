@@ -64,7 +64,7 @@ void main() async {
       );
 
       await windowManager.show();
-      await windowManager.setPreventClose(true);
+      await windowManager.setPreventClose(false);
       await windowManager.setSkipTaskbar(false);
     });
   }
