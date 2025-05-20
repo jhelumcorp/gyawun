@@ -19,6 +19,9 @@ jobs:
         with:
           channel: "stable"
           flutter-version: "3.29.3"
+      
+      - name: Enable Linux platform (if not already enabled)
+        run: flutter create --platforms=linux .
 
       - name: Get dependencies
         run: flutter pub get
