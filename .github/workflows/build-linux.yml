@@ -111,9 +111,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Enable Linux platform (if not already enabled)
-        run: flutter create --platforms=linux .
-
       - name: Build Snap with Snapcraft
         uses: snapcore/action-build@v1
         id: snapcraft
