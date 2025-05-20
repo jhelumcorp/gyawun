@@ -111,6 +111,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2.16.0
+        with:
+          channel: stable
+          flutter-version: "3.29.3"
+
+      - name: Enable Linux platform (if not already enabled)
+        run: flutter create --platforms=linux .
+
       - name: Build Snap with Snapcraft
         uses: snapcore/action-build@v1
         id: snapcraft
