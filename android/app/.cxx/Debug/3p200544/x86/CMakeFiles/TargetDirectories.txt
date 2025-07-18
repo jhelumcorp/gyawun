@@ -1,2 +1,0 @@
-/home/sheikh-haziq/Development/Jhelum/gyawun-app/android/app/.cxx/Debug/3p200544/x86/CMakeFiles/edit_cache.dir
-/home/sheikh-haziq/Development/Jhelum/gyawun-app/android/app/.cxx/Debug/3p200544/x86/CMakeFiles/rebuild_cache.dir
