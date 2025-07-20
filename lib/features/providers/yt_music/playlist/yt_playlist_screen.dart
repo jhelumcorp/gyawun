@@ -40,6 +40,7 @@ class _YtPlaylistScreenState extends ConsumerState<YtPlaylistScreen> {
     return Scaffold(
       appBar: context.isDesktop
           ? YaruWindowTitleBar(
+              heroTag: "titlebar",
               title: Text("Playlist"),
               leading: context.canPop() ? YaruBackButton() : null,
             )

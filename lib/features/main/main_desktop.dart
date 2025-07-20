@@ -45,6 +45,7 @@ class MainDesktop extends StatelessWidget {
           width: 255,
           child: context.isDesktop
               ? YaruWindowTitleBar(
+                  heroTag: "titlebar",
                   title: Text("Gyawun"),
                   isClosable: false,
                   isMaximizable: false,
