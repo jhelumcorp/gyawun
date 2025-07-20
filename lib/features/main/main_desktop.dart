@@ -98,21 +98,5 @@ class MainDesktop extends StatelessWidget {
               destinations: destinations,
             ),
     );
-    // appBar: YaruWindowTitleBar(title: Text("Gyawun"), heroTag: "Sidebar"),
-    // length: 4,
-    // tileBuilder: (context, index, selected, availableWidth) {
-    //   return YaruMasterTile(
-    //     onTap: () => navigationShell.goBranch(index),
-    //     title: Text(destinations[index].title),
-    //     leading: Icon(
-    //       selected
-    //           ? destinations[index].selectedIcon
-    //           : destinations[index].icon,
-    //     ),
-    //   );
-    // },
-    // pageBuilder: (context, index) {
-    //   return navigationShell;
-    // },
   }
 }

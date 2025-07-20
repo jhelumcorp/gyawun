@@ -1,17 +1,21 @@
 import 'package:gyawun_music/providers/ytmusic_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:ytmusic/models/browse_page.dart';
 import 'package:ytmusic/ytmusic.dart';
 
-part 'chip_state_provider.g.dart';
+part 'album_state_provider.g.dart';
 
 @riverpod
-class ChipStateNotifier extends _$ChipStateNotifier {
+class AlbumStateNotifier extends _$AlbumStateNotifier {
   late YTMusic _ytmusic;
+  late Map<String, dynamic> _body;
   @override
-  Future<ChipState> build(Map<String, dynamic> body) async {
+  Future<AlbumState> build(Map<String, dynamic> body) async {
+    _body = body;
     _ytmusic = ref.watch(ytmusicProvider);
-    final firstPage = await _ytmusic.getChipPage(body: body, limit: 5);
-    return ChipState(
+    final firstPage = await _ytmusic.getAlbum(body: body);
+    return AlbumState(
+      header: firstPage.header,
       sections: firstPage.sections,
       continuation: firstPage.continuation,
       isLoadingMore: false,
@@ -28,12 +32,14 @@ class ChipStateNotifier extends _$ChipStateNotifier {
 
     state = AsyncValue.data(current.copyWith(isLoadingMore: true));
     try {
-      final nextPage = await _ytmusic.getHomePageContinuation(
+      final nextPage = await _ytmusic.getPlaylistSectionContinuation(
+        body: _body,
         continuation: current.continuation!,
       );
       final updatedSections = [...current.sections, ...nextPage.sections];
       state = AsyncValue.data(
-        ChipState(
+        AlbumState(
+          header: current.header,
           sections: updatedSections,
           continuation: nextPage.continuation,
           isLoadingMore: false,
@@ -45,23 +51,27 @@ class ChipStateNotifier extends _$ChipStateNotifier {
   }
 }
 
-class ChipState {
+class AlbumState {
+  final YTPageHeader? header;
   final List<YTSection> sections;
   final String? continuation;
   final bool isLoadingMore;
 
-  ChipState({
+  AlbumState({
+    required this.header,
     required this.sections,
     this.continuation,
     this.isLoadingMore = false,
   });
 
-  ChipState copyWith({
+  AlbumState copyWith({
+    YTPageHeader? header,
     List<YTSection>? sections,
     String? continuation,
     bool? isLoadingMore,
   }) {
-    return ChipState(
+    return AlbumState(
+      header: header ?? this.header,
       sections: sections ?? this.sections,
       continuation: continuation ?? this.continuation,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,

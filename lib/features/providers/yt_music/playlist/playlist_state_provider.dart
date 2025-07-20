@@ -13,7 +13,7 @@ class PlaylistStateNotifier extends _$PlaylistStateNotifier {
   Future<PlaylistState> build(Map<String, dynamic> body) async {
     _body = body;
     _ytmusic = ref.watch(ytmusicProvider);
-    final firstPage = await _ytmusic.getPlaylist(body);
+    final firstPage = await _ytmusic.getPlaylist(body: body);
     return PlaylistState(
       header: firstPage.header,
       sections: firstPage.sections,

@@ -6,7 +6,7 @@ part of 'chip_state_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$chipStateNotifierHash() => r'a6b9586d6add8cbb24d40a4bb0734665d03c749c';
+String _$chipStateNotifierHash() => r'9a082ffa39c4ece6b87d3c527a0ec1604dbac835';
 
 /// Copied from Dart SDK
 class _SystemHash {

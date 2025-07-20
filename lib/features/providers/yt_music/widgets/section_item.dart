@@ -7,6 +7,7 @@ import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/features/providers/yt_music/browse/yt_browse_screen.dart';
 import 'package:ytmusic/enums/enums.dart';
 import 'package:ytmusic/models/section.dart';
+import 'package:ytmusic/utils/pretty_print.dart';
 
 import 'section_item_tile.dart';
 
@@ -59,6 +60,7 @@ class _SectionItemState extends State<SectionItem> {
                   iconAlignment: IconAlignment.end,
                   onPressed: () {
                     if (widget.section.trailing!.isPlayable == false) {
+                      pprint(widget.section.trailing!.endpoint);
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
@@ -90,6 +92,8 @@ class _SectionItemState extends State<SectionItem> {
           ),
         if (widget.section.type == YTSectionType.singleColumn)
           SectionSingleColumn(items: widget.section.items),
+        if (widget.section.type == YTSectionType.grid)
+          SectionGrid(items: widget.section.items),
       ],
     );
   }

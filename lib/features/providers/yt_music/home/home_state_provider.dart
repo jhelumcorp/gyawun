@@ -30,7 +30,7 @@ class HomeStateNotifier extends _$HomeStateNotifier {
     state = AsyncValue.data(current.copyWith(isLoadingMore: true));
     try {
       final nextPage = await _ytmusic.getHomePageContinuation(
-        current.continuation!,
+        continuation: current.continuation!,
       );
       final updatedSections = [...current.sections, ...nextPage.sections];
       state = AsyncValue.data(

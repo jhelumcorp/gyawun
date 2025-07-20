@@ -7,7 +7,7 @@ part of 'browse_state_provider.dart';
 // **************************************************************************
 
 String _$browseStateNotifierHash() =>
-    r'c7bd4cc41c54c293f6aefb88a2461dcfe761b156';
+    r'930f20aaef4559ed44894c1adf2092ca655d243c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 }
 
 abstract class _$BrowseStateNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<YTBrowsePage> {
+    extends BuildlessAutoDisposeAsyncNotifier<BrowseState> {
   late final Map<String, dynamic> body;
 
-  FutureOr<YTBrowsePage> build(Map<String, dynamic> body);
+  FutureOr<BrowseState> build(Map<String, dynamic> body);
 }
 
 /// See also [BrowseStateNotifier].
@@ -42,7 +42,7 @@ abstract class _$BrowseStateNotifier
 const browseStateNotifierProvider = BrowseStateNotifierFamily();
 
 /// See also [BrowseStateNotifier].
-class BrowseStateNotifierFamily extends Family<AsyncValue<YTBrowsePage>> {
+class BrowseStateNotifierFamily extends Family<AsyncValue<BrowseState>> {
   /// See also [BrowseStateNotifier].
   const BrowseStateNotifierFamily();
 
@@ -76,10 +76,7 @@ class BrowseStateNotifierFamily extends Family<AsyncValue<YTBrowsePage>> {
 /// See also [BrowseStateNotifier].
 class BrowseStateNotifierProvider
     extends
-        AutoDisposeAsyncNotifierProviderImpl<
-          BrowseStateNotifier,
-          YTBrowsePage
-        > {
+        AutoDisposeAsyncNotifierProviderImpl<BrowseStateNotifier, BrowseState> {
   /// See also [BrowseStateNotifier].
   BrowseStateNotifierProvider(Map<String, dynamic> body)
     : this._internal(
@@ -108,7 +105,7 @@ class BrowseStateNotifierProvider
   final Map<String, dynamic> body;
 
   @override
-  FutureOr<YTBrowsePage> runNotifierBuild(
+  FutureOr<BrowseState> runNotifierBuild(
     covariant BrowseStateNotifier notifier,
   ) {
     return notifier.build(body);
@@ -131,7 +128,7 @@ class BrowseStateNotifierProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<BrowseStateNotifier, YTBrowsePage>
+  AutoDisposeAsyncNotifierProviderElement<BrowseStateNotifier, BrowseState>
   createElement() {
     return _BrowseStateNotifierProviderElement(this);
   }
@@ -153,7 +150,7 @@ class BrowseStateNotifierProvider
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin BrowseStateNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<YTBrowsePage> {
+    on AutoDisposeAsyncNotifierProviderRef<BrowseState> {
   /// The parameter `body` of this provider.
   Map<String, dynamic> get body;
 }
@@ -162,7 +159,7 @@ class _BrowseStateNotifierProviderElement
     extends
         AutoDisposeAsyncNotifierProviderElement<
           BrowseStateNotifier,
-          YTBrowsePage
+          BrowseState
         >
     with BrowseStateNotifierRef {
   _BrowseStateNotifierProviderElement(super.provider);

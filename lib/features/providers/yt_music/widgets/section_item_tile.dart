@@ -8,6 +8,8 @@ import 'package:yaru/widgets.dart';
 import 'package:ytmusic/models/section.dart';
 import 'package:ytmusic/utils/pretty_print.dart';
 
+import '../album/yt_album_screen.dart';
+
 class SectionItemRowTile extends StatelessWidget {
   const SectionItemRowTile({super.key, required this.item});
 
@@ -22,11 +24,21 @@ class SectionItemRowTile extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: () {
-        if (item.type == "MUSIC_PAGE_TYPE_PLAYLIST" && item.endpoint != null) {
+        if (item.endpoint == null) {
+          return;
+        }
+        if (item.type == "MUSIC_PAGE_TYPE_PLAYLIST") {
           Navigator.push(
             context,
             CupertinoPageRoute(
               builder: (_) => YtPlaylistScreen(body: item.endpoint!.cast()),
+            ),
+          );
+        } else if (item.type == "MUSIC_PAGE_TYPE_ALBUM") {
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (_) => YtAlbumScreen(body: item.endpoint!.cast()),
             ),
           );
         } else {
@@ -127,6 +139,27 @@ class _SectionItemColumnTileState extends State<SectionItemColumnTile> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SectionGrid extends StatelessWidget {
+  final List<YTSectionItem> items;
+  const SectionGrid({super.key, required this.items});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      itemCount: items.length,
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: (context.isWideScreen ? 236 : 186) + 16,
+        mainAxisExtent: (context.isWideScreen ? 236 : 186) + 16,
+        childAspectRatio: 0.9,
+      ),
+      itemBuilder: (context, index) {
+        return SectionItemRowTile(item: items[index]);
+      },
     );
   }
 }
