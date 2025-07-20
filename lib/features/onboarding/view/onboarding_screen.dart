@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_music/app.dart';
-import 'package:gyawun_music/core/extensions/context_exxtensions.dart';
+import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:yaru/yaru.dart';
@@ -83,10 +82,10 @@ class OnboardingScreen extends StatelessWidget {
                   child: FilledButton(
                     style: FilledButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: isDesktop
+                      backgroundColor: context.isDesktop
                           ? Theme.of(context).colorScheme.primary
                           : null,
-                      foregroundColor: isDesktop
+                      foregroundColor: context.isDesktop
                           ? Theme.of(context).colorScheme.onPrimary
                           : null,
                     ),

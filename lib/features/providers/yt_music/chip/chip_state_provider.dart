@@ -2,17 +2,16 @@ import 'package:gyawun_music/providers/ytmusic_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:ytmusic/ytmusic.dart';
 
-part 'home_state_provider.g.dart';
+part 'chip_state_provider.g.dart';
 
 @riverpod
-class HomeStateNotifier extends _$HomeStateNotifier {
+class ChipStateNotifier extends _$ChipStateNotifier {
   late YTMusic _ytmusic;
   @override
-  Future<HomeState> build() async {
+  Future<ChipState> build(Map<String, dynamic> body) async {
     _ytmusic = ref.watch(ytmusicProvider);
-    final firstPage = await _ytmusic.getHomePage(limit: 5);
-    return HomeState(
-      chips: firstPage.chips,
+    final firstPage = await _ytmusic.getChipPage(body: body, limit: 5);
+    return ChipState(
       sections: firstPage.sections,
       continuation: firstPage.continuation,
       isLoadingMore: false,
@@ -34,8 +33,7 @@ class HomeStateNotifier extends _$HomeStateNotifier {
       );
       final updatedSections = [...current.sections, ...nextPage.sections];
       state = AsyncValue.data(
-        HomeState(
-          chips: current.chips,
+        ChipState(
           sections: updatedSections,
           continuation: nextPage.continuation,
           isLoadingMore: false,
@@ -47,27 +45,23 @@ class HomeStateNotifier extends _$HomeStateNotifier {
   }
 }
 
-class HomeState {
-  final List<YTChip> chips;
+class ChipState {
   final List<YTSection> sections;
   final String? continuation;
   final bool isLoadingMore;
 
-  HomeState({
-    required this.chips,
+  ChipState({
     required this.sections,
     this.continuation,
     this.isLoadingMore = false,
   });
 
-  HomeState copyWith({
-    List<YTChip>? chips,
+  ChipState copyWith({
     List<YTSection>? sections,
     String? continuation,
     bool? isLoadingMore,
   }) {
-    return HomeState(
-      chips: chips ?? this.chips,
+    return ChipState(
       sections: sections ?? this.sections,
       continuation: continuation ?? this.continuation,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_music/core/extensions/context_exxtensions.dart';
+import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:yaru/widgets.dart';
 
 final destinations = [

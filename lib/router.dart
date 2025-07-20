@@ -6,6 +6,7 @@ import 'package:gyawun_music/features/home/home_screen.dart';
 import 'package:gyawun_music/features/main/main_screen.dart';
 import 'package:gyawun_music/features/onboarding/view/onboarding_screen.dart';
 import 'package:gyawun_music/features/providers/yt_music/browse/yt_browse_screen.dart';
+import 'package:gyawun_music/features/providers/yt_music/chip/yt_chip_screen.dart';
 import 'package:gyawun_music/features/providers/yt_music/playlist/yt_playlist_screen.dart';
 import 'package:gyawun_music/features/search/search_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -35,6 +36,16 @@ GoRouter router(Ref ref) {
                     path: '/home',
                     builder: (context, state) => const HomeScreen(),
                     routes: [
+                      GoRoute(
+                        path: 'chip/:body',
+                        builder: (context, state) {
+                          return YtChipScreen(
+                            body: Map.from(
+                              jsonDecode(state.pathParameters['body']!),
+                            ),
+                          );
+                        },
+                      ),
                       GoRoute(
                         path: 'browse/:body',
                         builder: (context, state) {

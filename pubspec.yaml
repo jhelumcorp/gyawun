@@ -25,6 +25,7 @@ dependencies:
   cached_network_image: ^3.4.1
   expandable_page_view: ^1.0.17
   google_fonts: ^6.2.1
+  dynamic_color: ^1.7.0
 
 dev_dependencies:
   flutter_test:

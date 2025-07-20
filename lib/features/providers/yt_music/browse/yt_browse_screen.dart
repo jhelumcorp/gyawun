@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_music/core/extensions/context_exxtensions.dart';
+import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/features/providers/yt_music/browse/browse_state_provider.dart';
-import 'package:gyawun_music/features/providers/yt_music/playlist/yt_playlist_screen.dart';
+import 'package:gyawun_music/features/providers/yt_music/widgets/page_header.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/section_item.dart';
 import 'package:yaru/widgets.dart';
 
