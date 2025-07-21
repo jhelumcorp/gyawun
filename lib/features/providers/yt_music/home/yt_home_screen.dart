@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/chip_item.dart';
+import 'package:ytmusic/enums/section_type.dart';
 
 import '../widgets/section_item.dart';
 import 'home_state_provider.dart';
@@ -64,24 +65,32 @@ class _YtHomeScreenState extends ConsumerState<YtHomeScreen> {
                     ),
                   ),
                 ),
-                SliverList.builder(
-                  itemCount: data.sections.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index < data.sections.length) {
-                      final section = data.sections[index];
-                      return SectionItem(section: section);
-                    } else {
-                      if (data.continuation != null) {
-                        return const Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    }
-                  },
-                ),
+
+                // Loop through sections
+                for (final section in data.sections) ...[
+                  if (section.title.isNotEmpty || section.trailing != null)
+                    SliverToBoxAdapter(child: SectionHeader(section: section)),
+
+                  if (section.type == YTSectionType.row)
+                    SectionRowSliver(items: section.items),
+
+                  if (section.type == YTSectionType.multiColumn)
+                    SectionMultiColumnSliver(items: section.items),
+
+                  if (section.type == YTSectionType.singleColumn)
+                    SectionSingleColumnSliver(items: section.items),
+
+                  if (section.type == YTSectionType.grid)
+                    SectionGridSliver(items: section.items),
+                ],
+
+                if (data.continuation != null)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                  ),
               ],
             ),
           );

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
+import 'package:readmore/readmore.dart';
 import 'package:ytmusic/models/browse_page.dart';
 
 class PageHeader extends StatelessWidget {
@@ -43,7 +44,12 @@ class PageHeader extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         SizedBox(height: 4),
-        Text(header.description, style: Theme.of(context).textTheme.bodyLarge),
+        ReadMoreText(
+          header.description,
+          trimMode: TrimMode.Length,
+          style: Theme.of(context).textTheme.bodyLarge,
+          trimLines: 3,
+        ),
         SizedBox(height: 4),
         Wrap(
           spacing: 4,

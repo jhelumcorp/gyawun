@@ -6,6 +6,7 @@ import 'package:gyawun_music/features/providers/yt_music/browse/browse_state_pro
 import 'package:gyawun_music/features/providers/yt_music/widgets/page_header.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/section_item.dart';
 import 'package:yaru/widgets.dart';
+import 'package:ytmusic/enums/section_type.dart';
 
 class YtBrowseScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> body;
@@ -52,28 +53,39 @@ class _YtBrowseScreenState extends ConsumerState<YtBrowseScreen> {
               if (data.header != null)
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16),
                     child: PageHeader(header: data.header!),
                   ),
                 ),
-              SliverList.builder(
-                itemCount: data.sections.length + 1,
-                itemBuilder: (context, index) {
-                  if (index < data.sections.length) {
-                    final section = data.sections[index];
-                    return SectionItem(section: section);
-                  } else {
-                    if (data.continuation != null) {
-                      return const Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  }
-                },
-              ),
+
+              // Loop through sections
+              for (final section in data.sections) ...[
+                if (section.title.isNotEmpty || section.trailing != null)
+                  SliverToBoxAdapter(child: SectionHeader(section: section)),
+
+                if (section.type == YTSectionType.row)
+                  SectionRowSliver(items: section.items),
+
+                if (section.type == YTSectionType.multiColumn)
+                  SectionMultiColumnSliver(
+                    items: section.items,
+                    // controller: _scrollController,
+                  ),
+
+                if (section.type == YTSectionType.singleColumn)
+                  SectionSingleColumnSliver(items: section.items),
+
+                if (section.type == YTSectionType.grid)
+                  SectionGridSliver(items: section.items),
+              ],
+
+              if (data.continuation != null)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ),
             ],
           );
         },

@@ -10,6 +10,79 @@ import 'package:ytmusic/utils/pretty_print.dart';
 
 import '../album/yt_album_screen.dart';
 
+class SectionItemSquareTile extends StatelessWidget {
+  final YTSectionItem item;
+  final double width;
+  final double height;
+
+  const SectionItemSquareTile({
+    super.key,
+    required this.item,
+    required this.width,
+    required this.height,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final pixelRatio = MediaQuery.devicePixelRatioOf(context);
+
+    // Calculate image height inside the available height
+    // Leave some space for title/subtitle and padding
+    final imageHeight = height * 0.7;
+    final imageWidth = item.isRectangle ? imageHeight * (16 / 9) : imageHeight;
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: () {
+        // your navigation code
+      },
+      child: RepaintBoundary(
+        child: SizedBox(
+          width: width,
+          height: height,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Ink(
+                  height: imageHeight,
+                  width: imageWidth,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(
+                        item.thumbnails.byWidth(imageWidth.toInt()).url,
+                        maxHeight: (imageHeight * pixelRatio).round(),
+                        maxWidth: (imageWidth * pixelRatio).round(),
+                      ),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  item.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                if (item.subtitle != null)
+                  Text(
+                    item.subtitle!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class SectionItemRowTile extends StatelessWidget {
   const SectionItemRowTile({super.key, required this.item});
 
@@ -54,21 +127,22 @@ class SectionItemRowTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Ink(
-                  height: imageHeight.toDouble(),
-                  width: imageWidth.toDouble(),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(
-                        item.thumbnails.byWidth(imageWidth).url,
-                        maxHeight: (imageHeight * pixelRatio).round(),
-                        maxWidth: (imageWidth * pixelRatio).round(),
+                if (item.thumbnails.isNotEmpty)
+                  Ink(
+                    height: imageHeight.toDouble(),
+                    width: imageWidth.toDouble(),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(
+                          item.thumbnails.byWidth(imageWidth).url,
+                          maxHeight: (imageHeight * pixelRatio).round(),
+                          maxWidth: (imageWidth * pixelRatio).round(),
+                        ),
+                        fit: BoxFit.fill,
                       ),
-                      fit: BoxFit.fill,
                     ),
                   ),
-                ),
                 Text(
                   item.title,
                   maxLines: 1,
@@ -111,21 +185,23 @@ class _SectionItemColumnTileState extends State<SectionItemColumnTile> {
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: YaruTile(
-            leading: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: CachedNetworkImageProvider(
-                    widget.item.thumbnails.byWidth(50).url,
-                    maxHeight: (50 * pixelRatio).round(),
-                    maxWidth: (50 * pixelRatio).round(),
+            leading: widget.item.thumbnails.isEmpty
+                ? null
+                : Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(
+                          widget.item.thumbnails.byWidth(50).url,
+                          maxHeight: (50 * pixelRatio).round(),
+                          maxWidth: (50 * pixelRatio).round(),
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
             title: Text(
               widget.item.title,
               maxLines: 1,
@@ -139,27 +215,6 @@ class _SectionItemColumnTileState extends State<SectionItemColumnTile> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class SectionGrid extends StatelessWidget {
-  final List<YTSectionItem> items;
-  const SectionGrid({super.key, required this.items});
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      itemCount: items.length,
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: (context.isWideScreen ? 236 : 186) + 16,
-        mainAxisExtent: (context.isWideScreen ? 236 : 186) + 16,
-        childAspectRatio: 0.9,
-      ),
-      itemBuilder: (context, index) {
-        return SectionItemRowTile(item: items[index]);
-      },
     );
   }
 }
