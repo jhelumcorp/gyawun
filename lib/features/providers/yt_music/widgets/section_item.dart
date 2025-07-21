@@ -240,6 +240,9 @@ class SectionSingleColumnSliver extends StatelessWidget {
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
+            if (items[index].desctiption != null) {
+              return SectionMultiRowColumn(item: items[index]);
+            }
             return SectionItemColumnTile(item: items[index]);
           },
           childCount: items.length,
@@ -257,27 +260,35 @@ class SectionGridSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final crossAxisExtent = context.isWideScreen ? 200.0 : 150.0;
-    final mainAxisExtent = context.isWideScreen ? 236.0 : 186.0;
+    final desiredItemWidth = context.isWideScreen ? 200.0 : 150.0;
+    final itemHeight = context.isWideScreen ? 236.0 : 186.0;
+    final crossAxisSpacing = 8.0;
 
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      sliver: SliverGrid(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) => SectionItemSquareTile(
-            item: items[index],
-            width: crossAxisExtent,
-            height: mainAxisExtent,
+    return SliverLayoutBuilder(
+      builder: (context, constraints) {
+        final availableWidth = constraints.crossAxisExtent;
+
+        final crossAxisCount =
+            (availableWidth + crossAxisSpacing) ~/
+            (desiredItemWidth + crossAxisSpacing);
+        final effectiveCrossAxisCount = crossAxisCount.clamp(1, items.length);
+        return SliverGrid(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => SectionItemGridTile(
+              item: items[index],
+              width: desiredItemWidth,
+              height: itemHeight,
+            ),
+            childCount: items.length,
           ),
-          childCount: items.length,
-        ),
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: crossAxisExtent,
-          mainAxisExtent: mainAxisExtent,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-        ),
-      ),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: effectiveCrossAxisCount,
+            childAspectRatio: 0.79,
+            crossAxisSpacing: crossAxisSpacing,
+            mainAxisSpacing: 8,
+          ),
+        );
+      },
     );
   }
 }

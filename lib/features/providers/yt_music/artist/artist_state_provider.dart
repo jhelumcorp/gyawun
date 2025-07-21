@@ -4,21 +4,21 @@ import 'package:ytmusic/enums/section_type.dart';
 import 'package:ytmusic/models/browse_page.dart';
 import 'package:ytmusic/ytmusic.dart';
 
-part 'browse_state_provider.g.dart';
+part 'artist_state_provider.g.dart';
 
 @riverpod
-class BrowseStateNotifier extends _$BrowseStateNotifier {
+class ArtistStateNotifier extends _$ArtistStateNotifier {
   late YTMusic _ytmusic;
   late Map<String, dynamic> _body;
   @override
-  Future<BrowseState> build(Map<String, dynamic> body) async {
+  Future<ArtistState> build(Map<String, dynamic> body) async {
     _body = body;
     _ytmusic = ref.watch(ytmusicProvider);
-    final firstPage = await _ytmusic.browseMore(body: body);
-    return BrowseState(
+    final firstPage = await _ytmusic.getArtist(body: body);
+    return ArtistState(
       header: firstPage.header,
       sections: firstPage.sections,
-      // continuation: firstPage.continuation,
+      continuation: firstPage.continuation,
       isLoadingMore: false,
     );
   }
@@ -32,6 +32,7 @@ class BrowseStateNotifier extends _$BrowseStateNotifier {
     }
 
     state = AsyncValue.data(current.copyWith(isLoadingMore: true));
+
     try {
       final lastSection = current.sections.isNotEmpty
           ? current.sections.last
@@ -67,7 +68,7 @@ class BrowseStateNotifier extends _$BrowseStateNotifier {
       );
       final updatedSections = [...current.sections, ...nextPage.sections];
       state = AsyncValue.data(
-        BrowseState(
+        ArtistState(
           header: current.header,
           sections: updatedSections,
           continuation: nextPage.continuation,
@@ -80,26 +81,26 @@ class BrowseStateNotifier extends _$BrowseStateNotifier {
   }
 }
 
-class BrowseState {
+class ArtistState {
   final YTPageHeader? header;
   final List<YTSection> sections;
   final String? continuation;
   final bool isLoadingMore;
 
-  BrowseState({
+  ArtistState({
     required this.header,
     required this.sections,
     this.continuation,
     this.isLoadingMore = false,
   });
 
-  BrowseState copyWith({
+  ArtistState copyWith({
     YTPageHeader? header,
     List<YTSection>? sections,
     String? continuation,
     bool? isLoadingMore,
   }) {
-    return BrowseState(
+    return ArtistState(
       header: header ?? this.header,
       sections: sections ?? this.sections,
       continuation: continuation ?? this.continuation,

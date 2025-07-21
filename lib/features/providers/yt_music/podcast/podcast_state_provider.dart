@@ -4,38 +4,41 @@ import 'package:ytmusic/enums/section_type.dart';
 import 'package:ytmusic/models/browse_page.dart';
 import 'package:ytmusic/ytmusic.dart';
 
-part 'browse_state_provider.g.dart';
+part 'podcast_state_provider.g.dart';
 
 @riverpod
-class BrowseStateNotifier extends _$BrowseStateNotifier {
+class PodcastStateNotifier extends _$PodcastStateNotifier {
   late YTMusic _ytmusic;
   late Map<String, dynamic> _body;
   @override
-  Future<BrowseState> build(Map<String, dynamic> body) async {
+  Future<PodcastState> build(Map<String, dynamic> body) async {
     _body = body;
     _ytmusic = ref.watch(ytmusicProvider);
-    final firstPage = await _ytmusic.browseMore(body: body);
-    return BrowseState(
+    final firstPage = await _ytmusic.getPodcast(body: body);
+
+    return PodcastState(
       header: firstPage.header,
       sections: firstPage.sections,
-      // continuation: firstPage.continuation,
+      continuation: firstPage.continuation,
       isLoadingMore: false,
     );
   }
 
   Future<void> loadMore() async {
     final current = state.asData?.value;
-    if (current == null ||
-        current.isLoadingMore ||
-        current.continuation == null) {
+    if (current == null || current.isLoadingMore) return;
+    if (current.continuation == null &&
+        current.sections.last.continuation == null) {
       return;
     }
 
     state = AsyncValue.data(current.copyWith(isLoadingMore: true));
+
     try {
       final lastSection = current.sections.isNotEmpty
           ? current.sections.last
           : null;
+
       if (lastSection?.continuation != null &&
           lastSection?.type == YTSectionType.singleColumn) {
         final nextPage = await _ytmusic.getContinuationItems(
@@ -61,45 +64,52 @@ class BrowseStateNotifier extends _$BrowseStateNotifier {
         return;
       }
 
-      final nextPage = await _ytmusic.getPlaylistSectionContinuation(
-        body: _body,
-        continuation: current.continuation!,
-      );
-      final updatedSections = [...current.sections, ...nextPage.sections];
-      state = AsyncValue.data(
-        BrowseState(
-          header: current.header,
-          sections: updatedSections,
-          continuation: nextPage.continuation,
-          isLoadingMore: false,
-        ),
-      );
+      if (current.continuation != null) {
+        // final nextPage = await _ytmusic.getPodcastContinuation(
+        //   body: _body,
+        //   continuation: current.continuation!,
+        // );
+
+        // final updatedSections = [...current.sections, ...nextPage.sections];
+
+        // state = AsyncValue.data(
+        //   current.copyWith(
+        //     sections: updatedSections,
+        //     continuation: nextPage.continuation,
+        //     isLoadingMore: false,
+        //   ),
+        // );
+        // return;
+      }
+
+      // 3️⃣ Nothing more to load
+      state = AsyncValue.data(current.copyWith(isLoadingMore: false));
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }
   }
 }
 
-class BrowseState {
+class PodcastState {
   final YTPageHeader? header;
   final List<YTSection> sections;
   final String? continuation;
   final bool isLoadingMore;
 
-  BrowseState({
+  PodcastState({
     required this.header,
     required this.sections,
     this.continuation,
     this.isLoadingMore = false,
   });
 
-  BrowseState copyWith({
+  PodcastState copyWith({
     YTPageHeader? header,
     List<YTSection>? sections,
     String? continuation,
     bool? isLoadingMore,
   }) {
-    return BrowseState(
+    return PodcastState(
       header: header ?? this.header,
       sections: sections ?? this.sections,
       continuation: continuation ?? this.continuation,

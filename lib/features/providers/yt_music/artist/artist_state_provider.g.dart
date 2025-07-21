@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'playlist_state_provider.dart';
+part of 'artist_state_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playlistStateNotifierHash() =>
-    r'56c25c7b585c36c105429a90b5483e8738173e14';
+String _$artistStateNotifierHash() =>
+    r'17a90c75bec2d316e973c89f91d7dac7f769b357';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,30 +30,30 @@ class _SystemHash {
   }
 }
 
-abstract class _$PlaylistStateNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<PlaylistState> {
+abstract class _$ArtistStateNotifier
+    extends BuildlessAutoDisposeAsyncNotifier<ArtistState> {
   late final Map<String, dynamic> body;
 
-  FutureOr<PlaylistState> build(Map<String, dynamic> body);
+  FutureOr<ArtistState> build(Map<String, dynamic> body);
 }
 
-/// See also [PlaylistStateNotifier].
-@ProviderFor(PlaylistStateNotifier)
-const playlistStateNotifierProvider = PlaylistStateNotifierFamily();
+/// See also [ArtistStateNotifier].
+@ProviderFor(ArtistStateNotifier)
+const artistStateNotifierProvider = ArtistStateNotifierFamily();
 
-/// See also [PlaylistStateNotifier].
-class PlaylistStateNotifierFamily extends Family<AsyncValue<PlaylistState>> {
-  /// See also [PlaylistStateNotifier].
-  const PlaylistStateNotifierFamily();
+/// See also [ArtistStateNotifier].
+class ArtistStateNotifierFamily extends Family<AsyncValue<ArtistState>> {
+  /// See also [ArtistStateNotifier].
+  const ArtistStateNotifierFamily();
 
-  /// See also [PlaylistStateNotifier].
-  PlaylistStateNotifierProvider call(Map<String, dynamic> body) {
-    return PlaylistStateNotifierProvider(body);
+  /// See also [ArtistStateNotifier].
+  ArtistStateNotifierProvider call(Map<String, dynamic> body) {
+    return ArtistStateNotifierProvider(body);
   }
 
   @override
-  PlaylistStateNotifierProvider getProviderOverride(
-    covariant PlaylistStateNotifierProvider provider,
+  ArtistStateNotifierProvider getProviderOverride(
+    covariant ArtistStateNotifierProvider provider,
   ) {
     return call(provider.body);
   }
@@ -70,32 +70,29 @@ class PlaylistStateNotifierFamily extends Family<AsyncValue<PlaylistState>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'playlistStateNotifierProvider';
+  String? get name => r'artistStateNotifierProvider';
 }
 
-/// See also [PlaylistStateNotifier].
-class PlaylistStateNotifierProvider
+/// See also [ArtistStateNotifier].
+class ArtistStateNotifierProvider
     extends
-        AutoDisposeAsyncNotifierProviderImpl<
-          PlaylistStateNotifier,
-          PlaylistState
-        > {
-  /// See also [PlaylistStateNotifier].
-  PlaylistStateNotifierProvider(Map<String, dynamic> body)
+        AutoDisposeAsyncNotifierProviderImpl<ArtistStateNotifier, ArtistState> {
+  /// See also [ArtistStateNotifier].
+  ArtistStateNotifierProvider(Map<String, dynamic> body)
     : this._internal(
-        () => PlaylistStateNotifier()..body = body,
-        from: playlistStateNotifierProvider,
-        name: r'playlistStateNotifierProvider',
+        () => ArtistStateNotifier()..body = body,
+        from: artistStateNotifierProvider,
+        name: r'artistStateNotifierProvider',
         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
             ? null
-            : _$playlistStateNotifierHash,
-        dependencies: PlaylistStateNotifierFamily._dependencies,
+            : _$artistStateNotifierHash,
+        dependencies: ArtistStateNotifierFamily._dependencies,
         allTransitiveDependencies:
-            PlaylistStateNotifierFamily._allTransitiveDependencies,
+            ArtistStateNotifierFamily._allTransitiveDependencies,
         body: body,
       );
 
-  PlaylistStateNotifierProvider._internal(
+  ArtistStateNotifierProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -108,17 +105,17 @@ class PlaylistStateNotifierProvider
   final Map<String, dynamic> body;
 
   @override
-  FutureOr<PlaylistState> runNotifierBuild(
-    covariant PlaylistStateNotifier notifier,
+  FutureOr<ArtistState> runNotifierBuild(
+    covariant ArtistStateNotifier notifier,
   ) {
     return notifier.build(body);
   }
 
   @override
-  Override overrideWith(PlaylistStateNotifier Function() create) {
+  Override overrideWith(ArtistStateNotifier Function() create) {
     return ProviderOverride(
       origin: this,
-      override: PlaylistStateNotifierProvider._internal(
+      override: ArtistStateNotifierProvider._internal(
         () => create()..body = body,
         from: from,
         name: null,
@@ -131,14 +128,14 @@ class PlaylistStateNotifierProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<PlaylistStateNotifier, PlaylistState>
+  AutoDisposeAsyncNotifierProviderElement<ArtistStateNotifier, ArtistState>
   createElement() {
-    return _PlaylistStateNotifierProviderElement(this);
+    return _ArtistStateNotifierProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is PlaylistStateNotifierProvider && other.body == body;
+    return other is ArtistStateNotifierProvider && other.body == body;
   }
 
   @override
@@ -152,24 +149,23 @@ class PlaylistStateNotifierProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin PlaylistStateNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<PlaylistState> {
+mixin ArtistStateNotifierRef
+    on AutoDisposeAsyncNotifierProviderRef<ArtistState> {
   /// The parameter `body` of this provider.
   Map<String, dynamic> get body;
 }
 
-class _PlaylistStateNotifierProviderElement
+class _ArtistStateNotifierProviderElement
     extends
         AutoDisposeAsyncNotifierProviderElement<
-          PlaylistStateNotifier,
-          PlaylistState
+          ArtistStateNotifier,
+          ArtistState
         >
-    with PlaylistStateNotifierRef {
-  _PlaylistStateNotifierProviderElement(super.provider);
+    with ArtistStateNotifierRef {
+  _ArtistStateNotifierProviderElement(super.provider);
 
   @override
-  Map<String, dynamic> get body =>
-      (origin as PlaylistStateNotifierProvider).body;
+  Map<String, dynamic> get body => (origin as ArtistStateNotifierProvider).body;
 }
 
 // ignore_for_file: type=lint

@@ -7,7 +7,7 @@ part of 'album_state_provider.dart';
 // **************************************************************************
 
 String _$albumStateNotifierHash() =>
-    r'7adb71a60b39abe09c3a52dfc4cfee08b5d8ac50';
+    r'9990beab9b98f3673a18079f0da0b9e3bf14aac9';
 
 /// Copied from Dart SDK
 class _SystemHash {

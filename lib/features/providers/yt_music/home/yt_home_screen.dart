@@ -84,7 +84,7 @@ class _YtHomeScreenState extends ConsumerState<YtHomeScreen> {
                     SectionGridSliver(items: section.items),
                 ],
 
-                if (data.continuation != null)
+                if (data.isLoadingMore)
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.all(16),

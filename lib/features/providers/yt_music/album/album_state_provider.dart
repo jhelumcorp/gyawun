@@ -1,5 +1,6 @@
 import 'package:gyawun_music/providers/ytmusic_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:ytmusic/enums/section_type.dart';
 import 'package:ytmusic/models/browse_page.dart';
 import 'package:ytmusic/ytmusic.dart';
 
@@ -32,6 +33,33 @@ class AlbumStateNotifier extends _$AlbumStateNotifier {
 
     state = AsyncValue.data(current.copyWith(isLoadingMore: true));
     try {
+      final lastSection = current.sections.isNotEmpty
+          ? current.sections.last
+          : null;
+      if (lastSection?.continuation != null &&
+          lastSection?.type == YTSectionType.singleColumn) {
+        final nextPage = await _ytmusic.getContinuationItems(
+          body: _body,
+          continuation: lastSection!.continuation!,
+        );
+
+        final updatedSection = YTSection(
+          title: lastSection.title,
+          strapline: lastSection.strapline,
+          trailing: lastSection.trailing,
+          type: lastSection.type,
+          items: [...lastSection.items, ...nextPage.items],
+          continuation: nextPage.continuation,
+        );
+
+        final updatedSections = [...current.sections];
+        updatedSections[updatedSections.length - 1] = updatedSection;
+
+        state = AsyncValue.data(
+          current.copyWith(sections: updatedSections, isLoadingMore: false),
+        );
+        return;
+      }
       final nextPage = await _ytmusic.getPlaylistSectionContinuation(
         body: _body,
         continuation: current.continuation!,

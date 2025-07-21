@@ -35,21 +35,35 @@ class PageHeader extends StatelessWidget {
           ? CrossAxisAlignment.start
           : CrossAxisAlignment.center,
       children: [
-        Text(header.title, style: Theme.of(context).textTheme.headlineMedium),
-        SizedBox(height: 8),
-        Text(header.subtitle, style: Theme.of(context).textTheme.bodyLarge),
-        SizedBox(height: 4),
-        Text(
-          header.secondSubtitle,
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
-        SizedBox(height: 4),
-        ReadMoreText(
-          header.description,
-          trimMode: TrimMode.Length,
-          style: Theme.of(context).textTheme.bodyLarge,
-          trimLines: 3,
-        ),
+        if (header.title.isNotEmpty)
+          Text(header.title, style: Theme.of(context).textTheme.headlineMedium),
+
+        if (header.subtitle.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              header.subtitle,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+        if (header.secondSubtitle.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              header.secondSubtitle,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+        if (header.description.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: ReadMoreText(
+              header.description,
+              trimMode: TrimMode.Length,
+              style: Theme.of(context).textTheme.bodyLarge,
+              trimLines: 3,
+            ),
+          ),
         SizedBox(height: 4),
         Wrap(
           spacing: 4,

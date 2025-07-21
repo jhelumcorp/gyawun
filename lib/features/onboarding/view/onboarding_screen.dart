@@ -20,7 +20,11 @@ class OnboardingScreen extends StatelessWidget {
               title: Text("Gyawun Music"),
               backgroundColor: Colors.transparent,
             )
-          : AppBar(surfaceTintColor: Colors.transparent, elevation: 0),
+          : AppBar(
+              surfaceTintColor: Colors.transparent,
+              elevation: 0,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            ),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Center(

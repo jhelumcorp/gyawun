@@ -34,7 +34,6 @@ class _YtAlbumScreenState extends ConsumerState<YtAlbumScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(albumStateNotifierProvider(widget.body));
-
     return Scaffold(
       appBar: context.isDesktop
           ? YaruWindowTitleBar(
@@ -49,6 +48,7 @@ class _YtAlbumScreenState extends ConsumerState<YtAlbumScreen> {
         data: (data) {
           return CustomScrollView(
             controller: _scrollController,
+
             slivers: [
               if (data.header != null)
                 SliverToBoxAdapter(
@@ -76,7 +76,7 @@ class _YtAlbumScreenState extends ConsumerState<YtAlbumScreen> {
                   SectionGridSliver(items: section.items),
               ],
 
-              if (data.continuation != null)
+              if (data.isLoadingMore)
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.all(16),

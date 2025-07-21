@@ -7,7 +7,7 @@ part of 'browse_state_provider.dart';
 // **************************************************************************
 
 String _$browseStateNotifierHash() =>
-    r'930f20aaef4559ed44894c1adf2092ca655d243c';
+    r'1d0b8397482d42252895aac4bf79d58002c1818e';
 
 /// Copied from Dart SDK
 class _SystemHash {

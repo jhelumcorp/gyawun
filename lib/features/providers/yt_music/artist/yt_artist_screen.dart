@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
-import 'package:gyawun_music/features/providers/yt_music/playlist/playlist_state_provider.dart';
+import 'package:gyawun_music/features/providers/yt_music/artist/artist_state_provider.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/page_header.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/section_item.dart';
 import 'package:yaru/widgets.dart';
 import 'package:ytmusic/enums/section_type.dart';
 
-class YtPlaylistScreen extends ConsumerStatefulWidget {
+class YtArtistScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> body;
-  const YtPlaylistScreen({super.key, required this.body});
+  const YtArtistScreen({super.key, required this.body});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _YtPlaylistScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _YtArtistScreenState();
 }
 
-class _YtPlaylistScreenState extends ConsumerState<YtPlaylistScreen> {
+class _YtArtistScreenState extends ConsumerState<YtArtistScreen> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -27,25 +26,23 @@ class _YtPlaylistScreenState extends ConsumerState<YtPlaylistScreen> {
     _scrollController.addListener(() {
       final position = _scrollController.position;
       if (position.pixels >= position.maxScrollExtent - 200) {
-        ref
-            .read(playlistStateNotifierProvider(widget.body).notifier)
-            .loadMore();
+        ref.read(artistStateNotifierProvider(widget.body).notifier).loadMore();
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(playlistStateNotifierProvider(widget.body));
+    final state = ref.watch(artistStateNotifierProvider(widget.body));
 
     return Scaffold(
       appBar: context.isDesktop
           ? YaruWindowTitleBar(
               heroTag: "titlebar",
-              title: Text("Playlist"),
+              title: Text("Artist"),
               leading: context.canPop() ? YaruBackButton() : null,
             )
-          : AppBar(title: Text("Playlist")),
+          : AppBar(title: Text("Artist")),
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
@@ -88,36 +85,6 @@ class _YtPlaylistScreenState extends ConsumerState<YtPlaylistScreen> {
                 ),
             ],
           );
-          // return CustomScrollView(
-          //   controller: _scrollController,
-          //   slivers: [
-          //     if (data.header != null)
-          //       SliverToBoxAdapter(
-          //         child: Padding(
-          //           padding: const EdgeInsets.all(16.0),
-          //           child: PageHeader(header: data.header!),
-          //         ),
-          //       ),
-          //     SliverList.builder(
-          //       itemCount: data.sections.length + 1,
-          //       itemBuilder: (context, index) {
-          //         if (index < data.sections.length) {
-          //           final section = data.sections[index];
-          //           return SectionItem(section: section);
-          //         } else {
-          //           if (data.continuation != null) {
-          //             return const Padding(
-          //               padding: EdgeInsets.all(16),
-          //               child: Center(child: CircularProgressIndicator()),
-          //             );
-          //           } else {
-          //             return const SizedBox.shrink();
-          //           }
-          //         }
-          //       },
-          //     ),
-          //   ],
-          // );
         },
       ),
     );

@@ -1,21 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/core/extensions/list_extensions.dart';
-import 'package:gyawun_music/features/providers/yt_music/playlist/yt_playlist_screen.dart';
+import 'package:readmore/readmore.dart';
 import 'package:yaru/widgets.dart';
+import 'package:ytmusic/enums/section_item_type.dart';
 import 'package:ytmusic/models/section.dart';
-import 'package:ytmusic/utils/pretty_print.dart';
 
-import '../album/yt_album_screen.dart';
+import '../utils/click_handler.dart';
 
-class SectionItemSquareTile extends StatelessWidget {
+class SectionItemGridTile extends StatelessWidget {
   final YTSectionItem item;
   final double width;
   final double height;
 
-  const SectionItemSquareTile({
+  const SectionItemGridTile({
     super.key,
     required this.item,
     required this.width,
@@ -26,10 +25,9 @@ class SectionItemSquareTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
 
-    // Calculate image height inside the available height
-    // Leave some space for title/subtitle and padding
     final imageHeight = height * 0.7;
     final imageWidth = item.isRectangle ? imageHeight * (16 / 9) : imageHeight;
+    final cappedImageWidth = imageWidth > width ? width : imageWidth;
 
     return InkWell(
       borderRadius: BorderRadius.circular(8),
@@ -45,18 +43,19 @@ class SectionItemSquareTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Ink(
-                  height: imageHeight,
-                  width: imageWidth,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(
-                        item.thumbnails.byWidth(imageWidth.toInt()).url,
-                        maxHeight: (imageHeight * pixelRatio).round(),
-                        maxWidth: (imageWidth * pixelRatio).round(),
+                AspectRatio(
+                  aspectRatio: item.isRectangle ? 16 / 9 : 1,
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(
+                          item.thumbnails.byWidth(cappedImageWidth.toInt()).url,
+                          maxHeight: (imageHeight * pixelRatio).round(),
+                          maxWidth: (cappedImageWidth * pixelRatio).round(),
+                        ),
+                        fit: BoxFit.cover,
                       ),
-                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
@@ -96,28 +95,8 @@ class SectionItemRowTile extends StatelessWidget {
         .toInt();
     return InkWell(
       borderRadius: BorderRadius.circular(8),
-      onTap: () {
-        if (item.endpoint == null) {
-          return;
-        }
-        if (item.type == "MUSIC_PAGE_TYPE_PLAYLIST") {
-          Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (_) => YtPlaylistScreen(body: item.endpoint!.cast()),
-            ),
-          );
-        } else if (item.type == "MUSIC_PAGE_TYPE_ALBUM") {
-          Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (_) => YtAlbumScreen(body: item.endpoint!.cast()),
-            ),
-          );
-        } else {
-          pprint(item);
-        }
-      },
+      enableFeedback: true,
+      onTap: () => onYTSectionItemTap(context, item),
       child: RepaintBoundary(
         child: SizedBox(
           height: context.isWideScreen ? 270 : 216,
@@ -165,36 +144,99 @@ class SectionItemRowTile extends StatelessWidget {
   }
 }
 
-class SectionItemColumnTile extends StatefulWidget {
+class SectionMultiRowColumn extends StatelessWidget {
   final YTSectionItem item;
-  const SectionItemColumnTile({super.key, required this.item});
 
-  @override
-  State<SectionItemColumnTile> createState() => _SectionItemColumnTileState();
-}
+  const SectionMultiRowColumn({super.key, required this.item});
 
-class _SectionItemColumnTileState extends State<SectionItemColumnTile> {
   @override
   Widget build(BuildContext context) {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
 
     return InkWell(
-      onTap: () {},
+      enableFeedback: true,
+      onTap: () => onYTSectionItemTap(context, item),
+      borderRadius: BorderRadius.circular(8),
+      child: RepaintBoundary(
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Column(
+            children: [
+              YaruTile(
+                leading: item.thumbnails.isEmpty
+                    ? null
+                    : Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                            image: CachedNetworkImageProvider(
+                              item.thumbnails.byWidth(50).url,
+                              maxHeight: (50 * pixelRatio).round(),
+                              maxWidth: (50 * pixelRatio).round(),
+                            ),
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                title: Text(
+                  item.title,
+                  maxLines: 1,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                subtitle: Text(
+                  item.subtitle ?? '',
+                  maxLines: 1,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+              if (item.desctiption != null && item.desctiption!.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: ReadMoreText(
+                    item.desctiption!,
+                    trimMode: TrimMode.Line,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SectionItemColumnTile extends StatelessWidget {
+  final YTSectionItem item;
+  const SectionItemColumnTile({super.key, required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    final pixelRatio = MediaQuery.devicePixelRatioOf(context);
+
+    return InkWell(
+      onTap: () => onYTSectionItemTap(context, item),
+      enableFeedback: true,
       borderRadius: BorderRadius.circular(8),
       child: RepaintBoundary(
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: YaruTile(
-            leading: widget.item.thumbnails.isEmpty
+            leading: item.thumbnails.isEmpty
                 ? null
                 : Container(
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(
+                        item.type == YTSectionItemType.artist
+                            ? ((50 * pixelRatio).round() / 2)
+                            : 8,
+                      ),
                       image: DecorationImage(
                         image: CachedNetworkImageProvider(
-                          widget.item.thumbnails.byWidth(50).url,
+                          item.thumbnails.byWidth(50).url,
                           maxHeight: (50 * pixelRatio).round(),
                           maxWidth: (50 * pixelRatio).round(),
                         ),
@@ -203,12 +245,12 @@ class _SectionItemColumnTileState extends State<SectionItemColumnTile> {
                     ),
                   ),
             title: Text(
-              widget.item.title,
+              item.title,
               maxLines: 1,
               style: Theme.of(context).textTheme.labelLarge,
             ),
             subtitle: Text(
-              widget.item.subtitle ?? '',
+              item.subtitle ?? '',
               maxLines: 1,
               style: Theme.of(context).textTheme.bodySmall,
             ),
