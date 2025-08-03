@@ -1,29 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
-import 'package:gyawun_music/core/extensions/list_extensions.dart';
 import 'package:readmore/readmore.dart';
 import 'package:ytmusic/models/browse_page.dart';
 
-class PageHeader extends StatelessWidget {
+class ArtistPageHeader extends StatelessWidget {
   final YTPageHeader header;
-  const PageHeader({super.key, required this.header});
+  const ArtistPageHeader({super.key, required this.header});
 
   _drawItems(BuildContext context) {
     return [
-      if (header.thumbnails.lastOrNull?.url != null)
+      if (header.thumbnails.lastOrNull?.url != null && context.isWideViewport)
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: CachedNetworkImage(
-            imageUrl: header.thumbnails.byWidth(300).url,
+            imageUrl: header.thumbnails.lastOrNull!.url,
             height: 300,
             width: 300,
           ),
         ),
-      SizedBox(
-        height: context.isWideViewport ? 0 : 16,
-        width: context.isWideViewport ? 16 : 0,
-      ),
+      if (context.isWideScreen) SizedBox(width: 16),
       context.isWideViewport
           ? Expanded(child: _drawDescription(context))
           : _drawDescription(context),
@@ -36,7 +32,7 @@ class PageHeader extends StatelessWidget {
           ? CrossAxisAlignment.start
           : CrossAxisAlignment.center,
       children: [
-        if (header.title.isNotEmpty)
+        if (header.title.isNotEmpty && context.isWideViewport)
           Text(header.title, style: Theme.of(context).textTheme.headlineMedium),
 
         if (header.subtitle.isNotEmpty)

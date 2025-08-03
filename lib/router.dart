@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/features/home/home_screen.dart';
+import 'package:gyawun_music/features/library/library_screen.dart';
 import 'package:gyawun_music/features/main/main_screen.dart';
 import 'package:gyawun_music/features/onboarding/view/onboarding_screen.dart';
 import 'package:gyawun_music/features/providers/yt_music/browse/yt_browse_screen.dart';
 import 'package:gyawun_music/features/providers/yt_music/chip/yt_chip_screen.dart';
 import 'package:gyawun_music/features/providers/yt_music/playlist/yt_playlist_screen.dart';
 import 'package:gyawun_music/features/search/search_screen.dart';
+import 'package:gyawun_music/features/settings/settings_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router.g.dart';
@@ -75,6 +77,22 @@ GoRouter router(Ref ref) {
                   GoRoute(
                     path: '/search',
                     builder: (context, state) => const SearchScreen(),
+                  ),
+                ],
+              ),
+              StatefulShellBranch(
+                routes: [
+                  GoRoute(
+                    path: '/library',
+                    builder: (context, state) => const LibraryScreen(),
+                  ),
+                ],
+              ),
+              StatefulShellBranch(
+                routes: [
+                  GoRoute(
+                    path: '/settings',
+                    builder: (context, state) => const SettingsScreen(),
                   ),
                 ],
               ),

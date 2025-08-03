@@ -50,7 +50,7 @@ class _YtHomeScreenState extends ConsumerState<YtHomeScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: SizedBox(
-                      height: 30,
+                      height: 32,
                       child: ListView.separated(
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         scrollDirection: Axis.horizontal,

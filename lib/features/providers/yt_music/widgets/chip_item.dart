@@ -17,16 +17,19 @@ class ChipItem extends StatelessWidget {
         context.go('/home/chip/${jsonEncode(chip.endpoint)}');
       },
       child: Ink(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Theme.of(context).dividerColor),
+          color: Theme.of(context).colorScheme.primary.withAlpha(100),
+          borderRadius: BorderRadius.circular(20),
+
+          // border: Border.all(color: Theme.of(context).dividerColor),
         ),
         child: Text(
           chip.title,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            // color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
       ),
     );

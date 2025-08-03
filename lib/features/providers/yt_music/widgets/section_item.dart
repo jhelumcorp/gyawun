@@ -105,16 +105,18 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            section.title,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
+          Expanded(
+            child: Text(
+              section.title,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+              ),
             ),
           ),
           if (section.trailing != null)
@@ -158,7 +160,7 @@ class SectionRowSliver extends StatelessWidget {
         height: context.isWideScreen ? 270 : 216,
         child: ListView.separated(
           addAutomaticKeepAlives: false,
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 8),
           scrollDirection: Axis.horizontal,
           itemCount: items.length,
           separatorBuilder: (context, index) => SizedBox(width: 4),
@@ -211,16 +213,13 @@ class _SectionMultiColumnSliverState extends State<SectionMultiColumnSliver> {
         itemBuilder: (context, index) {
           int start = index * num;
           int end = start + num;
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: widget.items
-                  .sublist(start, min(end, widget.items.length))
-                  .map((item) {
-                    return SectionItemColumnTile(item: item);
-                  })
-                  .toList(),
-            ),
+          return Column(
+            children: widget.items
+                .sublist(start, min(end, widget.items.length))
+                .map((item) {
+                  return SectionItemColumnTile(item: item);
+                })
+                .toList(),
           );
         },
       ),
@@ -235,19 +234,19 @@ class SectionSingleColumnSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            if (items[index].desctiption != null) {
-              return SectionMultiRowColumn(item: items[index]);
-            }
-            return SectionItemColumnTile(item: items[index]);
-          },
-          childCount: items.length,
-          addAutomaticKeepAlives: false,
-        ),
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          if (items[index].desctiption != null) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              child: SectionMultiRowColumn(item: items[index]),
+            );
+          }
+          return SectionItemColumnTile(item: items[index]);
+        },
+        childCount: items.length,
+        addAutomaticKeepAlives: false,
       ),
     );
   }

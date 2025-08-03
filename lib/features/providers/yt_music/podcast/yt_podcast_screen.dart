@@ -48,43 +48,41 @@ class _YtPodcastScreenState extends ConsumerState<YtPodcastScreen> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (data) {
-          return CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              if (data.header != null)
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: PageHeader(header: data.header!),
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                if (data.header != null)
+                  SliverToBoxAdapter(child: PageHeader(header: data.header!)),
+
+                // Loop through sections
+                for (final section in data.sections) ...[
+                  if (section.title.isNotEmpty || section.trailing != null)
+                    SliverToBoxAdapter(child: SectionHeader(section: section)),
+
+                  if (section.type == YTSectionType.row)
+                    SectionRowSliver(items: section.items),
+
+                  if (section.type == YTSectionType.multiColumn)
+                    SectionMultiColumnSliver(items: section.items),
+
+                  if (section.type == YTSectionType.singleColumn)
+                    SectionSingleColumnSliver(items: section.items),
+
+                  if (section.type == YTSectionType.grid)
+                    SectionGridSliver(items: section.items),
+                ],
+
+                if (data.isLoadingMore)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
                   ),
-                ),
-
-              // Loop through sections
-              for (final section in data.sections) ...[
-                if (section.title.isNotEmpty || section.trailing != null)
-                  SliverToBoxAdapter(child: SectionHeader(section: section)),
-
-                if (section.type == YTSectionType.row)
-                  SectionRowSliver(items: section.items),
-
-                if (section.type == YTSectionType.multiColumn)
-                  SectionMultiColumnSliver(items: section.items),
-
-                if (section.type == YTSectionType.singleColumn)
-                  SectionSingleColumnSliver(items: section.items),
-
-                if (section.type == YTSectionType.grid)
-                  SectionGridSliver(items: section.items),
               ],
-
-              if (data.isLoadingMore)
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                ),
-            ],
+            ),
           );
         },
       ),

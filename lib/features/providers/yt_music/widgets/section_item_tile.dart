@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/core/extensions/list_extensions.dart';
-import 'package:readmore/readmore.dart';
 import 'package:yaru/widgets.dart';
 import 'package:ytmusic/enums/section_item_type.dart';
 import 'package:ytmusic/models/section.dart';
@@ -64,14 +63,21 @@ class SectionItemGridTile extends StatelessWidget {
                   item.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelLarge,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 if (item.subtitle != null)
                   Text(
                     item.subtitle!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withAlpha(150),
+                    ),
                   ),
               ],
             ),
@@ -111,10 +117,16 @@ class SectionItemRowTile extends StatelessWidget {
                     height: imageHeight.toDouble(),
                     width: imageWidth.toDouble(),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(
+                        item.type == YTSectionItemType.artist
+                            ? (imageWidth * pixelRatio)
+                            : 8,
+                      ),
                       image: DecorationImage(
                         image: CachedNetworkImageProvider(
-                          item.thumbnails.byWidth(imageWidth).url,
+                          item.thumbnails
+                              .byWidth((imageWidth * pixelRatio).round())
+                              .url,
                           maxHeight: (imageHeight * pixelRatio).round(),
                           maxWidth: (imageWidth * pixelRatio).round(),
                         ),
@@ -126,14 +138,21 @@ class SectionItemRowTile extends StatelessWidget {
                   item.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelLarge,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 if (item.subtitle != null)
                   Text(
                     item.subtitle!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withAlpha(150),
+                    ),
                   ),
               ],
             ),
@@ -153,53 +172,90 @@ class SectionMultiRowColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
 
-    return InkWell(
-      enableFeedback: true,
-      onTap: () => onYTSectionItemTap(context, item),
-      borderRadius: BorderRadius.circular(8),
-      child: RepaintBoundary(
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
+      decoration: BoxDecoration(
+        border: Border.all(color: Theme.of(context).cardColor),
+        borderRadius: BorderRadius.circular(8),
+      ),
+
+      child: InkWell(
+        enableFeedback: true,
+        onTap: () => onYTSectionItemTap(context, item),
+        borderRadius: BorderRadius.circular(8),
         child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Column(
-            children: [
-              YaruTile(
-                leading: item.thumbnails.isEmpty
-                    ? null
-                    : Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                              item.thumbnails.byWidth(50).url,
-                              maxHeight: (50 * pixelRatio).round(),
-                              maxWidth: (50 * pixelRatio).round(),
+          padding: const EdgeInsets.all(8),
+          child: RepaintBoundary(
+            child: Column(
+              children: [
+                YaruTile(
+                  padding: EdgeInsetsGeometry.all(0),
+                  leading: item.thumbnails.isEmpty
+                      ? null
+                      : SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: AspectRatio(
+                            aspectRatio: item.type == YTSectionItemType.video
+                                ? 16 / 9
+                                : 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  item.type == YTSectionItemType.artist
+                                      ? ((50 * pixelRatio).round() / 2)
+                                      : 8,
+                                ),
+                                image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                    item.thumbnails.byWidth(50).url,
+                                    maxHeight: (50 * pixelRatio).round(),
+                                    maxWidth: (50 * pixelRatio).round(),
+                                  ),
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
                             ),
-                            fit: BoxFit.contain,
                           ),
                         ),
-                      ),
-                title: Text(
-                  item.title,
-                  maxLines: 1,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                subtitle: Text(
-                  item.subtitle ?? '',
-                  maxLines: 1,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-              if (item.desctiption != null && item.desctiption!.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: ReadMoreText(
-                    item.desctiption!,
-                    trimMode: TrimMode.Line,
+                  title: Text(
+                    item.title,
+                    maxLines: 1,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  subtitle: Text(
+                    item.subtitle ?? '',
+                    maxLines: 1,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withAlpha(150),
+                    ),
                   ),
                 ),
-            ],
+                if (item.desctiption != null && item.desctiption!.isNotEmpty)
+                  InkWell(
+                    borderRadius: BorderRadius.circular(14),
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        item.desctiption!,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withAlpha(150),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -209,53 +265,63 @@ class SectionMultiRowColumn extends StatelessWidget {
 
 class SectionItemColumnTile extends StatelessWidget {
   final YTSectionItem item;
-  const SectionItemColumnTile({super.key, required this.item});
+  final void Function()? onTap;
+  const SectionItemColumnTile({super.key, required this.item, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
 
-    return InkWell(
-      onTap: () => onYTSectionItemTap(context, item),
+    return ListTile(
+      onTap: () {
+        onYTSectionItemTap(context, item);
+      },
       enableFeedback: true,
-      borderRadius: BorderRadius.circular(8),
-      child: RepaintBoundary(
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: YaruTile(
-            leading: item.thumbnails.isEmpty
-                ? null
-                : Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        item.type == YTSectionItemType.artist
-                            ? ((50 * pixelRatio).round() / 2)
-                            : 8,
+
+      leading: item.thumbnails.isEmpty
+          ? null
+          : SizedBox(
+              width: 50,
+              height: 50,
+              child: AspectRatio(
+                aspectRatio: item.type == YTSectionItemType.video ? 16 / 9 : 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      item.type == YTSectionItemType.artist
+                          ? ((50 * pixelRatio).round() / 2)
+                          : 8,
+                    ),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(
+                        item.thumbnails.byWidth(50).url,
+                        maxHeight: (50 * pixelRatio).round(),
+                        maxWidth: (50 * pixelRatio).round(),
                       ),
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(
-                          item.thumbnails.byWidth(50).url,
-                          maxHeight: (50 * pixelRatio).round(),
-                          maxWidth: (50 * pixelRatio).round(),
-                        ),
-                        fit: BoxFit.cover,
-                      ),
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
-            title: Text(
-              item.title,
-              maxLines: 1,
-              style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ),
             ),
-            subtitle: Text(
-              item.subtitle ?? '',
-              maxLines: 1,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ),
+      title: Text(
+        item.title,
+        maxLines: 1,
+        style: Theme.of(
+          context,
+        ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+      ),
+      subtitle: Text(
+        item.subtitle ?? '',
+        maxLines: 1,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
         ),
+      ),
+      trailing: IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.more_vert_rounded),
       ),
     );
   }
