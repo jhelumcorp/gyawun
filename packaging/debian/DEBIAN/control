@@ -1,0 +1,9 @@
+Package: gyawun
+Version: 1.0.0
+Section: sound
+Priority: optional
+Architecture: amd64
+Depends: libgtk-3-0, libmpv-dev
+Maintainer: Unknown <unknown@example.com>
+Description: GyawunMusic – A modern Flutter music player
+ GyawunMusic is a powerful, plugin-capable music app built with Flutter.

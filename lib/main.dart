@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'dart:io';
 
 import 'package:dynamic_color/dynamic_color.dart';
@@ -64,7 +64,7 @@ void main() async {
       );
 
       await windowManager.show();
-      await windowManager.setPreventClose(true);
+      await windowManager.setPreventClose(false);
       await windowManager.setSkipTaskbar(false);
     });
   }

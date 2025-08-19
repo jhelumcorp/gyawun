@@ -1,0 +1,30 @@
+name: gyawun
+base: core22
+version: 1.0.0
+summary: GyawunMusic – A modern Flutter music player
+description: "GyawunMusic is a powerful, plugin-capable music app built with Flutter."
+
+grade: stable
+confinement: strict
+
+apps:
+  gyawun:
+    command: gyawun
+    extensions: [gnome]
+    plugs:
+      - network
+      - audio-playback
+      - home
+
+parts:
+  gyawun:
+    plugin: flutter
+    source: .
+    flutter-target: lib/main.dart
+    stage-packages:
+      - libmpv-dev
+      - libgtk-3-dev
+      - libpulse-dev
+    # override-build: |
+    #   export PKG_CONFIG_PATH=$SNAPCRAFT_STAGE/lib/pkgconfig:$PKG_CONFIG_PATH
+    #   snapcraftctl build
