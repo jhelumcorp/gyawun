@@ -63,6 +63,8 @@ dependencies:
   permission_handler: ^11.4.0
   http_server: ^1.0.0
   rxdart: ^0.28.0
+  translator: ^1.0.4+1
+  language_detector: ^1.0.1
 
 dev_dependencies:
   flutter_test:
