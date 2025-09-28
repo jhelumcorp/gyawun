@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
-import 'package:gyawun_music/core/extensions/list_extensions.dart';
-import 'package:yaru/widgets.dart';
 import 'package:ytmusic/enums/section_item_type.dart';
 import 'package:ytmusic/models/section.dart';
 
@@ -27,6 +25,7 @@ class SectionItemGridTile extends StatelessWidget {
     final imageHeight = height * 0.7;
     final imageWidth = item.isRectangle ? imageHeight * (16 / 9) : imageHeight;
     final cappedImageWidth = imageWidth > width ? width : imageWidth;
+    final thumbnail = item.thumbnails.lastOrNull;
 
     return InkWell(
       borderRadius: BorderRadius.circular(8),
@@ -42,22 +41,23 @@ class SectionItemGridTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AspectRatio(
-                  aspectRatio: item.isRectangle ? 16 / 9 : 1,
-                  child: Ink(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(
-                          item.thumbnails.byWidth(cappedImageWidth.toInt()).url,
-                          maxHeight: (imageHeight * pixelRatio).round(),
-                          maxWidth: (cappedImageWidth * pixelRatio).round(),
+                if (thumbnail?.url != null)
+                  AspectRatio(
+                    aspectRatio: item.isRectangle ? 16 / 9 : 1,
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                            thumbnail!.url,
+                            maxHeight: (imageHeight * pixelRatio).round(),
+                            maxWidth: (cappedImageWidth * pixelRatio).round(),
+                          ),
+                          fit: BoxFit.cover,
                         ),
-                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                ),
                 const SizedBox(height: 4),
                 Text(
                   item.title,
@@ -99,6 +99,7 @@ class SectionItemRowTile extends StatelessWidget {
     final imageHeight = (context.isWideScreen ? 200 : 150).toInt();
     final imageWidth = (item.isRectangle ? imageHeight * (16 / 9) : imageHeight)
         .toInt();
+    final thumbnail = item.thumbnails.lastOrNull;
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       enableFeedback: true,
@@ -112,7 +113,7 @@ class SectionItemRowTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (item.thumbnails.isNotEmpty)
+                if (thumbnail?.url != null)
                   Ink(
                     height: imageHeight.toDouble(),
                     width: imageWidth.toDouble(),
@@ -124,9 +125,7 @@ class SectionItemRowTile extends StatelessWidget {
                       ),
                       image: DecorationImage(
                         image: CachedNetworkImageProvider(
-                          item.thumbnails
-                              .byWidth((imageWidth * pixelRatio).round())
-                              .url,
+                          thumbnail!.url,
                           maxHeight: (imageHeight * pixelRatio).round(),
                           maxWidth: (imageWidth * pixelRatio).round(),
                         ),
@@ -171,11 +170,12 @@ class SectionMultiRowColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
+    final thumbnail = item.thumbnails.firstOrNull;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
       decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).cardColor),
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(8),
       ),
 
@@ -188,9 +188,8 @@ class SectionMultiRowColumn extends StatelessWidget {
           child: RepaintBoundary(
             child: Column(
               children: [
-                YaruTile(
-                  padding: EdgeInsetsGeometry.all(0),
-                  leading: item.thumbnails.isEmpty
+                ListTile(
+                  leading: thumbnail?.url == null
                       ? null
                       : SizedBox(
                           width: 50,
@@ -208,7 +207,7 @@ class SectionMultiRowColumn extends StatelessWidget {
                                 ),
                                 image: DecorationImage(
                                   image: CachedNetworkImageProvider(
-                                    item.thumbnails.byWidth(50).url,
+                                    thumbnail!.url,
                                     maxHeight: (50 * pixelRatio).round(),
                                     maxWidth: (50 * pixelRatio).round(),
                                   ),
@@ -239,12 +238,19 @@ class SectionMultiRowColumn extends StatelessWidget {
                 if (item.desctiption != null && item.desctiption!.isNotEmpty)
                   InkWell(
                     borderRadius: BorderRadius.circular(14),
+
                     onTap: () {},
-                    child: Padding(
+                    child: Container(
                       padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHigh,
+                      ),
                       child: Text(
                         item.desctiption!,
-                        maxLines: 3,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(
@@ -266,19 +272,37 @@ class SectionMultiRowColumn extends StatelessWidget {
 class SectionItemColumnTile extends StatelessWidget {
   final YTSectionItem item;
   final void Function()? onTap;
-  const SectionItemColumnTile({super.key, required this.item, this.onTap});
+  final bool isFirst;
+  final bool isLast;
+  const SectionItemColumnTile({
+    super.key,
+    required this.item,
+    this.onTap,
+    this.isFirst = false,
+    this.isLast = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
+    final thumbnail = item.thumbnails.firstOrNull;
 
     return ListTile(
       onTap: () {
         onYTSectionItemTap(context, item);
       },
       enableFeedback: true,
-
-      leading: item.thumbnails.isEmpty
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.only(
+          topLeft: Radius.circular(isFirst ? 20 : 4),
+          topRight: Radius.circular(isFirst ? 20 : 4),
+          bottomLeft: Radius.circular(isLast ? 20 : 4),
+          bottomRight: Radius.circular(isLast ? 20 : 4),
+        ),
+      ),
+      tileColor: Theme.of(context).colorScheme.surfaceContainer,
+      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      leading: thumbnail?.url == null
           ? null
           : SizedBox(
               width: 50,
@@ -294,7 +318,7 @@ class SectionItemColumnTile extends StatelessWidget {
                     ),
                     image: DecorationImage(
                       image: CachedNetworkImageProvider(
-                        item.thumbnails.byWidth(50).url,
+                        thumbnail!.url,
                         maxHeight: (50 * pixelRatio).round(),
                         maxWidth: (50 * pixelRatio).round(),
                       ),

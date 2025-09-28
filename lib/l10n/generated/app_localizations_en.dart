@@ -9,13 +9,16 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get onboardingWelcome => 'Welcome to';
+  String onboardingWelcome(Object appName) {
+    return 'Welcome to $appName';
+  }
 
   @override
   String get gyawunMusic => 'Gyawun Music';
 
   @override
-  String get onboardingDescription => 'Stream your favorite music, podcasts, and more.';
+  String get onboardingDescription =>
+      'Stream your favorite music, podcasts, and more.';
 
   @override
   String get getStarted => 'Get Started';

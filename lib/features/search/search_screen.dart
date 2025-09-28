@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/features/providers/yt_music/search/yt_search_screen.dart';
-import 'package:yaru/widgets.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -9,12 +7,6 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: context.isDesktop
-          ? YaruWindowTitleBar(
-              leading: Navigator.of(context).canPop() ? YaruBackButton() : null,
-              title: Text("Search"),
-            )
-          : null,
       body: YtSearchScreen(),
     );
   }

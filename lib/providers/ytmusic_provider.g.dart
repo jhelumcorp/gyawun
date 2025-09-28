@@ -6,7 +6,7 @@ part of 'ytmusic_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ytmusicHash() => r'9ba57312f792094db9a1c803299ab0e6a26d12b4';
+String _$ytmusicHash() => r'0b32a014ccf5227f21843e6baa8e61506cbed82e';
 
 /// See also [ytmusic].
 @ProviderFor(ytmusic)

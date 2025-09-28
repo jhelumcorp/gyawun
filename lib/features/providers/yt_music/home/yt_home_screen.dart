@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gyawun_music/core/widgets/custom_circular_progress_indicator.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/chip_item.dart';
 import 'package:ytmusic/enums/section_type.dart';
 
@@ -36,7 +37,7 @@ class _YtHomeScreenState extends ConsumerState<YtHomeScreen> {
       extendBody: true,
       extendBodyBehindAppBar: true,
       body: state.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CustomCircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (data) {
           return RefreshIndicator(

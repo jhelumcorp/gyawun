@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:gyawun_music/features/providers/yt_music/album/yt_album_screen.dart';
 import 'package:gyawun_music/features/providers/yt_music/artist/yt_artist_screen.dart';
 import 'package:gyawun_music/features/providers/yt_music/playlist/yt_playlist_screen.dart';
@@ -14,21 +14,21 @@ void onYTSectionItemTap(BuildContext context, YTSectionItem item) {
   if (item.type == YTSectionItemType.playlist) {
     Navigator.push(
       context,
-      CupertinoPageRoute(
+      MaterialPageRoute(
         builder: (_) => YtPlaylistScreen(body: item.endpoint!.cast()),
       ),
     );
   } else if (item.type == YTSectionItemType.album) {
     Navigator.push(
       context,
-      CupertinoPageRoute(
+       MaterialPageRoute(
         builder: (_) => YtAlbumScreen(body: item.endpoint!.cast()),
       ),
     );
   } else if (item.type == YTSectionItemType.artist) {
     Navigator.push(
       context,
-      CupertinoPageRoute(
+       MaterialPageRoute(
         builder: (_) => YtArtistScreen(body: item.endpoint!.cast()),
       ),
     );
@@ -36,7 +36,7 @@ void onYTSectionItemTap(BuildContext context, YTSectionItem item) {
   if (item.type == YTSectionItemType.podcast) {
     Navigator.push(
       context,
-      CupertinoPageRoute(
+       MaterialPageRoute(
         builder: (_) => YtPodcastScreen(body: item.endpoint!.cast()),
       ),
     );

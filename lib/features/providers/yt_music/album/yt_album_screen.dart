@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/features/providers/yt_music/album/album_state_provider.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/page_header.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/section_item.dart';
-import 'package:yaru/widgets.dart';
 import 'package:ytmusic/enums/section_type.dart';
 
 class YtAlbumScreen extends ConsumerStatefulWidget {
@@ -35,13 +32,7 @@ class _YtAlbumScreenState extends ConsumerState<YtAlbumScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(albumStateNotifierProvider(widget.body));
     return Scaffold(
-      appBar: context.isDesktop
-          ? YaruWindowTitleBar(
-              heroTag: "titlebar",
-              title: Text("Album"),
-              leading: context.canPop() ? YaruBackButton() : null,
-            )
-          : AppBar(title: Text("Album")),
+      appBar:AppBar(title: Text("Album")),
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, s) => Center(child: Text('Error: $s')),

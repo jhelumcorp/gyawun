@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-appTextTheme(TextTheme? textTheme) {
+TextTheme appTextTheme(TextTheme? textTheme) {
   textTheme ??= ThemeData.light().textTheme;
 
   return TextTheme(
@@ -89,21 +89,21 @@ appTextTheme(TextTheme? textTheme) {
       letterSpacing: 0.4,
     ),
     labelLarge: TextStyle(
-      color: textTheme.labelLarge?.color,
-      fontWeight: FontWeight.w500,
+      color: textTheme.labelLarge?.color?.withAlpha(200),
+      fontWeight: FontWeight.w600,
       fontSize: 14,
       height: 20 / 14,
       letterSpacing: 0.1,
     ),
     labelMedium: TextStyle(
-      color: textTheme.labelMedium?.color,
+      color: textTheme.labelMedium?.color?.withAlpha(200),
       fontWeight: FontWeight.w500,
       fontSize: 12,
       height: 16 / 12,
       letterSpacing: 0.5,
     ),
     labelSmall: TextStyle(
-      color: textTheme.labelSmall?.color,
+      color: textTheme.labelSmall?.color?.withAlpha(200),
       fontWeight: FontWeight.w500,
       fontSize: 11,
       height: 16 / 11,

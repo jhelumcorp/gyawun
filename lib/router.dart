@@ -39,9 +39,10 @@ GoRouter router(Ref ref) {
                     builder: (context, state) => const HomeScreen(),
                     routes: [
                       GoRoute(
-                        path: 'chip/:body',
+                        path: 'chip/:body/:title',
                         builder: (context, state) {
                           return YtChipScreen(
+                            title: state.pathParameters['title']!,
                             body: Map.from(
                               jsonDecode(state.pathParameters['body']!),
                             ),

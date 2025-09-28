@@ -1,0 +1,12 @@
+{
+  "@@locale": "ur",
+  "onboardingWelcome": "{appName} میں خوش آمدید",
+  "@onboardingWelcome": {
+    "placeholders": {
+      "appName": {}
+    }
+  },
+  "gyawunMusic": "گیاؤن میوزک",
+  "onboardingDescription": "اپنا پسندیدہ موسیقی، پوڈکاسٹ اور مزید سنیں۔",
+  "getStarted": "شروع کریں"
+}

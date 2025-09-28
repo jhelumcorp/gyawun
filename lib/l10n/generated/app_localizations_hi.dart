@@ -9,13 +9,16 @@ class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
   @override
-  String get onboardingWelcome => 'ग्यावुन म्यूज़िक में आपका स्वागत है';
+  String onboardingWelcome(Object appName) {
+    return '$appName में आपका स्वागत है';
+  }
 
   @override
   String get gyawunMusic => 'ग्यावुन म्यूज़िक';
 
   @override
-  String get onboardingDescription => 'अपने पसंदीदा गाने, पॉडकास्ट और बहुत कुछ स्ट्रीम करें।';
+  String get onboardingDescription =>
+      'अपना पसंदीदा संगीत, पॉडकास्ट और बहुत कुछ सुनें।';
 
   @override
   String get getStarted => 'शुरू करें';

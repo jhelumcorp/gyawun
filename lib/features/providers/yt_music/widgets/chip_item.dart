@@ -1,7 +1,6 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:gyawun_music/features/providers/yt_music/chip/yt_chip_screen.dart';
 import 'package:ytmusic/models/chip.dart';
 
 class ChipItem extends StatelessWidget {
@@ -14,12 +13,18 @@ class ChipItem extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: () {
-        context.go('/home/chip/${jsonEncode(chip.endpoint)}');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                YtChipScreen(body: chip.endpoint.cast(), title: chip.title),
+          ),
+        );
       },
       child: Ink(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary.withAlpha(100),
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(20),
 
           // border: Border.all(color: Theme.of(context).dividerColor),

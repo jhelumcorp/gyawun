@@ -3,13 +3,10 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
-import 'package:gyawun_music/core/extensions/list_extensions.dart';
 import 'package:gyawun_music/features/providers/yt_music/artist/artist_state_provider.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/artist_page_header.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/section_item.dart';
-import 'package:yaru/widgets.dart';
 import 'package:ytmusic/enums/section_type.dart';
 
 class YtArtistScreen extends ConsumerStatefulWidget {
@@ -40,32 +37,30 @@ class _YtArtistScreenState extends ConsumerState<YtArtistScreen> {
     final state = ref.watch(artistStateNotifierProvider(widget.body));
 
     return Scaffold(
-      appBar: context.isDesktop
-          ? YaruWindowTitleBar(
-              heroTag: "titlebar",
-              title: Text("Artist"),
-              leading: context.canPop() ? YaruBackButton() : null,
-            )
-          : null,
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (data) {
-          final thumbnail = data.header!.thumbnails.byWidth(
-            MediaQuery.sizeOf(context).width.toInt(),
-          );
+          final thumbnail = data.header!.thumbnails.lastOrNull;
           return CustomScrollView(
             controller: _scrollController,
             slivers: [
               if (data.header != null && !context.isWideViewport)
                 SliverAppBar(
                   pinned: true,
-
+                  leading: BackButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                         Theme.of(context).colorScheme.surfaceContainer,
+                      )
+                    ),
+                  ),
                   expandedHeight: context.isWideViewport
                       ? 0
-                      : min(thumbnail.height.toDouble(), 300),
+                      : min((thumbnail?.height??400).toDouble(), 300),
                   flexibleSpace: context.isWideViewport
                       ? null
+                    
                       : FlexibleSpaceBar(
                           title: Stack(children: [Text(data.header!.title)]),
                           background: Container(
@@ -77,8 +72,8 @@ class _YtArtistScreenState extends ConsumerState<YtArtistScreen> {
                               child: Stack(
                                 children: [
                                   // Image
-                                  CachedNetworkImage(
-                                    imageUrl: thumbnail.url,
+                                  if(thumbnail?.url!=null)CachedNetworkImage(
+                                    imageUrl: thumbnail!.url,
                                     fit: BoxFit.fitHeight,
                                     width: double.infinity,
                                     height: double.infinity,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:gyawun_music/core/extensions/context_extensions.dart';
+import 'package:gyawun_music/core/widgets/custom_circular_progress_indicator.dart';
 import 'package:gyawun_music/features/providers/yt_music/playlist/playlist_state_provider.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/page_header.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/section_item.dart';
-import 'package:yaru/widgets.dart';
+import 'package:gyawun_music/providers/playlist_providers.dart';
+import 'package:playlist_manager/playlist_manager.dart';
 import 'package:ytmusic/enums/section_type.dart';
 
 class YtPlaylistScreen extends ConsumerStatefulWidget {
@@ -36,18 +36,30 @@ class _YtPlaylistScreenState extends ConsumerState<YtPlaylistScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print(state.hasValue && state.value!.header != null);
     final state = ref.watch(playlistStateNotifierProvider(widget.body));
 
     return Scaffold(
-      appBar: context.isDesktop
-          ? YaruWindowTitleBar(
-              heroTag: "titlebar",
-              title: Text("Playlist"),
-              leading: context.canPop() ? YaruBackButton() : null,
-            )
-          : AppBar(title: Text("Playlist")),
+      appBar: AppBar(
+        title: Text("Playlist"),
+        actions: [
+          if (state.hasValue && state.value!.header != null)
+            IconButton.filled(
+              onPressed: () {
+                ref
+                    .read(playlistServiceProvider)
+                    .createRemote(
+                      state.value!.header!.title,
+                      MusicProvider.ytmusic,
+                      widget.body,
+                    );
+              },
+              icon: Icon(Icons.star),
+            ),
+        ],
+      ),
       body: state.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CustomCircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (data) {
           return CustomScrollView(

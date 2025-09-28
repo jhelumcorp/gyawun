@@ -1,6 +1,11 @@
 {
   "@@locale": "en",
-  "onboardingWelcome": "Welcome to",
+  "onboardingWelcome": "Welcome to {appName}",
+  "@onboardingWelcome": {
+    "placeholders": {
+      "appName": {}
+    }
+  },
   "gyawunMusic": "Gyawun Music",
   "onboardingDescription": "Stream your favorite music, podcasts, and more.",
   "getStarted": "Get Started"

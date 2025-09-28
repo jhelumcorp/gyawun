@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
-import 'package:gyawun_music/core/extensions/list_extensions.dart';
 import 'package:readmore/readmore.dart';
 import 'package:ytmusic/models/browse_page.dart';
 
@@ -9,13 +8,14 @@ class PageHeader extends StatelessWidget {
   final YTPageHeader header;
   const PageHeader({super.key, required this.header});
 
-  _drawItems(BuildContext context) {
+  List<Widget>_drawItems(BuildContext context) {
+    final thumbnail = header.thumbnails.lastOrNull;
     return [
-      if (header.thumbnails.lastOrNull?.url != null)
+      if (thumbnail?.url != null)
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: CachedNetworkImage(
-            imageUrl: header.thumbnails.byWidth(300).url,
+            imageUrl: thumbnail!.url,
             height: 300,
             width: 300,
           ),
@@ -73,20 +73,24 @@ class PageHeader extends StatelessWidget {
             if (header.playEndpoint != null)
               FilledButton.icon(
                 onPressed: () {},
-                label: Text("Play"),
+                label: Text("Play",),
                 icon: Icon(Icons.play_arrow_rounded),
+                
+                
               ),
             if (header.shuffleEndpoint != null)
               FilledButton.icon(
                 onPressed: () {},
                 label: Text("Shuffle"),
                 icon: Icon(Icons.shuffle_rounded),
+                
               ),
             if (header.radioEndpoint != null)
               FilledButton.icon(
                 onPressed: () {},
                 label: Text("Radio"),
                 icon: Icon(Icons.radar_outlined),
+                
               ),
           ],
         ),

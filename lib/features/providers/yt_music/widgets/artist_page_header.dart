@@ -8,7 +8,7 @@ class ArtistPageHeader extends StatelessWidget {
   final YTPageHeader header;
   const ArtistPageHeader({super.key, required this.header});
 
-  _drawItems(BuildContext context) {
+  List<Widget>_drawItems(BuildContext context) {
     return [
       if (header.thumbnails.lastOrNull?.url != null && context.isWideViewport)
         ClipRRect(

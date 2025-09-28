@@ -70,7 +70,7 @@ class SearchTopBar extends ConsumerWidget {
                           textInputAction: TextInputAction.search,
                           onSubmitted: (value) {
                             if (value.trim().isEmpty) return;
-                            print("Submitted: $value");
+                            // print("Submitted: $value");
                             controller.closeView(value);
                           },
                           onTap: () => controller.openView(),

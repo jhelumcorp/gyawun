@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
-import 'package:gyawun_music/l10n/app_localizations.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:lottie/lottie.dart';
-import 'package:yaru/yaru.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -13,18 +12,17 @@ class OnboardingScreen extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isWide = MediaQuery.sizeOf(context).width >= 800;
+    final fullText = loc.onboardingWelcome(loc.gyawunMusic);
+
+    // Split around appName (works for English, Urdu, Hindi, etc.)
+    final parts = fullText.split(loc.gyawunMusic);
 
     return Scaffold(
-      appBar: context.isDesktop
-          ? YaruWindowTitleBar(
-              title: Text("Gyawun Music"),
-              backgroundColor: Colors.transparent,
-            )
-          : AppBar(
-              surfaceTintColor: Colors.transparent,
-              elevation: 0,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            ),
+      appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Center(
@@ -39,14 +37,44 @@ class OnboardingScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 22),
-              Text(
-                loc.onboardingWelcome,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.displaySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  height: 1.1,
+              if (parts.first.isNotEmpty)
+                Text(
+                  parts.first,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.displaySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    height: 1.1,
+                  ),
                 ),
-              ),
+              // Text(
+              //       loc.onboardingWelcome,
+              //       textAlign: TextAlign.center,
+              //       style: theme.textTheme.displaySmall?.copyWith(
+              //         fontWeight: FontWeight.bold,
+              //         height: 1.1,
+              //       ),
+              //     ),
+              // ShaderMask(
+              //   shaderCallback: (bounds) => LinearGradient(
+              //     colors: [
+              //       theme.colorScheme.primary,
+              //       theme.colorScheme.tertiary,
+              //     ],
+              //     begin: Alignment.topLeft,
+              //     end: Alignment.bottomRight,
+              //   ).createShader(bounds),
+              //   blendMode: BlendMode.srcIn,
+              //   child: Text(
+              //     loc.gyawunMusic,
+              //     textAlign: TextAlign.center,
+              //     style: theme.textTheme.displaySmall?.copyWith(
+              //       fontWeight: FontWeight.bold,
+              //       height: 1.1,
+              //       color:
+              //           Colors.white, // required, but will be masked by shader
+              //     ),
+              //   ),
+              // ),
               ShaderMask(
                 shaderCallback: (bounds) => LinearGradient(
                   colors: [
@@ -63,11 +91,19 @@ class OnboardingScreen extends StatelessWidget {
                   style: theme.textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     height: 1.1,
-                    color:
-                        Colors.white, // required, but will be masked by shader
+                    color: Colors.white, // masked by shader
                   ),
                 ),
               ),
+              if (parts.last.isNotEmpty)
+                Text(
+                  parts.last,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.displaySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    height: 1.1,
+                  ),
+                ),
               const SizedBox(height: 24),
               Text(
                 loc.onboardingDescription,

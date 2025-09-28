@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/features/providers/yt_music/browse/browse_state_provider.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/page_header.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/section_item.dart';
-import 'package:yaru/widgets.dart';
 import 'package:ytmusic/enums/section_type.dart';
 
 class YtBrowseScreen extends ConsumerStatefulWidget {
@@ -36,13 +33,7 @@ class _YtBrowseScreenState extends ConsumerState<YtBrowseScreen> {
     final state = ref.watch(browseStateNotifierProvider(widget.body));
 
     return Scaffold(
-      appBar: context.isDesktop
-          ? YaruWindowTitleBar(
-              heroTag: "titlebar",
-              title: Text("Playlist"),
-              leading: context.canPop() ? YaruBackButton() : null,
-            )
-          : AppBar(title: Text("Playlist")),
+      appBar: AppBar(title: Text("Browse")),
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),

@@ -1,81 +1,152 @@
-import 'dart:ui';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gyawun_music/core/extensions/context_extensions.dart';
-import 'package:yaru/widgets.dart';
+import 'package:gyawun_music/core/utils/app_dialogs/app_dialog_tile_data.dart';
+import 'package:gyawun_music/core/utils/app_dialogs/app_dialogs.dart';
+import 'package:gyawun_music/providers/database_provider.dart';
+import 'package:gyawun_music/database/settings/app_appearence.dart';
+import 'package:gyawun_music/features/settings/app_settings_identifiers.dart';
+import 'package:gyawun_music/features/settings/widgets/group_title.dart';
+import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
 
 class AppearanceScreen extends ConsumerWidget {
   const AppearanceScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final appSettings = ref.read(appSettingsProvider);
+    final appearanceSettings = ref.watch(appearanceSettingsProvider);
+
     return Scaffold(
-      appBar: context.isDesktop
-          ? YaruWindowTitleBar(
-              leading: Navigator.of(context).canPop() ? YaruBackButton() : null,
-              title: Text("Appearance"),
-            )
-          : null,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              expandedHeight: 100,
-              pinned: true,
-              leading: context.isDesktop ? SizedBox.shrink() : BackButton(),
-              flexibleSpace: LayoutBuilder(
-                builder: (context, constraints) {
-                  if (context.isDesktop) {
-                    return Stack(
-                      alignment: Alignment.bottomLeft,
-                      children: [
-                        Positioned(
-                          left: 16,
-                          bottom: 16,
-                          child: Text(
-                            'Settings',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  final double maxExtent = 100;
-                  final double minExtent = kToolbarHeight;
-                  final double currentExtent = constraints.biggest.height;
-
-                  final double t =
-                      ((currentExtent - minExtent) / (maxExtent - minExtent))
-                          .clamp(0.0, 1.0);
-
-                  final double leftPadding = lerpDouble(
-                    kToolbarHeight,
-                    16.0,
-                    t,
-                  )!;
-                  final double bottomPadding = lerpDouble(16.0, 0.0, t)!;
-
-                  return Stack(
-                    alignment: Alignment.bottomLeft,
+      appBar: AppBar(title: Text("Appearance")),
+      body: appearanceSettings.when(
+        data: (settings) {
+          return Padding(
+            padding: EdgeInsets.all(16),
+            child: SingleChildScrollView(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 700),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Positioned(
-                        left: leftPadding,
-                        bottom: bottomPadding,
-                        child: Text(
-                          'Settings',
-                          style: Theme.of(context).textTheme.titleLarge,
+                      GroupTitle(title: "Theme"),
+                      SettingTile(
+                        title: "Dark theme",
+                        leading: Icon(Icons.dark_mode),
+                        subtitle: settings.themeMode.text,
+                        isFirst: true,
+                        onTap: () async {
+                          final res =
+                              await AppDialogs.showOptionSelectionDialog(
+                                context,
+                                children: [
+                                  AppDialogTileData(title: 'On', value: 'on'),
+                                  AppDialogTileData(title: 'Off', value: 'off'),
+                                  AppDialogTileData(
+                                    title: 'Follow system',
+                                    value: 'system',
+                                  ),
+                                ],
+                              );
+                          if (res != null) {
+                            await appSettings.setString(
+                              AppSettingsIdentifiers.darkTheme,
+                              res,
+                            );
+                          }
+                        },
+                      ),
+                      SettingTile(
+                        onTap: () async {
+                          final color =
+                              await AppDialogs.showColorSelectionDialog(
+                                context,
+                              );
+                          if (color != null) {
+                            await appSettings.setColor(
+                              AppSettingsIdentifiers.accentColor,
+                              color,
+                            );
+                          }
+                        },
+                        title: "Accent Color",
+                        leading: Icon(Icons.colorize),
+                        trailing: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: settings.accentColor,
                         ),
                       ),
+                      SettingSwitchTile(
+                        title: "Pure black",
+                        leading: Icon(Icons.dark_mode_sharp),
+                        value: settings.isPureBlack,
+                        onChanged: (value) async {
+                          await appSettings.setBool(
+                            AppSettingsIdentifiers.isPureBlack,
+                            value,
+                          );
+                        },
+                      ),
+
+                      SettingSwitchTile(
+                        value: settings.enableSystemColors,
+                        onChanged: (value) async {
+                          await appSettings.setBool(
+                            AppSettingsIdentifiers.enableSystemColors,
+                            value,
+                          );
+                        },
+                        title: "Enable system colors",
+                        leading: Icon(Icons.color_lens),
+                        isLast: true,
+                      ),
+                      GroupTitle(title: "Layout"),
+                      SettingTile(
+                        title: "Language",
+                        leading: Icon(Icons.language),
+                        isFirst: true,
+                        isLast: true,
+                        subtitle: settings.language.title,
+                        onTap: () async {
+                          final language =
+                              await AppDialogs.showOptionSelectionDialog<
+                                AppLanguage
+                              >(context, children: _appLanguage);
+                          if (language != null) {
+                            await appSettings.setString(
+                              AppSettingsIdentifiers.appLanguage,
+                              jsonEncode(language.toJson()),
+                            );
+                          }
+                        },
+                      ),
                     ],
-                  );
-                },
+                  ),
+                ),
               ),
             ),
-          ];
+          );
         },
-        body: CustomScrollView(),
+        error: (e, s) => SizedBox(child: Text(s.toString())),
+        loading: SizedBox.shrink,
       ),
     );
   }
 }
+
+final List<AppDialogTileData<AppLanguage>> _appLanguage = [
+  AppDialogTileData(
+    title: "English",
+    value: AppLanguage(title: 'English', value: "en"),
+  ),
+  AppDialogTileData(
+    title: "Hindi",
+    value: AppLanguage(title: 'Hindi', value: "hi"),
+  ),
+  AppDialogTileData(
+    title: "Urdu",
+    value: AppLanguage(title: 'Urdu', value: "ur"),
+  ),
+];

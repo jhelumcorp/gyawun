@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gyawun_music/core/widgets/custom_circular_progress_indicator.dart';
 import 'package:gyawun_music/features/providers/yt_music/search/search_state_provider.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/search_top_bar.dart';
 import 'package:gyawun_music/features/providers/yt_music/widgets/section_item.dart';
@@ -52,7 +53,7 @@ class _YtSearchScreenState extends ConsumerState<YtSearchScreen> {
         .when(
           loading: () => [
             SliverFillRemaining(
-              child: Center(child: CircularProgressIndicator()),
+              child: Center(child:CustomCircularProgressIndicator()),
             ),
           ],
           error: (e, _) => [

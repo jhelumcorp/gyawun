@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_music/core/extensions/context_extensions.dart';
-import 'package:yaru/widgets.dart';
 
 final destinations = [
   NavigationDestination(
@@ -34,7 +33,7 @@ final destinations = [
   ),
 ];
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends ConsumerWidget {
   final StatefulNavigationShell navigationShell;
 
   const MainScreen({super.key, required this.navigationShell});
@@ -44,21 +43,13 @@ class MainScreen extends StatelessWidget {
       children: [
         SizedBox(
           width: 255,
-          child: context.isDesktop
-              ? YaruWindowTitleBar(
-                  heroTag: "titlebar",
-                  title: Text("Gyawun"),
-                  isClosable: false,
-                  isMaximizable: false,
-                  isMinimizable: false,
-                  isRestorable: false,
-                )
-              : AppBar(title: Text("Gyawun"), centerTitle: true),
+          child: AppBar(title: Text("Gyawun"), centerTitle: true),
         ),
         Expanded(
           child: NavigationRail(
             selectedIndex: navigationShell.currentIndex,
             onDestinationSelected: navigationShell.goBranch,
+
             minExtendedWidth: 255,
             useIndicator: true,
             extended: extended,
@@ -81,7 +72,7 @@ class MainScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final isWideScreen = screenWidth >= 600;
     return Scaffold(

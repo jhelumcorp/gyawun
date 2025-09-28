@@ -213,13 +213,27 @@ class _SectionMultiColumnSliverState extends State<SectionMultiColumnSliver> {
         itemBuilder: (context, index) {
           int start = index * num;
           int end = start + num;
-          return Column(
-            children: widget.items
-                .sublist(start, min(end, widget.items.length))
-                .map((item) {
-                  return SectionItemColumnTile(item: item);
-                })
-                .toList(),
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              children: widget.items
+                  .sublist(start, min(end, widget.items.length))
+                  .indexed
+                  .map((entry) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 1,
+                        horizontal: 4,
+                      ),
+                      child: SectionItemColumnTile(
+                        item: entry.$2,
+                        isFirst: entry.$1 == 0,
+                        isLast: entry.$1 == 3,
+                      ),
+                    );
+                  })
+                  .toList(),
+            ),
           );
         },
       ),
@@ -243,7 +257,14 @@ class SectionSingleColumnSliver extends StatelessWidget {
               child: SectionMultiRowColumn(item: items[index]),
             );
           }
-          return SectionItemColumnTile(item: items[index]);
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
+            child: SectionItemColumnTile(
+              item: items[index],
+              isFirst: index == 0,
+              isLast: index == items.length - 1,
+            ),
+          );
         },
         childCount: items.length,
         addAutomaticKeepAlives: false,

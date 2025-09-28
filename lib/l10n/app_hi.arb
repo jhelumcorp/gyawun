@@ -1,7 +1,12 @@
 {
   "@@locale": "hi",
-  "onboardingWelcome": "ग्यावुन म्यूज़िक में आपका स्वागत है",
+  "onboardingWelcome": "{appName} में आपका स्वागत है",
+  "@onboardingWelcome": {
+    "placeholders": {
+      "appName": {}
+    }
+  },
   "gyawunMusic": "ग्यावुन म्यूज़िक",
-  "onboardingDescription": "अपने पसंदीदा गाने, पॉडकास्ट और बहुत कुछ स्ट्रीम करें।",
+  "onboardingDescription": "अपना पसंदीदा संगीत, पॉडकास्ट और बहुत कुछ सुनें।",
   "getStarted": "शुरू करें"
 }
