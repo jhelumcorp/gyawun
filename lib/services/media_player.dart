@@ -135,11 +135,10 @@ class MediaPlayer extends ChangeNotifier {
       if (playlist == _songList) return;
       bool shouldAdd = false;
       if ((_songList == null || _songList!.isEmpty) &&
-          playlist != null &&
           playlist.isNotEmpty) {
         shouldAdd = true;
       }
-      if (playlist == null || playlist.isEmpty) {
+      if (playlist.isEmpty) {
         _currentSongNotifier.value = null;
         _currentIndex.value == null;
         _songList = [];
@@ -409,7 +408,7 @@ class MediaPlayer extends ChangeNotifier {
   _addSongListToQueue(List songs, {bool isNext = false}) async {
     int index = _playlist.length;
     if (isNext) {
-      index = _player.sequence == null || _player.sequence!.isEmpty
+      index = _player.sequence.isEmpty
           ? 0
           : currentIndex.value! + 1;
     }

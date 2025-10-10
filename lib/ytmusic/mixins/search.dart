@@ -167,8 +167,12 @@ mixin SearchMixin on YTMusicServices {
 
   Map<String, dynamic> _handleMusicCardShelfRenderer(Map item) {
     Map<String, dynamic> section = {};
-    section.addAll(_handleHeader(
-        nav(item, ['header', 'musicCardShelfHeaderBasicRenderer'])));
+    // pprint(item['title']);
+    // final h = _handleHeader(
+    //     nav(item, ['header', 'musicCardShelfHeaderBasicRenderer']));
+    // if(h!=null){
+    //   section.addAll(h);
+    // }
     section['contents'] = [];
     section['contents'].add(_handleTopResult(item));
     List? contents = nav(item, ['contents']);
@@ -178,29 +182,29 @@ mixin SearchMixin on YTMusicServices {
     return section;
   }
 
-  Map<String, dynamic> _handleHeader(Map header) {
-    Map<String, dynamic> headerMap = {
-      'title': nav(header, ['title', 'runs', 0, 'text']),
-      'trailing': {
-        'text': nav(header,
-            ['moreContentButton', 'buttonRenderer', 'text', 'runs', 0, 'text']),
-        'playable': nav(header, [
-              'moreContentButton',
-              'buttonRenderer',
-              'navigationEndpoint',
-              'watchPlaylistEndpoint'
-            ]) !=
-            null,
-        'endpoint': nav(header, [
-          'moreContentButton',
-          'buttonRenderer',
-          'navigationEndpoint',
-          'watchPlaylistEndpoint'
-        ]),
-      }
-    };
-    return headerMap;
-  }
+  // Map<String, dynamic> _handleHeader(Map header) {
+  //   Map<String, dynamic> headerMap = {
+  //     'title': nav(header, ['title', 'runs', 0, 'text']),
+  //     'trailing': {
+  //       'text': nav(header,
+  //           ['moreContentButton', 'buttonRenderer', 'text', 'runs', 0, 'text']),
+  //       'playable': nav(header, [
+  //             'moreContentButton',
+  //             'buttonRenderer',
+  //             'navigationEndpoint',
+  //             'watchPlaylistEndpoint'
+  //           ]) !=
+  //           null,
+  //       'endpoint': nav(header, [
+  //         'moreContentButton',
+  //         'buttonRenderer',
+  //         'navigationEndpoint',
+  //         'watchPlaylistEndpoint'
+  //       ]),
+  //     }
+  //   };
+  //   return headerMap;
+  // }
 
   _handleTopResult(Map item) {
     Map? browseEndpoint =
