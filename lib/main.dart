@@ -73,6 +73,7 @@ void main() async {
     JustAudioMediaKit.bufferSize = 8 * 1024 * 1024;
     JustAudioMediaKit.title = 'Gyawun Music';
     JustAudioMediaKit.prefetchPlaylist = true;
+    JustAudioMediaKit.pitch = true;
   }
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,
