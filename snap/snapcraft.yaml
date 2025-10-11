@@ -1,11 +1,12 @@
-name: gyawun-music
+# This is the configuration file for building the Gyawun Music snap.
+# Place this file in the root of your Flutter project directory.
+# To build the snap, run the command: snapcraft
+
+name: gyawun
 base: core22
-version: '0.1.0' 
-summary: A beautiful music player for Linux built with Flutter.
-description: |
-  Gyawun Music is an elegant and feature-rich music player designed for the
-  Linux desktop. Enjoy your local music library with a smooth and intuitive
-  interface, powered by mpv for high-quality audio playback.
+version: 1.0.0
+summary: GyawunMusic – A modern Flutter music player
+description: "GyawunMusic is a powerful, plugin-capable music app built with Flutter."
 
 grade: stable
 confinement: strict
@@ -15,10 +16,14 @@ architectures:
   - build-on: arm64
 
 apps:
-  gyawun-music:
-    command: gyawun_music 
+  gyawun:
+    command: gyawun
+    # This is the most critical fix. The flutter-master extension correctly
+    # sets up the graphics environment and library paths for a Flutter app.
     extensions: [flutter-master]
     plugs:
+      # These plugs are required for rendering, audio, and proper desktop integration.
+      # The 'opengl' plug is essential and likely solves the black screen issue.
       - opengl
       - network
       - audio-playback
@@ -31,12 +36,17 @@ apps:
       - x11
 
 parts:
-  gyawun-music:
-    source: .
+  gyawun:
     plugin: flutter
-    flutter-target: lib/main.dart 
+    source: .
+    flutter-target: lib/main.dart
+    # This section is corrected to properly handle dependencies.
+    # '-dev' packages are needed to build, not to run the app.
     build-packages:
+      # The media_kit plugin needs the mpv development headers to compile.
       - libmpv-dev
     stage-packages:
+      # This is the runtime library containing libmpv.so, which media_kit
+      # calls when the app is running.
       - libmpv2
 
