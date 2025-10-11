@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,12 +8,10 @@ ThemeData lightTheme({required ColorScheme colorScheme}) {
   return ThemeData.light().copyWith(
     colorScheme: colorScheme,
     primaryColor: colorScheme.primary,
-    scaffoldBackgroundColor:
-        Platform.isWindows ? Colors.transparent : colorScheme.surface,
+    scaffoldBackgroundColor: colorScheme.surface,
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       centerTitle: true,
-      surfaceTintColor: Platform.isWindows ? Colors.transparent : null,
       systemOverlayStyle: const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
         statusBarColor: Colors.transparent,

@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 class AdaptiveTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -44,40 +41,6 @@ class AdaptiveTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isWindows) {
-      return fluent_ui.TextBox(
-        key: key,
-        controller: controller,
-        onChanged: onChanged,
-        onSubmitted: onSubmitted,
-        onTap: onTap,
-        focusNode: focusNode,
-        readOnly: readOnly,
-        keyboardType: keyboardType,
-        padding: contentPadding ?? const EdgeInsets.symmetric(),
-        placeholder: hintText,
-        prefix: prefix != null
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: prefix,
-              )
-            : null,
-        suffix: suffix != null
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: suffix,
-              )
-            : null,
-        autofocus: autofocus,
-        maxLines: maxLines,
-        textInputAction: textInputAction,
-        decoration: WidgetStatePropertyAll(BoxDecoration(
-          color: fillColor,
-          borderRadius: borderRadius,
-          border: borderWidth > 0 ? Border.all(width: borderWidth) : null,
-        )),
-      );
-    }
     return TextField(
       key: key,
       controller: controller,

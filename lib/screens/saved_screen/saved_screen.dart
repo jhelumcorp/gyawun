@@ -94,8 +94,8 @@ class _SavedScreenState extends State<SavedScreen> {
                   trailing: Icon(AdaptiveIcons.chevron_right),
                   onTap: () => Navigator.push(
                       context,
-                      AdaptivePageRoute.create(
-                        (context) => const FavouriteDetailsScreen(),
+                      CupertinoPageRoute(
+                        builder: (context) => const FavouriteDetailsScreen(),
                       )),
                 ),
                 AdaptiveListTile(
@@ -117,15 +117,17 @@ class _SavedScreenState extends State<SavedScreen> {
                     valueListenable: Hive.box('DOWNLOADS').listenable(),
                     builder: (context, box, child) {
                       List values = box.values.toList();
-                      List downloaded = values.where((element) => element['status'] == 'DOWNLOADED').toList();
+                      List downloaded = values
+                          .where((element) => element['status'] == 'DOWNLOADED')
+                          .toList();
                       return Text(S.of(context).nSongs(downloaded.length));
                     },
                   ),
                   trailing: Icon(AdaptiveIcons.chevron_right),
                   onTap: () => Navigator.push(
                       context,
-                      AdaptivePageRoute.create(
-                        (context) => const DownloadScreen(),
+                      CupertinoPageRoute(
+                        builder: (context) => const DownloadScreen(),
                       )),
                 ),
                 AdaptiveListTile(
@@ -152,8 +154,8 @@ class _SavedScreenState extends State<SavedScreen> {
                   trailing: Icon(AdaptiveIcons.chevron_right),
                   onTap: () => Navigator.push(
                       context,
-                      AdaptivePageRoute.create(
-                        (context) => const HistoryScreen(),
+                      CupertinoPageRoute(
+                        builder: (context) => const HistoryScreen(),
                       )),
                 ),
                 Column(
@@ -190,8 +192,8 @@ class _SavedScreenState extends State<SavedScreen> {
                                     if (item['isPredefined']) {
                                       Navigator.push(
                                         context,
-                                        AdaptivePageRoute.create(
-                                          (context) => BrowseScreen(
+                                        CupertinoPageRoute(
+                                          builder: (context) => BrowseScreen(
                                               endpoint: item['endpoint']
                                                   .cast<String, dynamic>()),
                                         ),
@@ -199,9 +201,10 @@ class _SavedScreenState extends State<SavedScreen> {
                                     } else {
                                       Navigator.push(
                                         context,
-                                        AdaptivePageRoute.create(
-                                          (context) => PlaylistDetailsScreen(
-                                              playlistkey: key),
+                                        CupertinoPageRoute(
+                                          builder: (context) =>
+                                              PlaylistDetailsScreen(
+                                                  playlistkey: key),
                                         ),
                                       );
                                     }

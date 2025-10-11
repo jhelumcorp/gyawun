@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../screens/home_screen/chip_screen.dart';
@@ -108,21 +106,18 @@ List<StatefulShellBranch> branches = [
           // ),
           GoRoute(
             path: 'appearence',
-            pageBuilder: (context, state) => Platform.isWindows
-                ? const FluentPage(child: AppearenceScreen())
-                : const CupertinoPage(child: AppearenceScreen()),
+            pageBuilder: (context, state) =>
+                const CupertinoPage(child: AppearenceScreen()),
           ),
           GoRoute(
             path: 'content',
-            pageBuilder: (context, state) => Platform.isWindows
-                ? const FluentPage(child: ContentScreen())
-                : const CupertinoPage(child: ContentScreen()),
+            pageBuilder: (context, state) =>
+                const CupertinoPage(child: ContentScreen()),
           ),
           GoRoute(
               path: 'playback',
-              pageBuilder: (context, state) => Platform.isWindows
-                  ? const FluentPage(child: AudioAndPlaybackScreen())
-                  : const CupertinoPage(child: AudioAndPlaybackScreen()),
+              pageBuilder: (context, state) =>
+                  const CupertinoPage(child: AudioAndPlaybackScreen()),
               routes: [
                 GoRoute(
                   path: 'equalizer',
@@ -132,15 +127,13 @@ List<StatefulShellBranch> branches = [
               ]),
           GoRoute(
             path: 'backup_restore',
-            pageBuilder: (context, state) => Platform.isWindows
-                ? const FluentPage(child: BackupRestoreScreen())
-                : const CupertinoPage(child: BackupRestoreScreen()),
+            pageBuilder: (context, state) =>
+                const CupertinoPage(child: BackupRestoreScreen()),
           ),
           GoRoute(
             path: 'about',
-            pageBuilder: (context, state) => Platform.isWindows
-                ? const FluentPage(child: AboutScreen())
-                : const CupertinoPage(child: AboutScreen()),
+            pageBuilder: (context, state) =>
+                const CupertinoPage(child: AboutScreen()),
           ),
         ]),
   ])

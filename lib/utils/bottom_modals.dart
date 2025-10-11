@@ -14,7 +14,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 import '../generated/l10n.dart';
 import '../screens/browse_screen/browse_screen.dart';
@@ -33,21 +32,6 @@ import '../utils/extensions.dart';
 
 class Modals {
   static Future showCenterLoadingModal(BuildContext context, {String? title}) {
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog(
-        context: context,
-        useRootNavigator: false,
-        builder: (context) {
-          return fluent_ui.ContentDialog(
-            title: Text(title ?? S.of(context).Progress),
-            content: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [fluent_ui.ProgressRing()],
-            ),
-          );
-        },
-      );
-    }
     return showDialog(
       context: context,
       useRootNavigator: false,
@@ -78,15 +62,6 @@ class Modals {
     String? hintText,
     String? doneText,
   }) {
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog(
-        context: context,
-        useRootNavigator: false,
-        barrierDismissible: true,
-        builder: (context) => _textFieldBottomModal(context,
-            title: title, hintText: hintText, doneText: doneText),
-      );
-    }
     return showModalBottomSheet<String?>(
       context: context,
       useRootNavigator: false,
@@ -100,14 +75,6 @@ class Modals {
 
   static Future<T?> showSelection<T>(
       BuildContext context, List<SelectionItem> items) {
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog<T>(
-        context: context,
-        useRootNavigator: false,
-        barrierDismissible: true,
-        builder: (context) => _showSelection(context, items),
-      );
-    }
     return showModalBottomSheet<T>(
       context: context,
       useRootNavigator: false,
@@ -119,14 +86,6 @@ class Modals {
   }
 
   static showSongBottomModal(BuildContext context, Map song) {
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog(
-        context: context,
-        useRootNavigator: false,
-        barrierDismissible: true,
-        builder: (context) => _songBottomModal(context, song),
-      );
-    }
     showModalBottomSheet(
       context: context,
       useRootNavigator: false,
@@ -141,20 +100,6 @@ class Modals {
     BuildContext context,
     Map song,
   ) {
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog(
-        context: context,
-        useRootNavigator: false,
-        barrierDismissible: true,
-        builder: (context) => fluent_ui.FluentTheme(
-          data: fluent_ui.FluentThemeData(
-            brightness: Brightness.dark,
-            accentColor: AdaptiveTheme.of(context).primaryColor.toAccentColor(),
-          ),
-          child: _playerOptionsModal(context, song),
-        ),
-      );
-    }
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -166,14 +111,6 @@ class Modals {
   }
 
   static showPlaylistBottomModal(BuildContext context, Map playlist) {
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog(
-        context: context,
-        useRootNavigator: false,
-        barrierDismissible: true,
-        builder: (context) => _playlistBottomModal(context, playlist),
-      );
-    }
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -186,15 +123,6 @@ class Modals {
 
   static showArtistsBottomModal(BuildContext context, List artists,
       {String? leading, bool shouldPop = false}) {
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog(
-        context: context,
-        useRootNavigator: false,
-        barrierDismissible: true,
-        builder: (context) =>
-            _artistsBottomModal(context, artists, shouldPop: shouldPop),
-      );
-    }
     return showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -208,13 +136,7 @@ class Modals {
 
   static showCreateplaylistModal(BuildContext context, {Map? item}) {
     String title = '';
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) => _createPlaylistModal(title, context, item),
-      );
-    }
+
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -226,14 +148,6 @@ class Modals {
   }
 
   static showImportplaylistModal(BuildContext context, {Map? item}) {
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog(
-        context: context,
-        useRootNavigator: false,
-        barrierDismissible: true,
-        builder: (context) => _importPlaylistModal(context),
-      );
-    }
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -246,18 +160,6 @@ class Modals {
 
   static showPlaylistRenameBottomModal(BuildContext context,
       {required String playlistId, String? name}) {
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog(
-        context: context,
-        useRootNavigator: false,
-        barrierDismissible: true,
-        builder: (context) => _playlistRenameBottomModal(
-          context,
-          name: name,
-          playlistId: playlistId,
-        ),
-      );
-    }
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -270,14 +172,6 @@ class Modals {
   }
 
   static addToPlaylist(BuildContext context, Map item) {
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog(
-        context: context,
-        useRootNavigator: false,
-        barrierDismissible: true,
-        builder: (context) => _addToPlaylist(context, item),
-      );
-    }
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -295,20 +189,6 @@ class Modals {
     String? doneText,
     String? cancelText,
   }) async {
-    if (Platform.isWindows) {
-      return await fluent_ui.showDialog<bool>(
-              context: context,
-              useRootNavigator: false,
-              barrierDismissible: true,
-              builder: (context) => _confirmBottomModal(
-                    context,
-                    message: message,
-                    isDanger: isDanger,
-                    doneText: doneText,
-                    cancelText: cancelText,
-                  )) ??
-          false;
-    }
     return await showModalBottomSheet(
             useRootNavigator: false,
             backgroundColor: Colors.transparent,
@@ -324,14 +204,6 @@ class Modals {
   }
 
   static showAccentSelector(BuildContext context) {
-    if (Platform.isWindows) {
-      return fluent_ui.showDialog(
-        context: context,
-        useRootNavigator: false,
-        barrierDismissible: true,
-        builder: (context) => _accentSelector(context),
-      );
-    }
     showModalBottomSheet(
       context: context,
       useRootNavigator: false,
@@ -477,8 +349,8 @@ _artistsBottomModal(BuildContext context, List<dynamic> artists,
 
                       Navigator.push(
                         context,
-                        AdaptivePageRoute.create(
-                          (context) => BrowseScreen(
+                        CupertinoPageRoute(
+                          builder: (context) => BrowseScreen(
                               endpoint:
                                   artist['endpoint'].cast<String, dynamic>()),
                         ),
@@ -536,9 +408,7 @@ Widget _createPlaylistModal(
                 prefix: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: Icon(Platform.isWindows
-                      ? fluent_ui.FluentIcons.playlist_music
-                      : Icons.title),
+                  child: Icon(Icons.title),
                 ),
               ),
             ],
@@ -596,9 +466,7 @@ Widget _importPlaylistModal(BuildContext context) {
                 prefix: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: Icon(Platform.isWindows
-                      ? fluent_ui.FluentIcons.playlist_music
-                      : Icons.title),
+                  child: Icon(Icons.title),
                 ),
                 fillColor: Platform.isWindows ? null : greyColor,
                 contentPadding:
@@ -730,63 +598,6 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
     height: MediaQuery.of(context).size.height,
     width: MediaQuery.of(context).size.width,
     child: LayoutBuilder(builder: (context, constraints) {
-      if (Platform.isWindows) {
-        return fluent_ui.ContentDialog(
-          title: Column(
-            children: [
-              Center(
-                  child: Text(
-                      updateInfo != null ? 'Update Available' : 'Update Info')),
-              if (updateInfo != null)
-                Text(
-                  '${updateInfo.name}\n${f.format(DateTime.parse(updateInfo.publishedAt))}',
-                  style: TextStyle(fontSize: 16, color: context.subtitleColor),
-                )
-            ],
-          ),
-          content: updateInfo != null
-              ? SizedBox(
-                  width: constraints.maxWidth,
-                  height: constraints.maxHeight - 400,
-                  child: Markdown(
-                    data: updateInfo.body,
-                    shrinkWrap: true,
-                    softLineBreak: true,
-                    onTapLink: (text, href, title) {
-                      if (href != null) {
-                        launchUrl(
-                          Uri.parse(href),
-                          mode: LaunchMode.externalApplication,
-                        );
-                      }
-                    },
-                  ),
-                )
-              : const Text("You are already up to date."),
-          actions: [
-            if (updateInfo != null)
-              AdaptiveButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel'),
-              ),
-            AdaptiveFilledButton(
-              onPressed: () {
-                Navigator.pop(context);
-                if (updateInfo != null) {
-                  String platform = Platform.isAndroid ? 'android' : 'windows';
-                  launchUrl(
-                      Uri.parse(
-                          'https://gyawunmusic.vercel.app/api/download?action=download&platform=$platform&url=${updateInfo.downloadUrl}'),
-                      mode: LaunchMode.externalApplication);
-                }
-              },
-              child: Text(updateInfo != null ? 'Update' : 'Done'),
-            ),
-          ],
-        );
-      }
       return AlertDialog(
         icon: Center(
           child: Container(
@@ -1209,8 +1020,8 @@ _songBottomModal(BuildContext context, Map song) {
                   Navigator.pop(context);
                   Navigator.push(
                       context,
-                      AdaptivePageRoute.create(
-                        (context) => BrowseScreen(
+                      CupertinoPageRoute(
+                        builder: (context) => BrowseScreen(
                             endpoint: song['album']['endpoint']
                                 .cast<String, dynamic>()),
                       ));
@@ -1392,8 +1203,8 @@ _playlistBottomModal(BuildContext context, Map playlist) {
               trailing: Icon(AdaptiveIcons.chevron_right),
               onTap: () => Navigator.push(
                   context,
-                  AdaptivePageRoute.create(
-                    (context) =>
+                  CupertinoPageRoute(
+                    builder: (context) =>
                         BrowseScreen(endpoint: playlist['album']['endpoint']),
                   )),
             ),
@@ -1456,25 +1267,6 @@ class BottomModalLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isWindows) {
-      return fluent_ui.ContentDialog(
-        title: Material(
-          color: Colors.transparent,
-          child: title,
-        ),
-        content: Material(
-          color: Colors.transparent,
-          child: child,
-        ),
-        actions: actions
-            ?.map((action) => Material(
-                  color: Colors.transparent,
-                  child: action,
-                ))
-            .toList(),
-      );
-    }
-
     return Container(
       width: double.maxFinite,
       constraints: const BoxConstraints(maxWidth: 600),

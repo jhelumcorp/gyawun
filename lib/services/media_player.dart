@@ -16,8 +16,8 @@ import 'settings_manager.dart';
 
 class MediaPlayer extends ChangeNotifier {
   late AudioPlayer _player;
-  final ConcatenatingAudioSource _playlist =
-      ConcatenatingAudioSource(children: []);
+  String address;
+  final _playlist = <AudioSource>[];
 
   final _loudnessEnhancer = AndroidLoudnessEnhancer();
   AndroidEqualizer? _equalizer;
@@ -39,7 +39,7 @@ class MediaPlayer extends ChangeNotifier {
 
   bool _shuffleModeEnabled = false;
 
-  MediaPlayer() {
+  MediaPlayer(this.address) {
     if (Platform.isAndroid) {
       _equalizer = AndroidEqualizer();
     }
@@ -57,7 +57,7 @@ class MediaPlayer extends ChangeNotifier {
     _init();
   }
   AudioPlayer get player => _player;
-  ConcatenatingAudioSource get playlist => _playlist;
+  List<AudioSource> get playlist => _playlist;
   List<IndexedAudioSource>? get songList => _songList;
   ValueNotifier<MediaItem?> get currentSongNotifier => _currentSongNotifier;
   ValueNotifier<int?> get currentIndex => _currentIndex;
@@ -70,7 +70,8 @@ class MediaPlayer extends ChangeNotifier {
   _init() async {
     await _loadLoudnessEnhancer();
     await _loadEqualizer();
-    await _player.setAudioSource(_playlist);
+    await _player.setAudioSources(_playlist);
+
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
     _listenToCurrentPosition();
@@ -134,8 +135,7 @@ class MediaPlayer extends ChangeNotifier {
     _player.sequenceStream.listen((playlist) {
       if (playlist == _songList) return;
       bool shouldAdd = false;
-      if ((_songList == null || _songList!.isEmpty) &&
-          playlist.isNotEmpty) {
+      if ((_songList == null || _songList!.isEmpty) && playlist.isNotEmpty) {
         shouldAdd = true;
       }
       if (playlist.isEmpty) {
@@ -279,7 +279,7 @@ class MediaPlayer extends ChangeNotifier {
     } else {
       // audioSource = AudioSource.uri(
       //   Uri.parse(
-      //       'https://invidious.nerdvpn.de/latest_version?id=${song['videoId']}'),
+      //       '$address?id=${song['videoId']}&quaity=${GetIt.I<SettingsManager>().streamingQuality.name.toLowerCase(),}'),
       //   tag: tag,
       // );
 
@@ -317,9 +317,9 @@ class MediaPlayer extends ChangeNotifier {
       {bool autoFetch = true}) async {
     if (song['videoId'] != null) {
       await _player.pause();
-      await _playlist.clear();
+      await _player.clearAudioSources();
       final source = await _getAudioSource(song);
-      await _playlist.add(source);
+      await _player.addAudioSource(source);
       await _player.load();
       _player.play();
       if (autoFetch == true && song['status'] != 'DOWNLOADED') {
@@ -335,10 +335,11 @@ class MediaPlayer extends ChangeNotifier {
     if (song['videoId'] != null) {
       AudioSource audioSource = await _getAudioSource(song);
 
-      if (_playlist.length > 0) {
-        await _playlist.insert((_player.currentIndex ?? -1) + 1, audioSource);
+      if (_player.audioSources.isNotEmpty) {
+        await _player.insertAudioSource(
+            (_player.currentIndex ?? -1) + 1, audioSource);
       } else {
-        await _playlist.add(audioSource);
+        await _player.addAudioSource(audioSource);
       }
     } else if (song['playlistId'] != null) {
       List songs =
@@ -352,7 +353,7 @@ class MediaPlayer extends ChangeNotifier {
   }
 
   playAll(List songs, {index = 0}) async {
-    await _playlist.clear();
+    await _player.clearAudioSources();
     await _addSongListToQueue(songs);
     await _player.seek(Duration.zero, index: index);
     if (!(_player.playing)) {
@@ -362,7 +363,7 @@ class MediaPlayer extends ChangeNotifier {
 
   Future<void> addToQueue(Map<String, dynamic> song) async {
     if (song['videoId'] != null) {
-      await _playlist.add(await _getAudioSource(song));
+      await _player.addAudioSource(await _getAudioSource(song));
     } else if (song['playlistId'] != null) {
       List songs =
           await GetIt.I<YTMusic>().getPlaylistSongs(song['playlistId']);
@@ -372,7 +373,7 @@ class MediaPlayer extends ChangeNotifier {
 
   Future<void> startRelated(Map<String, dynamic> song,
       {bool radio = false, bool shuffle = false, bool isArtist = false}) async {
-    await _playlist.clear();
+    await _player.clearAudioSources();
     if (!isArtist) {
       await addToQueue(song);
     }
@@ -388,7 +389,7 @@ class MediaPlayer extends ChangeNotifier {
   }
 
   Future<void> startPlaylistSongs(Map endpoint) async {
-    await playlist.clear();
+    await _player.clearAudioSources();
     List songs = await GetIt.I<YTMusic>().getNextSongList(
         playlistId: endpoint['playlistId'], params: endpoint['params']);
     await _addSongListToQueue(songs);
@@ -398,7 +399,7 @@ class MediaPlayer extends ChangeNotifier {
 
   Future<void> stop() async {
     await _player.stop();
-    await _playlist.clear();
+    await _player.clearAudioSources();
     await _player.seek(Duration.zero, index: 0);
     _currentIndex.value = null;
     _currentSongNotifier.value = null;
@@ -408,13 +409,11 @@ class MediaPlayer extends ChangeNotifier {
   _addSongListToQueue(List songs, {bool isNext = false}) async {
     int index = _playlist.length;
     if (isNext) {
-      index = _player.sequence.isEmpty
-          ? 0
-          : currentIndex.value! + 1;
+      index = _player.sequence.isEmpty ? 0 : currentIndex.value! + 1;
     }
     await Future.forEach(songs, (song) async {
       Map<String, dynamic> mapSong = Map.from(song);
-      await _playlist.insert(index, await _getAudioSource(mapSong));
+      await _player.insertAudioSource(index, await _getAudioSource(mapSong));
       index++;
     });
   }

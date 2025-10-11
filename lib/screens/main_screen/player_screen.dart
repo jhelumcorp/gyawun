@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun/screens/main_screen/main_screen.dart';
 import 'package:gyawun/utils/extensions.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
@@ -15,7 +14,6 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:text_scroll/text_scroll.dart';
-import 'package:window_manager/window_manager.dart';
 
 import '../../generated/l10n.dart';
 import '../../services/download_manager.dart';
@@ -235,43 +233,37 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           child: Scaffold(
                             appBar: PreferredSize(
                               preferredSize: AppBar().preferredSize,
-                              child: DragToMoveArea(
-                                child: AppBar(
-                                  backgroundColor: Colors.transparent,
-                                  surfaceTintColor: Colors.transparent,
-                                  elevation: 0,
-                                  iconTheme:
-                                      const IconThemeData(color: Colors.white),
-                                  leading: AdaptiveIconButton(
+                              child: AppBar(
+                                backgroundColor: Colors.transparent,
+                                surfaceTintColor: Colors.transparent,
+                                elevation: 0,
+                                iconTheme:
+                                    const IconThemeData(color: Colors.white),
+                                leading: AdaptiveIconButton(
+                                  onPressed: () {
+                                    context.pop();
+                                  },
+                                  icon: Icon(AdaptiveIcons.chevron_down),
+                                ),
+                                actions: [
+                                  AdaptiveIconButton(
                                     onPressed: () {
-                                      context.pop();
+                                      setState(() {
+                                        showLyrics = !showLyrics;
+                                      });
                                     },
-                                    icon: Icon(AdaptiveIcons.chevron_down),
+                                    icon: Icon(AdaptiveIcons.lyrics),
                                   ),
-                                  actions: [
+                                  if (MediaQuery.of(context).size.width >
+                                          MediaQuery.of(context).size.height ||
+                                      Platform.isWindows)
                                     AdaptiveIconButton(
                                       onPressed: () {
-                                        setState(() {
-                                          showLyrics = !showLyrics;
-                                        });
+                                        _key.currentState?.openEndDrawer();
                                       },
-                                      icon: Icon(AdaptiveIcons.lyrics),
+                                      icon: Icon(AdaptiveIcons.queue),
                                     ),
-                                    if (MediaQuery.of(context).size.width >
-                                            MediaQuery.of(context)
-                                                .size
-                                                .height ||
-                                        Platform.isWindows)
-                                      AdaptiveIconButton(
-                                        onPressed: () {
-                                          _key.currentState?.openEndDrawer();
-                                        },
-                                        icon: Icon(AdaptiveIcons.queue),
-                                      ),
-                                    if (Platform.isWindows)
-                                      const WindowButtons()
-                                  ],
-                                ),
+                                ],
                               ),
                             ),
                             key: _key,

@@ -1,9 +1,6 @@
 import 'dart:io';
 
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'buttons.dart';
 
 class AdaptiveAppBar extends StatelessWidget implements PreferredSizeWidget {
   const AdaptiveAppBar({
@@ -40,31 +37,6 @@ class AdaptiveAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isWindows) {
-      return fluent_ui.Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: fluent_ui.Column(
-          children: [
-            fluent_ui.PageHeader(
-              leading: leading ??
-                  (automaticallyImplyLeading && context.canPop()
-                      ? const AdaptiveBackButton()
-                      : null),
-              title: fluent_ui.Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: title,
-              ),
-              commandBar: actions != null || actions?.isNotEmpty == false
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: actions ?? [])
-                  : null,
-            ),
-            if (bottom != null) bottom!,
-          ],
-        ),
-      );
-    }
     return AppBar(
       leading: leading,
       title: title,

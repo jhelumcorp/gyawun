@@ -98,8 +98,8 @@ class _SectionItemState extends State<SectionItem> {
                                 false) {
                               Navigator.push(
                                 context,
-                                AdaptivePageRoute.create(
-                                  (context) => BrowseScreen(
+                                CupertinoPageRoute(
+                                  builder: (context) => BrowseScreen(
                                     endpoint: widget.section['trailing']
                                         ['endpoint'],
                                     isMore: true,
@@ -402,8 +402,8 @@ class _ItemListState extends State<ItemList> {
                       widget.items[index]['videoId'] == null) {
                     Navigator.push(
                         context,
-                        AdaptivePageRoute.create(
-                          (context) => BrowseScreen(
+                        CupertinoPageRoute(
+                          builder: (context) => BrowseScreen(
                               endpoint: widget.items[index]['endpoint']),
                         ));
                   } else {

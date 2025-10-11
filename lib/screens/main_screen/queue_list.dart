@@ -150,8 +150,8 @@ class QueueList extends StatelessWidget {
                               if (newIndex > oldIndex) {
                                 newIndex -= 1;
                               }
-                              await mediaPlayer.playlist
-                                  .move(oldIndex, newIndex);
+                              await mediaPlayer.player
+                                  .moveAudioSource(oldIndex, newIndex);
                             },
                           ),
                         ),

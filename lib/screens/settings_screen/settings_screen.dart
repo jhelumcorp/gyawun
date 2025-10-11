@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 import '../../generated/l10n.dart';
 import '../../themes/colors.dart';
@@ -256,14 +255,7 @@ showPaymentsModal(BuildContext context) {
       ),
     ],
   );
-  if (Platform.isWindows) {
-    return fluent_ui.showDialog(
-      context: context,
-      useRootNavigator: false,
-      barrierDismissible: true,
-      builder: (context) => BottomModalLayout(title: title, child: child),
-    );
-  }
+
   showModalBottomSheet(
     useSafeArea: true,
     backgroundColor: Colors.transparent,

@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 class AdaptiveDropdownButton<T> extends StatelessWidget {
   final T? value;
@@ -18,22 +15,6 @@ class AdaptiveDropdownButton<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isWindows) {
-      return fluent_ui.ComboBox<T>(
-        value: value,
-        items: items
-            ?.map(
-              (item) => fluent_ui.ComboBoxItem<T>(
-                value: item.value,
-                enabled: item.enabled,
-                onTap: item.onTap,
-                child: item.child,
-              ),
-            )
-            .toList(),
-        onChanged: onChanged,
-      );
-    }
     return DropdownButton<T>(
       style: style,
       underline: const SizedBox(),

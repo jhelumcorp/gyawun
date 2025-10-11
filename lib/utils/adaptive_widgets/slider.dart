@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/material.dart';
 
 class AdaptiveSlider extends StatelessWidget {
@@ -25,17 +22,6 @@ class AdaptiveSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isWindows) {
-      return fluent_ui.Slider(
-        min: min,
-        max: max,
-        label: label,
-        divisions: divisions,
-        value: value,
-        vertical: vertical,
-        onChanged: disabled ? null : onChanged,
-      );
-    }
     return RotatedBox(
       quarterTurns: vertical ? 3 : 0,
       child: Slider(

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -21,10 +20,7 @@ class BottomPlayer extends StatelessWidget {
         builder: (context, currentSong, child) {
           return currentSong != null
               ? Container(
-                  color: Platform.isWindows
-                      ? fluent_ui.FluentTheme.of(context)
-                          .scaffoldBackgroundColor
-                      : Theme.of(context).colorScheme.surfaceContainerLow,
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
                   child: GestureDetector(
                     onTap: () {
                       context.push('/player');

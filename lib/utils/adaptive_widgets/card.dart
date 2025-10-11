@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 class Adaptivecard extends StatelessWidget {
   const Adaptivecard({
@@ -23,16 +20,6 @@ class Adaptivecard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isWindows) {
-      return fluent_ui.Card(
-        padding: padding ?? const EdgeInsets.all(12.0),
-        backgroundColor: backgroundColor,
-        margin: margin,
-        borderRadius:
-            borderRadius ?? const BorderRadius.all(Radius.circular(4.0)),
-        child: child,
-      );
-    }
     return Card(
       margin: margin ?? const EdgeInsets.all(1),
       color: backgroundColor,

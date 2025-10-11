@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/material.dart';
 
 class AdaptiveProgressRing extends StatelessWidget {
@@ -23,14 +21,6 @@ class AdaptiveProgressRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isWindows) {
-      return fluent_ui.ProgressRing(
-        value: value,
-        strokeWidth: strokeWidth,
-        backgroundColor: backgroundColor,
-        activeColor: color,
-      );
-    }
     return CircularProgressIndicator(
       value: value,
       strokeWidth: strokeWidth,

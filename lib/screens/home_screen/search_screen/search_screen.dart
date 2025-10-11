@@ -257,8 +257,8 @@ class SearchSectionItem extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            AdaptivePageRoute.create(
-                              (context) => SearchScreen(
+                            CupertinoPageRoute(
+                              builder: (context) => SearchScreen(
                                   endpoint: section['trailing']['endpoint'],
                                   isMore: true),
                             ),
@@ -301,8 +301,8 @@ class SearchListTile extends StatelessWidget {
         } else if (item['endpoint'] != null && item['videoId'] == null) {
           Navigator.push(
               context,
-              AdaptivePageRoute.create(
-                (context) => BrowseScreen(endpoint: item['endpoint']),
+              CupertinoPageRoute(
+                builder: (context) => BrowseScreen(endpoint: item['endpoint']),
               ));
         }
       },

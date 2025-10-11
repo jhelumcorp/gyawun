@@ -1,11 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../generated/l10n.dart';
 import '../../../utils/adaptive_widgets/adaptive_widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 
 import '../../../services/settings_manager.dart';
 import '../../../utils/bottom_modals.dart';
@@ -60,27 +57,6 @@ List<SettingItem> appearenceScreenData(BuildContext context) => [
           Modals.showAccentSelector(context);
         },
       ),
-      if (Platform.isWindows || Platform.isLinux)
-        SettingItem(
-          title: S.of(context).Window_Effect,
-          icon: fluent_ui.FluentIcons.background_color,
-          trailing: (context) {
-            return AdaptiveDropdownButton(
-                value: context.watch<SettingsManager>().windowEffect,
-                items: context
-                    .read<SettingsManager>()
-                    .windowEffectList
-                    .map(
-                      (e) => AdaptiveDropdownMenuItem(
-                          value: e, child: Text(e.name.toUpperCase())),
-                    )
-                    .toList(),
-                onChanged: (value) async {
-                  if (value == null) return;
-                  await context.read<SettingsManager>().setwindowEffect(value);
-                });
-          },
-        ),
       SettingItem(
         title: 'Amoled Black',
         icon: Icons.mode_night_outlined,

@@ -26,8 +26,8 @@ class YTMSongTile extends StatelessWidget {
         } else {
           Navigator.push(
             context,
-            AdaptivePageRoute.create(
-              (context) => BrowseScreen(
+            CupertinoPageRoute(
+              builder: (context) => BrowseScreen(
                   endpoint: item['endpoint'].cast<String, dynamic>()),
             ),
           );

@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -22,22 +19,13 @@ class SettingsManager extends ChangeNotifier {
     AudioQuality.high,
     AudioQuality.low
   ];
-  List<WindowEffect> get windowEffectList => [
-        WindowEffect.disabled,
-        WindowEffect.solid,
-        WindowEffect.transparent,
-        WindowEffect.acrylic,
-        WindowEffect.mica,
-        WindowEffect.tabbed,
-        WindowEffect.aero,
-      ];
+
   AudioQuality _streamingQuality = AudioQuality.high;
   AudioQuality _downloadQuality = AudioQuality.high;
   bool _skipSilence = false;
   Color? _accentColor;
   bool _amoledBlack = true;
   bool _dynamicColors = false;
-  WindowEffect _windowEffect = WindowEffect.disabled;
   bool _equalizerEnabled = false;
   List<double> _equalizerBandsGain = [];
   bool _loudnessEnabled = false;
@@ -57,7 +45,6 @@ class SettingsManager extends ChangeNotifier {
   Color? get accentColor => _accentColor;
   bool get amoledBlack => _amoledBlack;
   bool get dynamicColors => _dynamicColors;
-  WindowEffect get windowEffect => _windowEffect;
   bool get equalizerEnabled => _equalizerEnabled;
   List<double> get equalizerBandsGain => _equalizerBandsGain;
   bool get loudnessEnabled => _loudnessEnabled;
@@ -76,10 +63,6 @@ class SettingsManager extends ChangeNotifier {
         : null;
     _amoledBlack = _box.get('AMOLED_BLACK', defaultValue: true);
     _dynamicColors = _box.get('DYNAMIC_COLORS', defaultValue: false);
-    _windowEffect = windowEffectList.firstWhere((el) =>
-        el.name.toUpperCase() ==
-        _box.get('WINDOW_EFFECT',
-            defaultValue: WindowEffect.disabled.name.toUpperCase()));
 
     _location = _countries.firstWhere((country) =>
         country['value'] == _box.get('LOCATION', defaultValue: 'IN'));
@@ -99,23 +82,6 @@ class SettingsManager extends ChangeNotifier {
   setThemeMode(ThemeMode mode) async {
     _box.put('THEME_MODE', _themeModes.indexOf(mode));
     _themeMode = mode;
-    if (Platform.isWindows) {
-      await Window.setEffect(
-        effect: _windowEffect,
-        dark: getDarkness(_themeModes.indexOf(mode)),
-      );
-    }
-    notifyListeners();
-  }
-
-  setwindowEffect(WindowEffect effect) async {
-    _box.put('WINDOW_EFFECT', effect.name.toUpperCase());
-    _windowEffect = effect;
-
-    await Window.setEffect(
-      effect: _windowEffect,
-      dark: getDarkness(_themeModes.indexOf(_themeMode)),
-    );
 
     notifyListeners();
   }
