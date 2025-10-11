@@ -1,7 +1,3 @@
-# This is the configuration file for building the Gyawun Music snap.
-# Place this file in the root of your Flutter project directory.
-# To build the snap, run the command: snapcraft
-
 name: gyawun
 base: core22
 version: 1.0.0
@@ -11,19 +7,11 @@ description: "GyawunMusic is a powerful, plugin-capable music app built with Flu
 grade: stable
 confinement: strict
 
-architectures:
-  - build-on: amd64
-  - build-on: arm64
-
 apps:
   gyawun:
     command: gyawun
-    # This is the most critical fix. 'flutter' is the correct name for the
-    # official Snapcraft extension. 'flutter-master' is not recognized.
-    extensions: [flutter]
+    extensions: [gnome]
     plugs:
-      # These plugs are required for rendering, audio, and proper desktop integration.
-      # The 'opengl' plug is essential and likely solves the black screen issue.
       - opengl
       - network
       - audio-playback
@@ -40,13 +28,8 @@ parts:
     plugin: flutter
     source: .
     flutter-target: lib/main.dart
-    # This section is corrected to properly handle dependencies.
-    # '-dev' packages are needed to build, not to run the app.
-    build-packages:
-      # The media_kit plugin needs the mpv development headers to compile.
-      - libmpv-dev
     stage-packages:
-      # This is the runtime library containing libmpv.so, which media_kit
-      # calls when the app is running.
       - libmpv2
-
+    # override-build: |
+    #   export PKG_CONFIG_PATH=$SNAPCRAFT_STAGE/lib/pkgconfig:$PKG_CONFIG_PATH
+    #   snapcraftctl build
