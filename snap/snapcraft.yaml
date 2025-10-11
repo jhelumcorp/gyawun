@@ -28,6 +28,8 @@ parts:
     plugin: flutter
     source: .
     flutter-target: lib/main.dart
+    build-packages:
+      - libmpv-dev
     stage-packages:
       - mpv
     # override-build: |
