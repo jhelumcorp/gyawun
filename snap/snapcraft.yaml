@@ -18,9 +18,9 @@ architectures:
 apps:
   gyawun:
     command: gyawun
-    # This is the most critical fix. The flutter-master extension correctly
-    # sets up the graphics environment and library paths for a Flutter app.
-    extensions: [flutter-master]
+    # This is the most critical fix. 'flutter' is the correct name for the
+    # official Snapcraft extension. 'flutter-master' is not recognized.
+    extensions: [flutter]
     plugs:
       # These plugs are required for rendering, audio, and proper desktop integration.
       # The 'opengl' plug is essential and likely solves the black screen issue.
