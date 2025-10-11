@@ -28,8 +28,10 @@ parts:
     plugin: flutter
     source: .
     flutter-target: lib/main.dart
+    build-packages:
+      - libmpv-dev
     stage-packages:
-      - libmpv2
+      - mpv
     # override-build: |
     #   export PKG_CONFIG_PATH=$SNAPCRAFT_STAGE/lib/pkgconfig:$PKG_CONFIG_PATH
     #   snapcraftctl build
