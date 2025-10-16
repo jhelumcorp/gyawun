@@ -1,8 +1,8 @@
 id: com.jhelum.gyawun
 app_name: gyawun
 desktop_name: Gyawun Music
-version: 1.0.0
-build: 1
+version: 2.0.15
+build: 40
 author: Jhelum Corp
 summary: GyawunMusic – A modern Flutter music player
 description: GyawunMusic is a powerful, plugin-capable music app built with Flutter.

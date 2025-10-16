@@ -16,7 +16,6 @@ import 'settings_manager.dart';
 
 class MediaPlayer extends ChangeNotifier {
   late AudioPlayer _player;
-  String address;
   final _playlist = <AudioSource>[];
 
   final _loudnessEnhancer = AndroidLoudnessEnhancer();
@@ -39,7 +38,7 @@ class MediaPlayer extends ChangeNotifier {
 
   bool _shuffleModeEnabled = false;
 
-  MediaPlayer(this.address) {
+  MediaPlayer() {
     if (Platform.isAndroid) {
       _equalizer = AndroidEqualizer();
     }
@@ -87,7 +86,7 @@ class MediaPlayer extends ChangeNotifier {
     });
   }
 
-  _loadLoudnessEnhancer() async {
+  Future<void> _loadLoudnessEnhancer() async {
     await _loudnessEnhancer
         .setEnabled(GetIt.I<SettingsManager>().loudnessEnabled);
 
@@ -95,7 +94,7 @@ class MediaPlayer extends ChangeNotifier {
         .setTargetGain(GetIt.I<SettingsManager>().loudnessTargetGain);
   }
 
-  _loadEqualizer() async {
+  Future<void> _loadEqualizer() async {
     if (!Platform.isAndroid) return;
     await _equalizer!.setEnabled(GetIt.I<SettingsManager>().equalizerEnabled);
     _equalizer!.parameters.then((value) async {
@@ -239,7 +238,7 @@ class MediaPlayer extends ChangeNotifier {
     });
   }
 
-  changeLoopMode() {
+  void changeLoopMode() {
     switch (_loopMode.value) {
       case LoopMode.off:
         _loopMode.value = LoopMode.all;
@@ -292,40 +291,19 @@ class MediaPlayer extends ChangeNotifier {
     return audioSource;
   }
 
-  // void download() async {
-  //   List<String> qualVidOptions = ['480p', '720p', '1080p', '2K', '4K'];
-  //   List<String> qualAudOptions = ['64k', '128k', '192k', '256k', '320k'];
-
-  //   String command =
-  //       'yt-dlp -f \'bestvideo[height<=${qualVid.replaceAll('p', '')}]'
-  //       '+bestaudio/best[height<=${qualVid.replaceAll('p', '')}]\' $ytUrl';
-  //   if (dlAud) command += ' -x --audio-format mp3 --audio-quality ${qualAud}';
-  //   if (dlThumb) command += ' --write-thumbnail';
-  //   if (timeStart != null && timeEnd != null) {
-  //     command +=
-  //         ' --postprocessor-args "-ss ${timeStart!.format(context)} -to ${timeEnd!.format(context)}"';
-  //   }
-  //   Shell shell = Shell();
-  //   if (kDebugMode) {
-  //     print("Running command: ==================================== ");
-  //     print(command);
-  //   }
-  //   await shell.run(command);
-  // }
 
   Future<void> playSong(Map<String, dynamic> song,
       {bool autoFetch = true}) async {
     if (song['videoId'] != null) {
       await _player.pause();
       await _player.clearAudioSources();
-      final source = await _getAudioSource(song);
-      await _player.addAudioSource(source);
-      await _player.load();
-      _player.play();
+      // final source = await _getAudioSource(song);
+      // await _player.addAudioSource(source);
+      // _player.play();
       if (autoFetch == true && song['status'] != 'DOWNLOADED') {
         List nextSongs =
             await GetIt.I<YTMusic>().getNextSongList(videoId: song['videoId']);
-        nextSongs.removeAt(0);
+        // nextSongs.removeAt(0);
         await _addSongListToQueue(nextSongs);
       }
     }
@@ -347,12 +325,11 @@ class MediaPlayer extends ChangeNotifier {
       await _addSongListToQueue(songs, isNext: true);
     }
     if (!_player.playing) {
-      await _player.load();
       _player.play();
     }
   }
 
-  playAll(List songs, {index = 0}) async {
+  Future<void> playAll(List songs, {index = 0}) async {
     await _player.clearAudioSources();
     await _addSongListToQueue(songs);
     await _player.seek(Duration.zero, index: index);
@@ -384,7 +361,6 @@ class MediaPlayer extends ChangeNotifier {
         shuffle: shuffle);
     songs.removeAt(0);
     await _addSongListToQueue(songs, isNext: false);
-    await _player.load();
     _player.play();
   }
 
@@ -393,7 +369,6 @@ class MediaPlayer extends ChangeNotifier {
     List songs = await GetIt.I<YTMusic>().getNextSongList(
         playlistId: endpoint['playlistId'], params: endpoint['params']);
     await _addSongListToQueue(songs);
-    await _player.load();
     _player.play();
   }
 
@@ -406,19 +381,23 @@ class MediaPlayer extends ChangeNotifier {
     notifyListeners();
   }
 
-  _addSongListToQueue(List songs, {bool isNext = false}) async {
+  Future<void> _addSongListToQueue(List songs, {bool isNext = false}) async {
     int index = _playlist.length;
     if (isNext) {
       index = _player.sequence.isEmpty ? 0 : currentIndex.value! + 1;
     }
+    if(!_player.playing){
+      _player.play();
+    }
     await Future.forEach(songs, (song) async {
       Map<String, dynamic> mapSong = Map.from(song);
-      await _player.insertAudioSource(index, await _getAudioSource(mapSong));
+      final source = await _getAudioSource(mapSong);
+      await _player.insertAudioSource(index,source );
       index++;
     });
   }
 
-  setTimer(Duration duration) {
+  void setTimer(Duration duration) {
     int seconds = duration.inSeconds;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -432,7 +411,7 @@ class MediaPlayer extends ChangeNotifier {
     });
   }
 
-  cancelTimer() {
+  void cancelTimer() {
     _timerDuration.value = null;
     _timer?.cancel();
     notifyListeners();

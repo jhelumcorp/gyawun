@@ -1,0 +1,102 @@
+app-id: com.jhelum.Gyawun
+runtime: org.freedesktop.Platform
+runtime-version: "24.08"
+sdk: org.freedesktop.Sdk
+command: gyawun
+
+build-options:
+  env:
+    PIP_NO_CACHE_DIR: "off"
+  build-args:
+    - --share=network
+
+finish-args:
+  # Permissions and sandbox access
+  - --share=network
+  - --socket=pulseaudio
+  - --socket=wayland
+  - --socket=x11
+  - --device=all
+  - --filesystem=home
+  - --talk-name=org.freedesktop.Notifications
+  - --env=TMPDIR=/var/tmp
+
+modules:
+  # 🐍 Install Jinja2 for libplacebo Python tools
+  - name: libass
+    sources:
+      - type: archive
+        url: https://github.com/libass/libass/releases/download/0.14.0/libass-0.14.0.tar.xz
+        sha256: 881f2382af48aead75b7a0e02e65d88c5ebd369fe46bc77d9270a94aa8fd38a2
+
+  - name: python3-jinja2
+    buildsystem: simple
+    build-commands:
+      - pip3 install jinja2 --prefix=/app
+  # 🎞️ libplacebo (required by mpv)
+  - name: libplacebo
+    buildsystem: meson
+    builddir: true
+    config-opts:
+      - -Dvulkan=disabled
+      - -Dopengl=disabled
+      - -Ddemos=false
+      - -Dshaderc=disabled
+      - -Dtests=false
+    sources:
+      - type: archive
+        url: https://code.videolan.org/videolan/libplacebo/-/archive/v6.338.2/libplacebo-v6.338.2.tar.gz
+        sha256: d029adbe55bba8aed7aed2c48b0b66081dddfb9d42683a709342e33aa666c544
+  - name: libv4l2
+    sources:
+      - type: archive,
+        url: https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.20.0.tar.bz2,
+        sha256: 956118713f7ccb405c55c7088a6a2490c32d54300dd9a30d8d5008c28d3726f7
+             
+  # 1️⃣ Install libmpv (media_kit native backend)
+  - name: mpv
+    buildsystem: meson
+    config-opts:
+      - -Dbuild-date=false
+      - -Dlibmpv=true
+      - -Dmanpage-build=disabled
+      - -Dcdda=enabled
+      - -Ddvbin=enabled
+      - -Ddvdnav=enabled
+      - -Dlibarchive=enabled
+      - -Dsdl2=enabled
+      - -Dvulkan=enabled
+    sources:
+      - type: archive
+        url: https://github.com/mpv-player/mpv/archive/refs/tags/v0.38.0.tar.gz
+        sha256: 86d9ef40b6058732f67b46d0bbda24a074fae860b3eaae05bab3145041303066
+    build-commands:
+      - install -Dm755 build/libmpv.so /app/lib/libmpv.so
+
+
+
+
+
+  # 2️⃣ Install FFmpeg (needed by mpv)
+  - name: ffmpeg
+    buildsystem: simple
+    build-commands:
+      - ./configure --prefix=/app --disable-debug --disable-doc --disable-static --enable-shared
+      - make -j$(nproc)
+      - make install
+    sources:
+      - type: archive
+        url: https://ffmpeg.org/releases/ffmpeg-6.1.1.tar.xz
+        sha256: 8684f4b00f94b85461884c3719382f1261f0d9eb3d59640a1f4ac0873616f968
+
+  # 3️⃣ Copy your Flutter build
+  - name: gyawun
+    buildsystem: simple
+    build-commands:
+      - install -D build/linux/x64/release/bundle/gyawun /app/bin/gyawun
+      - cp -r build/linux/x64/release/bundle/* /app/
+      - install -D flatpak/com.jhelum.Gyawun.desktop /app/share/applications/com.jhelum.Gyawun.desktop
+      - install -D flatpak/com.jhelum.Gyawun.png /app/share/icons/hicolor/256x256/apps/com.jhelum.Gyawun.png
+    sources:
+      - type: dir
+        path: ../..

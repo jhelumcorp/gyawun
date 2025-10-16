@@ -1,7 +1,7 @@
 name: gyawun
 description: "A new Flutter project."
 publish_to: 'none'
-version: 2.0.14+39
+version: 2.0.15+40
 
 environment:
   sdk: '>=3.4.1 <4.0.0'

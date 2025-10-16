@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gyawun/services/yt_audio_stream.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
@@ -36,7 +35,9 @@ void main() async {
   }
   await initialiseHive();
   if (Platform.isWindows || Platform.isLinux) {
-    JustAudioMediaKit.ensureInitialized();
+    JustAudioMediaKit.ensureInitialized(
+      // libmpv: Platform.isLinux ? '/app/lib/libmpv.so' : null,
+    );
     JustAudioMediaKit.bufferSize = 8 * 1024 * 1024;
     JustAudioMediaKit.title = 'Gyawun Music';
     JustAudioMediaKit.prefetchPlaylist = true;
@@ -60,10 +61,9 @@ void main() async {
   await FileStorage.initialise();
   FileStorage fileStorage = FileStorage();
   SettingsManager settingsManager = SettingsManager();
-  final host = await createAudioStreamServer();
 
   GetIt.I.registerSingleton<SettingsManager>(settingsManager);
-  MediaPlayer mediaPlayer = MediaPlayer(host);
+  MediaPlayer mediaPlayer = MediaPlayer();
   GetIt.I.registerSingleton<MediaPlayer>(mediaPlayer);
   LibraryService libraryService = LibraryService();
   GetIt.I.registerSingleton<DownloadManager>(DownloadManager());
