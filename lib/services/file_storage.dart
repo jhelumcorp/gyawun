@@ -4,6 +4,7 @@ import 'package:audiotags/audiotags.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
@@ -187,22 +188,57 @@ class FileStorage {
   }
 
   static Future<bool> requestPermissions() async {
-    if (Platform.isWindows) return true;
-    List<Permission> permissions = [
-      Permission.manageExternalStorage,
-      Permission.storage
-    ];
-    bool isGranted =
-        (await Permission.manageExternalStorage.status.isGranted) ||
-            (await Permission.storage.status.isGranted);
-    if (isGranted) return true;
-    await permissions.request();
-    isGranted = (await Permission.manageExternalStorage.status.isGranted) ||
-        (await Permission.storage.status.isGranted);
-    if (!(isGranted)) {
-      await openAppSettings();
+    if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+      // Desktop platforms do not need permission
+      return true;
     }
+
+    if (Platform.isIOS) {
+      // iOS app-specific storage doesn't require permission
+      return true;
+    }
+
+    bool isGranted = false;
+
+    if (Platform.isAndroid) {
+      int sdkInt = (await _getAndroidSdkInt()) ?? 30;
+
+      if (sdkInt >= 30) {
+        // Android 11+ requires MANAGE_EXTERNAL_STORAGE for arbitrary access
+        isGranted = await Permission.manageExternalStorage.isGranted;
+        if (!isGranted) {
+          await Permission.manageExternalStorage.request();
+          isGranted = await Permission.manageExternalStorage.isGranted;
+        }
+      } else {
+        // Android < 11 uses standard storage permission
+        isGranted = await Permission.storage.isGranted;
+        if (!isGranted) {
+          await Permission.storage.request();
+          isGranted = await Permission.storage.isGranted;
+        }
+      }
+
+      if (!isGranted) {
+        // Open settings if permission denied
+        await openAppSettings();
+      }
+    }
+
     return isGranted;
+  }
+
+  // Helper function to get Android SDK version
+  static Future<int?> _getAndroidSdkInt() async {
+    try {
+      final String? sdkString = await MethodChannel('flutter/platform')
+          .invokeMethod<String>('SystemNavigator.getPlatformVersion');
+      if (sdkString != null) {
+        final match = RegExp(r'Android (\d+)').firstMatch(sdkString);
+        if (match != null) return int.tryParse(match.group(1)!);
+      }
+    } catch (_) {}
+    return null;
   }
 }
 
