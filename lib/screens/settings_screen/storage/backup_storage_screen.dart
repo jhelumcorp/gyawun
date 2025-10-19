@@ -30,7 +30,7 @@ class BackupStorageScreen extends StatelessWidget {
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1000),
           child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             children: [
               if (Platform.isAndroid) ...[
                 GroupTitle(title: "Storage"),
@@ -82,7 +82,19 @@ class BackupStorageScreen extends StatelessWidget {
                 title: S.of(context).Restore,
                 leading: Icon(Icons.restore_outlined),
                 isLast: true,
-                onTap: () => GetIt.I<FileStorage>().loadBackup(context),
+                onTap: () async {
+                  bool success =
+                      await GetIt.I<FileStorage>().loadBackup(context);
+                  if (context.mounted) {
+                    if (success) {
+                      BottomMessage.showText(
+                          context, S.of(context).Restore_Success);
+                    } else {
+                      BottomMessage.showText(
+                          context, S.of(context).Restore_Failed);
+                    }
+                  }
+                },
               ),
             ],
           ),
@@ -93,7 +105,9 @@ class BackupStorageScreen extends StatelessWidget {
 }
 
 Future<void> _backup(BuildContext context) async {
-  List? items = await showCupertinoModalPopup(
+  String? action;
+  List? items;
+  (action, items) = await showCupertinoModalPopup(
       useRootNavigator: false,
       context: context,
       builder: (context) {
@@ -139,7 +153,8 @@ Future<void> _backup(BuildContext context) async {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 20,
                     children: [
                       MaterialButton(
                         onPressed: () {
@@ -147,13 +162,34 @@ Future<void> _backup(BuildContext context) async {
                               .where((el) => el['selected'] == true)
                               .map((el) => el['name'].toLowerCase())
                               .toList();
-                          context.pop(finalItems.isEmpty ? null : finalItems);
+                          context.pop(finalItems.isEmpty
+                              ? (null, null)
+                              : ("Share", finalItems));
                         },
                         color: Theme.of(context).colorScheme.primary,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         child: Text(
-                          'Done',
+                          S.of(context).Share,
+                          style: TextStyle(
+                              color: Theme.of(context).scaffoldBackgroundColor),
+                        ),
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          List finalItems = items.value
+                              .where((el) => el['selected'] == true)
+                              .map((el) => el['name'].toLowerCase())
+                              .toList();
+                          context.pop(finalItems.isEmpty
+                              ? (null, null)
+                              : ("Save", finalItems));
+                        },
+                        color: Theme.of(context).colorScheme.primary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Text(
+                          S.of(context).Save,
                           style: TextStyle(
                               color: Theme.of(context).scaffoldBackgroundColor),
                         ),
@@ -166,7 +202,7 @@ Future<void> _backup(BuildContext context) async {
           ),
         );
       });
-  if (items == null) {
+  if (action == null || items == null) {
     return;
   }
   Map backup = {
@@ -196,9 +232,18 @@ Future<void> _backup(BuildContext context) async {
     Map downloads = Hive.box('DOWNLOADS').toMap();
     backup['data']['downloads'] = downloads;
   }
-  File? file = await GetIt.I<FileStorage>().saveBackUp(backup);
-  if (file == null) return;
+  String? backupPath = "";
+  if (action == 'Save') {
+    backupPath = await GetIt.I<FileStorage>().saveBackUp(backup);
+  } else if (action == 'Share') {
+    backupPath = await GetIt.I<FileStorage>().shareBackUp(backup);
+  }
   if (context.mounted) {
-    BottomMessage.showText(context, 'Backed up successfully at ${file.path}');
+    if (backupPath == "") {
+      BottomMessage.showText(context, S.of(context).Backup_Failed);
+    } else {
+      BottomMessage.showText(
+          context, '${S.of(context).Backup_Success} $backupPath');
+    }
   }
 }

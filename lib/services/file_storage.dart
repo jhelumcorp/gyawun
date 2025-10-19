@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as path;
+import 'package:share_plus/share_plus.dart';
 
 import '../utils/enhanced_image.dart';
 import '../ytmusic/ytmusic.dart';
@@ -20,6 +21,7 @@ import 'settings_manager.dart';
 
 class FileStorage {
   static bool _initialised = false;
+  static final String defaultPath = '/storage/emulated/0/Download/';
   static late StoragePaths _storagePaths;
   late StoragePaths storagePaths;
   FileStorage() {
@@ -32,7 +34,8 @@ class FileStorage {
   static Future<void> initialise() async {
     Directory directory = Directory("dir");
     if (Platform.isAndroid) {
-      directory = Directory(Hive.box('SETTINGS').get('APP_FOLDER',defaultValue:'/storage/emulated/0/Download/Gyawun'));
+      directory = Directory(Hive.box('SETTINGS')
+          .get('APP_FOLDER', defaultValue: FileStorage.defaultPath));
     } else if (Platform.isWindows) {
       directory =
           Directory(path.join((await getDownloadsDirectory())!.path, 'Gyawun'));
@@ -50,17 +53,19 @@ class FileStorage {
     _initialised = true;
   }
 
-  updateDirectories()async{
+  updateDirectories() async {
     Directory directory = Directory("dir");
     if (Platform.isAndroid) {
-      directory = Directory(Hive.box('SETTINGS').get('APP_FOLDER',defaultValue:'/storage/emulated/0/Download')+'/Gyawun');
+      directory = Directory(Hive.box('SETTINGS')
+              .get('APP_FOLDER', defaultValue: FileStorage.defaultPath) +
+          '/Gyawun');
     } else if (Platform.isWindows) {
       directory =
           Directory(path.join((await getDownloadsDirectory())!.path, 'Gyawun'));
     } else {
       directory = await getApplicationDocumentsDirectory();
     }
-     storagePaths = StoragePaths(
+    storagePaths = StoragePaths(
       basePath: directory.path,
       backupPath: path.join(directory.path, 'Back Up'),
       musicPath: path.join(directory.path, 'Music'),
@@ -70,10 +75,10 @@ class FileStorage {
     _initialised = true;
   }
 
-  Future<File?> saveBackUp(Map data) async {
+  Future<String> saveBackUp(Map data) async {
     String timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
     String fileName = '${timestamp}_backup';
-    if (!(await requestPermissions())) return null;
+    if (!(await requestPermissions())) return "";
     Directory directory = await _getDirectory(storagePaths.backupPath);
 
     String filePath = path.join(directory.path, '$fileName.json');
@@ -82,14 +87,30 @@ class FileStorage {
       if (await file.exists()) {
         await file.delete();
       }
-      await file.writeAsString(jsonEncode(data), flush: true);
-      return file;
+      File result = await file.writeAsString(jsonEncode(data), flush: true);
+      return result.path;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<File?> saveMusic(List<int> data, Map song,{extension='m4a'}) async {
+  Future<String> shareBackUp(Map data) async {
+    String timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
+    String fileName = '${timestamp}_backup.json';
+    try {
+      final params = ShareParams(files: [
+        XFile.fromData(utf8.encode(jsonEncode(data)), mimeType: 'text/plain')
+      ], fileNameOverrides: [
+        fileName
+      ]);
+      ShareResult result = await SharePlus.instance.share(params);
+      return result.raw;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<File?> saveMusic(List<int> data, Map song, {extension = 'm4a'}) async {
     String fileName = song['title'];
     final RegExp avoid = RegExp(r'[\.\\\*\:\(\)\"\?#/;\|]');
     fileName = fileName.replaceAll(avoid, '').replaceAll("'", '');
@@ -108,25 +129,24 @@ class FileStorage {
         await file.delete();
       }
       await file.writeAsBytes(data, flush: true);
-      
-      
-      try{
+
+      try {
         Response res = await get(
-          Uri.parse(getEnhancedImage(song['thumbnails'].first['url'])));
-      Tag tag = Tag(
-          title: song['title'],
-          trackArtist:
-              song['artists']?.map((artist) => artist['name']).join(','),
-          album: song['album']?['name'],
-          pictures: [
-            Picture(
-              bytes: res.bodyBytes,
-              pictureType: PictureType.coverFront,
-            )
-          ]);
+            Uri.parse(getEnhancedImage(song['thumbnails'].first['url'])));
+        Tag tag = Tag(
+            title: song['title'],
+            trackArtist:
+                song['artists']?.map((artist) => artist['name']).join(','),
+            album: song['album']?['name'],
+            pictures: [
+              Picture(
+                bytes: res.bodyBytes,
+                pictureType: PictureType.coverFront,
+              )
+            ]);
         await AudioTags.write(file.path, tag);
-      }catch(e){
-        await file.writeAsBytes(data,flush: true);
+      } catch (e) {
+        await file.writeAsBytes(data, flush: true);
       }
       return file;
     } catch (e) {
@@ -134,8 +154,8 @@ class FileStorage {
     }
   }
 
-  Future<void> loadBackup(BuildContext context) async {
-    if (!(await requestPermissions())) return;
+  Future<bool> loadBackup(BuildContext context) async {
+    if (!(await requestPermissions())) return false;
     FilePickerResult? picker = await FilePicker.platform.pickFiles(
       initialDirectory: storagePaths.backupPath,
       allowMultiple: false,
@@ -143,12 +163,12 @@ class FileStorage {
       type: FileType.custom,
       allowedExtensions: ['json'],
     );
-    if (picker == null) return;
+    if (picker == null) return false;
     final file = picker.files[0].xFile;
     String data = await file.readAsString();
     Map backup = jsonDecode(data);
     if (backup['name'] != 'Gyawun' && backup['type'] != 'backup') {
-      return;
+      return false;
     }
     Map? settings = backup['data']?['settings'];
     Map? favourites = backup['data']?['favourites'];
@@ -177,6 +197,7 @@ class FileStorage {
         Hive.box('DOWNLOADS').put(entry.key, entry.value);
       });
     }
+    return true;
   }
 
   static Future<Directory> _getDirectory(String pathString) async {
