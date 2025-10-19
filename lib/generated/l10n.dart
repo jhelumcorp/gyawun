@@ -393,6 +393,11 @@ class S {
     );
   }
 
+  /// `App Folder`
+  String get App_Folder {
+    return Intl.message('App Folder', name: 'App_Folder', desc: '', args: []);
+  }
+
   /// `Skip Silence`
   String get Skip_Silence {
     return Intl.message(
@@ -501,6 +506,56 @@ class S {
   /// `Restore`
   String get Restore {
     return Intl.message('Restore', name: 'Restore', desc: '', args: []);
+  }
+
+  /// `Share`
+  String get Share {
+    return Intl.message('Share', name: 'Share', desc: '', args: []);
+  }
+
+  /// `Save`
+  String get Save {
+    return Intl.message('Save', name: 'Save', desc: '', args: []);
+  }
+
+  /// `Backed up successfully at`
+  String get Backup_Success {
+    return Intl.message(
+      'Backed up successfully at',
+      name: 'Backup_Success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to back up Data`
+  String get Backup_Failed {
+    return Intl.message(
+      'Failed to back up Data',
+      name: 'Backup_Failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Data successfully restored`
+  String get Restore_Success {
+    return Intl.message(
+      'Data successfully restored',
+      name: 'Restore_Success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to restore Data`
+  String get Restore_Failed {
+    return Intl.message(
+      'Failed to restore Data',
+      name: 'Restore_Failed',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Select Backup`
