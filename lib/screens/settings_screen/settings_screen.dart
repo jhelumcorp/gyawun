@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun/screens/settings_screen/setting_item.dart';
+import 'package:gyawun/utils/check_update.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -61,11 +62,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1000),
           child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             children: [
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
                 child: AdaptiveTextField(
                   controller: searchController,
                   onChanged: (value) {
@@ -103,7 +104,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ListTile(
                   tileColor: Colors.red.withOpacity(0.3),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(25),
                   ),
                   leading: const ColorIcon(
                     icon: Icons.battery_alert,
@@ -136,24 +137,84 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 4),
                 ),
               if (searchText == "") ...[
-                ...settingScreenData(context).indexed.map((item) {
-                  final settingItem = item.$2;
-
-                  return SettingTile(
-                    title: settingItem.title,
-                    leading: Icon(settingItem.icon),
-                    isFirst: item.$1 == 0,
-                    isLast: item.$1 == settingScreenData(context).length - 1,
-                    onTap: () {
-                      if (settingItem.hasNavigation &&
-                          settingItem.location != null) {
-                        context.go(settingItem.location!);
-                      } else if (settingItem.onTap != null) {
-                        settingItem.onTap!(context);
+                GroupTitle(title: "General"),
+                SettingTile(
+                  title: S.of(context).Appearence,
+                  leading: Icon(Icons.looks_rounded),
+                  isFirst: true,
+                  onTap: () {
+                    context.go('/settings/appearence');
+                  },
+                ),
+                SettingTile(
+                  title: S.of(context).Audio_And_Playback,
+                  leading: Icon(Icons.play_arrow_rounded),
+                  isLast: true,
+                  onTap: () {
+                    context.go('/settings/playback');
+                  },
+                ),
+                GroupTitle(title: "Services"),
+                SettingTile(
+                  title: "Youtube Music",
+                  leading: Icon(Icons.play_circle_fill),
+                  isFirst: true,
+                  isLast: true,
+                  onTap: () {
+                    context.go('/settings/content');
+                  },
+                ),
+                GroupTitle(title: "Storage & Data"),
+                SettingTile(
+                  title: S.of(context).Backup_And_Restore,
+                  leading: Icon(Icons.cloud_upload_rounded),
+                  isFirst: true,
+                  isLast: true,
+                  onTap: () {
+                    context.go('/settings/backup_restore');
+                  },
+                ),
+                GroupTitle(title: "Updates & About"),
+                SettingTile(
+                  title: S.of(context).About,
+                  leading: Icon(Icons.info_rounded),
+                  isFirst: true,
+                  onTap: () {
+                    context.go('/settings/about');
+                  },
+                ),
+                SettingTile(
+                  title: S.of(context).Check_For_Update,
+                  leading: Icon(Icons.update_rounded),
+                  isLast: true,
+                  onTap: () {
+                    Modals.showCenterLoadingModal(context);
+                    checkUpdate().then((updateInfo) {
+                      if(mounted){
+                        Navigator.pop(context);
+                      Modals.showUpdateDialog(context, updateInfo);
                       }
-                    },
-                  );
-                })
+                    });
+                  },
+                ),
+                // ...settingScreenData(context).indexed.map((item) {
+                //   final settingItem = item.$2;
+
+                //   return SettingTile(
+                //     title: settingItem.title,
+                //     leading: Icon(settingItem.icon),
+                //     isFirst: item.$1 == 0,
+                //     isLast: item.$1 == settingScreenData(context).length - 1,
+                //     onTap: () {
+                //       if (settingItem.hasNavigation &&
+                //           settingItem.location != null) {
+                //         context.go(settingItem.location!);
+                //       } else if (settingItem.onTap != null) {
+                //         settingItem.onTap!(context);
+                //       }
+                //     },
+                //   );
+                // })
               ] else
                 ...allSettingsData(context)
                     .where((element) => element.title

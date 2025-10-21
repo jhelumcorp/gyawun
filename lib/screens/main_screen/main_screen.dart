@@ -172,6 +172,7 @@ class _MainScreenState extends State<MainScreen> {
               ],
               backgroundColor:
                   Theme.of(context).colorScheme.surfaceContainerLow,
+              selectedItemColor: Theme.of(context).colorScheme.onSurface,
               onTap: _goBranch,
             )
           : null,

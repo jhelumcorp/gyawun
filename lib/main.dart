@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyawun/themes/theme.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
@@ -18,9 +19,6 @@ import 'services/library.dart';
 import 'services/lyrics.dart';
 import 'services/media_player.dart';
 import 'services/settings_manager.dart';
-import 'themes/colors.dart';
-import 'themes/dark.dart';
-import 'themes/light.dart';
 import 'utils/router.dart';
 import 'ytmusic/ytmusic.dart';
 
@@ -109,33 +107,44 @@ class Gyawun extends StatelessWidget {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           themeMode: context.watch<SettingsManager>().themeMode,
-          theme: lightTheme(
-            colorScheme: context.watch<SettingsManager>().dynamicColors &&
-                    lightScheme != null
-                ? lightScheme
-                : ColorScheme.fromSeed(
-                    seedColor: context.watch<SettingsManager>().accentColor ??
-                        Colors.black,
-                    primary: context.watch<SettingsManager>().accentColor ??
-                        Colors.black,
-                    brightness: Brightness.light,
-                  ),
-          ),
-          darkTheme: darkTheme(
-            colorScheme: context.watch<SettingsManager>().dynamicColors &&
-                    darkScheme != null
-                ? darkScheme
-                : ColorScheme.fromSeed(
-                    seedColor: context.watch<SettingsManager>().accentColor ??
-                        primaryWhite,
-                    primary: context.watch<SettingsManager>().accentColor ??
-                        primaryWhite,
-                    brightness: Brightness.dark,
-                    surface: context.watch<SettingsManager>().amoledBlack
-                        ? Colors.black
-                        : null,
-                  ),
-          ),
+          theme: AppTheme.light(
+                primary: context.watch<SettingsManager>().dynamicColors && lightScheme != null
+                    ? lightScheme.primary
+                    : context.watch<SettingsManager>().accentColor,
+              ),
+              darkTheme: AppTheme.dark(
+                primary: context.watch<SettingsManager>().dynamicColors && darkScheme != null
+                    ? darkScheme.primary
+                    : context.watch<SettingsManager>().accentColor,
+                isPureBlack: context.watch<SettingsManager>().amoledBlack,
+              ),
+          // theme: lightTheme(
+          //   colorScheme: context.watch<SettingsManager>().dynamicColors &&
+          //           lightScheme != null
+          //       ? lightScheme
+          //       : ColorScheme.fromSeed(
+          //           seedColor: context.watch<SettingsManager>().accentColor ??
+          //               Colors.black,
+          //           primary: context.watch<SettingsManager>().accentColor ??
+          //               Colors.black,
+          //           brightness: Brightness.light,
+          //         ),
+          // ),
+          // darkTheme: darkTheme(
+          //   colorScheme: context.watch<SettingsManager>().dynamicColors &&
+          //           darkScheme != null
+          //       ? darkScheme
+          //       : ColorScheme.fromSeed(
+          //           seedColor: context.watch<SettingsManager>().accentColor ??
+          //               primaryWhite,
+          //           primary: context.watch<SettingsManager>().accentColor ??
+          //               primaryWhite,
+          //           brightness: Brightness.dark,
+          //           surface: context.watch<SettingsManager>().amoledBlack
+          //               ? Colors.black
+          //               : null,
+          //         ),
+          // ),
         ),
       );
     });
