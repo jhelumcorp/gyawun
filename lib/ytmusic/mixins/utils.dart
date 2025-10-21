@@ -146,7 +146,7 @@ Map<String, dynamic> handlePageHeader(Map<String, dynamic> header,
   return result;
 }
 
-handleContents(List contents, {List? thumbnails}) {
+List handleContents(List contents, {List? thumbnails}) {
   List contentsResult = [];
   for (Map content in contents) {
     Map result = {};
@@ -309,7 +309,7 @@ Map<String, dynamic> handleGridRenderer(Map item) {
   return section;
 }
 
-handleContinuationContents(Map item) {
+Map<String, dynamic> handleContinuationContents(Map item) {
   Map<String, dynamic> section = {
     'title': null,
     'contents': [],
@@ -322,7 +322,7 @@ handleContinuationContents(Map item) {
   return section;
 }
 
-handleMusicPlaylistShelfRenderer(Map item) {
+Map<String, dynamic> handleMusicPlaylistShelfRenderer(Map item) {
   Map<String, dynamic> section = {'contents': []};
   if (nav(item, ['playlistId']) != null) {
     section['playlistId'] = nav(item, ['playlistId']);
@@ -403,7 +403,7 @@ Map<String, dynamic> handleMusicResponsiveListItemRenderer(Map item,
   return itemresult;
 }
 
-handleMusicTwoRowItemRenderer(Map item, {List? thumbnails}) {
+Map handleMusicTwoRowItemRenderer(Map item, {List? thumbnails}) {
   Map itemresult = {
     'title': nav(item, ['title', 'runs', 0, 'text']),
     'thumbnails': nav(item, [
@@ -473,7 +473,7 @@ handleMusicTwoRowItemRenderer(Map item, {List? thumbnails}) {
   return itemresult;
 }
 
-handlePlaylistPanelVideoRenderer(Map item) {
+Map handlePlaylistPanelVideoRenderer(Map item) {
   Map itemresult = {
     'title': nav(item, ['title', 'runs', 0, 'text']),
     'thumbnails': nav(item, ['thumbnail', 'thumbnails']),
@@ -540,7 +540,7 @@ handlePlaylistPanelVideoRenderer(Map item) {
   return itemresult;
 }
 
-handleMusicMultiRowListItemRenderer(Map item) {
+Map handleMusicMultiRowListItemRenderer(Map item) {
   Map itemresult = {
     'title': nav(item, ['title', 'runs', 0, 'text']),
     'type': itemCategory[nav(item, [

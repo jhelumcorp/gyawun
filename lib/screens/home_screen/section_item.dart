@@ -45,7 +45,7 @@ class _SectionItemState extends State<SectionItem> {
     super.dispose();
   }
 
-  loadMoreItems() {
+  void loadMoreItems() {
     if (widget.section['continuation'] != null) {
       setState(() {
         loadingMore = true;

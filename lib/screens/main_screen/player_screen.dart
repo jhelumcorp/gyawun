@@ -72,7 +72,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     super.dispose();
   }
 
-  songListener() {
+  void songListener() {
     if (currentSong != GetIt.I<MediaPlayer>().currentSongNotifier.value) {
       if (mounted) {
         setState(() {
@@ -83,7 +83,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     }
   }
 
-  setShowLyrics() {
+  void setShowLyrics() {
     if (mounted) {
       setState(() {
         showLyrics = !showLyrics;
@@ -91,7 +91,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     }
   }
 
-  _fetchImage() {
+  void _fetchImage() {
     if (!mounted) return;
     if (currentSong?.extras?['thumbnails'] != null &&
         currentSong?.extras?['thumbnails'].isNotEmpty &&

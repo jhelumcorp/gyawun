@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchHome();
   }
 
-  _scrollListener() async {
+  Future<void> _scrollListener() async {
     if (initialLoading || nextLoading || continuation == null) {
       return;
     }
@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  fetchHome() async {
+  Future<void> fetchHome() async {
     setState(() {
       initialLoading = true;
       nextLoading = false;
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  refresh() async {
+  Future<void> refresh() async {
     if (initialLoading) return;
     Map<String, dynamic> home = await ytMusic.browse();
     if (mounted) {
@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  fetchNext() async {
+  Future<void> fetchNext() async {
     if (continuation == null) return;
     setState(() {
       nextLoading = true;
@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.3),
+                color: Colors.grey.withValues(alpha:0.3),
                 borderRadius: BorderRadius.circular(10)),
             child: Text(element['title']),
           ),
@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       textInputAction: TextInputAction.search,
                       fillColor: Platform.isWindows
                           ? null
-                          : Colors.grey.withOpacity(0.3),
+                          : Colors.grey.withValues(alpha:0.3),
                       contentPadding: const EdgeInsets.symmetric(
                           vertical: 2, horizontal: 8),
                       borderRadius:

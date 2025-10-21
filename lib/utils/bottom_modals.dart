@@ -85,7 +85,7 @@ class Modals {
     );
   }
 
-  static showSongBottomModal(BuildContext context, Map song) {
+  static void showSongBottomModal(BuildContext context, Map song) {
     showModalBottomSheet(
       context: context,
       useRootNavigator: false,
@@ -96,7 +96,7 @@ class Modals {
     );
   }
 
-  static showPlayerOptionsModal(
+  static void showPlayerOptionsModal(
     BuildContext context,
     Map song,
   ) {
@@ -110,7 +110,7 @@ class Modals {
     );
   }
 
-  static showPlaylistBottomModal(BuildContext context, Map playlist) {
+  static void showPlaylistBottomModal(BuildContext context, Map playlist) {
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -121,7 +121,7 @@ class Modals {
     );
   }
 
-  static showArtistsBottomModal(BuildContext context, List artists,
+  static Future showArtistsBottomModal(BuildContext context, List artists,
       {String? leading, bool shouldPop = false}) {
     return showModalBottomSheet(
       useRootNavigator: false,
@@ -134,7 +134,7 @@ class Modals {
     );
   }
 
-  static showCreateplaylistModal(BuildContext context, {Map? item}) {
+  static void showCreateplaylistModal(BuildContext context, {Map? item}) {
     String title = '';
 
     showModalBottomSheet(
@@ -147,7 +147,7 @@ class Modals {
     );
   }
 
-  static showImportplaylistModal(BuildContext context, {Map? item}) {
+  static void showImportplaylistModal(BuildContext context, {Map? item}) {
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -158,7 +158,7 @@ class Modals {
     );
   }
 
-  static showPlaylistRenameBottomModal(BuildContext context,
+  static void showPlaylistRenameBottomModal(BuildContext context,
       {required String playlistId, String? name}) {
     showModalBottomSheet(
       useRootNavigator: false,
@@ -171,7 +171,7 @@ class Modals {
     );
   }
 
-  static addToPlaylist(BuildContext context, Map item) {
+  static void addToPlaylist(BuildContext context, Map item) {
     showModalBottomSheet(
       useRootNavigator: false,
       backgroundColor: Colors.transparent,
@@ -203,7 +203,7 @@ class Modals {
         false;
   }
 
-  static showAccentSelector(BuildContext context) {
+  static void showAccentSelector(BuildContext context) {
     showModalBottomSheet(
       context: context,
       useRootNavigator: false,
@@ -215,7 +215,7 @@ class Modals {
   }
 }
 
-_confirmBottomModal(
+BottomModalLayout _confirmBottomModal(
   BuildContext context, {
   required String message,
   bool isDanger = false,
@@ -266,7 +266,7 @@ _confirmBottomModal(
   );
 }
 
-_playlistRenameBottomModal(BuildContext context,
+BottomModalLayout _playlistRenameBottomModal(BuildContext context,
     {String? name, required String playlistId}) {
   TextEditingController controller = TextEditingController();
   controller.text = name ?? '';
@@ -318,7 +318,7 @@ _playlistRenameBottomModal(BuildContext context,
       ));
 }
 
-_artistsBottomModal(BuildContext context, List<dynamic> artists,
+BottomModalLayout _artistsBottomModal(BuildContext context, List<dynamic> artists,
     {bool shouldPop = false}) {
   return BottomModalLayout(
       title: Center(
@@ -480,7 +480,7 @@ Widget _importPlaylistModal(BuildContext context) {
   );
 }
 
-_addToPlaylist(BuildContext context, Map item) {
+BottomModalLayout _addToPlaylist(BuildContext context, Map item) {
   return BottomModalLayout(
     title: AdaptiveListTile(
       contentPadding: EdgeInsets.zero,
@@ -591,7 +591,7 @@ _addToPlaylist(BuildContext context, Map item) {
   );
 }
 
-_updateDialog(BuildContext context, UpdateInfo? updateInfo) {
+SizedBox _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
   final f = DateFormat('MMMM dd, yyyy');
 
   return SizedBox(
@@ -665,7 +665,7 @@ _updateDialog(BuildContext context, UpdateInfo? updateInfo) {
   );
 }
 
-_textFieldBottomModal(BuildContext context,
+BottomModalLayout _textFieldBottomModal(BuildContext context,
     {String? title, String? hintText, String? doneText}) {
   String? text;
   return BottomModalLayout(
@@ -710,7 +710,7 @@ _textFieldBottomModal(BuildContext context,
   );
 }
 
-_playerOptionsModal(BuildContext context, Map song) {
+BottomModalLayout _playerOptionsModal(BuildContext context, Map song) {
   return BottomModalLayout(
       child: SingleChildScrollView(
     child: Column(
@@ -869,7 +869,7 @@ _playerOptionsModal(BuildContext context, Map song) {
   ));
 }
 
-_showSelection(BuildContext context, List<SelectionItem> items) {
+BottomModalLayout _showSelection(BuildContext context, List<SelectionItem> items) {
   return BottomModalLayout(
     title: Center(
       child: Text(
@@ -896,7 +896,7 @@ _showSelection(BuildContext context, List<SelectionItem> items) {
   );
 }
 
-_songBottomModal(BuildContext context, Map song) {
+BottomModalLayout _songBottomModal(BuildContext context, Map song) {
   return BottomModalLayout(
     title: AdaptiveListTile(
       contentPadding: EdgeInsets.zero,
@@ -1032,7 +1032,7 @@ _songBottomModal(BuildContext context, Map song) {
   );
 }
 
-_playlistBottomModal(BuildContext context, Map playlist) {
+BottomModalLayout _playlistBottomModal(BuildContext context, Map playlist) {
   return BottomModalLayout(
     title: AdaptiveListTile(
       contentPadding: EdgeInsets.zero,
@@ -1214,7 +1214,7 @@ _playlistBottomModal(BuildContext context, Map playlist) {
   );
 }
 
-_accentSelector(BuildContext context) {
+BottomModalLayout _accentSelector(BuildContext context) {
   Color? accentColor = GetIt.I<SettingsManager>().accentColor;
   return BottomModalLayout(
     title: Center(

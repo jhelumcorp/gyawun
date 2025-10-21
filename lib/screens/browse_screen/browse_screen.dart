@@ -51,7 +51,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     }
   }
 
-  fetchData() async {
+  Future<void> fetchData() async {
     setState(() {
       initialLoading = true;
       nextLoading = false;
@@ -69,7 +69,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     }
   }
 
-  fetchNext() async {
+  Future<void> fetchNext() async {
     if (continuation == null) return;
     setState(() {
       nextLoading = true;
@@ -87,7 +87,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     }
   }
 
-  _scrollListener() async {
+  Future<void> _scrollListener() async {
     if (initialLoading || nextLoading || continuation == null) {
       return;
     }
@@ -164,7 +164,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     super.initState();
   }
 
-  _buildImage(BuildContext context, List thumbnails, double maxWidth,
+  Widget _buildImage(BuildContext context, List thumbnails, double maxWidth,
       {bool isRound = false}) {
     return isRound
         ? CircleAvatar(
@@ -187,7 +187,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
           );
   }
 
-  _buildContent(Map header, BuildContext context, {bool isRow = false}) {
+  Padding _buildContent(Map header, BuildContext context, {bool isRow = false}) {
     if (widget.header['playlistId'] != null) {
       isAddedToLibrary = context
               .watch<LibraryService>()

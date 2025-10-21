@@ -5,7 +5,7 @@ import '../themes/text_styles.dart';
 import '../utils/adaptive_widgets/theme.dart';
 
 class BottomMessage {
-  static showText(BuildContext context, String text,
+  static void showText(BuildContext context, String text,
       {Duration duration = const Duration(milliseconds: 1500)}) {
     showPlatformToast(
       child: Text(

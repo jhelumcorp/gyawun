@@ -46,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
     _update();
   }
 
-  _handleIntent(SharedMediaFile value) {
+  void _handleIntent(SharedMediaFile value) {
     if (value.mimeType == 'text/plain' &&
         value.path.contains('music.youtube.com')) {
       Uri? uri = Uri.tryParse(value.path);
@@ -75,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
-  _update() async {
+  Future<void> _update() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
     BaseDeviceInfo deviceInfo = await deviceInfoPlugin.deviceInfo;
     UpdateInfo? updateInfo = await Isolate.run(() async {

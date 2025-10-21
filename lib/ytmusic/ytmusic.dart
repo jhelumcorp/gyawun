@@ -1,4 +1,3 @@
-library ytmusic;
 
 import 'package:gyawun/ytmusic/mixins/library.dart';
 

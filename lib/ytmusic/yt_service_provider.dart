@@ -17,7 +17,7 @@ abstract class YTMusicServices {
     }
   }
 
-  refreshContext() {
+  void refreshContext() {
     context = initializeContext();
   }
 

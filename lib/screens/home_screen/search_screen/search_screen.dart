@@ -42,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  _scrollListener() async {
+  Future<void> _scrollListener() async {
     if (initialLoading || nextLoading || continuation == null) {
       return;
     }
@@ -53,7 +53,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  onSubmit(String value) async {
+  Future<void> onSubmit(String value) async {
     _focusNode?.unfocus();
     setState(() {
       initialLoading = true;
@@ -70,7 +70,7 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  fetchNext() async {
+  Future<void> fetchNext() async {
     if (continuation == null) return;
     setState(() {
       nextLoading = true;
@@ -86,7 +86,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  search(Map<String, dynamic> value, {String additionalParams = ''}) async {
+  Future<void> search(Map<String, dynamic> value, {String additionalParams = ''}) async {
     _textEditingController?.value = value['query'];
     setState(() {
       initialLoading = true;
@@ -100,7 +100,7 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  getSuggestions(String query) async {
+  Future<void> getSuggestions(String query) async {
     await GetIt.I<YTMusic>().getSearchSuggestions(query);
   }
 
@@ -137,7 +137,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 textInputAction: TextInputAction.search,
                                 fillColor: Platform.isWindows
                                     ? null
-                                    : Colors.grey.withOpacity(0.3),
+                                    : Colors.grey.withValues(alpha:0.3),
                                 contentPadding: const EdgeInsets.symmetric(
                                     vertical: 2, horizontal: 8),
                                 borderRadius: BorderRadius.circular(
@@ -323,7 +323,7 @@ class SearchListTile extends StatelessWidget {
           ? Text(
               item['subtitle'],
               maxLines: 1,
-              style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+              style: TextStyle(color: Colors.grey.withValues(alpha:0.9)),
               overflow: TextOverflow.ellipsis,
             )
           : null,

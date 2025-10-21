@@ -38,7 +38,7 @@ class _ChipScreenState extends State<ChipScreen> {
     _scrollController.dispose();
   }
 
-  _scrollListener() async {
+  Future<void> _scrollListener() async {
     if (initialLoading || nextLoading || continuation == null) {
       return;
     }
@@ -49,7 +49,7 @@ class _ChipScreenState extends State<ChipScreen> {
     }
   }
 
-  fetchHome() async {
+  Future<void> fetchHome() async {
     setState(() {
       initialLoading = true;
       nextLoading = false;
@@ -66,7 +66,7 @@ class _ChipScreenState extends State<ChipScreen> {
     }
   }
 
-  fetchNext() async {
+  Future<void> fetchNext() async {
     if (continuation == null) return;
     setState(() {
       nextLoading = true;

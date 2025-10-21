@@ -41,7 +41,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     searchController.dispose();
   }
 
-  checkBatteryOptimisation() async {
+  Future<void> checkBatteryOptimisation() async {
     isBatteryOptimisationDisabled =
         await Permission.ignoreBatteryOptimizations.isGranted;
     setState(() {});
@@ -178,7 +178,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-showPaymentsModal(BuildContext context) {
+void showPaymentsModal(BuildContext context) {
   Widget title = AdaptiveListTile(
     contentPadding: EdgeInsets.zero,
     title: Text(

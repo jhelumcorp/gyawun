@@ -98,7 +98,7 @@ class MyPlayistHeader extends StatelessWidget {
 
   final Map playlist;
 
-  _buildImage(List songs, double maxWidth,
+  Widget _buildImage(List songs, double maxWidth,
       {bool isRound = false, bool isDark = false}) {
     return (songs.isNotEmpty)
         ? ClipRRect(
@@ -143,7 +143,7 @@ class MyPlayistHeader extends StatelessWidget {
           );
   }
 
-  _buildContent(Map playlist, BuildContext context, {bool isRow = false}) {
+  Padding _buildContent(Map playlist, BuildContext context, {bool isRow = false}) {
     return Padding(
       padding: const EdgeInsets.only(left: 8, top: 4),
       child: Column(
