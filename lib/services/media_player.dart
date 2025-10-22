@@ -37,6 +37,7 @@ class MediaPlayer extends ChangeNotifier {
   MediaPlayer() {
     if (Platform.isAndroid) {
       _equalizer = AndroidEqualizer();
+      
     }
     final AudioPipeline pipeline = AudioPipeline(
       androidAudioEffects: [
@@ -48,7 +49,8 @@ class MediaPlayer extends ChangeNotifier {
 
     GetIt.I.registerSingleton<AndroidLoudnessEnhancer>(_loudnessEnhancer);
     if (Platform.isAndroid && _equalizer != null) {
-      GetIt.I.registerSingleton<AndroidEqualizer>(_equalizer!);
+      GetIt.I.registerSingleton<AndroidEqualizer>(_equalizer!);print(GetIt.I<AndroidEqualizer>());
+      
     }
 
     _init();

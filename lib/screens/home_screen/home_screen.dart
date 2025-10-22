@@ -128,10 +128,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveScaffold(
+    return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const AdaptiveAppBar().preferredSize,
-        child: AdaptiveAppBar(
+        preferredSize:  AppBar().preferredSize,
+        child: AppBar(
           automaticallyImplyLeading: false,
           title: Material(
             color: Colors.transparent,

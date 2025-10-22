@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun/screens/settings_screen/privacy/privacy_screen.dart';
 
 import '../screens/home_screen/chip_screen.dart';
 import '../screens/home_screen/home_screen.dart';
@@ -12,10 +13,10 @@ import '../screens/main_screen/player_screen.dart';
 import '../screens/browse_screen/browse_screen.dart';
 import '../screens/settings_screen/about/about_screen.dart';
 import '../screens/settings_screen/appearence/appearence_screen.dart';
-import '../screens/settings_screen/backup_restore/backup_restore_screen.dart';
-import '../screens/settings_screen/content/content_screen.dart';
-import '../screens/settings_screen/playback/audio_and_playback_screen.dart';
-import '../screens/settings_screen/playback/equalizer_screen.dart';
+import '../screens/settings_screen/storage/backup_storage_screen.dart';
+import '../screens/settings_screen/services/ytmusic.dart';
+import '../screens/settings_screen/player/player_screen.dart';
+import '../screens/settings_screen/player/equalizer_screen.dart';
 import '../screens/settings_screen/settings_screen.dart';
 
 GoRouter router = GoRouter(
@@ -106,34 +107,32 @@ List<StatefulShellBranch> branches = [
           // ),
           GoRoute(
             path: 'appearence',
-            pageBuilder: (context, state) =>
-                const CupertinoPage(child: AppearenceScreen()),
+            builder: (context, state) => const AppearenceScreen(),
           ),
           GoRoute(
-            path: 'content',
-            pageBuilder: (context, state) =>
-                const CupertinoPage(child: ContentScreen()),
+            path: 'ytmusic',
+            builder: (context, state) => const YtMuaicScreen(),
           ),
           GoRoute(
-              path: 'playback',
-              pageBuilder: (context, state) =>
-                  const CupertinoPage(child: AudioAndPlaybackScreen()),
+              path: 'player',
+              builder: (context, state) => const PlayerSettingsScreen(),
               routes: [
                 GoRoute(
                   path: 'equalizer',
-                  pageBuilder: (context, state) =>
-                      const CupertinoPage(child: EqualizerScreen()),
+                  builder: (context, state) => const EqualizerScreen(),
                 )
               ]),
           GoRoute(
-            path: 'backup_restore',
-            pageBuilder: (context, state) =>
-                const CupertinoPage(child: BackupRestoreScreen()),
+            path: 'backup_storage',
+            builder: (context, state) => const BackupStorageScreen(),
+          ),
+          GoRoute(
+            path: 'privacy',
+            builder: (context, state) => const PrivacyScreen(),
           ),
           GoRoute(
             path: 'about',
-            pageBuilder: (context, state) =>
-                const CupertinoPage(child: AboutScreen()),
+            builder: (context, state) => const AboutScreen(),
           ),
         ]),
   ])

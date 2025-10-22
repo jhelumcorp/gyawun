@@ -17,7 +17,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../generated/l10n.dart';
 import '../screens/browse_screen/browse_screen.dart';
-import '../screens/settings_screen/playback/equalizer_screen.dart';
+import '../screens/settings_screen/player/equalizer_screen.dart';
 import '../services/bottom_message.dart';
 import '../services/download_manager.dart';
 import '../services/library.dart';

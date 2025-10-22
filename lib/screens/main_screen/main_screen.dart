@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import '../../generated/l10n.dart';
 import '../../themes/text_styles.dart';
@@ -151,29 +150,29 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       bottomNavigationBar: screenWidth < 450
-          ? SalomonBottomBar(
-              currentIndex: widget.navigationShell.currentIndex,
-              items: [
-                SalomonBottomBarItem(
-                  activeIcon: const Icon(CupertinoIcons.music_house_fill),
+          ? NavigationBar(
+              selectedIndex: widget.navigationShell.currentIndex,
+              destinations: [
+                NavigationDestination(
+                  selectedIcon: const Icon(CupertinoIcons.music_house_fill),
                   icon: const Icon(CupertinoIcons.music_house),
-                  title: Text(S.of(context).Home),
+                  label: S.of(context).Home,
                 ),
-                SalomonBottomBarItem(
-                  activeIcon: const Icon(Icons.library_music),
+                NavigationDestination(
+                  selectedIcon: const Icon(Icons.library_music),
                   icon: const Icon(Icons.library_music_outlined),
-                  title: Text(S.of(context).Saved),
+                  label: S.of(context).Saved,
                 ),
-                SalomonBottomBarItem(
-                  activeIcon: const Icon(CupertinoIcons.settings_solid),
+                NavigationDestination(
+                  selectedIcon: const Icon(CupertinoIcons.settings_solid),
                   icon: const Icon(CupertinoIcons.settings),
-                  title: Text(S.of(context).Settings),
+                  label: S.of(context).Settings,
                 ),
               ],
               backgroundColor:
                   Theme.of(context).colorScheme.surfaceContainerLow,
-              selectedItemColor: Theme.of(context).colorScheme.onSurface,
-              onTap: _goBranch,
+              // colo: Theme.of(context).colorScheme.onSurface,
+              onDestinationSelected: _goBranch,
             )
           : null,
     );

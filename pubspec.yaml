@@ -37,7 +37,6 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   url_launcher: ^6.3.0
   country_picker: ^2.0.26
-  # palette_generator: ^0.3.3+4  # Discontinued
   text_scroll: ^0.2.0
   duration_picker: ^1.2.0
   path_provider: ^2.1.3

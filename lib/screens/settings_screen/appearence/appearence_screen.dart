@@ -5,7 +5,6 @@ import 'package:gyawun/utils/bottom_modals.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
-import '../../../themes/text_styles.dart';
 import '../../../utils/adaptive_widgets/adaptive_widgets.dart';
 
 
@@ -14,17 +13,15 @@ class AppearenceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveScaffold(
-      appBar: AdaptiveAppBar(
-        title: Text(S.of(context).Appearence,
-            style: mediumTextStyle(context, bold: false)),
-        centerTitle: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).Appearence,),
       ),
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1000),
           child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
             children: [
               GroupTitle(title: "Theme"),
               SettingTile(
@@ -89,43 +86,6 @@ class AppearenceScreen extends StatelessWidget {
                   context.read<SettingsManager>().dynamicColors = value;
                 },
               ),
-              // ...appearenceScreenData(context).map((e) {
-              //   return Padding(
-              //     padding: const EdgeInsets.symmetric(vertical: 4),
-              //     child: AdaptiveListTile(
-              //       title: Text(
-              //         e.title,
-              //         style: textStyle(context, bold: false)
-              //             .copyWith(fontSize: 16),
-              //       ),
-              //       leading: (e.icon != null)
-              //           ? ColorIcon(
-              //               color: e.color,
-              //               icon: e.icon!,
-              //             )
-              //           : null,
-              //       trailing: e.trailing != null
-              //           ? e.trailing!(context)
-              //           : (e.hasNavigation
-              //               ? Icon(
-              //                   AdaptiveIcons.chevron_right,
-              //                   size: 30,
-              //                 )
-              //               : null),
-              //       onTap: (e.hasNavigation && e.location != null) ||
-              //               e.onTap != null
-              //           ? () {
-              //               if (e.hasNavigation && e.location != null) {
-              //                 context.go(e.location!);
-              //               } else if (e.onTap != null) {
-              //                 e.onTap!(context);
-              //               }
-              //             }
-              //           : null,
-              //       subtitle: e.subtitle != null ? e.subtitle!(context) : null,
-              //     ),
-              //   );
-              // }),
             ],
           ),
         ),

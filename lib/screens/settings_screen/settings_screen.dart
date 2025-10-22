@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun/screens/settings_screen/setting_item.dart';
 import 'package:gyawun/utils/check_update.dart';
@@ -9,12 +9,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
-import '../../themes/colors.dart';
 import '../../themes/text_styles.dart';
 import '../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../utils/bottom_modals.dart';
 import 'color_icon.dart';
-import 'setting_screen_data.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -24,10 +22,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  TextEditingController searchController = TextEditingController();
   bool? isBatteryOptimisationDisabled;
-
-  String searchText = "";
 
   @override
   void initState() {
@@ -35,12 +30,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (Platform.isAndroid) {
       checkBatteryOptimisation();
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    searchController.dispose();
   }
 
   Future<void> checkBatteryOptimisation() async {
@@ -55,54 +44,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AdaptiveAppBar(
         title: Text(S.of(context).Settings,
             style: mediumTextStyle(context, bold: false)),
-        centerTitle: true,
         automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1000),
           child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
             children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-                child: AdaptiveTextField(
-                  controller: searchController,
-                  onChanged: (value) {
-                    setState(() {
-                      searchText = value;
-                    });
-                  },
-                  autofocus: false,
-                  keyboardType: TextInputType.text,
-                  maxLines: 1,
-                  textInputAction: TextInputAction.search,
-                  fillColor:
-                      Platform.isWindows ? null : darkGreyColor.withAlpha(100),
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                  borderRadius:
-                      BorderRadius.circular(Platform.isWindows ? 4.0 : 35),
-                  hintText: S.of(context).Search_Settings,
-                  prefix: const Icon(Icons.search),
-                  suffix: searchController.text.trim().isNotEmpty
-                      ? GestureDetector(
-                          onTap: () {
-                            searchController.text = "";
-                            searchText = "";
-                            setState(() {});
-                          },
-                          child: const Icon(CupertinoIcons.clear),
-                        )
-                      : null,
-                ),
-              ),
-              if (searchText == "" &&
-                  isBatteryOptimisationDisabled != true &&
-                  Platform.isAndroid)
+              if (isBatteryOptimisationDisabled != true && Platform.isAndroid)
                 ListTile(
-                  tileColor: Colors.red.withOpacity(0.3),
+                  tileColor: Theme.of(context)
+                      .colorScheme
+                      .errorContainer
+                      .withAlpha(200),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
@@ -110,149 +65,98 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     icon: Icons.battery_alert,
                     color: Colors.red,
                   ),
-                  title: Text(S.of(context).Battery_Optimisation_title),
+                  title: Text(
+                    S.of(context).Battery_Optimisation_title,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onErrorContainer),
+                  ),
                   subtitle: Text(
                     S.of(context).Battery_Optimisation_message,
-                    style: tinyTextStyle(context),
+                    style: tinyTextStyle(context).copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onErrorContainer
+                          .withValues(alpha: 0.7),
+                    ),
                   ),
                   onTap: () async {
                     await Permission.ignoreBatteryOptimizations.request();
                     await checkBatteryOptimisation();
                   },
                 ),
-              if (searchText == "")
-                AdaptiveListTile(
-                  leading:
-                      ColorIcon(icon: Icons.money, color: Colors.accents[14]),
-                  title: Text(
-                    S.of(context).Donate,
-                    style:
-                        textStyle(context, bold: false).copyWith(fontSize: 16),
-                  ),
-                  subtitle: Text(
-                    S.of(context).Donate_Message,
-                    style: tinyTextStyle(context),
-                  ),
-                  onTap: () => showPaymentsModal(context),
-                  margin: const EdgeInsets.symmetric(vertical: 4),
-                ),
-              if (searchText == "") ...[
-                GroupTitle(title: "General"),
-                SettingTile(
-                  title: S.of(context).Appearence,
-                  leading: Icon(Icons.looks_rounded),
-                  isFirst: true,
-                  onTap: () {
-                    context.go('/settings/appearence');
-                  },
-                ),
-                SettingTile(
-                  title: S.of(context).Audio_And_Playback,
-                  leading: Icon(Icons.play_arrow_rounded),
-                  isLast: true,
-                  onTap: () {
-                    context.go('/settings/playback');
-                  },
-                ),
-                GroupTitle(title: "Services"),
-                SettingTile(
-                  title: "Youtube Music",
-                  leading: Icon(Icons.play_circle_fill),
-                  isFirst: true,
-                  isLast: true,
-                  onTap: () {
-                    context.go('/settings/content');
-                  },
-                ),
-                GroupTitle(title: "Storage & Data"),
-                SettingTile(
-                  title: S.of(context).Backup_And_Restore,
-                  leading: Icon(Icons.cloud_upload_rounded),
-                  isFirst: true,
-                  isLast: true,
-                  onTap: () {
-                    context.go('/settings/backup_restore');
-                  },
-                ),
-                GroupTitle(title: "Updates & About"),
-                SettingTile(
-                  title: S.of(context).About,
-                  leading: Icon(Icons.info_rounded),
-                  isFirst: true,
-                  onTap: () {
-                    context.go('/settings/about');
-                  },
-                ),
-                SettingTile(
-                  title: S.of(context).Check_For_Update,
-                  leading: Icon(Icons.update_rounded),
-                  isLast: true,
-                  onTap: () {
-                    Modals.showCenterLoadingModal(context);
-                    checkUpdate().then((updateInfo) {
-                      if(mounted){
-                        Navigator.pop(context);
+              GroupTitle(title: "General"),
+              SettingTile(
+                title: S.of(context).Appearence,
+                leading: Icon(Icons.looks_rounded),
+                isFirst: true,
+                onTap: () {
+                  context.go('/settings/appearence');
+                },
+              ),
+              SettingTile(
+                title: "Player",
+                leading: Icon(Icons.play_arrow_rounded),
+                isLast: true,
+                onTap: () {
+                  context.go('/settings/player');
+                },
+              ),
+              GroupTitle(title: "Services"),
+              SettingTile(
+                title: "Youtube Music",
+                leading: Icon(Icons.play_circle_fill),
+                isFirst: true,
+                isLast: true,
+                onTap: () {
+                  context.go('/settings/ytmusic');
+                },
+              ),
+              GroupTitle(title: "Storage & Privacy"),
+              SettingTile(
+                title: "Backup and storage",
+                leading: Icon(Icons.cloud_upload_rounded),
+                isFirst: true,
+                onTap: () {
+                  context.go('/settings/backup_storage');
+                },
+              ),
+              SettingTile(
+                title: "Privacy",
+                leading: Icon(Icons.privacy_tip),
+                isLast: true,
+                onTap: () {
+                  context.go('/settings/privacy');
+                },
+              ),
+              GroupTitle(title: "Updates & About"),
+              SettingTile(
+                title: S.of(context).About,
+                leading: Icon(Icons.info_rounded),
+                isFirst: true,
+                onTap: () {
+                  context.go('/settings/about');
+                },
+              ),
+              SettingTile(
+                title: S.of(context).Check_For_Update,
+                leading: Icon(Icons.update_rounded),
+                onTap: () {
+                  Modals.showCenterLoadingModal(context);
+                  checkUpdate().then((updateInfo) {
+                    if (mounted) {
+                      Navigator.pop(context);
                       Modals.showUpdateDialog(context, updateInfo);
-                      }
-                    });
-                  },
-                ),
-                // ...settingScreenData(context).indexed.map((item) {
-                //   final settingItem = item.$2;
-
-                //   return SettingTile(
-                //     title: settingItem.title,
-                //     leading: Icon(settingItem.icon),
-                //     isFirst: item.$1 == 0,
-                //     isLast: item.$1 == settingScreenData(context).length - 1,
-                //     onTap: () {
-                //       if (settingItem.hasNavigation &&
-                //           settingItem.location != null) {
-                //         context.go(settingItem.location!);
-                //       } else if (settingItem.onTap != null) {
-                //         settingItem.onTap!(context);
-                //       }
-                //     },
-                //   );
-                // })
-              ] else
-                ...allSettingsData(context)
-                    .where((element) => element.title
-                        .toLowerCase()
-                        .contains(searchText.toLowerCase()))
-                    .toList()
-                    .map((e) {
-                  return AdaptiveListTile(
-                    margin: const EdgeInsets.symmetric(vertical: 2),
-                    title: Text(
-                      e.title,
-                      style: textStyle(context, bold: false)
-                          .copyWith(fontSize: 16),
-                    ),
-                    leading: (e.icon != null)
-                        ? ColorIcon(
-                            color: e.color,
-                            icon: e.icon!,
-                          )
-                        : null,
-                    trailing: e.trailing != null
-                        ? e.trailing!(context)
-                        : (e.hasNavigation
-                            ? Icon(
-                                AdaptiveIcons.chevron_right,
-                                size: 30,
-                              )
-                            : null),
-                    onTap: () {
-                      if (e.hasNavigation && e.location != null) {
-                        context.go(e.location!);
-                      } else if (e.onTap != null) {
-                        e.onTap!(context);
-                      }
-                    },
-                    subtitle: e.subtitle != null ? e.subtitle!(context) : null,
-                  );
-                }),
+                    }
+                  });
+                },
+              ),
+              SettingTile(
+                leading: Icon(Icons.money),
+                title: S.of(context).Donate,
+                isLast: true,
+                subtitle: S.of(context).Donate_Message,
+                onTap: () => showPaymentsModal(context),
+              ),
             ],
           ),
         ),
@@ -292,10 +196,15 @@ void showPaymentsModal(BuildContext context) {
         ),
         onTap: () async {
           Navigator.pop(context);
-          await launchUrl(
-            Uri.parse(
-                'upi://pay?cu=INR&pa=sheikhhaziq76@okaxis&pn=Gyawun&am=&tn=Gyawun'),
-            mode: LaunchMode.externalApplication,
+          await Clipboard.setData(
+            const ClipboardData(text: 'sheikhhaziq76@okaxis'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Copied UPI ID to clipboard!",
+              ),
+            ),
           );
         },
       ),
