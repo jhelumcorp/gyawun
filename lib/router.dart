@@ -1,23 +1,20 @@
+
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/features/home/home_screen.dart';
 import 'package:gyawun_music/features/library/library_screen.dart';
 import 'package:gyawun_music/features/main/main_screen.dart';
 import 'package:gyawun_music/features/onboarding/view/onboarding_screen.dart';
-import 'package:gyawun_music/features/providers/yt_music/browse/yt_browse_screen.dart';
-import 'package:gyawun_music/features/providers/yt_music/chip/yt_chip_screen.dart';
-import 'package:gyawun_music/features/providers/yt_music/playlist/yt_playlist_screen.dart';
 import 'package:gyawun_music/features/search/search_screen.dart';
+import 'package:gyawun_music/features/services/yt_music/chip/yt_chip_screen.dart';
 import 'package:gyawun_music/features/settings/settings_screen.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'router.g.dart';
+import 'features/services/yt_music/browse/yt_browse_screen.dart';
+import 'features/services/yt_music/playlist/yt_playlist_screen.dart';
 
-@riverpod
-GoRouter router(Ref ref) {
-  return GoRouter(
+
+GoRouter router=GoRouter(
     initialLocation: '/',
     routes: [
       GoRoute(
@@ -52,7 +49,7 @@ GoRouter router(Ref ref) {
                       GoRoute(
                         path: 'browse/:body',
                         builder: (context, state) {
-                          return YtBrowseScreen(
+                          return YTBrowseScreen(
                             body: Map.from(
                               jsonDecode(state.pathParameters['body']!),
                             ),
@@ -62,7 +59,7 @@ GoRouter router(Ref ref) {
                       GoRoute(
                         path: 'playlist/:body',
                         builder: (context, state) {
-                          return YtPlaylistScreen(
+                          return YTPlaylistScreen(
                             body: Map.from(
                               jsonDecode(state.pathParameters['body']!),
                             ),
@@ -103,4 +100,3 @@ GoRouter router(Ref ref) {
       ),
     ],
   );
-}

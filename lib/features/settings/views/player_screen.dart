@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gyawun_music/providers/database_provider.dart';
+import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/settings/app_settings.dart';
 import 'package:gyawun_music/features/settings/app_settings_identifiers.dart';
-import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
 
-class PlayerScreen extends ConsumerWidget {
+import '../widgets/setting_tile.dart';
+
+class PlayerScreen extends StatelessWidget {
   const PlayerScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final appSettings = ref.read(appSettingsProvider);
-    final playerSettings = ref.watch(playerSettingsProvider);
-
+  Widget build(BuildContext context) {
+    final appSettings = sl<AppSettings>();
     return Scaffold(
       appBar: AppBar(title: Text("Player")),
       body: Padding(
         padding: EdgeInsets.all(16),
-        child: playerSettings.when(
-          data: (settings) {
-            return CustomScrollView(
+        child: StreamBuilder(stream: appSettings.player(), builder:(context, snapshot) {
+           if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            }
+          if(snapshot.hasData && snapshot.data!=null){
+            final settings = snapshot.data!;
+            return  CustomScrollView(
               slivers: [
                 SliverList.list(
                   children: [
@@ -40,10 +43,9 @@ class PlayerScreen extends ConsumerWidget {
                 ),
               ],
             );
-          },
-          error: (e, s) => SizedBox(child: Text(e.toString())),
-          loading: () => SizedBox.shrink(),
-        ),
+          }
+          return SizedBox();
+        },)
       ),
     );
   }

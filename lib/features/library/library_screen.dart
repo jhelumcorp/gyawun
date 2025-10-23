@@ -1,47 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gyawun_music/core/widgets/custom_tile.dart';
-import 'package:gyawun_music/features/providers/yt_music/playlist/yt_playlist_screen.dart';
-import 'package:gyawun_music/providers/playlist_providers.dart';
 
-class LibraryScreen extends ConsumerWidget {
+class LibraryScreen extends StatelessWidget {
   const LibraryScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Library")),
-      body: StreamBuilder(
-        stream: ref.read(playlistServiceProvider).watchAll(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
-            final playlists = snapshot.data!;
-            return ListView.builder(
-              itemCount: playlists.length,
-              itemBuilder: (context, index) {
-                final playlist = playlists[index];
-                return CustomTile(
-                  title: Text(playlist.title),
-                  leading: null,
-                  isFirst: index == 0,
-                  isLast: index == playlists.length - 1,
-                  onTap: () {
-                    if (playlist.endpoint == null) return;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            YtPlaylistScreen(body: playlist.endpoint!),
-                      ),
-                    );
-                  },
-                );
-              },
-            );
-          }
-          return SizedBox.shrink();
-        },
-      ),
+      // body: StreamBuilder(
+      //   stream: ref.read(playlistServiceProvider).watchAll(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.hasData && snapshot.data != null) {
+      //       final playlists = snapshot.data!;
+      //       return ListView.builder(
+      //         itemCount: playlists.length,
+      //         itemBuilder: (context, index) {
+      //           final playlist = playlists[index];
+      //           return CustomTile(
+      //             title: Text(playlist.title),
+      //             leading: null,
+      //             isFirst: index == 0,
+      //             isLast: index == playlists.length - 1,
+      //             onTap: () {
+      //               if (playlist.endpoint == null) return;
+      //               // Navigator.push(
+      //               //   context,
+      //               //   MaterialPageRoute(
+      //               //     builder: (context) =>
+      //               //         YtPlaylistScreen(body: playlist.endpoint!),
+      //               //   ),
+      //               // );
+      //             },
+      //           );
+      //         },
+      //       );
+      //     }
+      //     return SizedBox.shrink();
+      //   },
+      // ),
       // body: ref
       //     .watch(playlistsProvider)
       //     .when(

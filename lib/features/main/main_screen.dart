@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 final destinations = [
@@ -33,7 +32,7 @@ final destinations = [
   ),
 ];
 
-class MainScreen extends ConsumerWidget {
+class MainScreen extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
   const MainScreen({super.key, required this.navigationShell});
@@ -72,7 +71,7 @@ class MainScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final isWideScreen = screenWidth >= 600;
     return Scaffold(

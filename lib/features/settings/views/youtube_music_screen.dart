@@ -1,36 +1,40 @@
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gyawun_music/core/settings/app_settings.dart';
+import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/settings/youtube_settings.dart';
 import 'package:gyawun_music/core/utils/app_dialogs/app_dialog_tile_data.dart';
-import 'package:gyawun_music/core/utils/app_dialogs/app_dialogs.dart';
-import 'package:gyawun_music/providers/database_provider.dart';
-import 'package:gyawun_music/database/settings/yt_music_settings.dart';
-import 'package:gyawun_music/features/settings/app_settings_identifiers.dart';
-import 'package:gyawun_music/features/settings/widgets/group_title.dart';
-import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
 
-class YoutubeMusicScreen extends ConsumerWidget {
+import '../../../core/utils/app_dialogs/app_dialogs.dart';
+import '../app_settings_identifiers.dart';
+import '../widgets/group_title.dart';
+import '../widgets/setting_tile.dart';
+
+class YoutubeMusicScreen extends StatelessWidget {
   const YoutubeMusicScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final appSettings = ref.read(appSettingsProvider);
-    final ytMusicSettings = ref.watch(ytMusicSettingsProvider);
+  Widget build(BuildContext context) {
+    final appSettings = sl<AppSettings>();
 
     return Scaffold(
       appBar: AppBar(title: Text("Youtube Music")),
       body: Padding(
         padding: EdgeInsets.all(16),
-        child: ytMusicSettings.when(
-          data: (settings) {
-            return CustomScrollView(
-              slivers: [
-                SliverList.list(
-                  children: [
-                    SizedBox(height: 8),
+        child: StreamBuilder(
+          stream: appSettings.youtube(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            }
+            if (snapshot.hasData && snapshot.data!=null) {
+              final settings = snapshot.data!;
+              return CustomScrollView(slivers: [SliverList.list(children: [
+                SizedBox(height: 8),
                     GroupTitle(title: "General"),
-                    SettingTile(
+                SettingTile(
                       title: "Audio quality",
                       leading: Icon(Icons.spatial_audio_rounded),
                       isFirst: true,
@@ -59,8 +63,7 @@ class YoutubeMusicScreen extends ConsumerWidget {
                         }
                       },
                     ),
-
-                    SettingTile(
+                                        SettingTile(
                       title: "Language",
                       leading: Icon(Icons.language),
                       subtitle: settings.language.title,
@@ -96,7 +99,6 @@ class YoutubeMusicScreen extends ConsumerWidget {
                       },
                     ),
                     GroupTitle(title: "Privacy"),
-
                     SettingSwitchTile(
                       title: "Personalised Content",
                       leading: Icon(Icons.recommend),
@@ -133,13 +135,10 @@ class YoutubeMusicScreen extends ConsumerWidget {
                         }
                       },
                     ),
-                  ],
-                ),
-              ],
-            );
+              ])]);
+            }
+            return Center(child: CircularProgressIndicator());
           },
-          error: (_, _) => SizedBox.shrink(),
-          loading: SizedBox.shrink,
         ),
       ),
     );
