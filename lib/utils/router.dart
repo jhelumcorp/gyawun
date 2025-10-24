@@ -111,7 +111,7 @@ List<StatefulShellBranch> branches = [
           ),
           GoRoute(
             path: 'ytmusic',
-            builder: (context, state) => const YtMuaicScreen(),
+            builder: (context, state) => const YtMusicScreen(),
           ),
           GoRoute(
               path: 'player',

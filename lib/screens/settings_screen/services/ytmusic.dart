@@ -15,8 +15,8 @@ import '../../../generated/l10n.dart';
 import '../../../themes/text_styles.dart';
 import '../../../utils/adaptive_widgets/adaptive_widgets.dart';
 
-class YtMuaicScreen extends StatelessWidget {
-  const YtMuaicScreen({super.key});
+class YtMusicScreen extends StatelessWidget {
+  const YtMusicScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class YtMuaicScreen extends StatelessWidget {
                             value: location,
                             child: Text(
                               textAlign: TextAlign.right,
-                              location['name']!,
+                              location['name']!.trim(),
                               style: smallTextStyle(context),
                               maxLines: 2,
                             ),
@@ -72,7 +72,7 @@ class YtMuaicScreen extends StatelessWidget {
                         (language) => AdaptiveDropdownMenuItem(
                           value: language,
                           child: Text(
-                            language['name']!,
+                            language['name']!.trim(),
                             style: smallTextStyle(context),
                             textAlign: TextAlign.end,
                           ),
