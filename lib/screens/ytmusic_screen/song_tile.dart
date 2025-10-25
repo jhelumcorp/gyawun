@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/media_player.dart';
@@ -26,7 +26,7 @@ class YTMSongTile extends StatelessWidget {
         } else {
           Navigator.push(
             context,
-            CupertinoPageRoute(
+            MaterialPageRoute(
               builder: (context) => BrowseScreen(
                   endpoint: item['endpoint'].cast<String, dynamic>()),
             ),

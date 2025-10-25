@@ -86,7 +86,8 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  Future<void> search(Map<String, dynamic> value, {String additionalParams = ''}) async {
+  Future<void> search(Map<String, dynamic> value,
+      {String additionalParams = ''}) async {
     _textEditingController?.value = value['query'];
     setState(() {
       initialLoading = true;
@@ -137,7 +138,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 textInputAction: TextInputAction.search,
                                 fillColor: Platform.isWindows
                                     ? null
-                                    : Colors.grey.withValues(alpha:0.3),
+                                    : Colors.grey.withValues(alpha: 0.3),
                                 contentPadding: const EdgeInsets.symmetric(
                                     vertical: 2, horizontal: 8),
                                 borderRadius: BorderRadius.circular(
@@ -257,7 +258,7 @@ class SearchSectionItem extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            CupertinoPageRoute(
+                            MaterialPageRoute(
                               builder: (context) => SearchScreen(
                                   endpoint: section['trailing']['endpoint'],
                                   isMore: true),
@@ -301,7 +302,7 @@ class SearchListTile extends StatelessWidget {
         } else if (item['endpoint'] != null && item['videoId'] == null) {
           Navigator.push(
               context,
-              CupertinoPageRoute(
+              MaterialPageRoute(
                 builder: (context) => BrowseScreen(endpoint: item['endpoint']),
               ));
         }
@@ -323,7 +324,7 @@ class SearchListTile extends StatelessWidget {
           ? Text(
               item['subtitle'],
               maxLines: 1,
-              style: TextStyle(color: Colors.grey.withValues(alpha:0.9)),
+              style: TextStyle(color: Colors.grey.withValues(alpha: 0.9)),
               overflow: TextOverflow.ellipsis,
             )
           : null,

@@ -318,7 +318,8 @@ BottomModalLayout _playlistRenameBottomModal(BuildContext context,
       ));
 }
 
-BottomModalLayout _artistsBottomModal(BuildContext context, List<dynamic> artists,
+BottomModalLayout _artistsBottomModal(
+    BuildContext context, List<dynamic> artists,
     {bool shouldPop = false}) {
   return BottomModalLayout(
       title: Center(
@@ -349,7 +350,7 @@ BottomModalLayout _artistsBottomModal(BuildContext context, List<dynamic> artist
 
                       Navigator.push(
                         context,
-                        CupertinoPageRoute(
+                        MaterialPageRoute(
                           builder: (context) => BrowseScreen(
                               endpoint:
                                   artist['endpoint'].cast<String, dynamic>()),
@@ -777,7 +778,7 @@ BottomModalLayout _playerOptionsModal(BuildContext context, Map song) {
             title: Text(S.of(context).Equalizer),
             leading: Icon(AdaptiveIcons.equalizer),
             onTap: () {
-              Navigator.of(context).push(CupertinoPageRoute(
+              Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const EqualizerScreen()));
             },
             trailing: Icon(AdaptiveIcons.chevron_right),
@@ -869,7 +870,8 @@ BottomModalLayout _playerOptionsModal(BuildContext context, Map song) {
   ));
 }
 
-BottomModalLayout _showSelection(BuildContext context, List<SelectionItem> items) {
+BottomModalLayout _showSelection(
+    BuildContext context, List<SelectionItem> items) {
   return BottomModalLayout(
     title: Center(
       child: Text(
@@ -1020,7 +1022,7 @@ BottomModalLayout _songBottomModal(BuildContext context, Map song) {
                   Navigator.pop(context);
                   Navigator.push(
                       context,
-                      CupertinoPageRoute(
+                      MaterialPageRoute(
                         builder: (context) => BrowseScreen(
                             endpoint: song['album']['endpoint']
                                 .cast<String, dynamic>()),
@@ -1203,7 +1205,7 @@ BottomModalLayout _playlistBottomModal(BuildContext context, Map playlist) {
               trailing: Icon(AdaptiveIcons.chevron_right),
               onTap: () => Navigator.push(
                   context,
-                  CupertinoPageRoute(
+                  MaterialPageRoute(
                     builder: (context) =>
                         BrowseScreen(endpoint: playlist['album']['endpoint']),
                   )),

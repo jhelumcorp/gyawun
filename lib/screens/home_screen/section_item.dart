@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:expandable_text/expandable_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gyawun/ytmusic/ytmusic.dart';
@@ -98,7 +97,7 @@ class _SectionItemState extends State<SectionItem> {
                                 false) {
                               Navigator.push(
                                 context,
-                                CupertinoPageRoute(
+                                MaterialPageRoute(
                                   builder: (context) => BrowseScreen(
                                     endpoint: widget.section['trailing']
                                         ['endpoint'],
@@ -272,7 +271,7 @@ class SongTile extends StatelessWidget {
           if (song['endpoint'] != null && song['videoId'] == null) {
             Navigator.push(
                 context,
-                CupertinoPageRoute(
+                MaterialPageRoute(
                   builder: (context) =>
                       BrowseScreen(endpoint: song['endpoint']),
                 ));
@@ -402,7 +401,7 @@ class _ItemListState extends State<ItemList> {
                       widget.items[index]['videoId'] == null) {
                     Navigator.push(
                         context,
-                        CupertinoPageRoute(
+                        MaterialPageRoute(
                           builder: (context) => BrowseScreen(
                               endpoint: widget.items[index]['endpoint']),
                         ));

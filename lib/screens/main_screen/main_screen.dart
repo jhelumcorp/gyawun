@@ -58,7 +58,7 @@ class _MainScreenState extends State<MainScreen> {
           String id = uri.queryParameters['list']!;
           Navigator.push(
             context,
-            CupertinoPageRoute(
+            MaterialPageRoute(
               builder: (_) => BrowseScreen(
                   endpoint: {'browseId': id.startsWith('VL') ? id : 'VL$id'}),
             ),
