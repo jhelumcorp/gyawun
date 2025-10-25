@@ -14,7 +14,6 @@ class OnboardingScreen extends StatelessWidget {
     final isWide = MediaQuery.sizeOf(context).width >= 800;
     final fullText = loc.onboardingWelcome(loc.gyawunMusic);
 
-    // Split around appName (works for English, Urdu, Hindi, etc.)
     final parts = fullText.split(loc.gyawunMusic);
 
     return Scaffold(
@@ -46,35 +45,7 @@ class OnboardingScreen extends StatelessWidget {
                     height: 1.1,
                   ),
                 ),
-              // Text(
-              //       loc.onboardingWelcome,
-              //       textAlign: TextAlign.center,
-              //       style: theme.textTheme.displaySmall?.copyWith(
-              //         fontWeight: FontWeight.bold,
-              //         height: 1.1,
-              //       ),
-              //     ),
-              // ShaderMask(
-              //   shaderCallback: (bounds) => LinearGradient(
-              //     colors: [
-              //       theme.colorScheme.primary,
-              //       theme.colorScheme.tertiary,
-              //     ],
-              //     begin: Alignment.topLeft,
-              //     end: Alignment.bottomRight,
-              //   ).createShader(bounds),
-              //   blendMode: BlendMode.srcIn,
-              //   child: Text(
-              //     loc.gyawunMusic,
-              //     textAlign: TextAlign.center,
-              //     style: theme.textTheme.displaySmall?.copyWith(
-              //       fontWeight: FontWeight.bold,
-              //       height: 1.1,
-              //       color:
-              //           Colors.white, // required, but will be masked by shader
-              //     ),
-              //   ),
-              // ),
+             
               ShaderMask(
                 shaderCallback: (bounds) => LinearGradient(
                   colors: [
@@ -91,7 +62,7 @@ class OnboardingScreen extends StatelessWidget {
                   style: theme.textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     height: 1.1,
-                    color: Colors.white, // masked by shader
+                    color: Colors.white,
                   ),
                 ),
               ),

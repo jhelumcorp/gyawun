@@ -26,14 +26,11 @@ class ChipItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(20),
-
-          // border: Border.all(color: Theme.of(context).dividerColor),
         ),
         child: Text(
           chip.title,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            // color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ),

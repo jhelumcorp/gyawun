@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
-import 'package:ytmusic/models/section.dart';
+import 'package:ytmusic/models/yt_item.dart';
 
 import 'section_grid_tile.dart';
 
 class SectionGrid extends StatelessWidget {
-  final List<YTSectionItem> items;
+  final List<YTItem> items;
 
   const SectionGrid({super.key, required this.items});
 

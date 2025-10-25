@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:ytmusic/models/section.dart';
+import 'package:ytmusic/mixins/mixins.dart';
+import 'package:ytmusic/models/yt_item.dart';
 
 class SectionGridTile extends StatelessWidget {
-  final YTSectionItem item;
+  final YTItem item;
   final double width;
   final double height;
 
@@ -17,16 +18,15 @@ class SectionGridTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
-
+    final isHorizontal = (item is YTVideo || item is YTEpisode);
     final imageHeight = height * 0.7;
-    final imageWidth = item.isRectangle ? imageHeight * (16 / 9) : imageHeight;
+    final imageWidth = isHorizontal ? imageHeight * (16 / 9) : imageHeight;
     final cappedImageWidth = imageWidth > width ? width : imageWidth;
-    final thumbnail = item.thumbnails.lastOrNull;
+    final thumbnail = item is HasThumbnail ? (item as HasThumbnail).thumbnails.firstOrNull:null;
 
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: () {
-        // your navigation code
       },
       child: RepaintBoundary(
         child: SizedBox(
@@ -39,7 +39,7 @@ class SectionGridTile extends StatelessWidget {
               children: [
                 if (thumbnail?.url != null)
                   AspectRatio(
-                    aspectRatio: item.isRectangle ? 16 / 9 : 1,
+                    aspectRatio: isHorizontal ? 16 / 9 : 1,
                     child: Ink(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
@@ -63,9 +63,9 @@ class SectionGridTile extends StatelessWidget {
                     context,
                   ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
-                if (item.subtitle != null)
+                if (item.subtitle.isNotEmpty)
                   Text(
-                    item.subtitle!,
+                    item.subtitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(

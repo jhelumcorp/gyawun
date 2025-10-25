@@ -2,19 +2,17 @@ import 'dart:math';
 
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
-import 'package:ytmusic/models/section.dart';
+import 'package:ytmusic/models/yt_item.dart';
 
 import 'section_column_tile.dart';
 
 class SectionMultiColumn extends StatefulWidget {
-  // final PageController controller;
   const SectionMultiColumn({
     super.key,
     required this.items,
-    // required this.controller,
   });
 
-  final List<YTSectionItem> items;
+  final List<YTItem> items;
 
   @override
   State<SectionMultiColumn> createState() =>

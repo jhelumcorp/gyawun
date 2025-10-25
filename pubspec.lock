@@ -1212,11 +1212,9 @@ packages:
   ytmusic:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "5014ad225f3d722a27a94e6c3e3b6d1eb9a5498f"
-      url: "https://github.com/sheikhhaziq/ytmusic.git"
-    source: git
+      path: "../ytmusic"
+      relative: true
+    source: path
     version: "0.0.1"
 sdks:
   dart: ">=3.9.2 <4.0.0"

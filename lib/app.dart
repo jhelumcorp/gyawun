@@ -51,42 +51,5 @@ class MyApp extends StatelessWidget {
         return SizedBox();
       },
     );
-    // return appearanceSettings.when(
-    //   data: (appearance) {
-    //     return DynamicColorBuilder(
-    //       builder: (lightDynamic, darkDynamic) {
-    //         return MaterialApp.router(
-    //           title: 'Gyawun Music',
-    //           routerConfig: router,
-    //           theme: AppTheme.light(
-    //             primary: appearance.enableSystemColors && lightDynamic != null
-    //                 ? lightDynamic.primary
-    //                 : appearance.accentColor,
-    //           ),
-    //           darkTheme: AppTheme.dark(
-    //             primary: appearance.enableSystemColors && darkDynamic != null
-    //                 ? darkDynamic.primary
-    //                 : appearance.accentColor,
-    //             isPureBlack: appearance.isPureBlack,
-    //           ),
-    //           themeMode: appearance.themeMode.mode,
-    //           debugShowCheckedModeBanner: false,
-    //           locale: Locale(appearance.language.value),
-    //           localizationsDelegates: const [
-    //             AppLocalizations.delegate,
-    //             GlobalMaterialLocalizations.delegate,
-    //             GlobalWidgetsLocalizations.delegate,
-    //             GlobalCupertinoLocalizations.delegate,
-    //           ],
-    //           supportedLocales: AppLocalizations.supportedLocales,
-    //         );
-    //       },
-    //     );
-    //   },
-    //   loading: () => const SizedBox.shrink(),
-    //   error: (err, stack) => MaterialApp(
-    //     home: Scaffold(body: Center(child: Text("Error: $err"))),
-    //   ),
-    // );
   }
 }

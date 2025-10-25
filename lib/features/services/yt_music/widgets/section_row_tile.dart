@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/core/utils/modals.dart';
 import 'package:gyawun_music/features/services/yt_music/utils/click_handler.dart';
-import 'package:ytmusic/enums/section_item_type.dart';
-import 'package:ytmusic/models/section.dart';
+import 'package:ytmusic/mixins/mixins.dart';
+import 'package:ytmusic/models/yt_item.dart';
 
 class SectionRowTile extends StatelessWidget {
   const SectionRowTile({super.key, required this.item});
 
-  final YTSectionItem item;
+  final YTItem item;
 
   @override
   Widget build(BuildContext context) {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
     final imageHeight = (context.isWideScreen ? 200 : 150).toInt();
-    final imageWidth = (item.isRectangle ? imageHeight * (16 / 9) : imageHeight)
+        final isHorizontal = (item is YTVideo || item is YTEpisode);
+
+    final imageWidth = (isHorizontal? imageHeight * (16 / 9) : imageHeight)
         .toInt();
-    final thumbnail = item.thumbnails.lastOrNull;
+    final thumbnail = item is HasThumbnail ? (item as HasThumbnail).thumbnails.firstOrNull:null;
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       enableFeedback: true,
@@ -43,7 +45,7 @@ class SectionRowTile extends StatelessWidget {
                     width: imageWidth.toDouble(),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
-                        item.type == YTSectionItemType.artist
+                        item is YTArtist
                             ? (imageWidth * pixelRatio)
                             : 8,
                       ),
@@ -65,9 +67,9 @@ class SectionRowTile extends StatelessWidget {
                     context,
                   ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
-                if (item.subtitle != null)
+                if (item.subtitle.isNotEmpty)
                   Text(
-                    item.subtitle!,
+                    item.subtitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(

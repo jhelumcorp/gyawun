@@ -21,10 +21,10 @@ class PageHeader extends StatelessWidget {
           ),
         ),
       SizedBox(
-        height: context.isWideViewport ? 0 : 16,
-        width: context.isWideViewport ? 16 : 0,
+        height: context.isWideScreen ? 0 : 16,
+        width: context.isWideScreen ? 16 : 0,
       ),
-      context.isWideViewport
+      context.isWideScreen
           ? Expanded(child: _drawDescription(context))
           : _drawDescription(context),
     ];
@@ -32,7 +32,7 @@ class PageHeader extends StatelessWidget {
 
   Widget _drawDescription(BuildContext context) {
     return Column(
-      crossAxisAlignment: context.isWideViewport
+      crossAxisAlignment: context.isWideScreen
           ? CrossAxisAlignment.start
           : CrossAxisAlignment.center,
       children: [
@@ -100,7 +100,7 @@ class PageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return context.isWideViewport
+    return context.isWideScreen
         ? Row(children: _drawItems(context))
         : Column(children: _drawItems(context));
   }

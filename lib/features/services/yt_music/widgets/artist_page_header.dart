@@ -10,7 +10,7 @@ class ArtistPageHeader extends StatelessWidget {
 
   List<Widget>_drawItems(BuildContext context) {
     return [
-      if (header.thumbnails.lastOrNull?.url != null && context.isWideViewport)
+      if (header.thumbnails.lastOrNull?.url != null && context.isWideScreen)
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: CachedNetworkImage(
@@ -20,7 +20,7 @@ class ArtistPageHeader extends StatelessWidget {
           ),
         ),
       if (context.isWideScreen) SizedBox(width: 16),
-      context.isWideViewport
+      context.isWideScreen
           ? Expanded(child: _drawDescription(context))
           : _drawDescription(context),
     ];
@@ -28,11 +28,11 @@ class ArtistPageHeader extends StatelessWidget {
 
   Widget _drawDescription(BuildContext context) {
     return Column(
-      crossAxisAlignment: context.isWideViewport
+      crossAxisAlignment: context.isWideScreen
           ? CrossAxisAlignment.start
           : CrossAxisAlignment.center,
       children: [
-        if (header.title.isNotEmpty && context.isWideViewport)
+        if (header.title.isNotEmpty && context.isWideScreen)
           Text(header.title, style: Theme.of(context).textTheme.headlineMedium),
 
         if (header.subtitle.isNotEmpty)
@@ -92,7 +92,7 @@ class ArtistPageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return context.isWideViewport
+    return context.isWideScreen
         ? Row(children: _drawItems(context))
         : Column(children: _drawItems(context));
   }

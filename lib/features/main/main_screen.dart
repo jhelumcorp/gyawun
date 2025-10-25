@@ -6,29 +6,21 @@ final destinations = [
     icon: Icon(Icons.home_outlined),
     selectedIcon: Icon(Icons.home),
     label: 'Home',
-
-    // tooltip: AppLocalizations.of(context)?.homeScreen ?? 'Home Screen',
   ),
   NavigationDestination(
     icon: Icon(Icons.search_outlined),
     selectedIcon: Icon(Icons.search),
     label: 'Search',
-
-    // tooltip: AppLocalizations.of(context)?.search ?? 'Search Screen',
   ),
   NavigationDestination(
     icon: Icon(Icons.my_library_music_outlined),
     selectedIcon: Icon(Icons.library_music_sharp),
     label: 'Library',
-
-    // tooltip: AppLocalizations.of(context)?.search ?? 'Library Screen',
   ),
   NavigationDestination(
     icon: Icon(Icons.settings_outlined),
     selectedIcon: Icon(Icons.settings),
     label: 'Settings',
-
-    // tooltip: AppLocalizations.of(context)?.settings ?? 'Settings Screen',
   ),
 ];
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gyawun_music/features/settings/views/about_screen.dart';
 import 'package:gyawun_music/features/settings/views/appearance_screen.dart';
-import 'package:gyawun_music/features/settings/views/backup_restore_screen.dart';
-import 'package:gyawun_music/features/settings/views/player_screen.dart';
 import 'package:gyawun_music/features/settings/views/storage_screen.dart';
+import 'package:gyawun_music/features/settings/views/player_screen.dart';
+import 'package:gyawun_music/features/settings/views/privacy_screen.dart';
 import 'package:gyawun_music/features/settings/views/youtube_music_screen.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
@@ -77,9 +77,13 @@ class SettingsScreen extends StatelessWidget {
                     },
                   ),
 
-                  GroupTitle(title: "Storage & Data"),
+                  GroupTitle(title: "Storage & Privacy"),
 
                   SettingTile(
+                    
+                    title: "Storage and backups",
+                    isFirst: true,
+                    leading: Icon(Icons.storage_rounded),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -88,20 +92,17 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    title: "Storage",
-                    isFirst: true,
-                    leading: Icon(Icons.storage_rounded),
                   ),
 
                   SettingTile(
-                    title: "Backup and restore",
+                    title: "Privacy",
                     isLast: true,
-                    leading: Icon(Icons.cloud_download_rounded),
+                    leading: Icon(Icons.privacy_tip_rounded),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BackupRestoreScreen(),
+                          builder: (context) => PrivacyScreen(),
                         ),
                       );
                     },
@@ -132,7 +133,6 @@ class SettingsScreen extends StatelessWidget {
           ),
         ),
       ),
-      // ),
     );
   }
 }

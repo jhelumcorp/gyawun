@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:ytmusic/models/section.dart';
+import 'package:ytmusic/models/yt_item.dart';
 
 import 'section_column_tile.dart';
-import 'section_multi_row_column.dart';
 
 class SectionSingleColumn extends StatelessWidget {
   const SectionSingleColumn({super.key, required this.items});
 
-  final List<YTSectionItem> items;
+  final List<YTItem> items;
 
   @override
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          if (items[index].desctiption != null) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              child: SectionMultiRowColumn(item: items[index]),
-            );
-          }
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
             child: SectionColumnTile(

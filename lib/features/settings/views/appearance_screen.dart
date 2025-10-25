@@ -38,7 +38,7 @@ class AppearanceScreen extends StatelessWidget {
                       GroupTitle(title: "Theme"),
                       SettingTile(
                         title: "Dark theme",
-                        leading: Icon(Icons.dark_mode),
+                        leading: Icon(Icons.dark_mode_rounded),
                         subtitle: settings.themeMode.text,
                         isFirst: true,
                         onTap: () async {
@@ -76,7 +76,7 @@ class AppearanceScreen extends StatelessWidget {
                           }
                         },
                         title: "Accent Color",
-                        leading: Icon(Icons.colorize),
+                        leading: Icon(Icons.colorize_rounded),
                         trailing: CircleAvatar(
                           radius: 20,
                           backgroundColor: settings.accentColor,
@@ -84,7 +84,7 @@ class AppearanceScreen extends StatelessWidget {
                       ),
                       SettingSwitchTile(
                         title: "Pure black",
-                        leading: Icon(Icons.dark_mode_sharp),
+                        leading: Icon(Icons.water_drop_rounded),
                         value: settings.isPureBlack,
                         onChanged: (value) async {
                           await appSettings.setBool(
@@ -103,7 +103,7 @@ class AppearanceScreen extends StatelessWidget {
                           );
                         },
                         title: "Enable system colors",
-                        leading: Icon(Icons.color_lens),
+                        leading: Icon(Icons.color_lens_rounded),
                         isLast: true,
                       ),
                       GroupTitle(title: "Layout"),

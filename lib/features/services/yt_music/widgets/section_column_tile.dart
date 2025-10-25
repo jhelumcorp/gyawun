@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/utils/modals.dart';
-import 'package:ytmusic/enums/section_item_type.dart';
-import 'package:ytmusic/models/section.dart';
+import 'package:ytmusic/mixins/mixins.dart';
+import 'package:ytmusic/models/yt_item.dart';
 
 class SectionColumnTile extends StatelessWidget {
-  final YTSectionItem item;
+  final YTItem item;
   final void Function()? onTap;
   final bool isFirst;
   final bool isLast;
@@ -17,18 +17,14 @@ class SectionColumnTile extends StatelessWidget {
     this.isLast = false,
   });
 
-  void playSong(BuildContext context, YTSectionItem item) async {
-    if ([
-      YTSectionItemType.video,
-      YTSectionItemType.song,
-      YTSectionItemType.episode,
-    ].contains(item.type)) {}
+  void playSong(BuildContext context, YTItem item)  {
+
   }
 
   @override
   Widget build(BuildContext context) {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
-    final thumbnail = item.thumbnails.firstOrNull;
+    final thumbnail = item is HasThumbnail ? (item as HasThumbnail).thumbnails.firstOrNull:null;
 
     return ListTile(
       onTap: () {
@@ -54,11 +50,11 @@ class SectionColumnTile extends StatelessWidget {
               width: 50,
               height: 50,
               child: AspectRatio(
-                aspectRatio: item.type == YTSectionItemType.video ? 16 / 9 : 1,
+                aspectRatio: item is YTVideo ? 16 / 9 : 1,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
-                      item.type == YTSectionItemType.artist
+                      item is YTArtist
                           ? ((50 * pixelRatio).round() / 2)
                           : 8,
                     ),
@@ -82,7 +78,7 @@ class SectionColumnTile extends StatelessWidget {
         ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
       ),
       subtitle: Text(
-        item.subtitle ?? '',
+        item.subtitle,
         maxLines: 1,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
           fontWeight: FontWeight.w600,

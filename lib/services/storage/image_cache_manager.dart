@@ -9,8 +9,9 @@ class CustomImageCacheManager {
   static final ValueNotifier<double> cacheSize = ValueNotifier(0.0);
 
   /// Call this once (e.g. in main) to start tracking cache size
-  static Future<void> init() async {
+  static Future<ValueNotifier<double>> init() async {
     cacheSize.value = await _calculateCacheSize();
+    return cacheSize;
   }
 
   /// Internal: calculate cache size
