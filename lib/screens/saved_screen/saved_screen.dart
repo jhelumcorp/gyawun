@@ -94,7 +94,7 @@ class _SavedScreenState extends State<SavedScreen> {
                   trailing: Icon(AdaptiveIcons.chevron_right),
                   onTap: () => Navigator.push(
                       context,
-                      CupertinoPageRoute(
+                      MaterialPageRoute(
                         builder: (context) => const FavouriteDetailsScreen(),
                       )),
                 ),
@@ -126,7 +126,7 @@ class _SavedScreenState extends State<SavedScreen> {
                   trailing: Icon(AdaptiveIcons.chevron_right),
                   onTap: () => Navigator.push(
                       context,
-                      CupertinoPageRoute(
+                      MaterialPageRoute(
                         builder: (context) => const DownloadScreen(),
                       )),
                 ),
@@ -154,7 +154,7 @@ class _SavedScreenState extends State<SavedScreen> {
                   trailing: Icon(AdaptiveIcons.chevron_right),
                   onTap: () => Navigator.push(
                       context,
-                      CupertinoPageRoute(
+                      MaterialPageRoute(
                         builder: (context) => const HistoryScreen(),
                       )),
                 ),
@@ -192,7 +192,7 @@ class _SavedScreenState extends State<SavedScreen> {
                                     if (item['isPredefined']) {
                                       Navigator.push(
                                         context,
-                                        CupertinoPageRoute(
+                                        MaterialPageRoute(
                                           builder: (context) => BrowseScreen(
                                               endpoint: item['endpoint']
                                                   .cast<String, dynamic>()),
@@ -201,7 +201,7 @@ class _SavedScreenState extends State<SavedScreen> {
                                     } else {
                                       Navigator.push(
                                         context,
-                                        CupertinoPageRoute(
+                                        MaterialPageRoute(
                                           builder: (context) =>
                                               PlaylistDetailsScreen(
                                                   playlistkey: key),
