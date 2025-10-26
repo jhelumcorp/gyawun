@@ -6,6 +6,7 @@ import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gyawun/ytmusic/ytmusic.dart';
 
 import '../../generated/l10n.dart';
@@ -16,7 +17,6 @@ import '../../utils/enhanced_image.dart';
 import '../../utils/extensions.dart';
 import '../../services/media_player.dart';
 import '../../utils/bottom_modals.dart';
-import '../browse_screen/browse_screen.dart';
 
 class SectionItem extends StatefulWidget {
   const SectionItem({required this.section, this.isMore = false, super.key});
@@ -95,15 +95,13 @@ class _SectionItemState extends State<SectionItem> {
                           onPressed: () async {
                             if (widget.section['trailing']['playable'] ==
                                 false) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BrowseScreen(
-                                    endpoint: widget.section['trailing']
-                                        ['endpoint'],
-                                    isMore: true,
-                                  ),
-                                ),
+                              context.push(
+                                '/browse',
+                                extra: {
+                                  'endpoint': widget.section['trailing']
+                                      ['endpoint'],
+                                  'isMore': true,
+                                },
                               );
                             } else {
                               BottomMessage.showText(
@@ -269,12 +267,12 @@ class SongTile extends StatelessWidget {
         // focusColor: greyColor,
         onTap: () async {
           if (song['endpoint'] != null && song['videoId'] == null) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      BrowseScreen(endpoint: song['endpoint']),
-                ));
+            context.push(
+              '/browse',
+              extra: {
+                'endpoint': song['endpoint'],
+              },
+            );
           } else {
             await GetIt.I<MediaPlayer>().playSong(Map.from(song));
 
@@ -399,12 +397,12 @@ class _ItemListState extends State<ItemList> {
                 onTap: () async {
                   if (widget.items[index]['endpoint'] != null &&
                       widget.items[index]['videoId'] == null) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BrowseScreen(
-                              endpoint: widget.items[index]['endpoint']),
-                        ));
+                    context.push(
+                      '/browse',
+                      extra: {
+                        'endpoint': widget.items[index]['endpoint'],
+                      },
+                    );
                   } else {
                     await GetIt.I<MediaPlayer>()
                         .playSong(Map.from(widget.items[index]));

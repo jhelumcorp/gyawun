@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../generated/l10n.dart';
@@ -11,7 +12,6 @@ import '../../../services/media_player.dart';
 import '../../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../../utils/bottom_modals.dart';
 import '../../../ytmusic/ytmusic.dart';
-import '../../browse_screen/browse_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({this.endpoint, this.isMore = false, super.key});
@@ -256,13 +256,12 @@ class SearchSectionItem extends StatelessWidget {
                         vertical: Platform.isAndroid ? 12 : 0),
                     child: AdaptiveOutlinedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SearchScreen(
-                                  endpoint: section['trailing']['endpoint'],
-                                  isMore: true),
-                            ),
+                          context.push(
+                            '/search',
+                            extra: {
+                              'endpoint': section['trailing']['endpoint'],
+                              'isMore': true,
+                            },
                           );
                         },
                         child: Text(
@@ -300,11 +299,12 @@ class SearchListTile extends StatelessWidget {
         if (item['videoId'] != null) {
           await GetIt.I<MediaPlayer>().playSong(Map.from(item));
         } else if (item['endpoint'] != null && item['videoId'] == null) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BrowseScreen(endpoint: item['endpoint']),
-              ));
+          context.push(
+            '/browse',
+            extra: {
+              'endpoint': item['endpoint'],
+            },
+          );
         }
       },
       onLongPress: () {

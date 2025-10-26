@@ -11,7 +11,6 @@ import '../../generated/l10n.dart';
 import '../../themes/text_styles.dart';
 import '../../utils/bottom_modals.dart';
 import '../../utils/check_update.dart';
-import '../browse_screen/browse_screen.dart';
 import 'bottom_player.dart';
 
 class MainScreen extends StatefulWidget {
@@ -56,12 +55,11 @@ class _MainScreenState extends State<MainScreen> {
         } else if (uri.pathSegments.first == 'playlist' &&
             uri.queryParameters['list'] != null) {
           String id = uri.queryParameters['list']!;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => BrowseScreen(
-                  endpoint: {'browseId': id.startsWith('VL') ? id : 'VL$id'}),
-            ),
+          context.push(
+            '/browse',
+            extra: {
+              'endpoint': {'browseId': id.startsWith('VL') ? id : 'VL$id'},
+            },
           );
         }
       }

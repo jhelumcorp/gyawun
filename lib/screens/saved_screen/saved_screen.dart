@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gyawun/utils/extensions.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -15,11 +16,6 @@ import '../../services/library.dart';
 import '../../themes/colors.dart';
 import '../../utils/adaptive_widgets/adaptive_widgets.dart';
 import '../../utils/bottom_modals.dart';
-import '../browse_screen/browse_screen.dart';
-import 'download_screen.dart';
-import 'favourite_details_screen.dart';
-import 'history_screen.dart';
-import 'playlist_details_screen.dart';
 
 class SavedScreen extends StatefulWidget {
   const SavedScreen({super.key});
@@ -92,11 +88,7 @@ class _SavedScreenState extends State<SavedScreen> {
                     },
                   ),
                   trailing: Icon(AdaptiveIcons.chevron_right),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const FavouriteDetailsScreen(),
-                      )),
+                  onTap: () => context.push('/saved/favourite_details'),
                 ),
                 AdaptiveListTile(
                   margin: const EdgeInsets.symmetric(vertical: 4),
@@ -124,11 +116,7 @@ class _SavedScreenState extends State<SavedScreen> {
                     },
                   ),
                   trailing: Icon(AdaptiveIcons.chevron_right),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DownloadScreen(),
-                      )),
+                  onTap: () => context.push('/saved/downloads'),
                 ),
                 AdaptiveListTile(
                   margin: const EdgeInsets.symmetric(vertical: 4),
@@ -152,11 +140,7 @@ class _SavedScreenState extends State<SavedScreen> {
                     },
                   ),
                   trailing: Icon(AdaptiveIcons.chevron_right),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HistoryScreen(),
-                      )),
+                  onTap: () => context.push('/saved/history'),
                 ),
                 Column(
                   children: SplayTreeMap.from(playlists)
@@ -190,22 +174,17 @@ class _SavedScreenState extends State<SavedScreen> {
                                   },
                                   onTap: () {
                                     if (item['isPredefined']) {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => BrowseScreen(
-                                              endpoint: item['endpoint']
-                                                  .cast<String, dynamic>()),
-                                        ),
+                                      context.push(
+                                        '/browse',
+                                        extra: {
+                                          'endpoint': item['endpoint']
+                                              .cast<String, dynamic>()
+                                        },
                                       );
                                     } else {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PlaylistDetailsScreen(
-                                                  playlistkey: key),
-                                        ),
+                                      context.push(
+                                        '/saved/playlist_details',
+                                        extra: {'playlistkey': key},
                                       );
                                     }
                                   },
