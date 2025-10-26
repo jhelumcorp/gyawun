@@ -16,7 +16,6 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../generated/l10n.dart';
-import '../screens/browse_screen/browse_screen.dart';
 import '../screens/settings_screen/player/equalizer_screen.dart';
 import '../services/bottom_message.dart';
 import '../services/download_manager.dart';
@@ -343,18 +342,21 @@ BottomModalLayout _artistsBottomModal(
                   trailing: Icon(AdaptiveIcons.chevron_right),
                   onTap: () {
                     if (shouldPop) {
-                      context.go('/browse',
-                          extra: artist['endpoint'].cast<String, dynamic>());
+                      context.go(
+                        '/browse',
+                        extra: {
+                          'endpoint':
+                              artist['endpoint'].cast<String, dynamic>(),
+                        },
+                      );
                     } else {
                       Navigator.pop(context);
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BrowseScreen(
-                              endpoint:
-                                  artist['endpoint'].cast<String, dynamic>()),
-                        ),
+                      context.push(
+                        '/browse',
+                        extra: {
+                          'endpoint':
+                              artist['endpoint'].cast<String, dynamic>(),
+                        },
                       );
                     }
                   }),
@@ -807,8 +809,9 @@ BottomModalLayout _playerOptionsModal(BuildContext context, Map song) {
               leading: Icon(AdaptiveIcons.album),
               trailing: Icon(AdaptiveIcons.chevron_right),
               onTap: () {
-                context.go('/browse',
-                    extra: song['album']['endpoint'].cast<String, dynamic>());
+                context.go('/browse', extra: {
+                  'endpoint': song['album']['endpoint'].cast<String, dynamic>(),
+                });
               }),
         AdaptiveListTile(
           dense: true,
@@ -1020,13 +1023,13 @@ BottomModalLayout _songBottomModal(BuildContext context, Map song) {
                 trailing: Icon(AdaptiveIcons.chevron_right),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BrowseScreen(
-                            endpoint: song['album']['endpoint']
-                                .cast<String, dynamic>()),
-                      ));
+                  context.push(
+                    '/browse',
+                    extra: {
+                      'endpoint':
+                          song['album']['endpoint'].cast<String, dynamic>(),
+                    },
+                  );
                 }),
         ],
       ),
@@ -1203,12 +1206,12 @@ BottomModalLayout _playlistBottomModal(BuildContext context, Map playlist) {
                   maxLines: 1, overflow: TextOverflow.ellipsis),
               leading: Icon(AdaptiveIcons.album),
               trailing: Icon(AdaptiveIcons.chevron_right),
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        BrowseScreen(endpoint: playlist['album']['endpoint']),
-                  )),
+              onTap: () => context.push(
+                '/browse',
+                extra: {
+                  'endpoint': playlist['album']['endpoint'],
+                },
+              ),
             ),
         ],
       ),

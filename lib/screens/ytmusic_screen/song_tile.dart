@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../services/media_player.dart';
 import '../../utils/adaptive_widgets/adaptive_widgets.dart';
-import '../browse_screen/browse_screen.dart';
 
 class YTMSongTile extends StatelessWidget {
   const YTMSongTile(
@@ -24,12 +24,11 @@ class YTMSongTile extends StatelessWidget {
         if (item['videoId'] != null) {
           GetIt.I<MediaPlayer>().playAll(List.from(items), index: index);
         } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BrowseScreen(
-                  endpoint: item['endpoint'].cast<String, dynamic>()),
-            ),
+          context.push(
+            '/browse',
+            extra: {
+              'endpoint': item['endpoint'].cast<String, dynamic>(),
+            },
           );
         }
       },

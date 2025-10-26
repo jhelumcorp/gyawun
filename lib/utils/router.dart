@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun/screens/saved_screen/download_screen.dart';
+import 'package:gyawun/screens/saved_screen/downloading_screen.dart';
+import 'package:gyawun/screens/saved_screen/favourite_details_screen.dart';
+import 'package:gyawun/screens/saved_screen/history_screen.dart';
+import 'package:gyawun/screens/saved_screen/playlist_details_screen.dart';
 import 'package:gyawun/screens/settings_screen/privacy/privacy_screen.dart';
 
 import '../screens/home_screen/chip_screen.dart';
@@ -36,18 +41,29 @@ GoRouter router = GoRouter(
             children: children,
           ),
         ),
+        GoRoute(
+          path: '/player',
+          pageBuilder: (context, state) {
+            final videoId = state.extra as String?;
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: PlayerScreen(videoId: videoId),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                const begin = Offset(0.0, 1.0);
+                const end = Offset.zero;
+                final curve = Curves.ease;
+                final tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
+                return SlideTransition(
+                  position: animation.drive(tween),
+                  child: child,
+                );
+              },
+            );
+          },
+        ),
       ],
-    ),
-    GoRoute(
-      path: '/player',
-      pageBuilder: (context, state) {
-        String? videoId = state.extra as String?;
-        return CupertinoPage(
-          name: 'player',
-          child: PlayerScreen(videoId: videoId),
-          fullscreenDialog: true,
-        );
-      },
     ),
   ],
 );
@@ -71,13 +87,22 @@ List<StatefulShellBranch> branches = [
             GoRoute(
               path: 'browse',
               builder: (context, state) {
-                Map<String, dynamic> args = state.extra as Map<String, dynamic>;
-                return BrowseScreen(endpoint: args);
+                final args = state.extra as Map<String, dynamic>? ?? {};
+                return BrowseScreen(
+                  endpoint: args['endpoint'] as Map<String, dynamic>,
+                  isMore: args['isMore'] as bool? ?? false,
+                );
               },
             ),
             GoRoute(
               path: 'search',
-              builder: (context, state) => const SearchScreen(),
+              builder: (context, state) {
+                final args = state.extra as Map<String, dynamic>?;
+                return SearchScreen(
+                  endpoint: args?['endpoint'] as Map<String, dynamic>?,
+                  isMore: args?['isMore'] as bool? ?? false,
+                );
+              },
             ),
           ]),
     ],
@@ -86,6 +111,35 @@ List<StatefulShellBranch> branches = [
     GoRoute(
       path: '/saved',
       builder: (context, state) => const SavedScreen(),
+      routes: [
+        GoRoute(
+          path: 'favourite_details',
+          builder: (context, state) => const FavouriteDetailsScreen(),
+        ),
+        GoRoute(
+          path: 'downloads',
+          builder: (context, state) => const DownloadScreen(),
+          routes: [
+            GoRoute(
+              path: 'downloading',
+              builder: (context, state) => const DownloadingScreen(),
+            ),
+          ],
+        ),
+        GoRoute(
+          path: 'history',
+          builder: (context, state) => const HistoryScreen(),
+        ),
+        GoRoute(
+          path: 'playlist_details',
+          builder: (context, state) {
+            final args = state.extra as Map<String, dynamic>;
+            return PlaylistDetailsScreen(
+              playlistkey: args['playlistkey'] as String,
+            );
+          },
+        ),
+      ],
     ),
   ]),
   // StatefulShellBranch(routes: [
