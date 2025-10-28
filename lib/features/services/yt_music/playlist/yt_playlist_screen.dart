@@ -68,7 +68,7 @@ class _YTPlaylistScreenViewState extends State<YTPlaylistScreenView> {
       );
     }
         if(state is PlaylistSuccess){
-          final albumState = state.data;
+          final playlistState = state.data;
           return CustomScrollView(
             controller: _scrollController,
 
@@ -76,11 +76,11 @@ class _YTPlaylistScreenViewState extends State<YTPlaylistScreenView> {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
-                    child: PageHeader(header: albumState.header),
+                    child: PageHeader(header: playlistState.header),
                   ),
                 ),
 
-              SectionsWidget(sections: albumState.sections),
+              SectionsWidget(sections: playlistState.sections),
               if (state.loadingMore)
                 SliverToBoxAdapter(
                   child: Padding(

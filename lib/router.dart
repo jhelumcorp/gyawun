@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/features/home/home_screen.dart';
 import 'package:gyawun_music/features/library/library_screen.dart';
@@ -12,9 +13,11 @@ import 'package:gyawun_music/features/settings/settings_screen.dart';
 
 import 'features/services/yt_music/browse/yt_browse_screen.dart';
 import 'features/services/yt_music/playlist/yt_playlist_screen.dart';
+final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 
 GoRouter router=GoRouter(
+  navigatorKey: rootNavigatorKey,
     initialLocation: '/',
     routes: [
       GoRoute(

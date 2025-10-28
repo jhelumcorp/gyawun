@@ -9,28 +9,30 @@ import '../widgets/section_widget.dart';
 
 class YTBrowseScreen extends StatelessWidget {
   final Map<String, dynamic> body;
-  const YTBrowseScreen({super.key, required this.body});
+  final String? title;
+  const YTBrowseScreen({super.key, required this.body,this.title});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => BrowseCubit(sl<YTMusic>(), body)..fetchData(),
-      child: YTBrowseScreenView(),
+      child: YTBrowseScreenView(title: title,),
     );
   }
 }
 
 class YTBrowseScreenView extends StatelessWidget {
+  final String? title;
 
   final ScrollController _scrollController = ScrollController();
 
-  YTBrowseScreenView({super.key});
+  YTBrowseScreenView({super.key,this.title});
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(title: Text("Browse")),
+      appBar: AppBar(title: Text(title??"Browse")),
       body: BlocBuilder<BrowseCubit,BrowseState>(builder:(context, state) {
         if (state is BrowseLoading) {
             return const Center(child: CircularProgressIndicator());

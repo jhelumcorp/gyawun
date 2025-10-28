@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:ytmusic/models/yt_item.dart';
-
+import 'section_button_tile.dart';
 import 'section_grid_tile.dart';
 
 class SectionGrid extends StatelessWidget {
@@ -11,35 +11,60 @@ class SectionGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final desiredItemWidth = context.isWideScreen ? 200.0 : 150.0;
-    final itemHeight = context.isWideScreen ? 236.0 : 186.0;
-    final crossAxisSpacing = 8.0;
+    const spacing = 8.0;
+    final buttonItems = items.whereType<YTButtonItem>().toList();
+    final visualItems = items.where((e) => e is! YTButtonItem).toList();
 
-    return SliverLayoutBuilder(
-      builder: (context, constraints) {
-        final availableWidth = constraints.crossAxisExtent;
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (buttonItems.isNotEmpty)
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                alignment: WrapAlignment.start,
+                children: [
+                  for (final item in buttonItems)
+                    SectionButtonTile(item: item),
+                ],
+              ),
 
-        final crossAxisCount =
-            (availableWidth + crossAxisSpacing) ~/
-            (desiredItemWidth + crossAxisSpacing);
-        final effectiveCrossAxisCount = crossAxisCount.clamp(1, items.length);
-        return SliverGrid(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) => SectionGridTile(
-              item: items[index],
-              width: desiredItemWidth,
-              height: itemHeight,
-            ),
-            childCount: items.length,
-          ),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: effectiveCrossAxisCount,
-            childAspectRatio: 0.79,
-            crossAxisSpacing: crossAxisSpacing,
-            mainAxisSpacing: 8,
-          ),
-        );
-      },
+            if (visualItems.isNotEmpty)
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final availableWidth = constraints.maxWidth;
+                  
+                  final desiredItemWidth = 200;
+                  final crossAxisCount =
+                      ((availableWidth - spacing) / (desiredItemWidth ))
+                          .floor()
+                          .clamp(2, visualItems.length);
+
+                  final tileWidth = (availableWidth * (crossAxisCount - 1)) /
+                      crossAxisCount;
+
+                  return Wrap(
+                    spacing: spacing,
+                    runSpacing: spacing,
+                    alignment: WrapAlignment.start,
+                    children: [
+                      for (final item in visualItems)
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: tileWidth.clamp(140.0, 350.0),
+                          ),
+                          child: SectionGridTile(item: item,width: tileWidth.clamp(140.0, 350.0),),
+                        ),
+                    ],
+                  );
+                },
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

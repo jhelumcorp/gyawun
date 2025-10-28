@@ -34,6 +34,7 @@ class SectionHeader extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) => YTBrowseScreen(
+                        title: section.title,
                         body: section.trailing!.endpoint.cast(),
                       ),
                     ),

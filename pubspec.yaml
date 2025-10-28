@@ -42,6 +42,7 @@ dependencies:
   get_it: ^8.2.0
   bloc: ^9.1.0
   meta: ^1.16.0
+  flutter_staggered_grid_view: ^0.7.0
 
 dev_dependencies:
   flutter_test:

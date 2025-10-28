@@ -56,6 +56,16 @@ Please make sure to update tests as appropriate.
   <img src="https://contributors-img.web.app/image?repo=sheikhhaziq/gyawun" />
 </a></p>
 
+## Star History
+
+<a href="https://www.star-history.com/#jhelumcorp/gyawun&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=jhelumcorp/gyawun&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=jhelumcorp/gyawun&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=jhelumcorp/gyawun&type=date&legend=top-left" />
+ </picture>
+</a>
+
 ## Disclaimer
 This project and its contents are not affiliated with, funded, authorized, endorsed by, or in any way associated with YouTube, Google LLC or any of its affiliates and subsidiaries.
 Any trademark, service mark, trade name, or other intellectual property rights used in this project are owned by the respective owners.

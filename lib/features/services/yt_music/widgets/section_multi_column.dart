@@ -10,9 +10,11 @@ class SectionMultiColumn extends StatefulWidget {
   const SectionMultiColumn({
     super.key,
     required this.items,
+     this.maxItem,
   });
 
   final List<YTItem> items;
+  final int? maxItem;
 
   @override
   State<SectionMultiColumn> createState() =>
@@ -31,7 +33,7 @@ class _SectionMultiColumnState extends State<SectionMultiColumn> {
 
   @override
   Widget build(BuildContext context) {
-    final num = widget.items.length <= 5 ? widget.items.length : 4;
+    final num = widget.maxItem?? (widget.items.length <= 5 ? widget.items.length : 4);
     var pages = widget.items.length ~/ num;
     pages = (pages * num) < widget.items.length ? pages + 1 : pages;
     return SliverToBoxAdapter(
@@ -57,7 +59,7 @@ class _SectionMultiColumnState extends State<SectionMultiColumn> {
                       child: SectionColumnTile(
                         item: entry.$2,
                         isFirst: entry.$1 == 0,
-                        isLast: entry.$1 == 3,
+                        isLast: entry.$1 == (num-1) || entry.$2 == widget.items.last,
                       ),
                     );
                   })
@@ -69,3 +71,4 @@ class _SectionMultiColumnState extends State<SectionMultiColumn> {
     );
   }
 }
+

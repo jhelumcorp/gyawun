@@ -6,6 +6,7 @@ import 'package:ytmusic/enums/section_type.dart';
 import 'section_grid.dart';
 import 'section_header.dart';
 import 'section_multi_column.dart';
+import 'section_multi_column_row.dart';
 import 'section_row.dart';
 import 'section_single_column.dart';
 
@@ -30,13 +31,16 @@ class SectionsWidget extends StatelessWidget {
               SectionRow(items: section.items),
 
             if (section.type == YTSectionType.multiColumn)
-              SectionMultiColumn(items: section.items),
+              SectionMultiColumn(items: section.items,maxItem: section.itemsPerColumn,),
 
             if (section.type == YTSectionType.singleColumn)
               SectionSingleColumn(items: section.items),
 
             if (section.type == YTSectionType.grid)
               SectionGrid(items: section.items),
+            if(section.type == YTSectionType.multiColumnRow)
+              SectionMultiColumnRow(items:section.items),
+            
           ],
         ],
       );
