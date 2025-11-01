@@ -23,15 +23,13 @@ class YtMusicScreen extends StatelessWidget {
     Box box = Hive.box('SETTINGS');
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          S.of(context).YTMusic
-        ),
+        title: Text(S.of(context).YTMusic),
       ),
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1000),
           child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             children: [
               GroupTitle(title: "General"),
               SettingTile(
@@ -62,7 +60,6 @@ class YtMusicScreen extends StatelessWidget {
               SettingTile(
                 title: S.of(context).Language,
                 leading: Icon(Icons.language),
-                isLast: true,
                 trailing: AdaptiveDropdownButton(
                   value: context.watch<SettingsManager>().language,
                   items: context
@@ -84,59 +81,73 @@ class YtMusicScreen extends StatelessWidget {
                   },
                 ),
               ),
+              ValueListenableBuilder(
+                valueListenable: box.listenable(keys: ['TRANSLATE_LYRICS']),
+                builder: (context, item, child) {
+                  return SettingSwitchTile(
+                    title: S.of(context).Translate_Lyrics,
+                    leading: Icon(Icons.translate_outlined),
+                    isLast: true,
+                    value: item.get('TRANSLATE_LYRICS', defaultValue: false),
+                    onChanged: (value) async {
+                      await box.put('TRANSLATE_LYRICS', value);
+                    },
+                  );
+                },
+              ),
               GroupTitle(title: "Playback & download"),
               SettingTile(
-        title: S.of(context).Streaming_Quality,
-        leading: Icon(Icons.speaker_group_rounded),
-        isFirst: true,
-        // hasNavigation: false,
-        trailing: AdaptiveDropdownButton(
-            value: context.watch<SettingsManager>().streamingQuality,
-            items: context
-                .read<SettingsManager>()
-                .audioQualities
-                .map(
-                  (e) => AdaptiveDropdownMenuItem(
-                    value: e,
-                    child: Text(
-                      textAlign: TextAlign.right,
-                      e.name.toUpperCase(),
-                      style: smallTextStyle(context),
-                      maxLines: 2,
-                    ),
-                  ),
-                )
-                .toList(),
-            onChanged: (value) {
-              if (value == null) return;
-              context.read<SettingsManager>().streamingQuality = value;
-            },
-          ),
-      ),
-      SettingTile(
-        title: S.of(context).DOwnload_Quality,
-        leading: Icon(Icons.cloud_download_rounded),
-        isLast: true,
-        trailing:AdaptiveDropdownButton(
-              value: context.watch<SettingsManager>().downloadQuality,
-              items: context
-                  .read<SettingsManager>()
-                  .audioQualities
-                  .map(
-                    (e) => AdaptiveDropdownMenuItem(
-                      value: e,
-                      child: Text(
-                        e.name.toUpperCase(),
-                        style: smallTextStyle(context, bold: false),
-                      ),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) async {
-                if (value == null) return;
-                context.read<SettingsManager>().downloadQuality = value;
-              }),
-      ),
+                title: S.of(context).Streaming_Quality,
+                leading: Icon(Icons.speaker_group_rounded),
+                isFirst: true,
+                // hasNavigation: false,
+                trailing: AdaptiveDropdownButton(
+                  value: context.watch<SettingsManager>().streamingQuality,
+                  items: context
+                      .read<SettingsManager>()
+                      .audioQualities
+                      .map(
+                        (e) => AdaptiveDropdownMenuItem(
+                          value: e,
+                          child: Text(
+                            textAlign: TextAlign.right,
+                            e.name.toUpperCase(),
+                            style: smallTextStyle(context),
+                            maxLines: 2,
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    if (value == null) return;
+                    context.read<SettingsManager>().streamingQuality = value;
+                  },
+                ),
+              ),
+              SettingTile(
+                title: S.of(context).DOwnload_Quality,
+                leading: Icon(Icons.cloud_download_rounded),
+                isLast: true,
+                trailing: AdaptiveDropdownButton(
+                    value: context.watch<SettingsManager>().downloadQuality,
+                    items: context
+                        .read<SettingsManager>()
+                        .audioQualities
+                        .map(
+                          (e) => AdaptiveDropdownMenuItem(
+                            value: e,
+                            child: Text(
+                              e.name.toUpperCase(),
+                              style: smallTextStyle(context, bold: false),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) async {
+                      if (value == null) return;
+                      context.read<SettingsManager>().downloadQuality = value;
+                    }),
+              ),
               GroupTitle(title: "Privacy"),
               ValueListenableBuilder(
                 valueListenable: box.listenable(keys: ['PERSONALISED_CONTENT']),
@@ -161,7 +172,6 @@ class YtMusicScreen extends StatelessWidget {
               SettingTile(
                 title: S.of(context).Enter_Visitor_Id,
                 leading: Icon(Icons.edit),
-                
                 onTap: () async {
                   String? text = await Modals.showTextField(
                     context,
@@ -201,7 +211,7 @@ class YtMusicScreen extends StatelessWidget {
                                   GetIt.I<YTMusic>().refreshHeaders();
                                   if (context.mounted) {
                                     BottomMessage.showText(context,
-                                      S.of(context).Copied_To_Clipboard);
+                                        S.of(context).Copied_To_Clipboard);
                                   }
                                 });
                               },

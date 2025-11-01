@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lyric/lyrics_reader.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:gyawun/services/settings_manager.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,8 @@ import 'package:provider/provider.dart';
 import '../../services/lyrics.dart';
 import '../../services/media_player.dart';
 import '../../utils/adaptive_widgets/adaptive_widgets.dart';
+
+Box _box = Hive.box('SETTINGS');
 
 class LyricsBox extends StatefulWidget {
   const LyricsBox({required this.currentSong, required this.size, super.key});
@@ -60,7 +63,9 @@ class _LyricsBoxState extends State<LyricsBox> {
           album: widget.currentSong.album,
           durationInSeconds:
               GetIt.I<MediaPlayer>().progressBarState.value.total.inSeconds,
-          translation: context.read<SettingsManager>().language['value']!,
+          translation: _box.get('TRANSLATE_LYRICS', defaultValue: false)
+              ? context.read<SettingsManager>().language['value']!
+              : null,
         );
       });
     }
@@ -99,10 +104,8 @@ class _LyricsBoxState extends State<LyricsBox> {
                             return LyricsReader(
                               padding: EdgeInsets.zero,
                               position: progress.current.inMilliseconds,
-                              playing: context
-                                  .watch<MediaPlayer>()
-                                  .player
-                                  .playing,
+                              playing:
+                                  context.watch<MediaPlayer>().player.playing,
                               lyricUi: UINetease(
                                 highlight: false,
                                 defaultSize: 19,
