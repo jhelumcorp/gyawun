@@ -25,13 +25,17 @@ class SettingEmptyTile extends StatelessWidget {
   final Widget? leading;
   final Widget? child;
   const SettingEmptyTile(
-      {super.key, this.isFirst = false, this.isLast = false, this.leading, this.child});
+      {super.key,
+      this.isFirst = false,
+      this.isLast = false,
+      this.leading,
+      this.child});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusGeometry.only(
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(isFirst ? 20 : 4),
           topRight: Radius.circular(isFirst ? 20 : 4),
           bottomLeft: Radius.circular(isLast ? 20 : 4),
@@ -44,14 +48,14 @@ class SettingEmptyTile extends StatelessWidget {
           ? null
           : Container(
               padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Theme.of(
-              context,
-            ).colorScheme.primaryContainer.withAlpha(150),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: leading,
-        ),
+              decoration: BoxDecoration(
+                color: Theme.of(
+                  context,
+                ).colorScheme.primaryContainer.withAlpha(150),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: leading,
+            ),
       title: child,
     );
   }
@@ -85,7 +89,7 @@ class SettingTile extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.only(
+          borderRadius: BorderRadius.only(
             topLeft: Radius.circular(isFirst ? 20 : 4),
             topRight: Radius.circular(isFirst ? 20 : 4),
             bottomLeft: Radius.circular(isLast ? 20 : 4),
@@ -94,7 +98,6 @@ class SettingTile extends StatelessWidget {
         ),
         tileColor: Theme.of(context).colorScheme.surfaceContainer,
         contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        
         title: Text(
           title,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -154,7 +157,7 @@ class SettingSwitchTile extends StatelessWidget {
         value: value,
         onChanged: onChanged,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.only(
+          borderRadius: BorderRadius.only(
             topLeft: Radius.circular(isFirst ? 20 : 4),
             topRight: Radius.circular(isFirst ? 20 : 4),
             bottomLeft: Radius.circular(isLast ? 20 : 4),
