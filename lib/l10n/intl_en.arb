@@ -76,6 +76,8 @@
   "@Country": {},
   "Language": "Language",
   "@Language": {},
+  "Translate_Lyrics": "Translate Lyrics",
+  "@Translate_Lyrics": {},
   "Personalised_Content": "Personalised Content",
   "@Personalised_Content": {},
   "Enter_Visitor_Id": "Enter Visitor Id",

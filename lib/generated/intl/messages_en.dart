@@ -192,6 +192,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Telegram": MessageLookupByLibrary.simpleMessage("Telegram"),
     "Theme_Mode": MessageLookupByLibrary.simpleMessage("Theme Mode"),
+    "Translate_Lyrics": MessageLookupByLibrary.simpleMessage(
+      "Translate Lyrics",
+    ),
     "Version": MessageLookupByLibrary.simpleMessage("Version"),
     "Visitor_Id": MessageLookupByLibrary.simpleMessage("Visitor Id"),
     "Window_Effect": MessageLookupByLibrary.simpleMessage("Window Effect"),
