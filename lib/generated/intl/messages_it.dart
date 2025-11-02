@@ -38,6 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Add_To_Queue": MessageLookupByLibrary.simpleMessage("Aggiungi alla coda"),
     "Album": MessageLookupByLibrary.simpleMessage("Album"),
     "Albums": MessageLookupByLibrary.simpleMessage("Album"),
+    "App_Folder": MessageLookupByLibrary.simpleMessage("Cartella App"),
     "Appearence": MessageLookupByLibrary.simpleMessage("Aspetto"),
     "Artists": MessageLookupByLibrary.simpleMessage("Artisti"),
     "Audio_And_Playback": MessageLookupByLibrary.simpleMessage(
@@ -46,6 +47,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Backup": MessageLookupByLibrary.simpleMessage("Backup"),
     "Backup_And_Restore": MessageLookupByLibrary.simpleMessage(
       "Backup e ripristino",
+    ),
+    "Backup_Failed": MessageLookupByLibrary.simpleMessage(
+      "Salvataggio dati non riuscito",
+    ),
+    "Backup_Success": MessageLookupByLibrary.simpleMessage(
+      "Salvataggio dati riuscito al percorso",
     ),
     "Battery_Optimisation_message": MessageLookupByLibrary.simpleMessage(
       "Clicca qui per disattivare l’ottimizzazione della batteria e permettere a Gyawun di funzionare correttamente",
@@ -175,6 +182,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Reimposta Visitor ID",
     ),
     "Restore": MessageLookupByLibrary.simpleMessage("Ripristina"),
+    "Restore_Failed": MessageLookupByLibrary.simpleMessage(
+      "Ripristino dati non riuscito",
+    ),
+    "Restore_Success": MessageLookupByLibrary.simpleMessage(
+      "Ripristino dati riuscito",
+    ),
+    "Save": MessageLookupByLibrary.simpleMessage("Salva"),
     "Saved": MessageLookupByLibrary.simpleMessage("Salvati"),
     "Search_Gyawun": MessageLookupByLibrary.simpleMessage("Cerca in Gyawun"),
     "Search_History_Deleted": MessageLookupByLibrary.simpleMessage(
@@ -185,6 +199,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Select_Backup": MessageLookupByLibrary.simpleMessage("Seleziona backup"),
     "Settings": MessageLookupByLibrary.simpleMessage("Impostazioni"),
+    "Share": MessageLookupByLibrary.simpleMessage("Condividi"),
     "Sheikh_Haziq": MessageLookupByLibrary.simpleMessage("Sheikh Haziq"),
     "Show_Less": MessageLookupByLibrary.simpleMessage("Mostra meno"),
     "Show_More": MessageLookupByLibrary.simpleMessage("Mostra di più"),
