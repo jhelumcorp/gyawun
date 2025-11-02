@@ -65,6 +65,7 @@ dependencies:
   rxdart: ^0.28.0
   translator: ^1.0.4+1
   language_detector: ^1.0.1
+  wakelock_plus: ^1.4.0
 
 dev_dependencies:
   flutter_test:
