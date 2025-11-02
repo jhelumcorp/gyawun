@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
@@ -33,12 +34,12 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                 value: false,
                 isFirst: true,
                 title: "Disable playback history",
-                leading: Icon(Icons.play_disabled),
+                leading: Icon(Icons.play_disabled_rounded),
                 onChanged: (value) {},
               ),
               SettingTile(
                 title: "Delete playback history",
-                leading: Icon(Icons.playlist_remove),
+                leading: Icon(FluentIcons.history_dismiss_24_filled),
                 isLast: true,
               ),
               GroupTitle(title: "Search"),
@@ -46,12 +47,12 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                 value: false,
                 isFirst: true,
                 title: "Disable search history",
-                leading: Icon(Icons.search_off),
+                leading: Icon(Icons.search_off_rounded),
                 onChanged: (value) {},
               ),
               SettingTile(
                 title: "Delete search history",
-                leading: Icon(Icons.manage_search),
+                leading: Icon(Icons.manage_search_rounded),
                 isLast: true,
               ),
             ],

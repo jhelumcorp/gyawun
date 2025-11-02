@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gyawun_music/core/settings/app_settings.dart';
@@ -68,7 +69,7 @@ class YoutubeMusicScreen extends StatelessWidget {
                       ),
                       SettingTile(
                         title: "Language",
-                        leading: Icon(Icons.language),
+                        leading: Icon(FluentIcons.local_language_24_filled),
                         subtitle: settings.language.title,
                         onTap: () async {
                           final language =
@@ -85,7 +86,7 @@ class YoutubeMusicScreen extends StatelessWidget {
                       ),
                       SettingTile(
                         title: "Location",
-                        leading: Icon(Icons.location_pin),
+                        leading: Icon(FluentIcons.location_24_filled),
                         isLast: true,
                         subtitle: settings.location.title,
                         onTap: () async {
@@ -117,7 +118,7 @@ class YoutubeMusicScreen extends StatelessWidget {
 
                       SettingTile(
                         title: "Enter visitor ID",
-                        leading: Icon(Icons.edit),
+                        leading: Icon(FluentIcons.edit_24_filled),
                         subtitle: settings.visitorId,
                         trailing: IconButton.filled(
                           isSelected: false,
@@ -132,7 +133,7 @@ class YoutubeMusicScreen extends StatelessWidget {
                               );
                             }
                           },
-                          icon: Icon(Icons.copy),
+                          icon: Icon(FluentIcons.copy_24_filled),
                         ),
                         onTap: () async {
                           final id = await AppDialogs.showPromptDialog(
@@ -149,7 +150,7 @@ class YoutubeMusicScreen extends StatelessWidget {
                       ),
                       SettingTile(
                         title: "Reset Visitor ID",
-                        leading: Icon(Icons.restart_alt),
+                        leading: Icon(FluentIcons.key_reset_24_filled),
                         isLast: true,
                       ),
                     ],

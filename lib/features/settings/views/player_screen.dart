@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/settings/app_settings.dart';
@@ -27,7 +28,7 @@ class PlayerScreen extends StatelessWidget {
                   children: [
                     SettingSwitchTile(
                       title: "Skip silence",
-                      leading: Icon(Icons.fast_forward),
+                      leading: Icon(FluentIcons.fast_forward_24_filled),
                       isFirst: true,
                       isLast: true,
                       value: settings.skipSilence,

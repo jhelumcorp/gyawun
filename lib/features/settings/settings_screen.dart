@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gyawun_music/features/settings/views/about_screen.dart';
@@ -38,7 +39,7 @@ class SettingsScreen extends StatelessWidget {
                     },
                     isFirst: true,
                     title: "Appearance",
-                    leading: Icon(Icons.color_lens_rounded),
+                    leading: Icon(FluentIcons.color_background_24_filled),
                   ),
 
                   SettingTile(
@@ -50,7 +51,7 @@ class SettingsScreen extends StatelessWidget {
                     },
                     isLast: true,
                     title: "Player",
-                    leading: Icon(Icons.play_arrow_rounded),
+                    leading: Icon(FluentIcons.play_24_filled),
                   ),
                   GroupTitle(title: "Services"),
 
@@ -83,7 +84,7 @@ class SettingsScreen extends StatelessWidget {
                     
                     title: "Storage and backups",
                     isFirst: true,
-                    leading: Icon(Icons.storage_rounded),
+                    leading: Icon(FluentIcons.storage_24_filled),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -118,13 +119,13 @@ class SettingsScreen extends StatelessWidget {
                       );
                     },
                     title: "About",
-                    leading: Icon(Icons.info_rounded),
+                    leading: Icon(FluentIcons.info_24_filled),
                     isFirst: true,
                   ),
                   SettingTile(
                     onTap: () {},
                     title: "Check for update",
-                    leading: Icon(Icons.update_rounded),
+                    leading: Icon(FluentIcons.phone_update_24_filled),
                     isLast: true,
                   ),
                 ],

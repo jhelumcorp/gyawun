@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 supportedLocales: AppLocalizations.supportedLocales,
+                // backButtonDispatcher: RootBackButtonDispatcher(),
               );
             },
           );

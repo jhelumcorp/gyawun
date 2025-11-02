@@ -15,6 +15,12 @@ class AppTheme {
       colorScheme: colorScheme,
       visualDensity: VisualDensity.adaptivePlatformDensity,
       appBarTheme: AppBarTheme(
+        titleTextStyle: TextStyle(
+        fontSize: 30,
+        fontFamily: 'paytoneOne',
+        fontWeight: FontWeight.w300,
+        color: colorScheme.primary,
+      ),
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarBrightness: Brightness.light,
           statusBarColor: Colors.transparent,
@@ -22,12 +28,17 @@ class AppTheme {
           systemNavigationBarColor: Colors.transparent,
         ),
       ),
+      // pageTransitionsTheme: PageTransitionsTheme(
+      //   builders: Map<TargetPlatform, PageTransitionsBuilder>.fromIterable(
+      //     TargetPlatform.values,
+      //     value: (_) => const FadeForwardsPageTransitionsBuilder(),
+      //   ),
+      // ),
       pageTransitionsTheme: PageTransitionsTheme(
-        builders: Map<TargetPlatform, PageTransitionsBuilder>.fromIterable(
-          TargetPlatform.values,
-          value: (_) => const FadeForwardsPageTransitionsBuilder(),
-        ),
-      ),
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+      },
+    ),
     );
   }
 
@@ -44,6 +55,12 @@ class AppTheme {
       colorScheme: colorScheme,
       visualDensity: VisualDensity.adaptivePlatformDensity,
       appBarTheme: AppBarTheme(
+        titleTextStyle: TextStyle(
+        fontSize: 30,
+        fontFamily: 'paytoneOne',
+        fontWeight: FontWeight.w300,
+        color: colorScheme.primary,
+      ),
         backgroundColor: isPureBlack ? Colors.black : null,
         surfaceTintColor: isPureBlack ? Colors.black : null,
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -53,15 +70,21 @@ class AppTheme {
           systemNavigationBarColor: Colors.transparent,
         ),
       ),
+
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: isPureBlack ? Colors.black : null,
       ),
+      // pageTransitionsTheme: PageTransitionsTheme(
+      //   builders: Map<TargetPlatform, PageTransitionsBuilder>.fromIterable(
+      //     TargetPlatform.values,
+      //     value: (_) => const FadeForwardsPageTransitionsBuilder(),
+      //   ),
+      // ),
       pageTransitionsTheme: PageTransitionsTheme(
-        builders: Map<TargetPlatform, PageTransitionsBuilder>.fromIterable(
-          TargetPlatform.values,
-          value: (_) => const FadeForwardsPageTransitionsBuilder(),
-        ),
-      ),
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+      },
+    ),
     );
   }
 }

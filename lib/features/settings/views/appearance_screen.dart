@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/settings/app_settings.dart';
@@ -38,7 +39,7 @@ class AppearanceScreen extends StatelessWidget {
                       GroupTitle(title: "Theme"),
                       SettingTile(
                         title: "Dark theme",
-                        leading: Icon(Icons.dark_mode_rounded),
+                        leading: Icon(FluentIcons.dark_theme_24_filled),
                         subtitle: settings.themeMode.text,
                         isFirst: true,
                         onTap: () async {
@@ -76,7 +77,7 @@ class AppearanceScreen extends StatelessWidget {
                           }
                         },
                         title: "Accent Color",
-                        leading: Icon(Icons.colorize_rounded),
+                        leading: Icon(FluentIcons.color_24_filled),
                         trailing: CircleAvatar(
                           radius: 20,
                           backgroundColor: settings.accentColor,
@@ -84,7 +85,7 @@ class AppearanceScreen extends StatelessWidget {
                       ),
                       SettingSwitchTile(
                         title: "Pure black",
-                        leading: Icon(Icons.water_drop_rounded),
+                        leading: Icon(FluentIcons.drop_24_filled),
                         value: settings.isPureBlack,
                         onChanged: (value) async {
                           await appSettings.setBool(
@@ -103,13 +104,13 @@ class AppearanceScreen extends StatelessWidget {
                           );
                         },
                         title: "Enable system colors",
-                        leading: Icon(Icons.color_lens_rounded),
+                        leading: Icon(FluentIcons.system_24_filled),
                         isLast: true,
                       ),
                       GroupTitle(title: "Layout"),
                       SettingTile(
                         title: "Language",
-                        leading: Icon(Icons.language),
+                        leading: Icon(FluentIcons.local_language_24_filled),
                         isFirst: true,
                         isLast: true,
                         subtitle: settings.language.title,

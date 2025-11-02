@@ -337,6 +337,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  fluentui_system_icons:
+    dependency: "direct main"
+    description:
+      name: fluentui_system_icons
+      sha256: "1592ae32dae75fb66741ab2c0607bc6554ef086f1c457e27ef937fb4901d33da"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.273"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -1220,9 +1228,11 @@ packages:
   ytmusic:
     dependency: "direct main"
     description:
-      path: "../ytmusic"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: c06f50666b8ad43875f78a792491649906a03f66
+      url: "https://github.com/sheikhhaziq/ytmusic.git"
+    source: git
     version: "0.0.1"
 sdks:
   dart: ">=3.9.2 <4.0.0"

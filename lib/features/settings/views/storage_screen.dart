@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
@@ -23,7 +24,7 @@ class StorageScreen extends StatelessWidget {
                   GroupTitle(title: "Storage"),
                   SettingTile(
                     title: "App Folder",
-                    leading: Icon(Icons.folder_rounded),
+                    leading: Icon(FluentIcons.folder_24_filled),
                     isFirst: true,
                     isLast: true,
                     subtitle: "/storage/emulated/0/Download",
@@ -42,13 +43,13 @@ class StorageScreen extends StatelessWidget {
                           return SettingTile(
                             isFirst: true,
                             title: "Image Cache",
-                            leading: Icon(Icons.error),
+                            leading: Icon(FluentIcons.error_circle_24_filled),
                             subtitle: "${value.toStringAsFixed(2)} MB".toString(),
                             trailing: IconButton.filled(
                               onPressed: () async {
                                 await CustomImageCacheManager.resetCache();
                               },
-                              icon: Icon(Icons.delete),
+                              icon: Icon(FluentIcons.delete_24_filled),
                               isSelected: false,
                             ),
                           );
@@ -59,18 +60,18 @@ class StorageScreen extends StatelessWidget {
                   SettingTile(
                     isLast: true,
                     title: "Song Cache",
-                    leading: Icon(Icons.error),
+                    leading: Icon(FluentIcons.error_circle_24_filled),
                   ),
                   GroupTitle(title: "Backup and restore"),
                   SettingTile(
                     isFirst: true,
                     title: "Backup",
-                    leading: Icon(Icons.backup),
+                    leading: Icon(Icons.backup_rounded),
                   ),
                   SettingTile(
                     isLast: true,
                     title: "Restore",
-                    leading: Icon(Icons.cloud_download),
+                    leading: Icon(Icons.cloud_download_rounded),
                   ),
                 ],
               ),
