@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:gyawun/services/settings_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../services/lyrics.dart';
 import '../../services/media_player.dart';
@@ -74,6 +75,7 @@ class _LyricsBoxState extends State<LyricsBox> {
   @override
   void dispose() {
     GetIt.I<MediaPlayer>().progressBarState.removeListener(_progressListener);
+    WakelockPlus.disable();
     super.dispose();
   }
 
@@ -91,12 +93,20 @@ class _LyricsBoxState extends State<LyricsBox> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data == null) {
+                          WakelockPlus.disable();
                           return const Text('No Lyrics');
                         }
                         if (snapshot.data!['success'] == false) {
+                          WakelockPlus.disable();
                           return const Text('No Lyrics');
                         }
                         Map lyrics = snapshot.data!;
+                        if (lyrics['syncedLyrics'] == null &&
+                            lyrics['plainLyrics'] == null) {
+                          WakelockPlus.disable();
+                        } else {
+                          WakelockPlus.enable();
+                        }
                         return ValueListenableBuilder(
                           valueListenable:
                               GetIt.I<MediaPlayer>().progressBarState,
@@ -117,7 +127,7 @@ class _LyricsBoxState extends State<LyricsBox> {
                               emptyBuilder: () => SingleChildScrollView(
                                 child: Center(
                                   child: Text(
-                                    lyrics['plainLyrics'] ?? "No lyrics",
+                                    lyrics['plainLyrics'] ?? "No Lyrics",
                                     style: UINetease(
                                       highlight: false,
                                       defaultSize: 19,
@@ -132,6 +142,7 @@ class _LyricsBoxState extends State<LyricsBox> {
                         );
                       }
                       if (snapshot.hasError) {
+                        WakelockPlus.disable();
                         return const Text('No Lyrics');
                       }
                       return const AdaptiveProgressRing();
