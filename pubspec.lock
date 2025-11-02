@@ -621,6 +621,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
+  language_detector:
+    dependency: "direct main"
+    description:
+      name: language_detector
+      sha256: f8a8a4f8fc3046066f81715b82a9255ded4f5d2d2b08daa073601ec61dcc4a7a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -1115,6 +1123,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1"
+  translator:
+    dependency: "direct main"
+    description:
+      name: translator
+      sha256: fb28ada8b29931f5142907bac62dda375b14a60a57ec72ed37b78e3e97a7047b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4+1"
   typed_data:
     dependency: transitive
     description:
