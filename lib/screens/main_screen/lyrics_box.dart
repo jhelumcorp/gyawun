@@ -24,11 +24,13 @@ class LyricsBox extends StatefulWidget {
 
 class _LyricsBoxState extends State<LyricsBox> {
   Future<Map>? _fetchLyricsFuture;
+  bool _lyricsLoaded = false;
 
   @override
   void initState() {
     super.initState();
     _initFetchLyrics();
+    _initWakelock();
   }
 
   void _initFetchLyrics() {
@@ -43,6 +45,20 @@ class _LyricsBoxState extends State<LyricsBox> {
     if (GetIt.I<MediaPlayer>().progressBarState.value.total.inSeconds > 0) {
       _fetchLyrics();
       GetIt.I<MediaPlayer>().progressBarState.removeListener(_progressListener);
+    }
+  }
+
+  void _initWakelock() {
+    GetIt.I<MediaPlayer>().buttonState.addListener(_updateWakelock);
+  }
+
+  void _updateWakelock() {
+    final isPlaying =
+        GetIt.I<MediaPlayer>().buttonState.value == ButtonState.playing;
+    if (isPlaying && _lyricsLoaded) {
+      WakelockPlus.enable();
+    } else {
+      WakelockPlus.disable();
     }
   }
 
@@ -68,6 +84,15 @@ class _LyricsBoxState extends State<LyricsBox> {
               ? context.read<SettingsManager>().language['value']!
               : null,
         );
+        _lyricsLoaded = false;
+        _fetchLyricsFuture!.then((lyrics) {
+          _lyricsLoaded =
+              lyrics['syncedLyrics'] != null || lyrics['plainLyrics'] != null;
+          _updateWakelock();
+        }).catchError((_) {
+          _lyricsLoaded = false;
+          _updateWakelock();
+        });
       });
     }
   }
@@ -75,6 +100,7 @@ class _LyricsBoxState extends State<LyricsBox> {
   @override
   void dispose() {
     GetIt.I<MediaPlayer>().progressBarState.removeListener(_progressListener);
+    GetIt.I<MediaPlayer>().buttonState.removeListener(_updateWakelock);
     WakelockPlus.disable();
     super.dispose();
   }
@@ -93,20 +119,12 @@ class _LyricsBoxState extends State<LyricsBox> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data == null) {
-                          WakelockPlus.disable();
                           return const Text('No Lyrics');
                         }
                         if (snapshot.data!['success'] == false) {
-                          WakelockPlus.disable();
                           return const Text('No Lyrics');
                         }
                         Map lyrics = snapshot.data!;
-                        if (lyrics['syncedLyrics'] == null &&
-                            lyrics['plainLyrics'] == null) {
-                          WakelockPlus.disable();
-                        } else {
-                          WakelockPlus.enable();
-                        }
                         return ValueListenableBuilder(
                           valueListenable:
                               GetIt.I<MediaPlayer>().progressBarState,
@@ -142,7 +160,6 @@ class _LyricsBoxState extends State<LyricsBox> {
                         );
                       }
                       if (snapshot.hasError) {
-                        WakelockPlus.disable();
                         return const Text('No Lyrics');
                       }
                       return const AdaptiveProgressRing();
