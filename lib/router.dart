@@ -22,6 +22,8 @@ final searchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'search');
 final libraryNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'library');
 final settingsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'settings');
 
+ValueNotifier<int> bottomSheetCounter = ValueNotifier(0);
+
 final router = GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: '/onboarding',

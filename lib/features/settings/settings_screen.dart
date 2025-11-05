@@ -81,7 +81,6 @@ class SettingsScreen extends StatelessWidget {
                   GroupTitle(title: "Storage & Privacy"),
 
                   SettingTile(
-                    
                     title: "Storage and backups",
                     isFirst: true,
                     leading: Icon(FluentIcons.storage_24_filled),
@@ -98,7 +97,7 @@ class SettingsScreen extends StatelessWidget {
                   SettingTile(
                     title: "Privacy",
                     isLast: true,
-                    leading: Icon(Icons.privacy_tip_rounded),
+                    leading: Icon(FluentIcons.shield_keyhole_24_filled),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -125,7 +124,7 @@ class SettingsScreen extends StatelessWidget {
                   SettingTile(
                     onTap: () {},
                     title: "Check for update",
-                    leading: Icon(FluentIcons.phone_update_24_filled),
+                    leading: Icon(FluentIcons.arrow_circle_up_24_filled),
                     isLast: true,
                   ),
                 ],

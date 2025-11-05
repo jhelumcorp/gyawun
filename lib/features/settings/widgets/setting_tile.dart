@@ -40,6 +40,7 @@ class SettingTile extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontSize: 16,
             fontWeight: FontWeight.w500,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         leading: Container(
@@ -103,6 +104,7 @@ class SettingSwitchTile extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontSize: 16,
             fontWeight: FontWeight.w500,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         subtitle: subtitle != null

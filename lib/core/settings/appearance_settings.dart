@@ -5,10 +5,7 @@ import 'package:gyawun_music/database/settings/app_settings_dao.dart';
 import 'package:gyawun_music/features/settings/app_settings_identifiers.dart';
 import 'package:rxdart/rxdart.dart';
 
-
-
 Stream<AppAppearance> appearanceSettingsStream(AppSettingsDao dao) {
-
   final darkTheme$ = dao
       .watchSetting<String>(AppSettingsIdentifiers.darkTheme)
       .distinct();
@@ -25,6 +22,9 @@ Stream<AppAppearance> appearanceSettingsStream(AppSettingsDao dao) {
   final appLanguage$ = dao
       .watchSetting<String>(AppSettingsIdentifiers.appLanguage)
       .distinct();
+  final enableAndroidPredictiveBack$ = dao
+      .watchSetting<bool>(AppSettingsIdentifiers.enableAndroidPredictiveBack)
+      .distinct();
 
   return Rx.combineLatestList([
     darkTheme$,
@@ -32,6 +32,7 @@ Stream<AppAppearance> appearanceSettingsStream(AppSettingsDao dao) {
     isPureBlack$,
     enableSystemColors$,
     appLanguage$,
+    enableAndroidPredictiveBack$,
   ]).map((values) {
     final darkTheme = values[0] ?? 'system';
     final accentColor = values[1] as Color?;
@@ -41,6 +42,8 @@ Stream<AppAppearance> appearanceSettingsStream(AppSettingsDao dao) {
     final language = values[4] != null
         ? jsonDecode(values[4] as String)
         : (AppLanguage(title: "English", value: 'en').toJson());
+    final enableAndroidPredictiveBack = values[5] as bool? ?? false;
+
     final AppThemeMode mode;
     switch (darkTheme) {
       case 'on':
@@ -58,17 +61,19 @@ Stream<AppAppearance> appearanceSettingsStream(AppSettingsDao dao) {
       accentColor: accentColor,
       isPureBlack: isPureBlack,
       enableSystemColors: enableSystemColors,
+      enableAndroidPredictiveBack: enableAndroidPredictiveBack,
+
       language: AppLanguage.fromJson(language),
     );
   });
 }
-
 
 class AppAppearance {
   final AppThemeMode themeMode;
   final bool isPureBlack;
   final bool enableSystemColors;
   final Color? accentColor;
+  final bool enableAndroidPredictiveBack;
 
   final AppLanguage language;
 
@@ -78,6 +83,7 @@ class AppAppearance {
     required this.enableSystemColors,
     required this.accentColor,
     required this.language,
+    required this.enableAndroidPredictiveBack,
   });
 
   AppAppearance copyWith({
@@ -87,6 +93,7 @@ class AppAppearance {
     Color? accentColor,
     AppLanguage? language,
     bool? isRightToLeft,
+    bool? enableAndroidPredictiveBack,
   }) {
     return AppAppearance(
       themeMode: themeMode ?? this.themeMode,
@@ -94,6 +101,8 @@ class AppAppearance {
       enableSystemColors: enableSystemColors ?? this.enableSystemColors,
       accentColor: accentColor ?? this.accentColor,
       language: language ?? this.language,
+      enableAndroidPredictiveBack:
+          enableAndroidPredictiveBack ?? this.enableAndroidPredictiveBack,
     );
   }
 }
@@ -115,4 +124,3 @@ class AppThemeMode {
 
   AppThemeMode({required this.text, required this.mode});
 }
-

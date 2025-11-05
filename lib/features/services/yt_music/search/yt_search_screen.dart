@@ -38,7 +38,7 @@ class _YTSearchScreenViewState extends State<YTSearchScreenView> {
               onSubmit: (value) {
                 setState(() {
                   query = value;
-                  if(query!=null){
+                  if (query != null) {
                     context.read<SearchCubit>().search(query!);
                   }
                 });
@@ -48,7 +48,7 @@ class _YTSearchScreenViewState extends State<YTSearchScreenView> {
           ];
         },
 
-        body:query==null? YTExploreScreen(): YTSearchResultView(),
+        body: query == null ? YTExploreScreen() : YTSearchResultView(),
       ),
     );
   }

@@ -6,23 +6,23 @@ import 'section_column_tile.dart';
 class SearchTopBar extends StatelessWidget {
   final void Function(String value)? onSubmit;
   final SearchCubit searchCubit;
-  const SearchTopBar({super.key, this.onSubmit,required this.searchCubit});
+  const SearchTopBar({super.key, this.onSubmit, required this.searchCubit});
 
   @override
-  Widget build(BuildContext context,) {
+  Widget build(BuildContext context) {
     return SliverAppBar(
       pinned: true,
-      expandedHeight: 150,
-      collapsedHeight: 90,
+      expandedHeight: 130,
+      collapsedHeight: 75,
       flexibleSpace: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(8),
           child: LayoutBuilder(
             builder: (context, constraints) {
               final appBarHeight = constraints.maxHeight;
               final collapsedHeight = kToolbarHeight;
-              final isCollapsed = appBarHeight <= collapsedHeight + 10;
+              final isCollapsed = appBarHeight <= collapsedHeight;
 
               final double collapsedTop = (kToolbarHeight - 56) / 2;
 
@@ -31,7 +31,7 @@ class SearchTopBar extends StatelessWidget {
                   Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 16),
+                      padding: const EdgeInsets.only(top: 8, left: 8),
                       child: AnimatedOpacity(
                         duration: const Duration(milliseconds: 300),
                         opacity: isCollapsed ? 0 : 1,
@@ -60,7 +60,7 @@ class SearchTopBar extends StatelessWidget {
                       builder: (context, controller) {
                         return SearchBar(
                           backgroundColor: WidgetStatePropertyAll(
-                            Theme.of(context).colorScheme.primaryContainer,
+                            Theme.of(context).colorScheme.surfaceContainer,
                           ),
                           elevation: const WidgetStatePropertyAll(0),
                           controller: controller,
@@ -71,7 +71,7 @@ class SearchTopBar extends StatelessWidget {
                           textInputAction: TextInputAction.search,
                           onSubmitted: (value) {
                             if (value.trim().isEmpty) return;
-                            if(onSubmit!=null){
+                            if (onSubmit != null) {
                               onSubmit!(value);
                             }
                             controller.closeView(value);
@@ -81,7 +81,9 @@ class SearchTopBar extends StatelessWidget {
                         );
                       },
                       suggestionsBuilder: (context, controller) async {
-                        final results = await searchCubit.searchSuggestions(controller.text);
+                        final results = await searchCubit.searchSuggestions(
+                          controller.text,
+                        );
 
                         return [
                           ...results.textItems.map(

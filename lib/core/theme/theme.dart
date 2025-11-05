@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:gyawun_music/core/theme/typography.dart';
 
 class AppTheme {
-  static ThemeData light({Color? primary}) {
+  static ThemeData light({Color? primary, bool androidPredictiveBack = false}) {
     final colorScheme = ColorScheme.fromSeed(
-            seedColor: primary??Colors.red,
-            brightness: Brightness.light,
-          );
+      seedColor: primary ?? Colors.red,
+      brightness: Brightness.light,
+    );
 
     return ThemeData.light(useMaterial3: true).copyWith(
       scaffoldBackgroundColor: colorScheme.surface,
@@ -16,11 +16,11 @@ class AppTheme {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       appBarTheme: AppBarTheme(
         titleTextStyle: TextStyle(
-        fontSize: 30,
-        fontFamily: 'paytoneOne',
-        fontWeight: FontWeight.w300,
-        color: colorScheme.primary,
-      ),
+          fontSize: 30,
+          fontFamily: 'paytoneOne',
+          fontWeight: FontWeight.w300,
+          color: colorScheme.primary,
+        ),
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarBrightness: Brightness.light,
           statusBarColor: Colors.transparent,
@@ -35,32 +35,37 @@ class AppTheme {
       //   ),
       // ),
       pageTransitionsTheme: PageTransitionsTheme(
-      builders: <TargetPlatform, PageTransitionsBuilder>{
-        TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
-      },
-    ),
+        builders: <TargetPlatform, PageTransitionsBuilder>{
+          TargetPlatform.android: androidPredictiveBack
+              ? PredictiveBackPageTransitionsBuilder()
+              : const FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.linux: const FadeForwardsPageTransitionsBuilder(),
+        },
+      ),
     );
   }
 
-  static ThemeData dark({Color? primary, bool isPureBlack = false}) {
+  static ThemeData dark({
+    Color? primary,
+    bool isPureBlack = false,
+    bool androidPredictiveBack = false,
+  }) {
     final colorScheme = ColorScheme.fromSeed(
-            seedColor: primary??Colors.deepPurpleAccent,
-            brightness: Brightness.dark,
-          );
+      seedColor: primary ?? Colors.deepPurpleAccent,
+      brightness: Brightness.dark,
+    );
     return ThemeData.dark(useMaterial3: true).copyWith(
-      scaffoldBackgroundColor: isPureBlack
-          ? Colors.black
-          : colorScheme.surface,
+      scaffoldBackgroundColor: isPureBlack ? Colors.black : colorScheme.surface,
       textTheme: appTextTheme(ThemeData.dark().textTheme),
       colorScheme: colorScheme,
       visualDensity: VisualDensity.adaptivePlatformDensity,
       appBarTheme: AppBarTheme(
         titleTextStyle: TextStyle(
-        fontSize: 30,
-        fontFamily: 'paytoneOne',
-        fontWeight: FontWeight.w300,
-        color: colorScheme.primary,
-      ),
+          fontSize: 30,
+          fontFamily: 'paytoneOne',
+          fontWeight: FontWeight.w300,
+          color: colorScheme.primary,
+        ),
         backgroundColor: isPureBlack ? Colors.black : null,
         surfaceTintColor: isPureBlack ? Colors.black : null,
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -81,10 +86,13 @@ class AppTheme {
       //   ),
       // ),
       pageTransitionsTheme: PageTransitionsTheme(
-      builders: <TargetPlatform, PageTransitionsBuilder>{
-        TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
-      },
-    ),
+        builders: <TargetPlatform, PageTransitionsBuilder>{
+          TargetPlatform.android: androidPredictiveBack
+              ? PredictiveBackPageTransitionsBuilder()
+              : const FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.linux: const FadeForwardsPageTransitionsBuilder(),
+        },
+      ),
     );
   }
 }

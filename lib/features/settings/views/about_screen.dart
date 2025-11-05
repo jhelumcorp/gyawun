@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
@@ -30,7 +31,7 @@ class AboutScreen extends StatelessWidget {
                   SettingTile(
                     isFirst: true,
                     title: "Gyawun Music",
-                    leading: Icon(Icons.title_rounded),
+                    leading: Icon(FluentIcons.text_32_filled),
                   ),
                   SettingTile(
                     isLast: true,
@@ -42,9 +43,9 @@ class AboutScreen extends StatelessWidget {
                   SettingTile(
                     isFirst: true,
                     title: "Developer",
-                    leading: Icon(Icons.person_rounded),
+                    leading: Icon(FluentIcons.person_24_filled),
                     subtitle: "Sheikh Haziq",
-                    trailing: Icon(Icons.open_in_browser_rounded),
+                    trailing: Icon(FluentIcons.open_24_filled),
 
                     onTap: () {
                       launchUrl(Uri.parse("https://github.com/sheikhhaziq"));
@@ -53,8 +54,8 @@ class AboutScreen extends StatelessWidget {
                   SettingTile(
                     isLast: true,
                     title: "Website",
-                    leading: Icon(Icons.link_rounded),
-                    trailing: Icon(Icons.open_in_browser_rounded),
+                    leading: Icon(FluentIcons.link_24_filled),
+                    trailing: Icon(FluentIcons.open_24_filled),
                     onTap: () {
                       launchUrl(Uri.parse("https://gyawunmusic.vercel.app"));
                     },
@@ -68,23 +69,23 @@ class AboutScreen extends StatelessWidget {
                   SettingTile(
                     isLast: true,
                     title: "Source code",
-                    leading: Icon(Icons.code_rounded),
+                    leading: Icon(FluentIcons.code_24_filled),
                   ),
-                  
+
                   GroupTitle(title: "Support"),
                   SettingTile(
                     isFirst: true,
                     title: "Bug report",
-                    leading: Icon(Icons.bug_report_rounded),
+                    leading: Icon(FluentIcons.bug_24_filled),
                   ),
                   SettingTile(
                     title: "Feature request",
-                    leading: Icon(Icons.request_page_rounded),
+                    leading: Icon(FluentIcons.new_24_filled),
                   ),
                   SettingTile(
                     isLast: true,
                     title: "Licenses",
-                    leading: Icon(Icons.label_rounded),
+                    leading: Icon(FluentIcons.document_24_filled),
                     onTap: () {
                       showLicensePage(context: context);
                     },

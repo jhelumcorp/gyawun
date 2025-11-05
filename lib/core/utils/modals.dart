@@ -5,7 +5,8 @@ import 'package:ytmusic/ytmusic.dart';
 import 'modal_layouts.dart';
 
 class Modals {
-  static void showItemBottomSheet(BuildContext context,YTItem item) {
+  static void showItemBottomSheet(BuildContext context, YTItem item) {
+    bottomSheetCounter.value++;
     showModalBottomSheet(
       context: rootNavigatorKey.currentContext!,
       showDragHandle: true,
@@ -14,7 +15,12 @@ class Modals {
       builder: (context) => ModalLayouts.itemBottomLayout(context, item),
     );
   }
-  static void showArtistsBottomSheet(BuildContext context,List<YTArtistBasic> item) {
+
+  static void showArtistsBottomSheet(
+    BuildContext context,
+    List<YTArtistBasic> item,
+  ) {
+    bottomSheetCounter.value++;
     showModalBottomSheet(
       context: rootNavigatorKey.currentContext!,
       showDragHandle: true,

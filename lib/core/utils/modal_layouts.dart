@@ -1,6 +1,12 @@
+import 'dart:convert';
+
+import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/features/services/yt_music/artist/yt_artist_screen.dart';
+import 'package:gyawun_music/services/audio_service/audio_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:ytmusic/mixins/mixins.dart';
 import 'package:ytmusic/ytmusic.dart';
@@ -49,7 +55,7 @@ class ModalLayouts {
             trailing: isPlayable
                 ? IconButton(
                     onPressed: () => {},
-                    icon: const Icon(Icons.favorite),
+                    icon: const Icon(FluentIcons.heart_24_regular),
                   )
                 : null,
           ),
@@ -63,22 +69,47 @@ class ModalLayouts {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TopIconButton(
-                      icon: Icons.queue_play_next_rounded,
+                      icon: FluentIcons.play_24_filled,
                       label: "Play Next",
-                      onTap: () {},
+                      onTap: () {
+                        if (item is YTSong) {
+                          sl<MyAudioHandler>().playNext(
+                            MediaItem(
+                              id: item.id.isNotEmpty
+                                  ? item.id
+                                  : jsonEncode(item.endpoint),
+                              title: item.title,
+                              album: item.album?.title,
+                              artist: item.artists
+                                  .map((e) => e.title)
+                                  .join(', '),
+                              artUri: item.thumbnails.lastOrNull?.url != null
+                                  ? Uri.parse(item.thumbnails.last.url)
+                                  : null,
+                            ),
+                          );
+                        }
+                      },
                     ),
                     TopIconButton(
-                      icon: Icons.add_to_queue,
+                      icon: FluentIcons.task_list_add_24_filled,
                       label: "Add to queue",
                     ),
                     TopIconButton(
-                      icon: Icons.share,
+                      icon: FluentIcons.share_24_filled,
                       label: "Share",
                       onTap: () async {
+                        // Your generated URL
+                        final String url =
+                            'https://music.youtube.com/${isPlayable ? 'watch?v' : 'playlist?list'}=${item.id}';
+
+                        // 4. Call the instance method, just as you did,
+                        //    but add the 'sharePositionOrigin' to the ShareParams.
                         await SharePlus.instance.share(
                           ShareParams(
-                            text:
-                                'https://music.youtube.com/${isPlayable ? 'watch?v' : 'playlist?list'}=${item.id}',
+                            text: url,
+                            // THIS IS THE FIX:
+                            // sharePositionOrigin: sharePositionOrigin,
                           ),
                         );
                       },
@@ -95,7 +126,7 @@ class ModalLayouts {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    leading: Icon(Icons.library_add),
+                    leading: Icon(FluentIcons.document_one_page_add_24_filled),
                     onTap: () {
                       Navigator.pop(context);
                       // Modals.addToPlaylist(context, song);
@@ -110,7 +141,7 @@ class ModalLayouts {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    leading: Icon(Icons.cloud_download_rounded),
+                    leading: Icon(FluentIcons.cloud_arrow_down_24_filled),
                     onTap: () {
                       Navigator.pop(context);
                       // Modals.addToPlaylist(context, song);
@@ -124,7 +155,7 @@ class ModalLayouts {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  leading: Icon(Icons.radio),
+                  leading: Icon(FluentIcons.remix_add_24_filled),
                   onTap: () {
                     Navigator.pop(context);
                     // GetIt.I<MediaPlayer>().startRelated(Map.from(song), radio: true);
@@ -140,8 +171,8 @@ class ModalLayouts {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    leading: Icon(Icons.people),
-                    trailing: Icon(Icons.chevron_right),
+                    leading: Icon(FluentIcons.people_24_filled),
+                    trailing: Icon(FluentIcons.chevron_right_24_filled),
                     onTap: () {
                       Navigator.pop(context);
                       Modals.showArtistsBottomSheet(
@@ -161,8 +192,8 @@ class ModalLayouts {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    leading: Icon(Icons.album),
-                    trailing: Icon(Icons.chevron_right),
+                    leading: Icon(FluentIcons.radio_button_24_filled),
+                    trailing: Icon(FluentIcons.chevron_right_24_filled),
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(
@@ -237,7 +268,7 @@ class TopIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => onTap,
+      onTap: onTap,
       borderRadius: BorderRadius.circular(20),
       child: Ink(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),

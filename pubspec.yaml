@@ -22,7 +22,7 @@ dependencies:
   navigation_rail_flutter: ^1.0.3
   cached_network_image: ^3.4.1
   expandable_page_view: ^1.0.17
-  google_fonts: ^6.2.1
+  google_fonts: ^6.3.2
   dynamic_color: ^1.7.0
   readmore: ^3.0.0
   drift: ^2.28.1
@@ -36,7 +36,9 @@ dependencies:
   shared_preferences: ^2.5.3
   sliver_tools: ^0.2.12
   playlist_manager:
-    path: ../playlist_manager
+    # path: ../playlist_manager
+    git:
+      url: https://github.com/sheikhhaziq/playlist_manager.git
   flutter_bloc: ^9.1.1
   share_plus: ^12.0.1
   get_it: ^8.2.0
@@ -44,6 +46,11 @@ dependencies:
   meta: ^1.16.0
   flutter_staggered_grid_view: ^0.7.0
   fluentui_system_icons: ^1.1.273
+  just_audio: ^0.10.5
+  audio_session: ^0.2.2
+  audio_service: ^0.18.18
+  youtube_explode_dart: ^2.5.3
+  permission_handler: ^12.0.1
 
 dev_dependencies:
   flutter_test:

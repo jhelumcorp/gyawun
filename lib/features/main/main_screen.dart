@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // Import the router keys
-import '../../router.dart' show
-  homeNavigatorKey,
-  searchNavigatorKey,
-  libraryNavigatorKey,
-  settingsNavigatorKey;
+import '../../router.dart'
+    show
+        bottomSheetCounter,
+        homeNavigatorKey,
+        libraryNavigatorKey,
+        rootNavigatorKey,
+        searchNavigatorKey,
+        settingsNavigatorKey;
 
 final destinations = [
   NavigationDestination(
@@ -37,11 +40,11 @@ class MainScreen extends StatelessWidget {
   const MainScreen({super.key, required this.navigationShell});
 
   List<GlobalKey<NavigatorState>> get _branchKeys => [
-        homeNavigatorKey,
-        searchNavigatorKey,
-        libraryNavigatorKey,
-        settingsNavigatorKey,
-      ];
+    homeNavigatorKey,
+    searchNavigatorKey,
+    libraryNavigatorKey,
+    settingsNavigatorKey,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +55,11 @@ class MainScreen extends StatelessWidget {
       canPop: false, // we’ll decide manually whether to pop or exit
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return; // already popped by inner navigator
+        if (bottomSheetCounter.value > 0) {
+          Navigator.pop(rootNavigatorKey.currentContext!);
+          bottomSheetCounter.value--;
+          return;
+        }
 
         final currentIndex = navigationShell.currentIndex;
         final currentKey = _branchKeys[currentIndex];
@@ -63,9 +71,11 @@ class MainScreen extends StatelessWidget {
         }
 
         // If nothing left to pop, exit app
-        final rootNavigator = Navigator.of(context);
-        if (rootNavigator.canPop()) {
-          rootNavigator.pop();
+        if (context.mounted) {
+          final rootNavigator = Navigator.of(context);
+          if (rootNavigator.canPop()) {
+            rootNavigator.pop();
+          }
         }
       },
       child: Scaffold(
@@ -79,7 +89,8 @@ class MainScreen extends StatelessWidget {
         bottomNavigationBar: isWideScreen
             ? null
             : NavigationBar(
-              labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+                labelBehavior:
+                    NavigationDestinationLabelBehavior.onlyShowSelected,
                 selectedIndex: navigationShell.currentIndex,
                 onDestinationSelected: navigationShell.goBranch,
                 destinations: destinations,
@@ -90,10 +101,7 @@ class MainScreen extends StatelessWidget {
 }
 
 class CustomNavigationRail extends StatefulWidget {
-  const CustomNavigationRail({
-    super.key,
-    required this.navigationShell,
-  });
+  const CustomNavigationRail({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
@@ -125,11 +133,13 @@ class _CustomNavigationRailState extends State<CustomNavigationRail> {
             selectedLabelTextStyle: Theme.of(context).textTheme.titleLarge,
             unselectedLabelTextStyle: Theme.of(context).textTheme.bodyLarge,
             destinations: destinations
-                .map((destination) => NavigationRailDestination(
-                      icon: destination.icon,
-                      selectedIcon: destination.selectedIcon,
-                      label: Text(destination.label),
-                    ))
+                .map(
+                  (destination) => NavigationRailDestination(
+                    icon: destination.icon,
+                    selectedIcon: destination.selectedIcon,
+                    label: Text(destination.label),
+                  ),
+                )
                 .toList(),
           ),
         ),

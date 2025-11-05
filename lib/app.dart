@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return StreamBuilder(
       stream: appSettings.appearance(),
       builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data!=null) {
+        if (snapshot.hasData && snapshot.data != null) {
           final appearance = snapshot.data!;
           return DynamicColorBuilder(
             builder: (lightDynamic, darkDynamic) {
@@ -27,12 +27,14 @@ class MyApp extends StatelessWidget {
                   primary: appearance.enableSystemColors && lightDynamic != null
                       ? lightDynamic.primary
                       : appearance.accentColor,
+                  androidPredictiveBack: appearance.enableAndroidPredictiveBack,
                 ),
                 darkTheme: AppTheme.dark(
                   primary: appearance.enableSystemColors && darkDynamic != null
                       ? darkDynamic.primary
                       : appearance.accentColor,
                   isPureBlack: appearance.isPureBlack,
+                  androidPredictiveBack: appearance.enableAndroidPredictiveBack,
                 ),
                 themeMode: appearance.themeMode.mode,
                 debugShowCheckedModeBanner: false,
@@ -44,7 +46,6 @@ class MyApp extends StatelessWidget {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 supportedLocales: AppLocalizations.supportedLocales,
-                // backButtonDispatcher: RootBackButtonDispatcher(),
               );
             },
           );

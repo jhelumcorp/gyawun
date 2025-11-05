@@ -4,6 +4,8 @@ class AppSettingsIdentifiers {
   static String accentColor = "ACCENT_COLOR";
   static String isPureBlack = "IS_PURE_BLACK";
   static String enableSystemColors = "ENABLE_SYSTEM_COLORS";
+  static String enableAndroidPredictiveBack = "ENABLE_ANDROID_PREDICTIVE_BACK";
+
   // static String isRightToLeft = "IS_RIGHT_TO_LEFT";
 
   // Player & Audio

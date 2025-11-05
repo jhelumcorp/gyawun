@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:gyawun_music/database/database.dart';
 import 'package:gyawun_music/features/settings/app_settings_identifiers.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:ytmusic/models/config.dart';
 import 'package:ytmusic/yt_music_base.dart';
 
@@ -17,13 +18,14 @@ Future<void> registerDependencies() async {
   sl.registerSingletonAsync<YTMusic>(() async {
     final appSettings = sl<AppSettings>();
     final ytMusicSettings = await appSettings.youtube().first;
-
+    final dir = await getApplicationDocumentsDirectory();
     return YTMusic(
       config: YTConfig(
         visitorData: ytMusicSettings.visitorId ?? "",
         language: ytMusicSettings.language.value,
         location: ytMusicSettings.location.value,
       ),
+      cacheDatabasePath: dir.path,
       onConfigUpdate: (config) async {
         await appSettings.setString(
           AppSettingsIdentifiers.ytVisitorId,
@@ -32,6 +34,7 @@ Future<void> registerDependencies() async {
       },
     );
   });
+
   await sl.allReady();
 }
 
