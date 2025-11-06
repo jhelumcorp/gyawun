@@ -53,6 +53,7 @@ class _LyricsBoxState extends State<LyricsBox> {
   }
 
   void _updateWakelock() {
+    if (!mounted) return;
     final isPlaying =
         GetIt.I<MediaPlayer>().buttonState.value == ButtonState.playing;
     if (isPlaying && _lyricsLoaded) {
