@@ -94,7 +94,9 @@ class _SectionItemState extends State<SectionItem> {
                         AdaptiveOutlinedButton(
                           onPressed: () async {
                             if (widget.section['trailing']['playable'] ==
-                                false) {
+                                    false &&
+                                widget.section['trailing']['endpoint'] !=
+                                    null) {
                               context.push(
                                 '/browse',
                                 extra: {
@@ -104,10 +106,16 @@ class _SectionItemState extends State<SectionItem> {
                                 },
                               );
                             } else {
-                              BottomMessage.showText(
-                                  context, 'Songs will start playing soon.');
-                              await GetIt.I<MediaPlayer>().startPlaylistSongs(
-                                  widget.section['trailing']['endpoint']);
+                              BottomMessage.showText(context,
+                                  S.of(context).Songs_Will_Start_Playing_Soon);
+                              if (widget.section['trailing']['endpoint'] !=
+                                  null) {
+                                await GetIt.I<MediaPlayer>().startPlaylistSongs(
+                                    widget.section['trailing']['endpoint']);
+                              } else {
+                                await GetIt.I<MediaPlayer>()
+                                    .playAll(widget.section['contents']);
+                              }
                             }
                           },
                           child: Text(widget.section['trailing']['text']),
