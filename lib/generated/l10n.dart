@@ -307,6 +307,16 @@ class S {
     );
   }
 
+  /// `Autoplay Similar Songs`
+  String get Autofetch_Songs {
+    return Intl.message(
+      'Autoplay Similar Songs',
+      name: 'Autofetch_Songs',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Personalised Content`
   String get Personalised_Content {
     return Intl.message(

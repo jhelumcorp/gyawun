@@ -78,6 +78,8 @@
   "@Language": {},
   "Translate_Lyrics": "Translate Lyrics",
   "@Translate_Lyrics": {},
+  "Autofetch_Songs": "Autoplay Similar Songs",
+  "@Autofetch_Songs": {},
   "Personalised_Content": "Personalised Content",
   "@Personalised_Content": {},
   "Enter_Visitor_Id": "Enter Visitor Id",

@@ -44,6 +44,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "Audio_And_Playback": MessageLookupByLibrary.simpleMessage(
       "Audio e riproduzione",
     ),
+    "Autofetch_Songs": MessageLookupByLibrary.simpleMessage(
+      "Riproduci automaticamente brani simili",
+    ),
     "Backup": MessageLookupByLibrary.simpleMessage("Backup"),
     "Backup_And_Restore": MessageLookupByLibrary.simpleMessage(
       "Backup e ripristino",
