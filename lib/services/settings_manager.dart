@@ -15,6 +15,7 @@ class SettingsManager extends ChangeNotifier {
   ];
   late Map<String, String> _location;
   late Map<String, String> _language;
+  bool _autofetchSongs = true;
   final List<AudioQuality> _audioQualities = [
     AudioQuality.high,
     AudioQuality.low
@@ -36,6 +37,7 @@ class SettingsManager extends ChangeNotifier {
   Map<String, String> get location => _location;
   List<Map<String, String>> get locations => _countries;
   Map<String, String> get language => _language;
+  bool get autofetchSongs => _autofetchSongs;
   List<Map<String, String>> get languages => _languages;
   List<AudioQuality> get audioQualities => _audioQualities;
   AudioQuality get streamingQuality => _streamingQuality;
@@ -58,6 +60,7 @@ class SettingsManager extends ChangeNotifier {
     _themeMode = _themeModes[_box.get('THEME_MODE', defaultValue: 0)];
     _language = _languages.firstWhere((language) =>
         language['value'] == _box.get('LANGUAGE', defaultValue: 'en-IN'));
+    _autofetchSongs = _box.get('AUTOFETCH_SONGS', defaultValue: true);
     _accentColor = _box.get('ACCENT_COLOR') != null
         ? Color(_box.get('ACCENT_COLOR'))
         : null;
@@ -97,6 +100,12 @@ class SettingsManager extends ChangeNotifier {
     _box.put('LANGUAGE', value['value']);
     _language = value;
     GetIt.I<YTMusic>().refreshContext();
+    notifyListeners();
+  }
+
+  set autofetchSongs(bool value) {
+    _box.put('AUTOFETCH_SONGS', value);
+    _autofetchSongs = value;
     notifyListeners();
   }
 

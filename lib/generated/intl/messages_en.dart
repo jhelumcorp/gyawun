@@ -40,6 +40,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "Audio_And_Playback": MessageLookupByLibrary.simpleMessage(
       "Audio and Playback",
     ),
+    "Autofetch_Songs": MessageLookupByLibrary.simpleMessage(
+      "Autoplay Similar Songs",
+    ),
     "Backup": MessageLookupByLibrary.simpleMessage("Backup"),
     "Backup_And_Restore": MessageLookupByLibrary.simpleMessage(
       "Backup and Restore",

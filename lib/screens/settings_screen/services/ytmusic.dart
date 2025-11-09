@@ -87,12 +87,21 @@ class YtMusicScreen extends StatelessWidget {
                   return SettingSwitchTile(
                     title: S.of(context).Translate_Lyrics,
                     leading: Icon(Icons.translate_outlined),
-                    isLast: true,
+                    isLast: false,
                     value: item.get('TRANSLATE_LYRICS', defaultValue: false),
                     onChanged: (value) async {
                       await box.put('TRANSLATE_LYRICS', value);
                     },
                   );
+                },
+              ),
+              SettingSwitchTile(
+                title: S.of(context).Autofetch_Songs,
+                leading: Icon(Icons.autorenew_outlined),
+                isLast: true,
+                value: context.watch<SettingsManager>().autofetchSongs,
+                onChanged: (value) {
+                  context.read<SettingsManager>().autofetchSongs = value;
                 },
               ),
               GroupTitle(title: "Playback & download"),
