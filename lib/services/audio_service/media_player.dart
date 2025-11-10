@@ -176,21 +176,7 @@ class MediaPlayer {
   Future<void> skipToNext() => _player.seekToNext();
   Future<void> skipToPrevious() => _player.seekToPrevious();
 
-  Future<void> skipToIndex(int index) async {
-    print('=== skipToIndex called ===');
-    print('Target index: $index');
-    print('Current index BEFORE: ${_player.currentIndex}');
-    print('Sequence length: ${_player.sequence.length}');
-
-    await _player.seek(Duration.zero, index: index);
-
-    print('Current index AFTER seek: ${_player.currentIndex}');
-
-    _player.play();
-
-    print('Current index AFTER play: ${_player.currentIndex}');
-    print('======================');
-  }
+  Future<void> skipToIndex(int index) => _player.seek(Duration.zero, index: index);
 
   /// Set playback speed
   Future<void> setSpeed(double speed) => _player.setSpeed(speed);
