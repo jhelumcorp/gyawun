@@ -1,5 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -90,7 +91,7 @@ class AboutScreen extends StatelessWidget {
                       showLicensePage(context: context);
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const BottomPlayingPadding(),
                 ],
               ),
             ),

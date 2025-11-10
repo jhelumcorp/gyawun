@@ -5,6 +5,7 @@ import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/features/player/player_screen.dart';
 import 'package:gyawun_music/features/player/widgets/next_button.dart';
 import 'package:gyawun_music/features/player/widgets/play_button.dart';
+import 'package:gyawun_music/features/player/widgets/previous_button.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 
 class QueueTrackBar extends StatelessWidget {
@@ -14,11 +15,15 @@ class QueueTrackBar extends StatelessWidget {
     required this.artworkSize,
     required this.iconSize,
     required this.height,
+    required this.hasNext,
+    required this.hasPrevious,
   });
   final MediaItem item;
   final double artworkSize;
   final double iconSize;
   final double height;
+  final bool hasNext;
+  final bool hasPrevious;
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +49,9 @@ class QueueTrackBar extends StatelessWidget {
               _QueueArtwork(item: item, size: artworkSize),
               const SizedBox(width: 12),
               Expanded(child: _QueueTitleSubtitle(item: item)),
-              PlayButton(
-                iconSize: iconSize + 4,
-              ), // this still controls current playback
-              NextButton(iconSize: iconSize, hideIfDisabled: true),
+              if (hasPrevious) PreviousButton(iconSize: iconSize, hideIfDisabled: true),
+              PlayButton(iconSize: iconSize + 4), // this still controls current playback
+              if (hasNext) NextButton(iconSize: iconSize, hideIfDisabled: true),
             ],
           ),
         ),
@@ -80,10 +84,8 @@ class _QueueArtwork extends StatelessWidget {
                   child: CircularProgressIndicator(
                     value:
                         (positions.position.inMilliseconds.toDouble() /
-                                (positions.duration?.inMilliseconds
-                                        .toDouble() ??
-                                    positions.position.inMilliseconds
-                                        .toDouble()))
+                                (positions.duration?.inMilliseconds.toDouble() ??
+                                    positions.position.inMilliseconds.toDouble()))
                             .clamp(0, 1),
                     padding: EdgeInsets.zero,
                   ),
@@ -111,17 +113,13 @@ class _QueueTitleSubtitle extends StatelessWidget {
           item.title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
         ),
         Text(
           item.artist ?? '',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
         ),
       ],
     );

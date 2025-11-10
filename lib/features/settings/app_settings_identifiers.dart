@@ -5,14 +5,15 @@ class AppSettingsIdentifiers {
   static String isPureBlack = "IS_PURE_BLACK";
   static String enableSystemColors = "ENABLE_SYSTEM_COLORS";
   static String enableAndroidPredictiveBack = "ENABLE_ANDROID_PREDICTIVE_BACK";
-
+  static String appLanguage = "App_LANGUAGE";
   static String enableNewPlayer = "ENABLE_NEW_PLAYER";
 
   // static String isRightToLeft = "IS_RIGHT_TO_LEFT";
 
-  // Player & Audio
+  // Player
   static String skipSilence = "SKIP_SILENCE";
-  static String appLanguage = "App_LANGUAGE";
+  static String miniPlayerNextButton = "MINI_PLAYER_NEXT_BUTTON";
+  static String miniPlayerPreviousButton = "MINI_PLAYER_PREVIOUS_BUTTON";
 
   // Youtube Music Settings
   static String ytAudioQuality = "YT_AUDIO_QUALITY";

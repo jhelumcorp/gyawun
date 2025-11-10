@@ -46,9 +46,7 @@ class SettingTile extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Theme.of(
-              context,
-            ).colorScheme.primaryContainer.withAlpha(150),
+            color: Theme.of(context).colorScheme.primaryContainer.withAlpha(150),
             borderRadius: BorderRadius.circular(12),
           ),
           child: leading,
@@ -98,7 +96,7 @@ class SettingSwitchTile extends StatelessWidget {
           ),
         ),
         tileColor: Theme.of(context).colorScheme.surfaceContainer,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         title: Text(
           title,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -114,9 +112,7 @@ class SettingSwitchTile extends StatelessWidget {
         secondary: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Theme.of(
-              context,
-            ).colorScheme.primaryContainer.withAlpha(150),
+            color: Theme.of(context).colorScheme.primaryContainer.withAlpha(150),
             borderRadius: BorderRadius.circular(12),
           ),
           child: leading,

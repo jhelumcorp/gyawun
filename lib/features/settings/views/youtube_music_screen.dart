@@ -1,11 +1,13 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gyawun_music/core/settings/app_settings.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/settings/app_settings.dart';
 import 'package:gyawun_music/core/settings/youtube_settings.dart';
 import 'package:gyawun_music/core/utils/app_dialogs/app_dialog_tile_data.dart';
 import 'package:gyawun_music/core/utils/app_dialogs/app_dialogs.dart';
+import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
+
 import '../widgets/group_title.dart';
 import '../widgets/setting_tile.dart';
 
@@ -45,21 +47,14 @@ class YoutubeMusicScreen extends StatelessWidget {
                       isFirst: true,
                       subtitle: settings.audioQuality.name.toUpperCase(),
                       onTap: () async {
-                        final quality =
-                            await AppDialogs.showOptionSelectionDialog(
-                              context,
-                              title: "Audio Quality",
-                              children: [
-                                AppDialogTileData(
-                                  title: "HIGH",
-                                  value: AudioQuality.high,
-                                ),
-                                AppDialogTileData(
-                                  title: "LOW",
-                                  value: AudioQuality.low,
-                                ),
-                              ],
-                            );
+                        final quality = await AppDialogs.showOptionSelectionDialog(
+                          context,
+                          title: "Audio Quality",
+                          children: [
+                            AppDialogTileData(title: "HIGH", value: AudioQuality.high),
+                            AppDialogTileData(title: "LOW", value: AudioQuality.low),
+                          ],
+                        );
                         if (quality != null) {
                           await ytSettings.setAudioQuality(quality);
                         }
@@ -71,9 +66,10 @@ class YoutubeMusicScreen extends StatelessWidget {
                       subtitle: settings.language.title,
                       onTap: () async {
                         final language =
-                            await AppDialogs.showOptionSelectionDialog<
-                              YtMusicLanguage
-                            >(context, children: _languages);
+                            await AppDialogs.showOptionSelectionDialog<YtMusicLanguage>(
+                              context,
+                              children: _languages,
+                            );
                         if (language != null) {
                           await ytSettings.setLanguage(language);
                         }
@@ -86,9 +82,10 @@ class YoutubeMusicScreen extends StatelessWidget {
                       subtitle: settings.location.title,
                       onTap: () async {
                         final location =
-                            await AppDialogs.showOptionSelectionDialog<
-                              YtMusicLocation
-                            >(context, children: _locations);
+                            await AppDialogs.showOptionSelectionDialog<YtMusicLocation>(
+                              context,
+                              children: _locations,
+                            );
                         if (location != null) {
                           await ytSettings.setLocation(location);
                         }
@@ -112,15 +109,11 @@ class YoutubeMusicScreen extends StatelessWidget {
                         isSelected: false,
                         onPressed: () async {
                           if (settings.visitorId == null) return;
-                          await Clipboard.setData(
-                            ClipboardData(text: settings.visitorId!),
-                          );
+                          await Clipboard.setData(ClipboardData(text: settings.visitorId!));
                           if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Copied to clipboard!"),
-                              ),
-                            );
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(const SnackBar(content: Text("Copied to clipboard!")));
                           }
                         },
                         icon: const Icon(FluentIcons.copy_24_filled),
@@ -145,9 +138,7 @@ class YoutubeMusicScreen extends StatelessWidget {
                           context: context,
                           builder: (context) => AlertDialog(
                             title: const Text("Reset Visitor ID"),
-                            content: const Text(
-                              "Are you sure you want to reset your visitor ID?",
-                            ),
+                            content: const Text("Are you sure you want to reset your visitor ID?"),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context, false),
@@ -164,15 +155,14 @@ class YoutubeMusicScreen extends StatelessWidget {
                         if (confirm == true) {
                           await ytSettings.setVisitorId(null);
                           if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Visitor ID reset!"),
-                              ),
-                            );
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(const SnackBar(content: Text("Visitor ID reset!")));
                           }
                         }
                       },
                     ),
+                    const BottomPlayingPadding(),
                   ],
                 ),
               ],

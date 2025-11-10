@@ -1,5 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
 import 'package:gyawun_music/services/storage/image_cache_manager.dart';
@@ -55,6 +56,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                 leading: Icon(Icons.manage_search_rounded),
                 isLast: true,
               ),
+              const BottomPlayingPadding(),
             ],
           ),
         ),

@@ -2,9 +2,10 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/settings/app_settings.dart';
 import 'package:gyawun_music/features/player/widgets/queue_track_bar.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:rxdart/rxdart.dart';
 
 class BottomPlayer extends StatefulWidget {
   const BottomPlayer({
@@ -86,12 +87,20 @@ class _BottomPlayerState extends State<BottomPlayer> {
                   final active = activeSnap.data ?? false;
                   if (!active) return const SizedBox.shrink();
 
-                  return StreamBuilder<SequenceState>(
-                    stream: sl<MediaPlayer>().queueStateStream,
-                    builder: (context, queueSnap) {
-                      final queueState = queueSnap.data;
-                      final queue = queueState?.sequence;
-                      if (queue == null || queue.isEmpty) {
+                  return StreamBuilder(
+                    stream: Rx.combineLatest2(
+                      sl<MediaPlayer>().queueStateStream.distinct(),
+                      sl<AppSettings>().playerSettings.stream.distinct(),
+                      (a, b) => (a, b),
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.data == null) {
+                        return const SizedBox.shrink();
+                      }
+                      final (queueState, playerSettings) = snapshot.data!;
+
+                      final queue = queueState.sequence;
+                      if (queue.isEmpty) {
                         return const SizedBox.shrink();
                       }
 
@@ -111,6 +120,8 @@ class _BottomPlayerState extends State<BottomPlayer> {
                             return Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8),
                               child: QueueTrackBar(
+                                hasNext: playerSettings.miniPlayerNextButton,
+                                hasPrevious: playerSettings.miniPlayerPreviousButton,
                                 key: ValueKey(item.id),
                                 item: item,
                                 artworkSize: widget.artworkSize,

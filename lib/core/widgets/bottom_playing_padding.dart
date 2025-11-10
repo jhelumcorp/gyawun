@@ -10,9 +10,7 @@ class BottomPlayingPadding extends StatelessWidget {
     return StreamBuilder(
       stream: sl<MediaPlayer>().hasQueueItemsStream,
       builder: (context, snapshot) {
-        return SizedBox(
-          height: snapshot.hasData && snapshot.data == true ? 100 : 0,
-        );
+        return SizedBox(height: snapshot.hasData && snapshot.data == true ? 80 : 0);
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
 import 'package:gyawun_music/services/storage/image_cache_manager.dart';
@@ -38,8 +39,7 @@ class StorageScreen extends StatelessWidget {
                   FutureBuilder(
                     future: CustomImageCacheManager.init(),
                     builder: (context, asyncSnapshot) {
-                      if (!asyncSnapshot.hasData ||
-                          asyncSnapshot.data == null) {
+                      if (!asyncSnapshot.hasData || asyncSnapshot.data == null) {
                         return const SizedBox.shrink();
                       }
                       return ValueListenableBuilder(
@@ -48,11 +48,8 @@ class StorageScreen extends StatelessWidget {
                           return SettingTile(
                             isFirst: true,
                             title: "Image Cache",
-                            leading: const Icon(
-                              FluentIcons.error_circle_24_filled,
-                            ),
-                            subtitle: "${value.toStringAsFixed(2)} MB"
-                                .toString(),
+                            leading: const Icon(FluentIcons.error_circle_24_filled),
+                            subtitle: "${value.toStringAsFixed(2)} MB".toString(),
                             trailing: IconButton.filled(
                               onPressed: () async {
                                 await CustomImageCacheManager.resetCache();
@@ -81,6 +78,7 @@ class StorageScreen extends StatelessWidget {
                     title: "Restore",
                     leading: Icon(Icons.cloud_download_rounded),
                   ),
+                  const BottomPlayingPadding(),
                 ],
               ),
             ),
