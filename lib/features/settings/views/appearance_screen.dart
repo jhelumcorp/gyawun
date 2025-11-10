@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/di.dart';
@@ -7,7 +5,7 @@ import 'package:gyawun_music/core/settings/app_settings.dart';
 import 'package:gyawun_music/core/settings/appearance_settings.dart';
 import 'package:gyawun_music/core/utils/app_dialogs/app_dialog_tile_data.dart';
 import 'package:gyawun_music/core/utils/app_dialogs/app_dialogs.dart';
-import 'package:gyawun_music/features/settings/app_settings_identifiers.dart';
+import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
 
@@ -16,146 +14,145 @@ class AppearanceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appSettings = sl<AppSettings>();
+    final appearanceSettings = sl<AppSettings>().appearanceSettings;
 
     return Scaffold(
-      appBar: AppBar(title: Text("Appearance")),
-      body: StreamBuilder(
-        stream: appSettings.appearance(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
-          }
-          if (snapshot.hasData && snapshot.data != null) {
+      appBar: AppBar(title: const Text("Appearance")),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: StreamBuilder<AppAppearance>(
+          stream: appearanceSettings.stream,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            }
+
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
             final settings = snapshot.data!;
-            return Padding(
-              padding: EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 700),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GroupTitle(title: "Theme"),
-                        SettingTile(
-                          title: "Dark theme",
-                          leading: Icon(FluentIcons.dark_theme_24_filled),
-                          subtitle: settings.themeMode.text,
-                          isFirst: true,
-                          onTap: () async {
-                            final res =
-                                await AppDialogs.showOptionSelectionDialog(
-                                  context,
-                                  children: [
-                                    AppDialogTileData(title: 'On', value: 'on'),
-                                    AppDialogTileData(
-                                      title: 'Off',
-                                      value: 'off',
-                                    ),
-                                    AppDialogTileData(
-                                      title: 'Follow system',
-                                      value: 'system',
-                                    ),
-                                  ],
-                                );
-                            if (res != null) {
-                              await appSettings.setString(
-                                AppSettingsIdentifiers.darkTheme,
-                                res,
-                              );
-                            }
-                          },
-                        ),
-                        SettingTile(
-                          onTap: () async {
-                            final color =
-                                await AppDialogs.showColorSelectionDialog(
-                                  context,
-                                );
-                            if (color != null) {
-                              await appSettings.setColor(
-                                AppSettingsIdentifiers.accentColor,
-                                color,
-                              );
-                            }
-                          },
-                          title: "Accent Color",
-                          leading: Icon(FluentIcons.color_24_filled),
-                          trailing: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: settings.accentColor,
-                          ),
-                        ),
-                        SettingSwitchTile(
-                          title: "Pure black",
-                          leading: Icon(FluentIcons.drop_24_filled),
-                          value: settings.isPureBlack,
-                          onChanged: (value) async {
-                            await appSettings.setBool(
-                              AppSettingsIdentifiers.isPureBlack,
-                              value,
-                            );
-                          },
-                        ),
 
-                        SettingSwitchTile(
-                          value: settings.enableSystemColors,
-                          onChanged: (value) async {
-                            await appSettings.setBool(
-                              AppSettingsIdentifiers.enableSystemColors,
-                              value,
-                            );
-                          },
-                          title: "Enable system colors",
-                          leading: Icon(FluentIcons.system_24_filled),
-                          isLast: true,
+            return SingleChildScrollView(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 700),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const GroupTitle(title: "Theme"),
+                      SettingTile(
+                        title: "Dark theme",
+                        leading: const Icon(FluentIcons.dark_theme_24_filled),
+                        subtitle: settings.themeMode.text,
+                        isFirst: true,
+                        onTap: () =>
+                            _handleDarkThemeChange(context, appearanceSettings),
+                      ),
+                      SettingTile(
+                        onTap: () => _handleAccentColorChange(
+                          context,
+                          appearanceSettings,
                         ),
-
-                        GroupTitle(title: "Layout"),
-                        SettingTile(
-                          title: "Language",
-                          leading: Icon(FluentIcons.local_language_24_filled),
-                          isFirst: true,
-                          subtitle: settings.language.title,
-                          onTap: () async {
-                            final language =
-                                await AppDialogs.showOptionSelectionDialog<
-                                  AppLanguage
-                                >(context, children: _appLanguage);
-                            if (language != null) {
-                              await appSettings.setString(
-                                AppSettingsIdentifiers.appLanguage,
-                                jsonEncode(language.toJson()),
-                              );
-                            }
-                          },
+                        title: "Accent Color",
+                        leading: const Icon(FluentIcons.color_24_filled),
+                        trailing: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: settings.accentColor,
                         ),
-                        SettingSwitchTile(
-                          value: settings.enableAndroidPredictiveBack,
-                          onChanged: (value) async {
-                            await appSettings.setBool(
-                              AppSettingsIdentifiers
-                                  .enableAndroidPredictiveBack,
-                              value,
-                            );
-                          },
-                          subtitle: "Android 14+",
-                          title: "Predictive Back",
-                          leading: Icon(FluentIcons.tabs_24_filled),
-                          isLast: true,
+                      ),
+                      SettingSwitchTile(
+                        title: "Pure black",
+                        leading: const Icon(FluentIcons.drop_24_filled),
+                        value: settings.isPureBlack,
+                        onChanged: appearanceSettings.setIsPureBlack,
+                      ),
+                      SettingSwitchTile(
+                        value: settings.enableSystemColors,
+                        onChanged: appearanceSettings.setEnableSystemColors,
+                        title: "Enable system colors",
+                        leading: const Icon(FluentIcons.system_24_filled),
+                        isLast: true,
+                      ),
+                      const GroupTitle(title: "Layout"),
+                      SettingTile(
+                        title: "Language",
+                        leading: const Icon(
+                          FluentIcons.local_language_24_filled,
                         ),
-                      ],
-                    ),
+                        isFirst: true,
+                        subtitle: settings.language.title,
+                        onTap: () =>
+                            _handleLanguageChange(context, appearanceSettings),
+                      ),
+                      SettingSwitchTile(
+                        value: settings.enableAndroidPredictiveBack,
+                        onChanged:
+                            appearanceSettings.setEnableAndroidPredictiveBack,
+                        subtitle: "Android 14+",
+                        title: "Predictive Back",
+                        leading: const Icon(FluentIcons.tabs_24_filled),
+                        isLast: true,
+                      ),
+                      const GroupTitle(title: "Player"),
+                      SettingSwitchTile(
+                        value: settings.enableNewPlayer,
+                        onChanged: appearanceSettings.setEnableNewPlayer,
+                        title: "Enable new player",
+                        leading: const Icon(FluentIcons.slide_play_24_filled),
+                        isFirst: true,
+                        isLast: true,
+                      ),
+                      const BottomPlayingPadding(),
+                    ],
                   ),
                 ),
               ),
             );
-          }
-          return Center(child: CircularProgressIndicator());
-        },
+          },
+        ),
       ),
     );
+  }
+
+  Future<void> _handleDarkThemeChange(
+    BuildContext context,
+    AppearanceSettings settings,
+  ) async {
+    final res = await AppDialogs.showOptionSelectionDialog(
+      context,
+      children: [
+        AppDialogTileData(title: 'On', value: 'on'),
+        AppDialogTileData(title: 'Off', value: 'off'),
+        AppDialogTileData(title: 'Follow system', value: 'system'),
+      ],
+    );
+    if (res != null) {
+      await settings.setDarkTheme(res);
+    }
+  }
+
+  Future<void> _handleAccentColorChange(
+    BuildContext context,
+    AppearanceSettings settings,
+  ) async {
+    final color = await AppDialogs.showColorSelectionDialog(context);
+    if (color != null) {
+      await settings.setAccentColor(color);
+    }
+  }
+
+  Future<void> _handleLanguageChange(
+    BuildContext context,
+    AppearanceSettings settings,
+  ) async {
+    final language = await AppDialogs.showOptionSelectionDialog<AppLanguage>(
+      context,
+      children: _appLanguage,
+    );
+    if (language != null) {
+      await settings.setAppLanguage(language);
+    }
   }
 }
 

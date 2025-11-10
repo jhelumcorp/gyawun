@@ -10,9 +10,9 @@ import 'settings/app_settings_dao.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [AppSettings], daos: [AppSettingsDao])
-class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
+@DriftDatabase(tables: [AppSettingsTable], daos: [AppSettingsTableDao])
+class AppSettingsDatabase extends _$AppSettingsDatabase {
+  AppSettingsDatabase() : super(_openConnection());
 
   @override
   int get schemaVersion => 1;

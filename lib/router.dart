@@ -1,20 +1,25 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_music/features/player/widgets/bottom_player.dart';
 
-// Screens
-import 'package:gyawun_music/features/home/home_screen.dart';
-import 'package:gyawun_music/features/library/library_screen.dart';
 import 'package:gyawun_music/features/main/main_screen.dart';
 import 'package:gyawun_music/features/onboarding/view/onboarding_screen.dart';
-import 'package:gyawun_music/features/search/search_screen.dart';
-import 'package:gyawun_music/features/settings/settings_screen.dart';
+import 'package:gyawun_music/features/player/player_screen.dart';
+import 'package:gyawun_music/features/player/queue_screen.dart';
 import 'package:gyawun_music/features/services/yt_music/album/yt_album_screen.dart';
 import 'package:gyawun_music/features/services/yt_music/artist/yt_artist_screen.dart';
 import 'package:gyawun_music/features/services/yt_music/browse/yt_browse_screen.dart';
 import 'package:gyawun_music/features/services/yt_music/chip/yt_chip_screen.dart';
 import 'package:gyawun_music/features/services/yt_music/playlist/yt_playlist_screen.dart';
 import 'package:gyawun_music/features/services/yt_music/podcast/yt_podcast_screen.dart';
+import 'package:gyawun_music/features/settings/views/about_screen.dart';
+import 'package:gyawun_music/features/settings/views/appearance_screen.dart';
+import 'package:gyawun_music/features/settings/views/player_screen.dart'
+    as settings;
+import 'package:gyawun_music/features/settings/views/privacy_screen.dart';
+import 'package:gyawun_music/features/settings/views/storage_screen.dart';
+import 'package:gyawun_music/features/settings/views/youtube_music_screen.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
@@ -33,94 +38,104 @@ final router = GoRouter(
       name: 'onboarding',
       builder: (context, state) => const OnboardingScreen(),
     ),
-
-    // The main shell with bottom nav
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        return MainScreen(navigationShell: navigationShell);
+    ShellRoute(
+      builder: (context, state, child) {
+        return Stack(children: [child, const BottomPlayer()]);
       },
-      branches: [
-        // Home tab
-        StatefulShellBranch(
-          navigatorKey: homeNavigatorKey,
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) => const MainScreen(),
           routes: [
             GoRoute(
-              path: '/home',
-              builder: (context, state) => const HomeScreen(),
-              routes: [
-                GoRoute(
-                  path: 'chip/:body/:title',
-                  builder: (context, state) => YtChipScreen(
-                    title: state.pathParameters['title']!,
-                    body: Map.from(jsonDecode(state.pathParameters['body']!)),
-                  ),
-                ),
-                GoRoute(
-                  path: 'browse/:body',
-                  builder: (context, state) => YTBrowseScreen(
-                    body: Map.from(jsonDecode(state.pathParameters['body']!)),
-                  ),
-                ),
-                GoRoute(
-                  path: 'playlist/:body',
-                  builder: (context, state) => YTPlaylistScreen(
-                    body: Map.from(jsonDecode(state.pathParameters['body']!)),
-                  ),
-                ),
-                GoRoute(
-                  path: 'album/:body',
-                  builder: (context, state) => YTAlbumScreen(
-                    body: Map.from(jsonDecode(state.pathParameters['body']!)),
-                  ),
-                ),
-                GoRoute(
-                  path: 'artist/:body',
-                  builder: (context, state) => YTArtistScreen(
-                    body: Map.from(jsonDecode(state.pathParameters['body']!)),
-                  ),
-                ),
-                GoRoute(
-                  path: 'podcast/:body',
-                  builder: (context, state) => YTPodcastScreen(
-                    body: Map.from(jsonDecode(state.pathParameters['body']!)),
-                  ),
-                ),
-              ],
+              path: 'playlist/:body',
+              builder: (context, state) => YTPlaylistScreen(
+                body: Map.from(jsonDecode(state.pathParameters['body']!)),
+              ),
+            ),
+            GoRoute(
+              path: 'chip/:body/:title',
+              builder: (context, state) => YtChipScreen(
+                title: state.pathParameters['title']!,
+                body: Map.from(jsonDecode(state.pathParameters['body']!)),
+              ),
+            ),
+            GoRoute(
+              path: 'browse/:body',
+              builder: (context, state) => YTBrowseScreen(
+                body: Map.from(jsonDecode(state.pathParameters['body']!)),
+              ),
+            ),
+            GoRoute(
+              path: 'playlist/:body',
+              builder: (context, state) => YTPlaylistScreen(
+                body: Map.from(jsonDecode(state.pathParameters['body']!)),
+              ),
+            ),
+            GoRoute(
+              path: 'album/:body',
+              builder: (context, state) => YTAlbumScreen(
+                body: Map.from(jsonDecode(state.pathParameters['body']!)),
+              ),
+            ),
+            GoRoute(
+              path: 'artist/:body',
+              builder: (context, state) => YTArtistScreen(
+                body: Map.from(jsonDecode(state.pathParameters['body']!)),
+              ),
+            ),
+            GoRoute(
+              path: 'podcast/:body',
+              builder: (context, state) => YTPodcastScreen(
+                body: Map.from(jsonDecode(state.pathParameters['body']!)),
+              ),
+            ),
+            //  Settings Screens
+            GoRoute(
+              path: 'settings/appearance',
+              builder: (context, state) => const AppearanceScreen(),
+            ),
+            GoRoute(
+              path: 'settings/player',
+              builder: (context, state) => const settings.PlayerScreen(),
+            ),
+            GoRoute(
+              path: 'settings/ytmusic',
+              builder: (context, state) => const YoutubeMusicScreen(),
+            ),
+            GoRoute(
+              path: 'settings/storage',
+              builder: (context, state) => const StorageScreen(),
+            ),
+            GoRoute(
+              path: 'settings/privacy',
+              builder: (context, state) => const PrivacyScreen(),
+            ),
+            GoRoute(
+              path: 'settings/about',
+              builder: (context, state) => const AboutScreen(),
             ),
           ],
         ),
-
-        // Search tab
-        StatefulShellBranch(
-          navigatorKey: searchNavigatorKey,
-          routes: [
-            GoRoute(
-              path: '/search',
-              builder: (context, state) => const SearchScreen(),
-            ),
-          ],
-        ),
-
-        // Library tab
-        StatefulShellBranch(
-          navigatorKey: libraryNavigatorKey,
-          routes: [
-            GoRoute(
-              path: '/library',
-              builder: (context, state) => const LibraryScreen(),
-            ),
-          ],
-        ),
-
-        // Settings tab
-        StatefulShellBranch(
-          navigatorKey: settingsNavigatorKey,
-          routes: [
-            GoRoute(
-              path: '/settings',
-              builder: (context, state) => const SettingsScreen(),
-            ),
-          ],
+      ],
+    ),
+    GoRoute(
+      path: '/player',
+      pageBuilder: (context, state) {
+        return const CupertinoPage(
+          fullscreenDialog: true,
+          child: PlayerScreen(),
+        );
+      },
+      routes: [
+        GoRoute(
+          path: 'queue',
+          pageBuilder: (context, state) {
+            return const CupertinoPage(
+              fullscreenDialog: true,
+              child: QueueScreen(),
+            );
+          },
         ),
       ],
     ),

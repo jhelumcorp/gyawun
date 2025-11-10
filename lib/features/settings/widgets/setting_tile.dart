@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 
 class SettingTile extends StatelessWidget {
-  final String title;
-  final String? subtitle;
-  final Widget leading;
-  final Widget? trailing;
-  final void Function()? onTap;
-  final bool isFirst;
-  final bool isLast;
   const SettingTile({
     super.key,
     required this.title,
@@ -18,6 +11,13 @@ class SettingTile extends StatelessWidget {
     this.isFirst = false,
     this.isLast = false,
   });
+  final String title;
+  final String? subtitle;
+  final Widget leading;
+  final Widget? trailing;
+  final void Function()? onTap;
+  final bool isFirst;
+  final bool isLast;
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +34,17 @@ class SettingTile extends StatelessWidget {
           ),
         ),
         tileColor: Theme.of(context).colorScheme.surfaceContainer,
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         title: Text(
           title,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontSize: 16,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
         leading: Container(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Theme.of(
               context,
@@ -63,14 +63,6 @@ class SettingTile extends StatelessWidget {
 }
 
 class SettingSwitchTile extends StatelessWidget {
-  final bool value;
-  final String title;
-  final Widget leading;
-  final String? subtitle;
-
-  final ValueChanged<bool>? onChanged;
-  final bool isFirst;
-  final bool isLast;
   const SettingSwitchTile({
     super.key,
     required this.value,
@@ -81,6 +73,14 @@ class SettingSwitchTile extends StatelessWidget {
     this.isLast = false,
     this.subtitle,
   });
+  final bool value;
+  final String title;
+  final Widget leading;
+  final String? subtitle;
+
+  final ValueChanged<bool>? onChanged;
+  final bool isFirst;
+  final bool isLast;
 
   @override
   Widget build(BuildContext context) {
@@ -98,12 +98,12 @@ class SettingSwitchTile extends StatelessWidget {
           ),
         ),
         tileColor: Theme.of(context).colorScheme.surfaceContainer,
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         title: Text(
           title,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontSize: 16,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
@@ -112,7 +112,7 @@ class SettingSwitchTile extends StatelessWidget {
             : null,
 
         secondary: Container(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Theme.of(
               context,

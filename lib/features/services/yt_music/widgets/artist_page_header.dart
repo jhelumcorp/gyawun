@@ -1,14 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
+import 'package:gyawun_music/core/utils/snackbar.dart';
+import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:readmore/readmore.dart';
 import 'package:ytmusic/models/browse_page.dart';
 
 class ArtistPageHeader extends StatelessWidget {
-  final YTPageHeader header;
   const ArtistPageHeader({super.key, required this.header});
+  final YTPageHeader header;
 
-  List<Widget>_drawItems(BuildContext context) {
+  List<Widget> _drawItems(BuildContext context) {
     return [
       if (header.thumbnails.lastOrNull?.url != null && context.isWideScreen)
         ClipRRect(
@@ -19,7 +22,7 @@ class ArtistPageHeader extends StatelessWidget {
             width: 300,
           ),
         ),
-      if (context.isWideScreen) SizedBox(width: 16),
+      if (context.isWideScreen) const SizedBox(width: 16),
       context.isWideScreen
           ? Expanded(child: _drawDescription(context))
           : _drawDescription(context),
@@ -61,28 +64,43 @@ class ArtistPageHeader extends StatelessWidget {
               trimLines: 3,
             ),
           ),
-        SizedBox(height: 4),
+        const SizedBox(height: 4),
         Wrap(
           spacing: 4,
           runSpacing: 4,
           children: [
             if (header.playEndpoint != null)
               FilledButton.icon(
-                onPressed: () {},
-                label: Text("Play"),
-                icon: Icon(Icons.play_arrow_rounded),
+                onPressed: () async {
+                  BottomSnackbar.showMessage(context, "Play starting...");
+                  await sl<MediaPlayer>().playYTFromEndpoint(
+                    header.playEndpoint!,
+                  );
+                },
+                label: const Text("Play"),
+                icon: const Icon(Icons.play_arrow_rounded),
               ),
             if (header.shuffleEndpoint != null)
               FilledButton.icon(
-                onPressed: () {},
-                label: Text("Shuffle"),
-                icon: Icon(Icons.shuffle_rounded),
+                onPressed: () async {
+                  BottomSnackbar.showMessage(context, "Play starting...");
+                  await sl<MediaPlayer>().playYTFromEndpoint(
+                    header.shuffleEndpoint!,
+                  );
+                },
+                label: const Text("Shuffle"),
+                icon: const Icon(Icons.shuffle_rounded),
               ),
             if (header.radioEndpoint != null)
               FilledButton.icon(
-                onPressed: () {},
-                label: Text("Radio"),
-                icon: Icon(Icons.radar_outlined),
+                onPressed: () async {
+                  BottomSnackbar.showMessage(context, "Play starting...");
+                  await sl<MediaPlayer>().playYTFromEndpoint(
+                    header.radioEndpoint!,
+                  );
+                },
+                label: const Text("Radio"),
+                icon: const Icon(Icons.radar_outlined),
               ),
           ],
         ),

@@ -16,10 +16,10 @@ class SectionRow extends StatelessWidget {
         height: context.isWideScreen ? 270 : 216,
         child: ListView.separated(
           addAutomaticKeepAlives: false,
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           scrollDirection: Axis.horizontal,
           itemCount: items.length,
-          separatorBuilder: (context, index) => SizedBox(width: 4),
+          separatorBuilder: (context, index) => const SizedBox(width: 4),
           itemBuilder: (context, index) {
             final item = items[index];
 

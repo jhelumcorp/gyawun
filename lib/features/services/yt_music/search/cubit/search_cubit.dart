@@ -6,8 +6,8 @@ import 'package:ytmusic/yt_music_base.dart';
 part 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  final YTMusic ytmusic;
   SearchCubit(this.ytmusic) : super(SearchInitial());
+  final YTMusic ytmusic;
   Future<void> search(String query) async {
     try {
       emit(SearchLoading());
@@ -18,7 +18,8 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
-  Future<YTSearchSuggestions> searchSuggestions(String query)=>ytmusic.getSearchSuggestions(query: query);
+  Future<YTSearchSuggestions> searchSuggestions(String query) =>
+      ytmusic.getSearchSuggestions(query: query);
 }
 // class PlaylistCubit extends Cubit<PlaylistState> {
 //   final YTMusic ytmusic;
@@ -39,7 +40,7 @@ class SearchCubit extends Cubit<SearchState> {
 //     if (currentState is! PlaylistSuccess) return;
 //     if(currentState.loadingMore)return;
 //     final currentData = currentState.data;
-    
+
 //     final lastSection = currentData.sections.isNotEmpty
 //           ? currentData.sections.last
 //           : null;

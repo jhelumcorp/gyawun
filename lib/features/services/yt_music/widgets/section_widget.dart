@@ -11,38 +11,35 @@ import 'section_row.dart';
 import 'section_single_column.dart';
 
 class SectionsWidget extends StatelessWidget {
+  const SectionsWidget({super.key, required this.sections});
   final List<YTSection> sections;
-
-  const SectionsWidget({
-    super.key,
-    required this.sections,
-  });
 
   @override
   Widget build(BuildContext context) {
     return MultiSliver(
-      children: 
-        [
-          for (final section in sections) ...[
-            if (section.title.isNotEmpty || section.trailing != null)
-              SectionHeader(section: section),
+      children: [
+        for (final section in sections) ...[
+          if (section.title.isNotEmpty || section.trailing != null)
+            SectionHeader(section: section),
 
-            if (section.type == YTSectionType.row)
-              SectionRow(items: section.items),
+          if (section.type == YTSectionType.row)
+            SectionRow(items: section.items),
 
-            if (section.type == YTSectionType.multiColumn)
-              SectionMultiColumn(items: section.items,maxItem: section.itemsPerColumn,),
+          if (section.type == YTSectionType.multiColumn)
+            SectionMultiColumn(
+              items: section.items,
+              maxItem: section.itemsPerColumn,
+            ),
 
-            if (section.type == YTSectionType.singleColumn)
-              SectionSingleColumn(items: section.items),
+          if (section.type == YTSectionType.singleColumn)
+            SectionSingleColumn(items: section.items),
 
-            if (section.type == YTSectionType.grid)
-              SectionGrid(items: section.items),
-            if(section.type == YTSectionType.multiColumnRow)
-              SectionMultiColumnRow(items:section.items),
-            
-          ],
+          if (section.type == YTSectionType.grid)
+            SectionGrid(items: section.items),
+          if (section.type == YTSectionType.multiColumnRow)
+            SectionMultiColumnRow(items: section.items),
         ],
-      );
+      ],
+    );
   }
 }

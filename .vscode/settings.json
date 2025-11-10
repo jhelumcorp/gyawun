@@ -1,0 +1,16 @@
+{
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    // Organize imports automatically on save
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "always"
+    },
+    // Dart specific
+    "dart.lineLength": 100,
+    "dart.enableSdkFormatter": true,
+    "dart.showTodos": true,
+    "dart.analysisExcludedFolders": [
+        "build"
+    ]
+}

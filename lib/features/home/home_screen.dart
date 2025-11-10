@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/features/services/yt_music/home/yt_home_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -9,13 +11,16 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      requestNotificationPermission();
-    });
+    if (Platform.isAndroid) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        requestNotificationPermission();
+      });
+    }
   }
 
   Future<void> requestNotificationPermission() async {
@@ -27,9 +32,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-      appBar: AppBar(title: Text("Home")),
-      body: YTHomeScreen(),
+      appBar: AppBar(title: const Text("Gyawun")),
+      body: const YTHomeScreen(),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

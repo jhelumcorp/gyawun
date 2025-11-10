@@ -6,8 +6,8 @@ import 'package:ytmusic/models/yt_item.dart';
 import 'section_button_tile.dart';
 
 class SectionMultiColumnRow extends StatelessWidget {
-  final List<YTItem> items;
   const SectionMultiColumnRow({super.key, required this.items});
+  final List<YTItem> items;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +32,9 @@ class SectionMultiColumnRow extends StatelessWidget {
                     .indexed
                     .map((entry) {
                       return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: SectionButtonTile(item: entry.$2,),
-                        )
-                      ;
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: SectionButtonTile(item: entry.$2),
+                      );
                     })
                     .toList(),
               ),

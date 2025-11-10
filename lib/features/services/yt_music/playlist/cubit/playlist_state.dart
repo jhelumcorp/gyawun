@@ -4,13 +4,16 @@ part of 'playlist_cubit.dart';
 sealed class PlaylistState {}
 
 final class PlaylistInitial extends PlaylistState {}
+
 final class PlaylistLoading extends PlaylistState {}
+
 final class PlaylistSuccess extends PlaylistState {
+  PlaylistSuccess(this.data, {this.loadingMore = false});
   final YTPlaylistPage data;
   final bool loadingMore;
-  PlaylistSuccess(this.data,{this.loadingMore=false});
 }
+
 final class PlaylistError extends PlaylistState {
-  final String? message;
   PlaylistError([this.message]);
+  final String? message;
 }

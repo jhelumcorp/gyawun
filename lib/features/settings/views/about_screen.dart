@@ -10,42 +10,42 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("About")),
+      appBar: AppBar(title: const Text("About")),
 
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 700),
+              constraints: const BoxConstraints(maxWidth: 700),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     alignment: Alignment.center,
                     width: double.infinity,
-                    child: FlutterLogo(size: 150),
+                    child: const FlutterLogo(size: 150),
                   ),
 
-                  GroupTitle(title: "App Info"),
-                  SettingTile(
+                  const GroupTitle(title: "App Info"),
+                  const SettingTile(
                     isFirst: true,
                     title: "Gyawun Music",
                     leading: Icon(FluentIcons.text_32_filled),
                   ),
-                  SettingTile(
+                  const SettingTile(
                     isLast: true,
                     title: "Version",
                     leading: Icon(Icons.new_releases_rounded),
                     subtitle: "3.0.1",
                   ),
-                  GroupTitle(title: "Developer"),
+                  const GroupTitle(title: "Developer"),
                   SettingTile(
                     isFirst: true,
                     title: "Developer",
-                    leading: Icon(FluentIcons.person_24_filled),
+                    leading: const Icon(FluentIcons.person_24_filled),
                     subtitle: "Sheikh Haziq",
-                    trailing: Icon(FluentIcons.open_24_filled),
+                    trailing: const Icon(FluentIcons.open_24_filled),
 
                     onTap: () {
                       launchUrl(Uri.parse("https://github.com/sheikhhaziq"));
@@ -54,43 +54,43 @@ class AboutScreen extends StatelessWidget {
                   SettingTile(
                     isLast: true,
                     title: "Website",
-                    leading: Icon(FluentIcons.link_24_filled),
-                    trailing: Icon(FluentIcons.open_24_filled),
+                    leading: const Icon(FluentIcons.link_24_filled),
+                    trailing: const Icon(FluentIcons.open_24_filled),
                     onTap: () {
                       launchUrl(Uri.parse("https://gyawunmusic.vercel.app"));
                     },
                   ),
-                  GroupTitle(title: "Community"),
-                  SettingTile(
+                  const GroupTitle(title: "Community"),
+                  const SettingTile(
                     isFirst: true,
                     title: "Telegram",
                     leading: Icon(Icons.send_rounded),
                   ),
-                  SettingTile(
+                  const SettingTile(
                     isLast: true,
                     title: "Source code",
                     leading: Icon(FluentIcons.code_24_filled),
                   ),
 
-                  GroupTitle(title: "Support"),
-                  SettingTile(
+                  const GroupTitle(title: "Support"),
+                  const SettingTile(
                     isFirst: true,
                     title: "Bug report",
                     leading: Icon(FluentIcons.bug_24_filled),
                   ),
-                  SettingTile(
+                  const SettingTile(
                     title: "Feature request",
                     leading: Icon(FluentIcons.new_24_filled),
                   ),
                   SettingTile(
                     isLast: true,
                     title: "Licenses",
-                    leading: Icon(FluentIcons.document_24_filled),
+                    leading: const Icon(FluentIcons.document_24_filled),
                     onTap: () {
                       showLicensePage(context: context);
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),

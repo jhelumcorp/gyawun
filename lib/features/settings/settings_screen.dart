@@ -1,12 +1,8 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gyawun_music/features/settings/views/about_screen.dart';
-import 'package:gyawun_music/features/settings/views/appearance_screen.dart';
-import 'package:gyawun_music/features/settings/views/storage_screen.dart';
-import 'package:gyawun_music/features/settings/views/player_screen.dart';
-import 'package:gyawun_music/features/settings/views/privacy_screen.dart';
-import 'package:gyawun_music/features/settings/views/youtube_music_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
 
@@ -16,44 +12,36 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Settings")),
+      appBar: AppBar(title: const Text("Settings")),
 
       body: SingleChildScrollView(
         child: Center(
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 700),
+            constraints: const BoxConstraints(maxWidth: 700),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GroupTitle(title: "General"),
+                  const GroupTitle(title: "General"),
                   SettingTile(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AppearanceScreen(),
-                        ),
-                      );
+                      context.push("/settings/appearance");
                     },
                     isFirst: true,
                     title: "Appearance",
-                    leading: Icon(FluentIcons.color_background_24_filled),
+                    leading: const Icon(FluentIcons.color_background_24_filled),
                   ),
 
                   SettingTile(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PlayerScreen()),
-                      );
+                      context.push("/settings/player");
                     },
                     isLast: true,
                     title: "Player",
-                    leading: Icon(FluentIcons.play_24_filled),
+                    leading: const Icon(FluentIcons.play_24_filled),
                   ),
-                  GroupTitle(title: "Services"),
+                  const GroupTitle(title: "Services"),
 
                   SettingTile(
                     title: "Youtube Music",
@@ -69,64 +57,47 @@ class SettingsScreen extends StatelessWidget {
                     isFirst: true,
                     isLast: true,
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => YoutubeMusicScreen(),
-                        ),
-                      );
+                      context.push("/settings/ytmusic");
                     },
                   ),
 
-                  GroupTitle(title: "Storage & Privacy"),
+                  const GroupTitle(title: "Storage & Privacy"),
 
                   SettingTile(
                     title: "Storage and backups",
                     isFirst: true,
-                    leading: Icon(FluentIcons.storage_24_filled),
+                    leading: const Icon(FluentIcons.storage_24_filled),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => StorageScreen(),
-                        ),
-                      );
+                      context.push("/settings/storage");
                     },
                   ),
 
                   SettingTile(
                     title: "Privacy",
                     isLast: true,
-                    leading: Icon(FluentIcons.shield_keyhole_24_filled),
+                    leading: const Icon(FluentIcons.shield_keyhole_24_filled),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PrivacyScreen(),
-                        ),
-                      );
+                      context.push("/settings/privacy");
                     },
                   ),
 
-                  GroupTitle(title: "Updates & About"),
+                  const GroupTitle(title: "Updates & About"),
 
                   SettingTile(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AboutScreen()),
-                      );
+                      context.push("/settings/about");
                     },
                     title: "About",
-                    leading: Icon(FluentIcons.info_24_filled),
+                    leading: const Icon(FluentIcons.info_24_filled),
                     isFirst: true,
                   ),
                   SettingTile(
                     onTap: () {},
                     title: "Check for update",
-                    leading: Icon(FluentIcons.arrow_circle_up_24_filled),
+                    leading: const Icon(FluentIcons.arrow_circle_up_24_filled),
                     isLast: true,
                   ),
+                  const BottomPlayingPadding(),
                 ],
               ),
             ),

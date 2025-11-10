@@ -6,10 +6,6 @@ import 'package:ytmusic/mixins/mixins.dart';
 import 'package:ytmusic/models/yt_item.dart';
 
 class SectionColumnTile extends StatelessWidget {
-  final YTItem item;
-  final void Function()? onTap;
-  final bool isFirst;
-  final bool isLast;
   const SectionColumnTile({
     super.key,
     required this.item,
@@ -17,15 +13,19 @@ class SectionColumnTile extends StatelessWidget {
     this.isFirst = false,
     this.isLast = false,
   });
+  final YTItem item;
+  final void Function()? onTap;
+  final bool isFirst;
+  final bool isLast;
 
-  void playSong(BuildContext context, YTItem item)  {
-
-  }
+  void playSong(BuildContext context, YTItem item) {}
 
   @override
   Widget build(BuildContext context) {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
-    final thumbnail = item is HasThumbnail ? (item as HasThumbnail).thumbnails.firstOrNull:null;
+    final thumbnail = item is HasThumbnail
+        ? (item as HasThumbnail).thumbnails.firstOrNull
+        : null;
 
     return Material(
       color: Colors.transparent,
@@ -49,7 +49,7 @@ class SectionColumnTile extends StatelessWidget {
           ),
         ),
         tileColor: Theme.of(context).colorScheme.surfaceContainer,
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         leading: thumbnail?.url == null
             ? null
             : SizedBox(
@@ -60,9 +60,7 @@ class SectionColumnTile extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
-                        item is YTArtist
-                            ? ((50 * pixelRatio).round() / 2)
-                            : 8,
+                        item is YTArtist ? ((50 * pixelRatio).round() / 2) : 8,
                       ),
                       image: DecorationImage(
                         image: CachedNetworkImageProvider(
@@ -93,9 +91,9 @@ class SectionColumnTile extends StatelessWidget {
         ),
         trailing: IconButton(
           onPressed: () {
-            Modals.showItemBottomSheet(context,item);
+            Modals.showItemBottomSheet(context, item);
           },
-          icon: Icon(Icons.more_vert_rounded),
+          icon: const Icon(Icons.more_vert_rounded),
         ),
       ),
     );

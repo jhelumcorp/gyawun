@@ -7,11 +7,11 @@ import 'package:ytmusic/yt_music_base.dart';
 part 'album_state.dart';
 
 class AlbumCubit extends Cubit<AlbumState> {
+  AlbumCubit(this.ytmusic, this.body) : super(AlbumInitial());
   final YTMusic ytmusic;
-  final Map<String,dynamic> body;
-  AlbumCubit(this.ytmusic,this.body) : super(AlbumInitial());
+  final Map<String, dynamic> body;
 
-   Future<void> fetchData() async {
+  Future<void> fetchData() async {
     try {
       emit(AlbumLoading());
       final data = await ytmusic.getAlbum(body: body);
@@ -20,22 +20,22 @@ class AlbumCubit extends Cubit<AlbumState> {
       emit(AlbumError(e.toString()));
     }
   }
-    Future<void> loadMore() async {
+
+  Future<void> loadMore() async {
     final currentState = state;
     if (currentState is! AlbumSuccess) return;
-    if(currentState.loadingMore)return;
+    if (currentState.loadingMore) return;
     final currentData = currentState.data;
-    
+
     final lastSection = currentData.sections.isNotEmpty
-          ? currentData.sections.last
-          : null;
-    final continuation =lastSection?.continuation ?? currentData.continuation;
+        ? currentData.sections.last
+        : null;
+    final continuation = lastSection?.continuation ?? currentData.continuation;
     if (continuation == null) return;
 
-    emit(AlbumSuccess(currentData,loadingMore: true));
+    emit(AlbumSuccess(currentData, loadingMore: true));
 
     try {
-
       if (lastSection?.continuation != null &&
           lastSection?.type == YTSectionType.singleColumn) {
         final nextPage = await ytmusic.getContinuationItems(
@@ -51,7 +51,15 @@ class AlbumCubit extends Cubit<AlbumState> {
         final updatedSections = [...currentData.sections];
         updatedSections[updatedSections.length - 1] = updatedSection;
 
-        emit(AlbumSuccess(YTAlbumPage(header: currentData.header, sections: updatedSections, continuation: currentData.continuation)));
+        emit(
+          AlbumSuccess(
+            YTAlbumPage(
+              header: currentData.header,
+              sections: updatedSections,
+              continuation: currentData.continuation,
+            ),
+          ),
+        );
         return;
       }
 
@@ -62,7 +70,15 @@ class AlbumCubit extends Cubit<AlbumState> {
 
       final updatedSections = [...currentData.sections, ...nextPage.sections];
 
-      emit(AlbumSuccess(YTAlbumPage(header: currentData.header,sections: updatedSections,continuation: nextPage.continuation)));
+      emit(
+        AlbumSuccess(
+          YTAlbumPage(
+            header: currentData.header,
+            sections: updatedSections,
+            continuation: nextPage.continuation,
+          ),
+        ),
+      );
     } catch (e) {
       emit(AlbumError(e.toString()));
     }

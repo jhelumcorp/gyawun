@@ -4,36 +4,41 @@ import 'dart:typed_data';
 import 'package:just_audio/just_audio.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-/// Stream YouTube audio with seek support
+/// Stream YouTube audio with full seek support.
 class YouTubeAudioSource extends StreamAudioSource {
+  YouTubeAudioSource(
+    this.videoId, {
+    required this.yt, // <— pass from above
+    super.tag,
+    this.audioQuality = YTAudioQuality.high,
+  });
   final String videoId;
-  final YoutubeExplode _yt;
+  final YoutubeExplode yt;
   final YTAudioQuality audioQuality;
+
   late final Uri _audioUrl;
   late final int _totalBytes;
   late final String _contentType;
+
   bool _initialized = false;
 
-  YouTubeAudioSource(
-    this.videoId, {
-    super.tag,
-    this.audioQuality = YTAudioQuality.high,
-  }) : _yt = YoutubeExplode();
+  static final HttpClient _sharedClient = HttpClient();
 
   Future<void> _init() async {
     if (_initialized) return;
 
-    final manifest = await _yt.videos.streamsClient.getManifest(
+    final manifest = await yt.videos.streamsClient.getManifest(
       videoId,
-      // requireWatchPage: true,
-      ytClients: [YoutubeApiClient.androidVr],
+      ytClients: [YoutubeApiClient.androidVr], // works + best availability
     );
 
+    // Choose best audio-only stream
     final streamInfo = manifest.audioOnly.withHighestBitrate();
 
     _audioUrl = Uri.parse(streamInfo.url.toString());
     _totalBytes = streamInfo.size.totalBytes;
     _contentType = streamInfo.codec.mimeType;
+
     _initialized = true;
   }
 
@@ -41,13 +46,14 @@ class YouTubeAudioSource extends StreamAudioSource {
   Future<StreamAudioResponse> request([int? start, int? end]) async {
     await _init();
 
-    final client = HttpClient();
-    final request = await client.getUrl(_audioUrl);
+    final request = await _sharedClient.getUrl(_audioUrl);
 
-    // Add Range header if seeking
+    // Add Range header for seek operations
     if (start != null || end != null) {
-      final rangeHeader = 'bytes=${start ?? 0}-${end != null ? end - 1 : ""}';
-      request.headers.set(HttpHeaders.rangeHeader, rangeHeader);
+      request.headers.set(
+        HttpHeaders.rangeHeader,
+        'bytes=${start ?? 0}-${end ?? ""}',
+      );
     }
 
     final response = await request.close();
@@ -58,8 +64,8 @@ class YouTubeAudioSource extends StreamAudioSource {
         ) ??
         _totalBytes;
 
-    // Explicitly convert to Stream<Uint8List>
-    final stream = response.map((List<int> chunk) => Uint8List.fromList(chunk));
+    // Convert stream to Uint8List
+    final stream = response.map((data) => Uint8List.fromList(data));
 
     return StreamAudioResponse(
       sourceLength: _totalBytes,
@@ -69,6 +75,12 @@ class YouTubeAudioSource extends StreamAudioSource {
       contentType: _contentType,
     );
   }
+
+  // @override
+  // Future<void> dispose() async {
+  //   await _yt.close(); // Prevents memory leaks
+  //   return super.close();
+  // }
 }
 
 enum YTAudioQuality { high, low }

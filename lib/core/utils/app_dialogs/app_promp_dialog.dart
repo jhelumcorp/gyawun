@@ -9,7 +9,7 @@ AlertDialog promptDialog(BuildContext context, {String? title}) {
         context,
       ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
     ),
-    contentPadding: EdgeInsetsGeometry.all(16),
+    contentPadding: const EdgeInsetsGeometry.all(16),
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -27,7 +27,7 @@ AlertDialog promptDialog(BuildContext context, {String? title}) {
         onPressed: () {
           Navigator.pop(context, value);
         },
-        child: Text("Done"),
+        child: const Text("Done"),
       ),
     ],
   );

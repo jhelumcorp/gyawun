@@ -1,26 +1,18 @@
 import 'package:gyawun_music/database/settings/app_settings_dao.dart';
 import 'package:gyawun_music/features/settings/app_settings_identifiers.dart';
-import 'package:rxdart/rxdart.dart';
 
 class PlayerSettings {
-  final bool skipSilence;
+  PlayerSettings(this._dao);
+  final AppSettingsTableDao _dao;
 
-  const PlayerSettings({required this.skipSilence});
+  // Getters
+  Future<bool?> get skipSilence =>
+      _dao.getSetting<bool>(AppSettingsIdentifiers.skipSilence);
 
-  PlayerSettings copyWith({bool? skipSilence}) {
-    return PlayerSettings(skipSilence: skipSilence ?? this.skipSilence);
-  }
-}
+  Stream<bool?> get skipSilenceStream =>
+      _dao.watchSetting<bool>(AppSettingsIdentifiers.skipSilence).distinct();
 
-Stream<PlayerSettings> playerSettingsStream(AppSettingsDao dao) {
-
-  final skipSilence$ = dao
-      .watchSetting<bool>(AppSettingsIdentifiers.skipSilence)
-      .distinct();
-
-  return Rx.combineLatestList([skipSilence$]).map((values) {
-    final skipSilence = values[0] ?? false;
-
-    return PlayerSettings(skipSilence: skipSilence);
-  });
+  // Setter for completeness
+  Future<void> setSkipSilence(bool value) =>
+      _dao.setSetting<bool>(AppSettingsIdentifiers.skipSilence, value);
 }

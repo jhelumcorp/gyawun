@@ -4,13 +4,16 @@ part of 'album_cubit.dart';
 sealed class AlbumState {}
 
 final class AlbumInitial extends AlbumState {}
+
 final class AlbumLoading extends AlbumState {}
+
 final class AlbumSuccess extends AlbumState {
+  AlbumSuccess(this.data, {this.loadingMore = false});
   final YTAlbumPage data;
   final bool loadingMore;
-  AlbumSuccess(this.data,{this.loadingMore=false});
 }
+
 final class AlbumError extends AlbumState {
-  final String? message;
   AlbumError([this.message]);
+  final String? message;
 }

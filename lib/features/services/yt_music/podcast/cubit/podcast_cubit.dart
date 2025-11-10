@@ -7,13 +7,12 @@ import 'package:ytmusic/yt_music_base.dart';
 
 part 'podcast_state.dart';
 
-
 class PodcastCubit extends Cubit<PodcastState> {
+  PodcastCubit(this.ytmusic, this.body) : super(PodcastInitial());
   final YTMusic ytmusic;
-  final Map<String,dynamic> body;
-  PodcastCubit(this.ytmusic,this.body) : super(PodcastInitial());
+  final Map<String, dynamic> body;
 
-   Future<void> fetchData() async {
+  Future<void> fetchData() async {
     try {
       emit(PodcastLoading());
       final data = await ytmusic.getPodcast(body: body);
@@ -22,22 +21,22 @@ class PodcastCubit extends Cubit<PodcastState> {
       emit(PodcastError(e.toString()));
     }
   }
-    Future<void> loadMore() async {
+
+  Future<void> loadMore() async {
     final currentState = state;
     if (currentState is! PodcastSuccess) return;
-    if(currentState.loadingMore)return;
+    if (currentState.loadingMore) return;
     final currentData = currentState.data;
-    
+
     final lastSection = currentData.sections.isNotEmpty
-          ? currentData.sections.last
-          : null;
-    final continuation =lastSection?.continuation ?? currentData.continuation;
+        ? currentData.sections.last
+        : null;
+    final continuation = lastSection?.continuation ?? currentData.continuation;
     if (continuation == null) return;
 
-    emit(PodcastSuccess(currentData,loadingMore: true));
+    emit(PodcastSuccess(currentData, loadingMore: true));
 
     try {
-
       if (lastSection?.continuation != null &&
           lastSection?.type == YTSectionType.singleColumn) {
         final nextPage = await ytmusic.getContinuationItems(
@@ -53,7 +52,15 @@ class PodcastCubit extends Cubit<PodcastState> {
         final updatedSections = [...currentData.sections];
         updatedSections[updatedSections.length - 1] = updatedSection;
 
-        emit(PodcastSuccess(YTPodcastPage(header: currentData.header, sections: updatedSections, continuation: currentData.continuation)));
+        emit(
+          PodcastSuccess(
+            YTPodcastPage(
+              header: currentData.header,
+              sections: updatedSections,
+              continuation: currentData.continuation,
+            ),
+          ),
+        );
         return;
       }
 
@@ -62,9 +69,20 @@ class PodcastCubit extends Cubit<PodcastState> {
         continuation: currentData.continuation!,
       );
 
-      final List<YTSection> updatedSections = [...currentData.sections, ...nextPage.sections];
+      final List<YTSection> updatedSections = [
+        ...currentData.sections,
+        ...nextPage.sections,
+      ];
 
-      emit(PodcastSuccess(YTPodcastPage(header: currentData.header,sections: updatedSections,continuation: nextPage.continuation)));
+      emit(
+        PodcastSuccess(
+          YTPodcastPage(
+            header: currentData.header,
+            sections: updatedSections,
+            continuation: nextPage.continuation,
+          ),
+        ),
+      );
     } catch (e) {
       emit(PodcastError(e.toString()));
     }

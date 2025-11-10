@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/services/yt_music/widgets/page_header.dart';
 import 'package:gyawun_music/features/services/yt_music/widgets/section_widget.dart';
 import 'package:ytmusic/yt_music_base.dart';
@@ -8,8 +9,8 @@ import 'package:ytmusic/yt_music_base.dart';
 import 'cubit/podcast_cubit.dart';
 
 class YTPodcastScreen extends StatelessWidget {
-  final Map<String, dynamic> body;
   const YTPodcastScreen({super.key, required this.body});
+  final Map<String, dynamic> body;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class _YTPodcastScreenViewState extends State<YTPodcastScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Podcast")),
+      appBar: AppBar(title: const Text("Podcast")),
       body: BlocBuilder<PodcastCubit, PodcastState>(
         builder: (context, state) {
           if (state is PodcastLoading) {
@@ -78,16 +79,17 @@ class _YTPodcastScreenViewState extends State<YTPodcastScreenView> {
 
                 SectionsWidget(sections: albumState.sections),
                 if (state.loadingMore)
-                  SliverToBoxAdapter(
+                  const SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16),
                       child: Center(child: CircularProgressIndicator()),
                     ),
                   ),
+                const SliverToBoxAdapter(child: BottomPlayingPadding()),
               ],
             );
           }
-          return SizedBox();
+          return const SizedBox();
         },
       ),
     );

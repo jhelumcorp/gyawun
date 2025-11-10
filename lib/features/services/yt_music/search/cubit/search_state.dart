@@ -4,13 +4,16 @@ part of 'search_cubit.dart';
 sealed class SearchState {}
 
 final class SearchInitial extends SearchState {}
+
 final class SearchLoading extends SearchState {}
+
 final class SearchSuccess extends SearchState {
+  SearchSuccess(this.data, {this.loadingMore = false});
   final YTSearchPage data;
   final bool loadingMore;
-  SearchSuccess(this.data,{this.loadingMore=false});
 }
+
 final class SearchError extends SearchState {
-  final String? message;
   SearchError([this.message]);
+  final String? message;
 }

@@ -1,6 +1,7 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:gyawun_music/features/services/yt_music/chip/yt_chip_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ytmusic/models/chip.dart';
 
 class ChipItem extends StatelessWidget {
@@ -10,27 +11,28 @@ class ChipItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(20),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) =>
-                YtChipScreen(body: chip.endpoint.cast(), title: chip.title),
+    return Material(
+      color: Colors.transparent,
+      shadowColor: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () {
+          context.push(
+            '/chip/${jsonEncode(chip.endpoint)}/${jsonEncode(chip.title)}',
+          );
+        },
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainer,
+            borderRadius: BorderRadius.circular(20),
           ),
-        );
-      },
-      child: Ink(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          chip.title,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.bold,
+          child: Text(
+            chip.title,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
         ),
       ),

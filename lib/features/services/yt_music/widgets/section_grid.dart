@@ -4,9 +4,8 @@ import 'section_button_tile.dart';
 import 'section_grid_tile.dart';
 
 class SectionGrid extends StatelessWidget {
-  final List<YTItem> items;
-
   const SectionGrid({super.key, required this.items});
+  final List<YTItem> items;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +25,7 @@ class SectionGrid extends StatelessWidget {
                 runSpacing: 8,
                 alignment: WrapAlignment.start,
                 children: [
-                  for (final item in buttonItems)
-                    SectionButtonTile(item: item),
+                  for (final item in buttonItems) SectionButtonTile(item: item),
                 ],
               ),
 
@@ -35,15 +33,15 @@ class SectionGrid extends StatelessWidget {
               LayoutBuilder(
                 builder: (context, constraints) {
                   final availableWidth = constraints.maxWidth;
-                  
-                  final desiredItemWidth = 200;
+
+                  const desiredItemWidth = 200;
                   final crossAxisCount =
-                      ((availableWidth - spacing) / (desiredItemWidth ))
+                      ((availableWidth - spacing) / (desiredItemWidth))
                           .floor()
                           .clamp(2, visualItems.length);
 
-                  final tileWidth = (availableWidth * (crossAxisCount - 1)) /
-                      crossAxisCount;
+                  final tileWidth =
+                      (availableWidth * (crossAxisCount - 1)) / crossAxisCount;
 
                   return Wrap(
                     spacing: spacing,
@@ -55,7 +53,10 @@ class SectionGrid extends StatelessWidget {
                           constraints: BoxConstraints(
                             maxWidth: tileWidth.clamp(140.0, 350.0),
                           ),
-                          child: SectionGridTile(item: item,width: tileWidth.clamp(140.0, 350.0),),
+                          child: SectionGridTile(
+                            item: item,
+                            width: tileWidth.clamp(140.0, 350.0),
+                          ),
                         ),
                     ],
                   );

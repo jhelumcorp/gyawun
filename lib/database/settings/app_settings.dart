@@ -14,8 +14,7 @@ class SettingTypeConverter extends TypeConverter<SettingType, String> {
   String toSql(SettingType value) => value.name;
 }
 
-
-class AppSettings extends Table {
+class AppSettingsTable extends Table {
   TextColumn get key => text()();
   TextColumn get value => text()();
   TextColumn get type => text().map(const SettingTypeConverter())();

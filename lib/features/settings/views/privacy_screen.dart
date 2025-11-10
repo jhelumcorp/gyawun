@@ -21,7 +21,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Privacy")),
+      appBar: AppBar(title: const Text("Privacy")),
 
       body: SingleChildScrollView(
         child: Padding(
@@ -29,28 +29,28 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              GroupTitle(title: "Playback"),
+              const GroupTitle(title: "Playback"),
               SettingSwitchTile(
                 value: false,
                 isFirst: true,
                 title: "Disable playback history",
-                leading: Icon(Icons.play_disabled_rounded),
+                leading: const Icon(Icons.play_disabled_rounded),
                 onChanged: (value) {},
               ),
-              SettingTile(
+              const SettingTile(
                 title: "Delete playback history",
                 leading: Icon(FluentIcons.history_dismiss_24_filled),
                 isLast: true,
               ),
-              GroupTitle(title: "Search"),
+              const GroupTitle(title: "Search"),
               SettingSwitchTile(
                 value: false,
                 isFirst: true,
                 title: "Disable search history",
-                leading: Icon(Icons.search_off_rounded),
+                leading: const Icon(Icons.search_off_rounded),
                 onChanged: (value) {},
               ),
-              SettingTile(
+              const SettingTile(
                 title: "Delete search history",
                 leading: Icon(Icons.manage_search_rounded),
                 isLast: true,

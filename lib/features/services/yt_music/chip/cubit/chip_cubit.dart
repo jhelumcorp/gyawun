@@ -6,14 +6,14 @@ import 'package:ytmusic/yt_music_base.dart';
 part 'chip_state.dart';
 
 class ChipCubit extends Cubit<ChipState> {
+  ChipCubit(this.ytmusic, this.body) : super(ChipInitial());
   final YTMusic ytmusic;
-  final Map<String,dynamic> body;
-  ChipCubit(this.ytmusic,this.body) : super(ChipInitial());
+  final Map<String, dynamic> body;
 
   Future<void> fetchData() async {
     try {
       emit(ChipLoading());
-      final data = await ytmusic.getChipPage(body: body,limit: 3);
+      final data = await ytmusic.getChipPage(body: body, limit: 3);
       emit(ChipSuccess(data));
     } catch (e) {
       emit(ChipError(e.toString()));
@@ -23,19 +23,18 @@ class ChipCubit extends Cubit<ChipState> {
   Future<void> loadMore() async {
     final currentState = state;
     if (currentState is! ChipSuccess) return;
-    if(currentState.loadingMore)return;
+    if (currentState.loadingMore) return;
     final currentData = currentState.data;
     final continuation = currentData.continuation;
     if (continuation == null) return;
 
     try {
       emit(ChipSuccess(currentData, loadingMore: true));
-      final nextPage =
-          await ytmusic.getChipPageContinuation(body: body,continuation: continuation);
-      final updatedSections = [
-        ...currentData.sections,
-        ...nextPage.sections,
-      ];
+      final nextPage = await ytmusic.getChipPageContinuation(
+        body: body,
+        continuation: continuation,
+      );
+      final updatedSections = [...currentData.sections, ...nextPage.sections];
       final updatedData = YTChipPage(
         sections: updatedSections,
         continuation: nextPage.continuation,

@@ -10,65 +10,73 @@ class StorageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Storage & backups")),
+      appBar: AppBar(title: const Text("Storage & backups")),
 
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 700),
+              constraints: const BoxConstraints(maxWidth: 700),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GroupTitle(title: "Storage"),
+                  const GroupTitle(title: "Storage"),
                   SettingTile(
                     title: "App Folder",
-                    leading: Icon(FluentIcons.folder_24_filled),
+                    leading: const Icon(FluentIcons.folder_24_filled),
                     isFirst: true,
                     isLast: true,
                     subtitle: "/storage/emulated/0/Download",
-                    trailing: IconButton.filled(isSelected: false,onPressed: (){}, icon: Icon(Icons.change_circle_rounded)),
+                    trailing: IconButton.filled(
+                      isSelected: false,
+                      onPressed: () {},
+                      icon: const Icon(Icons.change_circle_rounded),
+                    ),
                   ),
-                  GroupTitle(title: "Cache"),
+                  const GroupTitle(title: "Cache"),
                   FutureBuilder(
-                    future:  CustomImageCacheManager.init(),
+                    future: CustomImageCacheManager.init(),
                     builder: (context, asyncSnapshot) {
-                      if(!asyncSnapshot.hasData || asyncSnapshot.data==null){
-                        return SizedBox.shrink();
+                      if (!asyncSnapshot.hasData ||
+                          asyncSnapshot.data == null) {
+                        return const SizedBox.shrink();
                       }
                       return ValueListenableBuilder(
-                        valueListenable:asyncSnapshot.data!,
+                        valueListenable: asyncSnapshot.data!,
                         builder: (context, value, child) {
                           return SettingTile(
                             isFirst: true,
                             title: "Image Cache",
-                            leading: Icon(FluentIcons.error_circle_24_filled),
-                            subtitle: "${value.toStringAsFixed(2)} MB".toString(),
+                            leading: const Icon(
+                              FluentIcons.error_circle_24_filled,
+                            ),
+                            subtitle: "${value.toStringAsFixed(2)} MB"
+                                .toString(),
                             trailing: IconButton.filled(
                               onPressed: () async {
                                 await CustomImageCacheManager.resetCache();
                               },
-                              icon: Icon(FluentIcons.delete_24_filled),
+                              icon: const Icon(FluentIcons.delete_24_filled),
                               isSelected: false,
                             ),
                           );
                         },
                       );
-                    }
+                    },
                   ),
-                  SettingTile(
+                  const SettingTile(
                     isLast: true,
                     title: "Song Cache",
                     leading: Icon(FluentIcons.error_circle_24_filled),
                   ),
-                  GroupTitle(title: "Backup and restore"),
-                  SettingTile(
+                  const GroupTitle(title: "Backup and restore"),
+                  const SettingTile(
                     isFirst: true,
                     title: "Backup",
                     leading: Icon(Icons.backup_rounded),
                   ),
-                  SettingTile(
+                  const SettingTile(
                     isLast: true,
                     title: "Restore",
                     leading: Icon(Icons.cloud_download_rounded),

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:ytmusic/ytmusic.dart';
 
 import '../widgets/section_widget.dart';
 import 'cubit/chip_cubit.dart';
 
 class YtChipScreen extends StatelessWidget {
+  const YtChipScreen({super.key, required this.body, required this.title});
   final Map<String, dynamic> body;
   final String title;
-  const YtChipScreen({super.key, required this.body, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +22,8 @@ class YtChipScreen extends StatelessWidget {
 }
 
 class YTChipScreenView extends StatefulWidget {
-  final String title;
-
   const YTChipScreenView({super.key, required this.title});
+  final String title;
 
   @override
   State<YTChipScreenView> createState() => _YTChipScreenViewState();
@@ -74,12 +74,13 @@ class _YTChipScreenViewState extends State<YTChipScreenView> {
                 slivers: [
                   SectionsWidget(sections: homePage.sections),
                   if (chipState.loadingMore)
-                    SliverToBoxAdapter(
+                    const SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: EdgeInsets.all(16),
                         child: Center(child: CircularProgressIndicator()),
                       ),
                     ),
+                  const SliverToBoxAdapter(child: BottomPlayingPadding()),
                 ],
               ),
             );

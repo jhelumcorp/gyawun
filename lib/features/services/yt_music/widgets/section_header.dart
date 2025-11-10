@@ -1,15 +1,19 @@
+import 'dart:convert';
+
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/utils/snackbar.dart';
+import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:ytmusic/models/section.dart';
 
-import '../browse/yt_browse_screen.dart';
-
 class SectionHeader extends StatelessWidget {
-  final YTSection section;
   const SectionHeader({super.key, required this.section});
+  final YTSection section;
 
   @override
   Widget build(BuildContext context) {
-    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
@@ -21,30 +25,29 @@ class SectionHeader extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.w700,
-                fontSize: 20,
+                fontSize: 18,
               ),
             ),
           ),
           if (section.trailing != null)
             TextButton.icon(
               iconAlignment: IconAlignment.end,
-              onPressed: () {
-                if (section.trailing!.isPlayable == false) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => YTBrowseScreen(
-                        title: section.title,
-                        body: section.trailing!.endpoint.cast(),
-                      ),
-                    ),
+              onPressed: () async {
+                if (section.trailing!.isPlayable == true) {
+                  BottomSnackbar.showMessage(context, "Play starting");
+                  await sl<MediaPlayer>().playYTFromEndpoint(
+                    section.trailing!.endpoint.cast(),
                   );
+                  return;
                 }
+                context.push(
+                  '/browse/${jsonEncode(section.trailing!.endpoint)}',
+                );
               },
               icon: Icon(
                 section.trailing!.isPlayable
-                    ? Icons.play_arrow
-                    : Icons.arrow_forward,
+                    ? FluentIcons.play_24_filled
+                    : FluentIcons.chevron_right_24_filled,
               ),
               label: Text(section.trailing!.text),
             ),

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
+import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/services/yt_music/widgets/artist_page_header.dart';
 import 'package:gyawun_music/features/services/yt_music/widgets/section_widget.dart';
 import 'package:ytmusic/yt_music_base.dart';
@@ -13,8 +14,8 @@ import 'package:ytmusic/yt_music_base.dart';
 import 'cubit/artist_cubit.dart';
 
 class YTArtistScreen extends StatelessWidget {
-  final Map<String, dynamic> body;
   const YTArtistScreen({super.key, required this.body});
+  final Map<String, dynamic> body;
 
   @override
   Widget build(BuildContext context) {
@@ -111,31 +112,28 @@ class _YTArtistScreenViewState extends State<YTArtistScreenView> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          background:Stack(
-                              fit: StackFit.expand,
-                              children: [
-                                if (thumbnail?.url != null)
-                                  CachedNetworkImage(
-                                    imageUrl: thumbnail!.url,
-                                    fit: BoxFit.cover,
-                                  ),
-                                DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Colors.transparent,
-                                        Theme.of(
-                                          context,
-                                        ).scaffoldBackgroundColor,
-                                      ],
-                                    ),
+                          background: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              if (thumbnail?.url != null)
+                                CachedNetworkImage(
+                                  imageUrl: thumbnail!.url,
+                                  fit: BoxFit.cover,
+                                ),
+                              DecoratedBox(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.transparent,
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          
+                              ),
+                            ],
+                          ),
                         );
                       },
                     ),
@@ -143,7 +141,7 @@ class _YTArtistScreenViewState extends State<YTArtistScreenView> {
 
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     child: ArtistPageHeader(header: artistState.header),
                   ),
                 ),
@@ -151,16 +149,17 @@ class _YTArtistScreenViewState extends State<YTArtistScreenView> {
                 SectionsWidget(sections: artistState.sections),
 
                 if (state.loadingMore)
-                  SliverToBoxAdapter(
+                  const SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16),
                       child: Center(child: CircularProgressIndicator()),
                     ),
                   ),
+                const SliverToBoxAdapter(child: BottomPlayingPadding()),
               ],
             );
           }
-          return SizedBox();
+          return const SizedBox();
         },
       ),
     );

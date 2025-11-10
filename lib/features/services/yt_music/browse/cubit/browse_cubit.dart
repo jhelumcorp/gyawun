@@ -6,9 +6,9 @@ import 'package:ytmusic/yt_music_base.dart';
 part 'browse_state.dart';
 
 class BrowseCubit extends Cubit<BrowseState> {
+  BrowseCubit(this.ytmusic, this.body) : super(BrowseInitial());
   final YTMusic ytmusic;
-  final Map<String,dynamic> body;
-  BrowseCubit(this.ytmusic,this.body) : super(BrowseInitial());
+  final Map<String, dynamic> body;
 
   Future<void> fetchData() async {
     try {
@@ -20,4 +20,3 @@ class BrowseCubit extends Cubit<BrowseState> {
     }
   }
 }
-

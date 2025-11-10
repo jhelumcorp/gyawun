@@ -6,6 +6,7 @@ import 'package:gyawun_music/core/theme/theme.dart';
 import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:m3e_design/m3e_design.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final appSettings = sl<AppSettings>();
     return StreamBuilder(
-      stream: appSettings.appearance(),
+      stream: appSettings.appearanceSettings.stream,
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
           final appearance = snapshot.data!;
@@ -23,18 +24,26 @@ class MyApp extends StatelessWidget {
               return MaterialApp.router(
                 title: 'Gyawun Music',
                 routerConfig: router,
-                theme: AppTheme.light(
-                  primary: appearance.enableSystemColors && lightDynamic != null
-                      ? lightDynamic.primary
-                      : appearance.accentColor,
-                  androidPredictiveBack: appearance.enableAndroidPredictiveBack,
+                theme: withM3ETheme(
+                  AppTheme.light(
+                    primary:
+                        appearance.enableSystemColors && lightDynamic != null
+                        ? lightDynamic.primary
+                        : appearance.accentColor,
+                    androidPredictiveBack:
+                        appearance.enableAndroidPredictiveBack,
+                  ),
                 ),
-                darkTheme: AppTheme.dark(
-                  primary: appearance.enableSystemColors && darkDynamic != null
-                      ? darkDynamic.primary
-                      : appearance.accentColor,
-                  isPureBlack: appearance.isPureBlack,
-                  androidPredictiveBack: appearance.enableAndroidPredictiveBack,
+                darkTheme: withM3ETheme(
+                  AppTheme.dark(
+                    primary:
+                        appearance.enableSystemColors && darkDynamic != null
+                        ? darkDynamic.primary
+                        : appearance.accentColor,
+                    isPureBlack: appearance.isPureBlack,
+                    androidPredictiveBack:
+                        appearance.enableAndroidPredictiveBack,
+                  ),
                 ),
                 themeMode: appearance.themeMode.mode,
                 debugShowCheckedModeBanner: false,
@@ -50,7 +59,7 @@ class MyApp extends StatelessWidget {
             },
           );
         }
-        return SizedBox();
+        return const SizedBox();
       },
     );
   }

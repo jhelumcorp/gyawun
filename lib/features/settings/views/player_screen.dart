@@ -2,7 +2,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/settings/app_settings.dart';
-import 'package:gyawun_music/features/settings/app_settings_identifiers.dart';
+import 'package:gyawun_music/services/audio_service/media_player.dart';
 
 import '../widgets/setting_tile.dart';
 
@@ -11,42 +11,36 @@ class PlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appSettings = sl<AppSettings>();
+    final playerSettings = sl<AppSettings>().playerSettings;
     return Scaffold(
-      appBar: AppBar(title: Text("Player")),
+      appBar: AppBar(title: const Text("Player")),
       body: Padding(
-        padding: EdgeInsets.all(16),
-        child: StreamBuilder(stream: appSettings.player(), builder:(context, snapshot) {
-           if (snapshot.hasError) {
-              return Center(child: Text(snapshot.error.toString()));
-            }
-          if(snapshot.hasData && snapshot.data!=null){
-            final settings = snapshot.data!;
-            return  CustomScrollView(
-              slivers: [
-                SliverList.list(
-                  children: [
-                    SettingSwitchTile(
+        padding: const EdgeInsets.all(16),
+        child: CustomScrollView(
+          slivers: [
+            SliverList.list(
+              children: [
+                StreamBuilder<bool?>(
+                  stream: playerSettings.skipSilenceStream,
+                  initialData: false,
+                  builder: (context, snapshot) {
+                    return SettingSwitchTile(
                       title: "Skip silence",
-                      leading: Icon(FluentIcons.fast_forward_24_filled),
+                      leading: const Icon(FluentIcons.fast_forward_24_filled),
                       isFirst: true,
                       isLast: true,
-                      value: settings.skipSilence,
-
+                      value: snapshot.data ?? false,
                       onChanged: (value) async {
-                        await appSettings.setBool(
-                          AppSettingsIdentifiers.skipSilence,
-                          value,
-                        );
+                        await sl<MediaPlayer>().setSkipSilenceEnabled(value);
+                        await playerSettings.setSkipSilence(value);
                       },
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ],
-            );
-          }
-          return SizedBox();
-        },)
+            ),
+          ],
+        ),
       ),
     );
   }

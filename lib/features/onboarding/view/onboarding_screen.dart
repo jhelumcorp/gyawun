@@ -45,7 +45,7 @@ class OnboardingScreen extends StatelessWidget {
                     height: 1.1,
                   ),
                 ),
-             
+
               ShaderMask(
                 shaderCallback: (bounds) => LinearGradient(
                   colors: [
@@ -101,11 +101,11 @@ class OnboardingScreen extends StatelessWidget {
                           : null,
                     ),
                     onPressed: () {
-                      context.go('/home');
+                      context.go('/');
                     },
                     child: Text(
                       loc.getStarted,
-                      style: TextStyle(fontSize: 18, letterSpacing: 0.5),
+                      style: const TextStyle(fontSize: 18, letterSpacing: 0.5),
                     ),
                   ),
                 ),

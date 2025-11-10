@@ -3,12 +3,12 @@
 part of 'database.dart';
 
 // ignore_for_file: type=lint
-class $AppSettingsTable extends AppSettings
-    with TableInfo<$AppSettingsTable, AppSetting> {
+class $AppSettingsTableTable extends AppSettingsTable
+    with TableInfo<$AppSettingsTableTable, AppSettingsTableData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $AppSettingsTable(this.attachedDatabase, [this._alias]);
+  $AppSettingsTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _keyMeta = const VerificationMeta('key');
   @override
   late final GeneratedColumn<String> key = GeneratedColumn<String>(
@@ -35,17 +35,17 @@ class $AppSettingsTable extends AppSettings
         false,
         type: DriftSqlType.string,
         requiredDuringInsert: true,
-      ).withConverter<SettingType>($AppSettingsTable.$convertertype);
+      ).withConverter<SettingType>($AppSettingsTableTable.$convertertype);
   @override
   List<GeneratedColumn> get $columns => [key, value, type];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'app_settings';
+  static const String $name = 'app_settings_table';
   @override
   VerificationContext validateIntegrity(
-    Insertable<AppSetting> instance, {
+    Insertable<AppSettingsTableData> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -72,9 +72,9 @@ class $AppSettingsTable extends AppSettings
   @override
   Set<GeneratedColumn> get $primaryKey => {key};
   @override
-  AppSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
+  AppSettingsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return AppSetting(
+    return AppSettingsTableData(
       key: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}key'],
@@ -83,7 +83,7 @@ class $AppSettingsTable extends AppSettings
         DriftSqlType.string,
         data['${effectivePrefix}value'],
       )!,
-      type: $AppSettingsTable.$convertertype.fromSql(
+      type: $AppSettingsTableTable.$convertertype.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
           data['${effectivePrefix}type'],
@@ -93,19 +93,20 @@ class $AppSettingsTable extends AppSettings
   }
 
   @override
-  $AppSettingsTable createAlias(String alias) {
-    return $AppSettingsTable(attachedDatabase, alias);
+  $AppSettingsTableTable createAlias(String alias) {
+    return $AppSettingsTableTable(attachedDatabase, alias);
   }
 
   static TypeConverter<SettingType, String> $convertertype =
       const SettingTypeConverter();
 }
 
-class AppSetting extends DataClass implements Insertable<AppSetting> {
+class AppSettingsTableData extends DataClass
+    implements Insertable<AppSettingsTableData> {
   final String key;
   final String value;
   final SettingType type;
-  const AppSetting({
+  const AppSettingsTableData({
     required this.key,
     required this.value,
     required this.type,
@@ -117,26 +118,26 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     map['value'] = Variable<String>(value);
     {
       map['type'] = Variable<String>(
-        $AppSettingsTable.$convertertype.toSql(type),
+        $AppSettingsTableTable.$convertertype.toSql(type),
       );
     }
     return map;
   }
 
-  AppSettingsCompanion toCompanion(bool nullToAbsent) {
-    return AppSettingsCompanion(
+  AppSettingsTableCompanion toCompanion(bool nullToAbsent) {
+    return AppSettingsTableCompanion(
       key: Value(key),
       value: Value(value),
       type: Value(type),
     );
   }
 
-  factory AppSetting.fromJson(
+  factory AppSettingsTableData.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return AppSetting(
+    return AppSettingsTableData(
       key: serializer.fromJson<String>(json['key']),
       value: serializer.fromJson<String>(json['value']),
       type: serializer.fromJson<SettingType>(json['type']),
@@ -152,14 +153,17 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     };
   }
 
-  AppSetting copyWith({String? key, String? value, SettingType? type}) =>
-      AppSetting(
-        key: key ?? this.key,
-        value: value ?? this.value,
-        type: type ?? this.type,
-      );
-  AppSetting copyWithCompanion(AppSettingsCompanion data) {
-    return AppSetting(
+  AppSettingsTableData copyWith({
+    String? key,
+    String? value,
+    SettingType? type,
+  }) => AppSettingsTableData(
+    key: key ?? this.key,
+    value: value ?? this.value,
+    type: type ?? this.type,
+  );
+  AppSettingsTableData copyWithCompanion(AppSettingsTableCompanion data) {
+    return AppSettingsTableData(
       key: data.key.present ? data.key.value : this.key,
       value: data.value.present ? data.value.value : this.value,
       type: data.type.present ? data.type.value : this.type,
@@ -168,7 +172,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
 
   @override
   String toString() {
-    return (StringBuffer('AppSetting(')
+    return (StringBuffer('AppSettingsTableData(')
           ..write('key: $key, ')
           ..write('value: $value, ')
           ..write('type: $type')
@@ -181,24 +185,24 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is AppSetting &&
+      (other is AppSettingsTableData &&
           other.key == this.key &&
           other.value == this.value &&
           other.type == this.type);
 }
 
-class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
+class AppSettingsTableCompanion extends UpdateCompanion<AppSettingsTableData> {
   final Value<String> key;
   final Value<String> value;
   final Value<SettingType> type;
   final Value<int> rowid;
-  const AppSettingsCompanion({
+  const AppSettingsTableCompanion({
     this.key = const Value.absent(),
     this.value = const Value.absent(),
     this.type = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  AppSettingsCompanion.insert({
+  AppSettingsTableCompanion.insert({
     required String key,
     required String value,
     required SettingType type,
@@ -206,7 +210,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   }) : key = Value(key),
        value = Value(value),
        type = Value(type);
-  static Insertable<AppSetting> custom({
+  static Insertable<AppSettingsTableData> custom({
     Expression<String>? key,
     Expression<String>? value,
     Expression<String>? type,
@@ -220,13 +224,13 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     });
   }
 
-  AppSettingsCompanion copyWith({
+  AppSettingsTableCompanion copyWith({
     Value<String>? key,
     Value<String>? value,
     Value<SettingType>? type,
     Value<int>? rowid,
   }) {
-    return AppSettingsCompanion(
+    return AppSettingsTableCompanion(
       key: key ?? this.key,
       value: value ?? this.value,
       type: type ?? this.type,
@@ -245,7 +249,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     }
     if (type.present) {
       map['type'] = Variable<String>(
-        $AppSettingsTable.$convertertype.toSql(type.value),
+        $AppSettingsTableTable.$convertertype.toSql(type.value),
       );
     }
     if (rowid.present) {
@@ -256,7 +260,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
 
   @override
   String toString() {
-    return (StringBuffer('AppSettingsCompanion(')
+    return (StringBuffer('AppSettingsTableCompanion(')
           ..write('key: $key, ')
           ..write('value: $value, ')
           ..write('type: $type, ')
@@ -266,38 +270,40 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   }
 }
 
-abstract class _$AppDatabase extends GeneratedDatabase {
-  _$AppDatabase(QueryExecutor e) : super(e);
-  $AppDatabaseManager get managers => $AppDatabaseManager(this);
-  late final $AppSettingsTable appSettings = $AppSettingsTable(this);
-  late final AppSettingsDao appSettingsDao = AppSettingsDao(
-    this as AppDatabase,
+abstract class _$AppSettingsDatabase extends GeneratedDatabase {
+  _$AppSettingsDatabase(QueryExecutor e) : super(e);
+  $AppSettingsDatabaseManager get managers => $AppSettingsDatabaseManager(this);
+  late final $AppSettingsTableTable appSettingsTable = $AppSettingsTableTable(
+    this,
+  );
+  late final AppSettingsTableDao appSettingsTableDao = AppSettingsTableDao(
+    this as AppSettingsDatabase,
   );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [appSettings];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [appSettingsTable];
 }
 
-typedef $$AppSettingsTableCreateCompanionBuilder =
-    AppSettingsCompanion Function({
+typedef $$AppSettingsTableTableCreateCompanionBuilder =
+    AppSettingsTableCompanion Function({
       required String key,
       required String value,
       required SettingType type,
       Value<int> rowid,
     });
-typedef $$AppSettingsTableUpdateCompanionBuilder =
-    AppSettingsCompanion Function({
+typedef $$AppSettingsTableTableUpdateCompanionBuilder =
+    AppSettingsTableCompanion Function({
       Value<String> key,
       Value<String> value,
       Value<SettingType> type,
       Value<int> rowid,
     });
 
-class $$AppSettingsTableFilterComposer
-    extends Composer<_$AppDatabase, $AppSettingsTable> {
-  $$AppSettingsTableFilterComposer({
+class $$AppSettingsTableTableFilterComposer
+    extends Composer<_$AppSettingsDatabase, $AppSettingsTableTable> {
+  $$AppSettingsTableTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -321,9 +327,9 @@ class $$AppSettingsTableFilterComposer
       );
 }
 
-class $$AppSettingsTableOrderingComposer
-    extends Composer<_$AppDatabase, $AppSettingsTable> {
-  $$AppSettingsTableOrderingComposer({
+class $$AppSettingsTableTableOrderingComposer
+    extends Composer<_$AppSettingsDatabase, $AppSettingsTableTable> {
+  $$AppSettingsTableTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -346,9 +352,9 @@ class $$AppSettingsTableOrderingComposer
   );
 }
 
-class $$AppSettingsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $AppSettingsTable> {
-  $$AppSettingsTableAnnotationComposer({
+class $$AppSettingsTableTableAnnotationComposer
+    extends Composer<_$AppSettingsDatabase, $AppSettingsTableTable> {
+  $$AppSettingsTableTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -365,42 +371,48 @@ class $$AppSettingsTableAnnotationComposer
       $composableBuilder(column: $table.type, builder: (column) => column);
 }
 
-class $$AppSettingsTableTableManager
+class $$AppSettingsTableTableTableManager
     extends
         RootTableManager<
-          _$AppDatabase,
-          $AppSettingsTable,
-          AppSetting,
-          $$AppSettingsTableFilterComposer,
-          $$AppSettingsTableOrderingComposer,
-          $$AppSettingsTableAnnotationComposer,
-          $$AppSettingsTableCreateCompanionBuilder,
-          $$AppSettingsTableUpdateCompanionBuilder,
+          _$AppSettingsDatabase,
+          $AppSettingsTableTable,
+          AppSettingsTableData,
+          $$AppSettingsTableTableFilterComposer,
+          $$AppSettingsTableTableOrderingComposer,
+          $$AppSettingsTableTableAnnotationComposer,
+          $$AppSettingsTableTableCreateCompanionBuilder,
+          $$AppSettingsTableTableUpdateCompanionBuilder,
           (
-            AppSetting,
-            BaseReferences<_$AppDatabase, $AppSettingsTable, AppSetting>,
+            AppSettingsTableData,
+            BaseReferences<
+              _$AppSettingsDatabase,
+              $AppSettingsTableTable,
+              AppSettingsTableData
+            >,
           ),
-          AppSetting,
+          AppSettingsTableData,
           PrefetchHooks Function()
         > {
-  $$AppSettingsTableTableManager(_$AppDatabase db, $AppSettingsTable table)
-    : super(
+  $$AppSettingsTableTableTableManager(
+    _$AppSettingsDatabase db,
+    $AppSettingsTableTable table,
+  ) : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$AppSettingsTableFilterComposer($db: db, $table: table),
+              $$AppSettingsTableTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$AppSettingsTableOrderingComposer($db: db, $table: table),
+              $$AppSettingsTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$AppSettingsTableAnnotationComposer($db: db, $table: table),
+              $$AppSettingsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> key = const Value.absent(),
                 Value<String> value = const Value.absent(),
                 Value<SettingType> type = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
-              }) => AppSettingsCompanion(
+              }) => AppSettingsTableCompanion(
                 key: key,
                 value: value,
                 type: type,
@@ -412,7 +424,7 @@ class $$AppSettingsTableTableManager
                 required String value,
                 required SettingType type,
                 Value<int> rowid = const Value.absent(),
-              }) => AppSettingsCompanion.insert(
+              }) => AppSettingsTableCompanion.insert(
                 key: key,
                 value: value,
                 type: type,
@@ -426,27 +438,31 @@ class $$AppSettingsTableTableManager
       );
 }
 
-typedef $$AppSettingsTableProcessedTableManager =
+typedef $$AppSettingsTableTableProcessedTableManager =
     ProcessedTableManager<
-      _$AppDatabase,
-      $AppSettingsTable,
-      AppSetting,
-      $$AppSettingsTableFilterComposer,
-      $$AppSettingsTableOrderingComposer,
-      $$AppSettingsTableAnnotationComposer,
-      $$AppSettingsTableCreateCompanionBuilder,
-      $$AppSettingsTableUpdateCompanionBuilder,
+      _$AppSettingsDatabase,
+      $AppSettingsTableTable,
+      AppSettingsTableData,
+      $$AppSettingsTableTableFilterComposer,
+      $$AppSettingsTableTableOrderingComposer,
+      $$AppSettingsTableTableAnnotationComposer,
+      $$AppSettingsTableTableCreateCompanionBuilder,
+      $$AppSettingsTableTableUpdateCompanionBuilder,
       (
-        AppSetting,
-        BaseReferences<_$AppDatabase, $AppSettingsTable, AppSetting>,
+        AppSettingsTableData,
+        BaseReferences<
+          _$AppSettingsDatabase,
+          $AppSettingsTableTable,
+          AppSettingsTableData
+        >,
       ),
-      AppSetting,
+      AppSettingsTableData,
       PrefetchHooks Function()
     >;
 
-class $AppDatabaseManager {
-  final _$AppDatabase _db;
-  $AppDatabaseManager(this._db);
-  $$AppSettingsTableTableManager get appSettings =>
-      $$AppSettingsTableTableManager(_db, _db.appSettings);
+class $AppSettingsDatabaseManager {
+  final _$AppSettingsDatabase _db;
+  $AppSettingsDatabaseManager(this._db);
+  $$AppSettingsTableTableTableManager get appSettingsTable =>
+      $$AppSettingsTableTableTableManager(_db, _db.appSettingsTable);
 }

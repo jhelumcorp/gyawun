@@ -14,7 +14,7 @@ class YTSearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SearchCubit(sl<YTMusic>()),
-      child: YTSearchScreenView(),
+      child: const YTSearchScreenView(),
     );
   }
 }
@@ -48,7 +48,9 @@ class _YTSearchScreenViewState extends State<YTSearchScreenView> {
           ];
         },
 
-        body: query == null ? YTExploreScreen() : YTSearchResultView(),
+        body: query == null
+            ? const YTExploreScreen()
+            : const YTSearchResultView(),
       ),
     );
   }

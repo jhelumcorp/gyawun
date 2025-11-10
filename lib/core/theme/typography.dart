@@ -71,22 +71,22 @@ TextTheme appTextTheme(TextTheme? textTheme) {
       bodyLarge: TextStyle(
         color: textTheme.bodyLarge?.color,
         fontWeight: FontWeight.normal,
-        fontSize: 16,
-        height: 24 / 16,
+        fontSize: 15,
+        height: 24 / 15,
         letterSpacing: 0.5, // M3 uses 0.5, M2 used 0.15
       ),
       bodyMedium: TextStyle(
         color: textTheme.bodyMedium?.color,
         fontWeight: FontWeight.normal,
-        fontSize: 14,
-        height: 20 / 14,
+        fontSize: 13,
+        height: 20 / 13,
         letterSpacing: 0.25,
       ),
       bodySmall: TextStyle(
         color: textTheme.bodySmall?.color,
         fontWeight: FontWeight.normal,
-        fontSize: 12,
-        height: 16 / 12,
+        fontSize: 11,
+        height: 16 / 11,
         letterSpacing: 0.4,
       ),
       labelLarge: TextStyle(

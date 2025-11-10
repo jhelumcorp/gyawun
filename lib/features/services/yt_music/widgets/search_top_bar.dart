@@ -4,9 +4,9 @@ import 'package:gyawun_music/features/services/yt_music/search/cubit/search_cubi
 import 'section_column_tile.dart';
 
 class SearchTopBar extends StatelessWidget {
+  const SearchTopBar({super.key, this.onSubmit, required this.searchCubit});
   final void Function(String value)? onSubmit;
   final SearchCubit searchCubit;
-  const SearchTopBar({super.key, this.onSubmit, required this.searchCubit});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +21,10 @@ class SearchTopBar extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final appBarHeight = constraints.maxHeight;
-              final collapsedHeight = kToolbarHeight;
+              const collapsedHeight = kToolbarHeight;
               final isCollapsed = appBarHeight <= collapsedHeight;
 
-              final double collapsedTop = (kToolbarHeight - 56) / 2;
+              const double collapsedTop = (kToolbarHeight - 56) / 2;
 
               return Stack(
                 children: [
@@ -42,7 +42,12 @@ class SearchTopBar extends StatelessWidget {
                               : Offset.zero,
                           child: Text(
                             "Search",
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontFamily: 'paytoneOne',
+                              fontWeight: FontWeight.w300,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                             textAlign: TextAlign.left,
                           ),
                         ),

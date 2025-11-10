@@ -5,10 +5,10 @@ import 'package:ytmusic/ytmusic.dart';
 part 'explore_state.dart';
 
 class ExploreCubit extends Cubit<ExploreState> {
-  final YTMusic ytmusic;
   ExploreCubit(this.ytmusic) : super(ExploreInitial());
+  final YTMusic ytmusic;
 
-    Future<void> fetch() async {
+  Future<void> fetch() async {
     try {
       emit(ExploreLoading());
       final data = await ytmusic.getExplore();

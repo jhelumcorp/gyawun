@@ -4,13 +4,16 @@ part of 'artist_cubit.dart';
 sealed class ArtistState {}
 
 final class ArtistInitial extends ArtistState {}
+
 final class ArtistLoading extends ArtistState {}
+
 final class ArtistSuccess extends ArtistState {
+  ArtistSuccess(this.data, {this.loadingMore = false});
   final YTArtistPage data;
   final bool loadingMore;
-  ArtistSuccess(this.data,{this.loadingMore=false});
 }
+
 final class ArtistError extends ArtistState {
-  final String? message;
   ArtistError([this.message]);
+  final String? message;
 }

@@ -28,20 +28,16 @@ class AppTheme {
           systemNavigationBarColor: Colors.transparent,
         ),
       ),
-      // pageTransitionsTheme: PageTransitionsTheme(
-      //   builders: Map<TargetPlatform, PageTransitionsBuilder>.fromIterable(
-      //     TargetPlatform.values,
-      //     value: (_) => const FadeForwardsPageTransitionsBuilder(),
-      //   ),
-      // ),
       pageTransitionsTheme: PageTransitionsTheme(
         builders: <TargetPlatform, PageTransitionsBuilder>{
           TargetPlatform.android: androidPredictiveBack
-              ? PredictiveBackPageTransitionsBuilder()
+              ? const PredictiveBackPageTransitionsBuilder()
               : const FadeForwardsPageTransitionsBuilder(),
           TargetPlatform.linux: const FadeForwardsPageTransitionsBuilder(),
         },
       ),
+      // ignore: deprecated_member_use
+      progressIndicatorTheme: const ProgressIndicatorThemeData(year2023: false),
     );
   }
 
@@ -79,20 +75,16 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: isPureBlack ? Colors.black : null,
       ),
-      // pageTransitionsTheme: PageTransitionsTheme(
-      //   builders: Map<TargetPlatform, PageTransitionsBuilder>.fromIterable(
-      //     TargetPlatform.values,
-      //     value: (_) => const FadeForwardsPageTransitionsBuilder(),
-      //   ),
-      // ),
       pageTransitionsTheme: PageTransitionsTheme(
         builders: <TargetPlatform, PageTransitionsBuilder>{
           TargetPlatform.android: androidPredictiveBack
-              ? PredictiveBackPageTransitionsBuilder()
+              ? const PredictiveBackPageTransitionsBuilder()
               : const FadeForwardsPageTransitionsBuilder(),
           TargetPlatform.linux: const FadeForwardsPageTransitionsBuilder(),
         },
       ),
+      // ignore: deprecated_member_use
+      progressIndicatorTheme: const ProgressIndicatorThemeData(year2023: false),
     );
   }
 }
