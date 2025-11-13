@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
+import 'package:gyawun_music/core/widgets/section_widget.dart';
+import 'package:gyawun_music/core/widgets/tiles/chip_tile.dart';
 import 'package:ytmusic/ytmusic.dart';
 
-import '../widgets/chip_item.dart';
-import '../widgets/section_widget.dart';
 import 'cubit/home_cubit.dart';
 
 class YTHomeScreen extends StatelessWidget {
@@ -15,10 +15,7 @@ class YTHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => HomeCubit(sl<YTMusic>()),
-      child: const YTHomeScreenView(),
-    );
+    return BlocProvider(create: (_) => HomeCubit(sl<YTMusic>()), child: const YTHomeScreenView());
   }
 }
 
@@ -93,11 +90,10 @@ class _YTHomeScreenViewState extends State<YTHomeScreenView> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         scrollDirection: Axis.horizontal,
                         itemCount: homePage.chips.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(width: 8),
+                        separatorBuilder: (context, index) => const SizedBox(width: 8),
                         itemBuilder: (context, index) {
                           final chip = homePage.chips[index];
-                          return ChipItem(chip: chip);
+                          return ChipTile(chip: chip);
                         },
                       ),
                     ),

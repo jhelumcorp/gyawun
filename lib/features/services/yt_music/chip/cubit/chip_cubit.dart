@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:meta/meta.dart';
-import 'package:ytmusic/models/chip_page.dart';
 import 'package:ytmusic/yt_music_base.dart';
 
 part 'chip_state.dart';
@@ -35,9 +35,11 @@ class ChipCubit extends Cubit<ChipState> {
         continuation: continuation,
       );
       final updatedSections = [...currentData.sections, ...nextPage.sections];
-      final updatedData = YTChipPage(
+      final updatedData = Page(
         sections: updatedSections,
         continuation: nextPage.continuation,
+        header: currentData.header,
+        provider: currentData.provider,
       );
       emit(ChipSuccess(updatedData));
     } catch (e) {

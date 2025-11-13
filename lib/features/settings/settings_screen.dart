@@ -55,9 +55,24 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                     isFirst: true,
-                    isLast: true,
                     onTap: () {
                       context.push("/settings/ytmusic");
+                    },
+                  ),
+                  SettingTile(
+                    title: "Jio Saavn",
+                    leading: SvgPicture.asset(
+                      'assets/svgs/jio_saavn.svg',
+                      width: 22,
+                      height: 22,
+                      colorFilter: ColorFilter.mode(
+                        Theme.of(context).colorScheme.onSurfaceVariant,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    isLast: true,
+                    onTap: () {
+                      context.push("/settings/jiosaavn");
                     },
                   ),
 

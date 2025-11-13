@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ import 'package:gyawun_music/features/player/widgets/queue_button.dart';
 import 'package:gyawun_music/features/player/widgets/shuffle_button.dart';
 import 'package:gyawun_music/features/player/widgets/timer_button.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
-import 'package:ytmusic/models/models.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 
 class PlayerScreen extends StatefulWidget {
   const PlayerScreen({super.key});
@@ -88,9 +89,15 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         ),
 
                         // Thumbnail
-                        PlayerThumbnail(
+                        SizedBox(
                           width: min(400, size.width) * 0.8,
-                          borderRadius: 16,
+                          height: min(400, size.width) * 0.8,
+                          child: Center(
+                            child: PlayerThumbnail(
+                              width: min(400, size.width) * 0.8,
+                              borderRadius: 16,
+                            ),
+                          ),
                         ),
 
                         const SizedBox(height: 16),
@@ -126,11 +133,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TimerButton(),
-                            SizedBox(width: 8),
-                            QueueButton(),
-                          ],
+                          children: [TimerButton(), SizedBox(width: 8), QueueButton()],
                         ),
                       ],
                     ),
@@ -147,10 +150,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
 /// Separated background blur layer with enable setting check
 class _BackgroundBlurLayer extends StatelessWidget {
-  const _BackgroundBlurLayer({
-    required this.media,
-    required this.appearanceSettings,
-  });
+  const _BackgroundBlurLayer({required this.media, required this.appearanceSettings});
   final MediaPlayer media;
   final AppearanceSettings appearanceSettings;
 
@@ -165,7 +165,7 @@ class _BackgroundBlurLayer extends StatelessWidget {
         if (!blur) return const SizedBox.shrink();
 
         return Positioned.fill(
-          child: StreamBuilder<List<YTThumbnail>>(
+          child: StreamBuilder<List<Thumbnail>?>(
             stream: media.thumbnailStream,
             builder: (context, snapThumbs) {
               final thumbs = snapThumbs.data;
@@ -202,18 +202,11 @@ class _BlurredImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: CachedNetworkImageProvider(url),
-          fit: BoxFit.cover,
-        ),
+        image: DecorationImage(image: CachedNetworkImageProvider(url), fit: BoxFit.cover),
       ),
       child: ClipRRect(
         child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 20,
-            sigmaY: 20,
-            tileMode: TileMode.clamp,
-          ),
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20, tileMode: TileMode.clamp),
           child: Container(color: Colors.black.withValues(alpha: 0.28)),
         ),
       ),

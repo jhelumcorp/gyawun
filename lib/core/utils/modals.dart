@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/router.dart';
-import 'package:ytmusic/ytmusic.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 
 import 'modal_layouts.dart';
 
 class Modals {
-  static void showItemBottomSheet(BuildContext context, YTItem item) {
+  static void showItemBottomSheet(BuildContext context, SectionItem item) {
     bottomSheetCounter.value++;
     showModalBottomSheet(
       context: rootNavigatorKey.currentContext!,
@@ -16,10 +16,7 @@ class Modals {
     );
   }
 
-  static void showArtistsBottomSheet(
-    BuildContext context,
-    List<YTArtistBasic> item,
-  ) {
+  static void showArtistsBottomSheet(BuildContext context, List<Artist> item) {
     bottomSheetCounter.value++;
     showModalBottomSheet(
       context: rootNavigatorKey.currentContext!,

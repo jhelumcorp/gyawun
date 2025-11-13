@@ -1,4 +1,3 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/di.dart';
@@ -8,14 +7,7 @@ import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:rxdart/rxdart.dart';
 
 class BottomPlayer extends StatefulWidget {
-  const BottomPlayer({
-    super.key,
-    this.height = 68,
-    this.artworkSize = 55,
-    this.iconSize = 28,
-    this.buttonSize = 44,
-  });
-  final double height;
+  const BottomPlayer({super.key, this.artworkSize = 55, this.iconSize = 28, this.buttonSize = 44});
   final double artworkSize;
   final double iconSize;
   final double buttonSize;
@@ -48,10 +40,10 @@ class _BottomPlayerState extends State<BottomPlayer> {
   @override
   Widget build(BuildContext context) {
     final currentLocation = GoRouterState.of(context).uri.path;
-    final isOnYTMusicRoute = currentLocation == '/';
+    final isOnMainRoute = currentLocation == '/';
 
     // Get the bottom navigation bar height (typically 56-80)
-    final bottomNavBarHeight = isOnYTMusicRoute ? 80.0 : 0.0;
+    final bottomNavBarHeight = isOnMainRoute ? 80.0 : 0.0;
     return StreamBuilder<Color?>(
       stream: sl<MediaPlayer>().dominantSeedColorStream,
       builder: (context, snapshot) {
@@ -77,7 +69,7 @@ class _BottomPlayerState extends State<BottomPlayer> {
           child: AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
-            bottom: bottomNavBarHeight + 8,
+            bottom: bottomNavBarHeight - 8,
             left: 0,
             right: 0,
             child: SafeArea(
@@ -89,7 +81,7 @@ class _BottomPlayerState extends State<BottomPlayer> {
 
                   return StreamBuilder(
                     stream: Rx.combineLatest2(
-                      sl<MediaPlayer>().queueStateStream.distinct(),
+                      sl<MediaPlayer>().queueItemsStream.distinct(),
                       sl<AppSettings>().playerSettings.stream.distinct(),
                       (a, b) => (a, b),
                     ),
@@ -97,18 +89,17 @@ class _BottomPlayerState extends State<BottomPlayer> {
                       if (snapshot.data == null) {
                         return const SizedBox.shrink();
                       }
-                      final (queueState, playerSettings) = snapshot.data!;
+                      final (items, playerSettings) = snapshot.data!;
 
-                      final queue = queueState.sequence;
-                      if (queue.isEmpty) {
+                      if (items.isEmpty) {
                         return const SizedBox.shrink();
                       }
 
                       return SizedBox(
-                        height: widget.height,
+                        height: 100,
                         child: PageView.builder(
                           controller: _pageController,
-                          itemCount: queue.length,
+                          itemCount: items.length,
                           onPageChanged: (index) {
                             final current = sl<MediaPlayer>().currentIndex;
                             if (current != index) {
@@ -116,9 +107,9 @@ class _BottomPlayerState extends State<BottomPlayer> {
                             }
                           },
                           itemBuilder: (context, index) {
-                            final item = queue[index].tag as MediaItem;
+                            final item = items[index];
                             return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                               child: QueueTrackBar(
                                 hasNext: playerSettings.miniPlayerNextButton,
                                 hasPrevious: playerSettings.miniPlayerPreviousButton,
@@ -126,7 +117,6 @@ class _BottomPlayerState extends State<BottomPlayer> {
                                 item: item,
                                 artworkSize: widget.artworkSize,
                                 iconSize: widget.iconSize,
-                                height: widget.height,
                               ),
                             );
                           },

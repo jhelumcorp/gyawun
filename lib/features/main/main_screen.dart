@@ -2,6 +2,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/features/home/home_screen.dart';
 import 'package:gyawun_music/features/library/library_screen.dart';
+import 'package:gyawun_music/features/player/player_screen.dart';
 import 'package:gyawun_music/features/search/search_screen.dart';
 import 'package:gyawun_music/features/settings/settings_screen.dart';
 import 'package:navigation_rail_m3e/navigation_rail_m3e.dart';
@@ -62,17 +63,16 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final isWideScreen = screenWidth >= 600;
+    final showFullPlayer = screenWidth >= 1000;
 
     return Scaffold(
       body: Row(
         children: [
           if (isWideScreen)
-            CustomNavigationRail(
-              onChanged: onChanged,
-              selectedIndex: selectedIndex,
-            ),
+            CustomNavigationRail(onChanged: onChanged, selectedIndex: selectedIndex),
           Expanded(
             child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
               controller: controller,
               onPageChanged: (value) {
                 // Unfocus when swiping between pages
@@ -81,21 +81,16 @@ class _MainScreenState extends State<MainScreen> {
                   selectedIndex = value;
                 });
               },
-              children: const [
-                HomeScreen(),
-                SearchScreen(),
-                LibraryScreen(),
-                SettingsScreen(),
-              ],
+              children: const [HomeScreen(), SearchScreen(), LibraryScreen(), SettingsScreen()],
             ),
           ),
+          if (showFullPlayer) const SizedBox(width: 400, child: PlayerScreen()),
         ],
       ),
       bottomNavigationBar: isWideScreen
           ? null
           : NavigationBar(
-              labelBehavior:
-                  NavigationDestinationLabelBehavior.onlyShowSelected,
+              labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
               selectedIndex: selectedIndex,
               onDestinationSelected: onChanged,
               destinations: destinations,
@@ -105,11 +100,7 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 class CustomNavigationRail extends StatefulWidget {
-  const CustomNavigationRail({
-    super.key,
-    required this.selectedIndex,
-    required this.onChanged,
-  });
+  const CustomNavigationRail({super.key, required this.selectedIndex, required this.onChanged});
 
   final int selectedIndex;
   final void Function(int index) onChanged;
@@ -125,10 +116,7 @@ class _CustomNavigationRailState extends State<CustomNavigationRail> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          width: 255,
-          child: AppBar(title: const Text("Gyawun"), centerTitle: true),
-        ),
+        SizedBox(width: 255, child: AppBar(title: const Text("Gyawun"), centerTitle: true)),
         Expanded(
           child: NavigationRailM3E(
             selectedIndex: widget.selectedIndex,

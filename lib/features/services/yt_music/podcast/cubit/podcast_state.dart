@@ -9,7 +9,7 @@ final class PodcastLoading extends PodcastState {}
 
 final class PodcastSuccess extends PodcastState {
   PodcastSuccess(this.data, {this.loadingMore = false});
-  final YTPodcastPage data;
+  final Page data;
   final bool loadingMore;
 }
 

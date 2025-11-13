@@ -10,20 +10,19 @@ class AppearanceSettings {
   final AppSettingsTableDao _dao;
 
   // Individual Getters
-  Future<String?> get darkTheme =>
-      _dao.getSetting<String>(AppSettingsIdentifiers.darkTheme);
+  Future<String?> get darkTheme => _dao.getSetting<String>(AppSettingsIdentifiers.darkTheme);
 
-  Future<Color?> get accentColor =>
-      _dao.getSetting<Color>(AppSettingsIdentifiers.accentColor);
+  Future<Color?> get accentColor => _dao.getSetting<Color>(AppSettingsIdentifiers.accentColor);
 
-  Future<bool?> get isPureBlack =>
-      _dao.getSetting<bool>(AppSettingsIdentifiers.isPureBlack);
+  Future<bool?> get enableDynamicTheme =>
+      _dao.getSetting<bool>(AppSettingsIdentifiers.enableDynamicTheme);
+
+  Future<bool?> get isPureBlack => _dao.getSetting<bool>(AppSettingsIdentifiers.isPureBlack);
 
   Future<bool?> get enableSystemColors =>
       _dao.getSetting<bool>(AppSettingsIdentifiers.enableSystemColors);
 
-  Future<String?> get appLanguage =>
-      _dao.getSetting<String>(AppSettingsIdentifiers.appLanguage);
+  Future<String?> get appLanguage => _dao.getSetting<String>(AppSettingsIdentifiers.appLanguage);
 
   Future<bool?> get enableAndroidPredictiveBack =>
       _dao.getSetting<bool>(AppSettingsIdentifiers.enableAndroidPredictiveBack);
@@ -38,29 +37,30 @@ class AppearanceSettings {
   Stream<Color?> get accentColorStream =>
       _dao.watchSetting<Color>(AppSettingsIdentifiers.accentColor).distinct();
 
+  Stream<bool?> get enableDynamicThemeStream =>
+      _dao.watchSetting<bool>(AppSettingsIdentifiers.enableDynamicTheme).distinct();
+
   Stream<bool?> get isPureBlackStream =>
       _dao.watchSetting<bool>(AppSettingsIdentifiers.isPureBlack).distinct();
 
-  Stream<bool?> get enableSystemColorsStream => _dao
-      .watchSetting<bool>(AppSettingsIdentifiers.enableSystemColors)
-      .distinct();
+  Stream<bool?> get enableSystemColorsStream =>
+      _dao.watchSetting<bool>(AppSettingsIdentifiers.enableSystemColors).distinct();
 
   Stream<String?> get appLanguageStream =>
       _dao.watchSetting<String>(AppSettingsIdentifiers.appLanguage).distinct();
 
-  Stream<bool?> get enableAndroidPredictiveBackStream => _dao
-      .watchSetting<bool>(AppSettingsIdentifiers.enableAndroidPredictiveBack)
-      .distinct();
+  Stream<bool?> get enableAndroidPredictiveBackStream =>
+      _dao.watchSetting<bool>(AppSettingsIdentifiers.enableAndroidPredictiveBack).distinct();
 
-  Stream<bool?> get enableNewPlayerStream => _dao
-      .watchSetting<bool>(AppSettingsIdentifiers.enableNewPlayer)
-      .distinct();
+  Stream<bool?> get enableNewPlayerStream =>
+      _dao.watchSetting<bool>(AppSettingsIdentifiers.enableNewPlayer).distinct();
 
   // Combined Stream (for convenience - returns the complete AppAppearance object)
   Stream<AppAppearance> get stream {
     return Rx.combineLatestList([
       darkThemeStream,
       accentColorStream,
+      enableDynamicThemeStream,
       isPureBlackStream,
       enableSystemColorsStream,
       appLanguageStream,
@@ -69,14 +69,15 @@ class AppearanceSettings {
     ]).map((values) {
       final darkTheme = values[0] ?? 'system';
       final accentColor = values[1] as Color?;
-      final isPureBlack = values[2] as bool? ?? false;
-      final enableSystemColors = values[3] as bool? ?? true;
+      final enableDynamicTheme = values[2] as bool? ?? true;
+      final isPureBlack = values[3] as bool? ?? false;
+      final enableSystemColors = values[4] as bool? ?? true;
 
-      final language = values[4] != null
-          ? jsonDecode(values[4] as String)
+      final language = values[5] != null
+          ? jsonDecode(values[5] as String)
           : (AppLanguage(title: "English", value: 'en').toJson());
-      final enableAndroidPredictiveBack = values[5] as bool? ?? false;
-      final enableNewPlayer = values[6] as bool? ?? false;
+      final enableAndroidPredictiveBack = values[6] as bool? ?? false;
+      final enableNewPlayer = values[7] as bool? ?? false;
 
       final AppThemeMode mode;
       switch (darkTheme) {
@@ -93,6 +94,7 @@ class AppearanceSettings {
       return AppAppearance(
         themeMode: mode,
         accentColor: accentColor,
+        enableDynamicTheme: enableDynamicTheme,
         isPureBlack: isPureBlack,
         enableSystemColors: enableSystemColors,
         enableAndroidPredictiveBack: enableAndroidPredictiveBack,
@@ -109,21 +111,20 @@ class AppearanceSettings {
   Future<void> setAccentColor(Color value) =>
       _dao.setSetting(AppSettingsIdentifiers.accentColor, value);
 
+  Future<void> setEnableDynamicTheme(bool value) =>
+      _dao.setSetting(AppSettingsIdentifiers.enableDynamicTheme, value);
+
   Future<void> setIsPureBlack(bool value) =>
       _dao.setSetting(AppSettingsIdentifiers.isPureBlack, value);
 
   Future<void> setEnableSystemColors(bool value) =>
       _dao.setSetting(AppSettingsIdentifiers.enableSystemColors, value);
 
-  Future<void> setAppLanguage(AppLanguage language) => _dao.setSetting(
-    AppSettingsIdentifiers.appLanguage,
-    jsonEncode(language.toJson()),
-  );
+  Future<void> setAppLanguage(AppLanguage language) =>
+      _dao.setSetting(AppSettingsIdentifiers.appLanguage, jsonEncode(language.toJson()));
 
-  Future<void> setEnableAndroidPredictiveBack(bool value) => _dao.setSetting(
-    AppSettingsIdentifiers.enableAndroidPredictiveBack,
-    value,
-  );
+  Future<void> setEnableAndroidPredictiveBack(bool value) =>
+      _dao.setSetting(AppSettingsIdentifiers.enableAndroidPredictiveBack, value);
 
   Future<void> setEnableNewPlayer(bool value) =>
       _dao.setSetting(AppSettingsIdentifiers.enableNewPlayer, value);
@@ -133,6 +134,7 @@ class AppAppearance {
   const AppAppearance({
     required this.themeMode,
     required this.isPureBlack,
+    required this.enableDynamicTheme,
     required this.enableSystemColors,
     required this.accentColor,
     required this.language,
@@ -141,6 +143,7 @@ class AppAppearance {
   });
   final AppThemeMode themeMode;
   final bool isPureBlack;
+  final bool enableDynamicTheme;
   final bool enableSystemColors;
   final Color? accentColor;
   final bool enableAndroidPredictiveBack;
@@ -150,6 +153,7 @@ class AppAppearance {
   AppAppearance copyWith({
     AppThemeMode? themeMode,
     bool? isPureBlack,
+    bool? enableDynamicTheme,
     bool? enableSystemColors,
     Color? accentColor,
     AppLanguage? language,
@@ -159,11 +163,11 @@ class AppAppearance {
     return AppAppearance(
       themeMode: themeMode ?? this.themeMode,
       isPureBlack: isPureBlack ?? this.isPureBlack,
+      enableDynamicTheme: enableDynamicTheme ?? this.enableDynamicTheme,
       enableSystemColors: enableSystemColors ?? this.enableSystemColors,
       accentColor: accentColor ?? this.accentColor,
       language: language ?? this.language,
-      enableAndroidPredictiveBack:
-          enableAndroidPredictiveBack ?? this.enableAndroidPredictiveBack,
+      enableAndroidPredictiveBack: enableAndroidPredictiveBack ?? this.enableAndroidPredictiveBack,
       enableNewPlayer: enableNewPlayer ?? this.enableNewPlayer,
     );
   }

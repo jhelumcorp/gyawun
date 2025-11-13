@@ -4,19 +4,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gyawun_music/core/di.dart';
-import 'package:gyawun_music/core/utils/snackbar.dart';
-import 'package:gyawun_music/services/audio_service/media_player.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:ytmusic/mixins/mixins.dart';
-import 'package:ytmusic/ytmusic.dart';
 
 import 'modals.dart';
 
 class ModalLayouts {
-  static Widget itemBottomLayout(BuildContext context, YTItem item) {
-    final isPlayable = item is YTSong || item is YTVideo || item is YTEpisode;
-    final isHorizontal = (item is YTVideo || item is YTEpisode);
+  static Widget itemBottomLayout(BuildContext context, SectionItem item) {
+    final isPlayable =
+        item.type == SectionItemType.video ||
+        item.type == SectionItemType.song ||
+        item.type == SectionItemType.episode;
+    final isHorizontal =
+        (item.type == SectionItemType.video || item.type == SectionItemType.episode);
 
     return SafeArea(
       child: Column(
@@ -26,14 +26,13 @@ class ModalLayouts {
             contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             title: Text(
               item.title,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            leading: (item as HasThumbnail).thumbnails.isEmpty
+            leading: item.thumbnails.isEmpty
                 ? null
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(10),
@@ -43,19 +42,16 @@ class ModalLayouts {
                       width: isHorizontal ? 80 : 50,
                     ),
                   ),
-            subtitle: item.subtitle.isNotEmpty
+            subtitle: item.subtitle != null && item.subtitle!.isNotEmpty
                 ? Text(
-                    item.subtitle,
+                    item.subtitle!,
                     style: Theme.of(context).textTheme.labelLarge,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   )
                 : null,
             trailing: isPlayable
-                ? IconButton(
-                    onPressed: () => {},
-                    icon: const Icon(FluentIcons.heart_24_regular),
-                  )
+                ? IconButton(onPressed: () => {}, icon: const Icon(FluentIcons.heart_24_regular))
                 : null,
           ),
           const Divider(height: 1),
@@ -71,20 +67,20 @@ class ModalLayouts {
                       icon: FluentIcons.play_24_filled,
                       label: "Play Next",
                       onTap: () {
-                        if (item is YTSong) {
-                          sl<MediaPlayer>().playYTNext(item);
-                          Navigator.pop(context);
-                        }
+                        // if (item is YTSong) {
+                        //   sl<MediaPlayer>().playYTNext(item);
+                        //   Navigator.pop(context);
+                        // }
                       },
                     ),
                     TopIconButton(
                       icon: FluentIcons.task_list_add_24_filled,
                       label: "Add to queue",
                       onTap: () {
-                        if (item is YTSong) {
-                          sl<MediaPlayer>().addYTToQueue(item);
-                          Navigator.pop(context);
-                        }
+                        // if (item is YTSong) {
+                        //   sl<MediaPlayer>().addYTToQueue(item);
+                        //   Navigator.pop(context);
+                        // }
                       },
                     ),
                     TopIconButton(
@@ -113,14 +109,11 @@ class ModalLayouts {
                   ListTile(
                     title: Text(
                       "Add to Playlist",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
-                    leading: const Icon(
-                      FluentIcons.document_one_page_add_24_filled,
-                    ),
+                    leading: const Icon(FluentIcons.document_one_page_add_24_filled),
                     onTap: () {
                       Navigator.pop(context);
                       // Modals.addToPlaylist(context, song);
@@ -130,10 +123,9 @@ class ModalLayouts {
                   ListTile(
                     title: Text(
                       "Download",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     leading: const Icon(FluentIcons.cloud_arrow_down_24_filled),
                     onTap: () {
@@ -141,71 +133,61 @@ class ModalLayouts {
                       // Modals.addToPlaylist(context, song);
                     },
                   ),
-                if (item is HasRadioEndpoint &&
-                    (item as HasRadioEndpoint).radioEndpoint != null)
+                if (item.radioEndpoint != null)
                   ListTile(
                     title: Text(
                       "Start Radio",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     leading: const Icon(FluentIcons.remix_add_24_filled),
                     onTap: () async {
                       Navigator.pop(context);
-                      BottomSnackbar.showMessage(context, "Starting radio...");
-                      await sl<MediaPlayer>().playYTRadio(item);
+                      // BottomSnackbar.showMessage(context, "Starting radio...");
+                      // await sl<MediaPlayer>().playYTRadio(item);
                     },
                   ),
-                if (item is HasShuffleEndpoint &&
-                    (item as HasShuffleEndpoint).shuffleEndpoint != null)
+                if (item.shuffleEndpoint != null)
                   ListTile(
                     title: Text(
                       "Start Radio",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     leading: const Icon(FluentIcons.remix_add_24_filled),
                     onTap: () async {
                       Navigator.pop(context);
-                      BottomSnackbar.showMessage(context, "Play starting");
-                      await sl<MediaPlayer>().playYTFromEndpoint(
-                        (item as HasShuffleEndpoint).shuffleEndpoint!,
-                      );
+                      // BottomSnackbar.showMessage(context, "Play starting");
+                      // await sl<MediaPlayer>().playYTFromEndpoint(
+                      //   (item as HasShuffleEndpoint).shuffleEndpoint!,
+                      // );
                     },
                   ),
 
-                if (item is HasArtists &&
-                    (item as HasArtists).artists.isNotEmpty)
+                if (item.artists.isNotEmpty)
                   ListTile(
                     title: Text(
                       "Artists",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     leading: const Icon(FluentIcons.people_24_filled),
                     trailing: const Icon(FluentIcons.chevron_right_24_filled),
                     onTap: () {
                       Navigator.pop(context);
-                      Modals.showArtistsBottomSheet(
-                        context,
-                        (item as HasArtists).artists,
-                      );
+                      Modals.showArtistsBottomSheet(context, item.artists);
                     },
                   ),
-                if (item is HasAlbum)
+                if (item is PlayableItem && item.album != null)
                   ListTile(
                     title: Text(
                       "Album",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -213,9 +195,7 @@ class ModalLayouts {
                     trailing: const Icon(FluentIcons.chevron_right_24_filled),
                     onTap: () {
                       Navigator.pop(context);
-                      context.push(
-                        '/album/${jsonEncode((item as HasAlbum).album!.endpoint)}',
-                      );
+                      context.push('/ytmusic/album/${jsonEncode(item.album!.endpoint)}');
                     },
                   ),
               ],
@@ -226,10 +206,7 @@ class ModalLayouts {
     );
   }
 
-  static Widget artistsBottomLayout(
-    BuildContext context,
-    List<YTArtistBasic> artists,
-  ) {
+  static Widget artistsBottomLayout(BuildContext context, List<Artist> artists) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -238,16 +215,12 @@ class ModalLayouts {
           children: [
             for (final artist in artists) ...[
               ListTile(
-                title: Text(
-                  artist.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                title: Text(artist.name, maxLines: 1, overflow: TextOverflow.ellipsis),
                 leading: const Icon(Icons.album),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   Navigator.pop(context);
-                  context.push('/artist/${jsonEncode(artist.endpoint)}');
+                  context.push('/ytmusic/artist/${jsonEncode(artist.endpoint)}');
                 },
               ),
             ],
@@ -259,12 +232,7 @@ class ModalLayouts {
 }
 
 class TopIconButton extends StatelessWidget {
-  const TopIconButton({
-    super.key,
-    required this.icon,
-    required this.label,
-    this.onTap,
-  });
+  const TopIconButton({super.key, required this.icon, required this.label, this.onTap});
   final IconData icon;
   final String label;
   final void Function()? onTap;
@@ -286,10 +254,9 @@ class TopIconButton extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               label,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ],
         ),

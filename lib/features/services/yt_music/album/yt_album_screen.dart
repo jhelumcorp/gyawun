@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
+import 'package:gyawun_music/core/widgets/page_header_widget.dart';
+import 'package:gyawun_music/core/widgets/section_widget.dart';
 import 'package:gyawun_music/features/services/yt_music/album/cubit/album_cubit.dart';
-import 'package:gyawun_music/features/services/yt_music/widgets/page_header.dart';
-import 'package:gyawun_music/features/services/yt_music/widgets/section_widget.dart';
 import 'package:ytmusic/yt_music_base.dart';
 
 class YTAlbumScreen extends StatelessWidget {
@@ -69,12 +69,13 @@ class _YTAlbumScreenViewState extends State<YTAlbumScreenView> {
               controller: _scrollController,
 
               slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: PageHeader(header: albumState.header),
+                if (albumState.header != null)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: PageHeaderWidget(header: albumState.header!),
+                    ),
                   ),
-                ),
 
                 SectionsWidget(sections: albumState.sections),
                 if (state.loadingMore)

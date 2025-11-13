@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:meta/meta.dart';
-import 'package:ytmusic/enums/section_type.dart';
-import 'package:ytmusic/models/models.dart';
 import 'package:ytmusic/yt_music_base.dart';
 
 part 'artist_state.dart';
@@ -29,9 +28,7 @@ class ArtistCubit extends Cubit<ArtistState> {
 
     final currentData = currentState.data;
 
-    final lastSection = currentData.sections.isNotEmpty
-        ? currentData.sections.last
-        : null;
+    final lastSection = currentData.sections.isNotEmpty ? currentData.sections.last : null;
 
     final continuation = lastSection?.continuation ?? currentData.continuation;
     if (continuation == null) return;
@@ -39,8 +36,7 @@ class ArtistCubit extends Cubit<ArtistState> {
     emit(ArtistSuccess(currentData, loadingMore: true));
 
     try {
-      if (lastSection?.continuation != null &&
-          lastSection?.type == YTSectionType.singleColumn) {
+      if (lastSection?.continuation != null && lastSection?.type == SectionType.singleColumn) {
         final nextPage = await ytmusic.getContinuationItems(
           body: body,
           continuation: lastSection!.continuation!,
@@ -56,10 +52,11 @@ class ArtistCubit extends Cubit<ArtistState> {
 
         emit(
           ArtistSuccess(
-            YTArtistPage(
+            Page(
               header: currentData.header,
               sections: updatedSections,
               continuation: currentData.continuation,
+              provider: currentData.provider,
             ),
           ),
         );
@@ -75,10 +72,11 @@ class ArtistCubit extends Cubit<ArtistState> {
 
       emit(
         ArtistSuccess(
-          YTArtistPage(
+          Page(
             header: currentData.header,
             sections: updatedSections,
             continuation: nextPage.continuation,
+            provider: currentData.provider,
           ),
         ),
       );

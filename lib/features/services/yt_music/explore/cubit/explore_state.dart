@@ -9,7 +9,7 @@ final class ExploreLoading extends ExploreState {}
 
 final class ExploreSuccess extends ExploreState {
   ExploreSuccess(this.data, {this.loadingMore = false});
-  final List<YTSection> data;
+  final List<Section> data;
   final bool loadingMore;
 }
 

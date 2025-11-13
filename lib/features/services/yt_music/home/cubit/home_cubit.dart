@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:gyawun_shared/gyawun_shared.dart' as dp;
 import 'package:ytmusic/ytmusic.dart';
 
 part 'home_state.dart';
@@ -39,14 +40,14 @@ class HomeCubit extends Cubit<HomeState> {
 
     try {
       emit(HomeSuccess(currentData, loadingMore: true));
-      final nextPage = await ytmusic.getHomePageContinuation(
-        continuation: continuation,
-      );
+      final nextPage = await ytmusic.getHomePageContinuation(continuation: continuation);
       final updatedSections = [...currentData.sections, ...nextPage.sections];
-      final updatedData = YTHomePage(
+      final updatedData = dp.Page(
         chips: currentData.chips,
         sections: updatedSections,
         continuation: nextPage.continuation,
+        header: currentData.header,
+        provider: currentData.provider,
       );
       emit(HomeSuccess(updatedData));
     } catch (e) {

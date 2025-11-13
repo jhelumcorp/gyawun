@@ -1,45 +1,54 @@
-import 'package:flutter/material.dart';
-import 'package:sliver_tools/sliver_tools.dart';
-import 'package:ytmusic/ytmusic.dart';
-import 'package:ytmusic/enums/section_type.dart';
+// import 'package:flutter/material.dart';
+// import 'package:gyawun_dataproviders_base/gyawun_dataproviders_base.dart';
+// import 'package:gyawun_music/core/widgets/carousel_card.dart';
+// import 'package:gyawun_music/core/widgets/section_header.dart';
+// import 'package:gyawun_music/core/widgets/section_single_column.dart';
+// import 'package:gyawun_music/features/services/yt_music/widgets/section_grid.dart';
+// import 'package:gyawun_music/features/services/yt_music/widgets/section_multi_column.dart';
+// import 'package:gyawun_music/features/services/yt_music/widgets/section_multi_column_row.dart';
+// import 'package:sliver_tools/sliver_tools.dart';
 
-import 'section_grid.dart';
-import 'section_header.dart';
-import 'section_multi_column.dart';
-import 'section_multi_column_row.dart';
-import 'section_row.dart';
-import 'section_single_column.dart';
+// class SectionsWidget extends StatelessWidget {
+//   const SectionsWidget({super.key, required this.sections});
+//   final List<Section> sections;
 
-class SectionsWidget extends StatelessWidget {
-  const SectionsWidget({super.key, required this.sections});
-  final List<YTSection> sections;
+//   @override
+//   Widget build(BuildContext context) {
+//     final carouselSection =
+//         (sections.first.type == SectionType.row || sections.first.type == SectionType.multiColumn)
+//         ? sections.first
+//         : null;
+//     return MultiSliver(
+//       children: [
+//         if (carouselSection != null &&
+//             ((carouselSection.title ?? '').isNotEmpty || carouselSection.trailing != null))
+//           SectionHeader(section: carouselSection),
 
-  @override
-  Widget build(BuildContext context) {
-    return MultiSliver(
-      children: [
-        for (final section in sections) ...[
-          if (section.title.isNotEmpty || section.trailing != null)
-            SectionHeader(section: section),
+//         if (carouselSection != null)
+//           SliverToBoxAdapter(
+//             child: ConstrainedBox(
+//               constraints: const BoxConstraints(maxHeight: 300),
+//               child: CarouselView(
+//                 itemExtent: 300,
+//                 shrinkExtent: 100,
+//                 children: sections[0].items.map((item) => CarouselCard(item: item)).toList(),
+//               ),
+//             ),
+//           ),
+//         for (final section in (carouselSection != null ? sections.sublist(1) : sections)) ...[
+//           if ((section.title != null && section.title!.isNotEmpty) || section.trailing != null)
+//             SectionHeader(section: section),
 
-          if (section.type == YTSectionType.row)
-            SectionRow(items: section.items),
+//           if (section.type == SectionType.multiColumn)
+//             SectionMultiColumn(items: section.items, maxItem: section.itemsPerColumn),
 
-          if (section.type == YTSectionType.multiColumn)
-            SectionMultiColumn(
-              items: section.items,
-              maxItem: section.itemsPerColumn,
-            ),
+//           if (section.type == SectionType.singleColumn) SectionSingleColumn(items: section.items),
 
-          if (section.type == YTSectionType.singleColumn)
-            SectionSingleColumn(items: section.items),
-
-          if (section.type == YTSectionType.grid)
-            SectionGrid(items: section.items),
-          if (section.type == YTSectionType.multiColumnRow)
-            SectionMultiColumnRow(items: section.items),
-        ],
-      ],
-    );
-  }
-}
+//           if (section.type == SectionType.grid) SectionGrid(items: section.items),
+//           if (section.type == SectionType.multiColumnRow)
+//             SectionMultiColumnRow(items: section.items),
+//         ],
+//       ],
+//     );
+//   }
+// }

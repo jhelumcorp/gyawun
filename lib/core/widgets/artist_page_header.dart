@@ -4,12 +4,12 @@ import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/core/utils/snackbar.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
-import 'package:readmore/readmore.dart';
-import 'package:ytmusic/models/browse_page.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
+import 'package:ytmusic/yt_music_base.dart';
 
 class ArtistPageHeader extends StatelessWidget {
   const ArtistPageHeader({super.key, required this.header});
-  final YTPageHeader header;
+  final PageHeader header;
 
   List<Widget> _drawItems(BuildContext context) {
     return [
@@ -23,9 +23,7 @@ class ArtistPageHeader extends StatelessWidget {
           ),
         ),
       if (context.isWideScreen) const SizedBox(width: 16),
-      context.isWideScreen
-          ? Expanded(child: _drawDescription(context))
-          : _drawDescription(context),
+      context.isWideScreen ? Expanded(child: _drawDescription(context)) : _drawDescription(context),
     ];
   }
 
@@ -41,29 +39,23 @@ class ArtistPageHeader extends StatelessWidget {
         if (header.subtitle.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: Text(
-              header.subtitle,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+            child: Text(header.subtitle, style: Theme.of(context).textTheme.bodyLarge),
           ),
-        if (header.secondSubtitle.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(
-              header.secondSubtitle,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ),
-        if (header.description.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: ReadMoreText(
-              header.description,
-              trimMode: TrimMode.Length,
-              style: Theme.of(context).textTheme.bodyLarge,
-              trimLines: 3,
-            ),
-          ),
+        // if (header.secondSubtitle.isNotEmpty)
+        //   Padding(
+        //     padding: const EdgeInsets.only(top: 4),
+        //     child: Text(header.secondSubtitle, style: Theme.of(context).textTheme.bodyLarge),
+        //   ),
+        // if (header.description.isNotEmpty)
+        //   Padding(
+        //     padding: const EdgeInsets.only(top: 4),
+        //     child: ReadMoreText(
+        //       header.description,
+        //       trimMode: TrimMode.Length,
+        //       style: Theme.of(context).textTheme.bodyLarge,
+        //       trimLines: 3,
+        //     ),
+        //   ),
         const SizedBox(height: 4),
         Wrap(
           spacing: 4,
@@ -72,10 +64,12 @@ class ArtistPageHeader extends StatelessWidget {
             if (header.playEndpoint != null)
               FilledButton.icon(
                 onPressed: () async {
-                  BottomSnackbar.showMessage(context, "Play starting...");
-                  await sl<MediaPlayer>().playYTFromEndpoint(
-                    header.playEndpoint!,
-                  );
+                  BottomSnackbar.showMessage(context, "Play starting");
+                  final items = await sl<YTMusic>().getNextSongs(body: header.playEndpoint!);
+                  final songs = items.whereType<PlayableItem>().toList();
+                  final first = songs.removeAt(0);
+                  sl<MediaPlayer>().playSong(first);
+                  await sl<MediaPlayer>().addSongs(songs.whereType<PlayableItem>().toList());
                 },
                 label: const Text("Play"),
                 icon: const Icon(Icons.play_arrow_rounded),
@@ -83,10 +77,12 @@ class ArtistPageHeader extends StatelessWidget {
             if (header.shuffleEndpoint != null)
               FilledButton.icon(
                 onPressed: () async {
-                  BottomSnackbar.showMessage(context, "Play starting...");
-                  await sl<MediaPlayer>().playYTFromEndpoint(
-                    header.shuffleEndpoint!,
-                  );
+                  BottomSnackbar.showMessage(context, "Play starting");
+                  final items = await sl<YTMusic>().getNextSongs(body: header.shuffleEndpoint!);
+                  final songs = items.whereType<PlayableItem>().toList();
+                  final first = songs.removeAt(0);
+                  sl<MediaPlayer>().playSong(first);
+                  await sl<MediaPlayer>().addSongs(songs.whereType<PlayableItem>().toList());
                 },
                 label: const Text("Shuffle"),
                 icon: const Icon(Icons.shuffle_rounded),
@@ -94,10 +90,12 @@ class ArtistPageHeader extends StatelessWidget {
             if (header.radioEndpoint != null)
               FilledButton.icon(
                 onPressed: () async {
-                  BottomSnackbar.showMessage(context, "Play starting...");
-                  await sl<MediaPlayer>().playYTFromEndpoint(
-                    header.radioEndpoint!,
-                  );
+                  BottomSnackbar.showMessage(context, "Play starting");
+                  final items = await sl<YTMusic>().getNextSongs(body: header.shuffleEndpoint!);
+                  final songs = items.whereType<PlayableItem>().toList();
+                  final first = songs.removeAt(0);
+                  sl<MediaPlayer>().playSong(first);
+                  await sl<MediaPlayer>().addSongs(songs.whereType<PlayableItem>().toList());
                 },
                 label: const Text("Radio"),
                 icon: const Icon(Icons.radar_outlined),

@@ -9,7 +9,7 @@ final class ArtistLoading extends ArtistState {}
 
 final class ArtistSuccess extends ArtistState {
   ArtistSuccess(this.data, {this.loadingMore = false});
-  final YTArtistPage data;
+  final Page data;
   final bool loadingMore;
 }
 

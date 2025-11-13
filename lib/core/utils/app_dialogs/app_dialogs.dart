@@ -9,16 +9,13 @@ class AppDialogs {
   static Future<T?> showOptionSelectionDialog<T>(
     BuildContext context, {
     String? title,
+    Widget? icon,
     List<AppDialogTileData<T>> children = const [],
   }) {
     return showDialog<T>(
       context: context,
       builder: (context) {
-        return optionSelectionDialog<T>(
-          context,
-          title: title,
-          children: children,
-        );
+        return optionSelectionDialog<T>(context, title: title, icon: icon, children: children);
       },
     );
   }
@@ -32,10 +29,7 @@ class AppDialogs {
     );
   }
 
-  static Future<String?> showPromptDialog(
-    BuildContext context, {
-    String? title,
-  }) {
+  static Future<String?> showPromptDialog(BuildContext context, {String? title}) {
     return showDialog(
       context: context,
       builder: (context) {

@@ -1,8 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:meta/meta.dart';
-import 'package:ytmusic/enums/section_type.dart';
-import 'package:ytmusic/models/podcast.dart';
-import 'package:ytmusic/models/section.dart';
 import 'package:ytmusic/yt_music_base.dart';
 
 part 'podcast_state.dart';
@@ -28,17 +26,14 @@ class PodcastCubit extends Cubit<PodcastState> {
     if (currentState.loadingMore) return;
     final currentData = currentState.data;
 
-    final lastSection = currentData.sections.isNotEmpty
-        ? currentData.sections.last
-        : null;
+    final lastSection = currentData.sections.isNotEmpty ? currentData.sections.last : null;
     final continuation = lastSection?.continuation ?? currentData.continuation;
     if (continuation == null) return;
 
     emit(PodcastSuccess(currentData, loadingMore: true));
 
     try {
-      if (lastSection?.continuation != null &&
-          lastSection?.type == YTSectionType.singleColumn) {
+      if (lastSection?.continuation != null && lastSection?.type == SectionType.singleColumn) {
         final nextPage = await ytmusic.getContinuationItems(
           body: body,
           continuation: lastSection!.continuation!,
@@ -54,10 +49,11 @@ class PodcastCubit extends Cubit<PodcastState> {
 
         emit(
           PodcastSuccess(
-            YTPodcastPage(
+            Page(
               header: currentData.header,
               sections: updatedSections,
               continuation: currentData.continuation,
+              provider: currentData.provider,
             ),
           ),
         );
@@ -69,17 +65,15 @@ class PodcastCubit extends Cubit<PodcastState> {
         continuation: currentData.continuation!,
       );
 
-      final List<YTSection> updatedSections = [
-        ...currentData.sections,
-        ...nextPage.sections,
-      ];
+      final List<Section> updatedSections = [...currentData.sections, ...nextPage.sections];
 
       emit(
         PodcastSuccess(
-          YTPodcastPage(
+          Page(
             header: currentData.header,
             sections: updatedSections,
             continuation: nextPage.continuation,
+            provider: currentData.provider,
           ),
         ),
       );

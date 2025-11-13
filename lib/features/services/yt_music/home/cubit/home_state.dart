@@ -9,7 +9,7 @@ final class HomeLoading extends HomeState {}
 
 final class HomeSuccess extends HomeState {
   HomeSuccess(this.data, {this.loadingMore = false});
-  final YTHomePage data;
+  final dp.Page data;
   final bool loadingMore;
 }
 

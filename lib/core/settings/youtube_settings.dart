@@ -9,25 +9,28 @@ class YtMusicSettings {
   final AppSettingsTableDao _dao;
 
   // Individual Getters
-  Future<String?> get audioQuality =>
-      _dao.getSetting<String>(AppSettingsIdentifiers.ytAudioQuality);
+  Future<YTAudioQuality> get audioStreamingQuality async {
+    final value = await _dao.getSetting<String>(AppSettingsIdentifiers.ytAudioStreamingQuality);
+    return value == 'high' ? YTAudioQuality.high : YTAudioQuality.low;
+  }
 
-  Future<String?> get language =>
-      _dao.getSetting<String>(AppSettingsIdentifiers.ytLanguage);
+  Future<String?> get audioDownloadingQuality =>
+      _dao.getSetting<String>(AppSettingsIdentifiers.ytAudioDownloadingQuality);
 
-  Future<String?> get location =>
-      _dao.getSetting<String>(AppSettingsIdentifiers.ytLocation);
+  Future<String?> get language => _dao.getSetting<String>(AppSettingsIdentifiers.ytLanguage);
+
+  Future<String?> get location => _dao.getSetting<String>(AppSettingsIdentifiers.ytLocation);
 
   Future<bool?> get personalisedContent =>
       _dao.getSetting<bool>(AppSettingsIdentifiers.ytPersonalisedContent);
 
-  Future<String?> get visitorId =>
-      _dao.getSetting<String>(AppSettingsIdentifiers.ytVisitorId);
+  Future<String?> get visitorId => _dao.getSetting<String>(AppSettingsIdentifiers.ytVisitorId);
 
   // Individual Streams
-  Stream<String?> get audioQualityStream => _dao
-      .watchSetting<String>(AppSettingsIdentifiers.ytAudioQuality)
-      .distinct();
+  Stream<String?> get streamingQualityStream =>
+      _dao.watchSetting<String>(AppSettingsIdentifiers.ytAudioStreamingQuality).distinct();
+  Stream<String?> get downloadingQualityStream =>
+      _dao.watchSetting<String>(AppSettingsIdentifiers.ytAudioDownloadingQuality).distinct();
 
   Stream<String?> get languageStream =>
       _dao.watchSetting<String>(AppSettingsIdentifiers.ytLanguage).distinct();
@@ -35,9 +38,8 @@ class YtMusicSettings {
   Stream<String?> get locationStream =>
       _dao.watchSetting<String>(AppSettingsIdentifiers.ytLocation).distinct();
 
-  Stream<bool?> get personalisedContentStream => _dao
-      .watchSetting<bool>(AppSettingsIdentifiers.ytPersonalisedContent)
-      .distinct();
+  Stream<bool?> get personalisedContentStream =>
+      _dao.watchSetting<bool>(AppSettingsIdentifiers.ytPersonalisedContent).distinct();
 
   Stream<String?> get visitorIdStream =>
       _dao.watchSetting<String>(AppSettingsIdentifiers.ytVisitorId).distinct();
@@ -45,33 +47,45 @@ class YtMusicSettings {
   // Combined Stream (returns complete YtMusicConfig object)
   Stream<YtMusicConfig> get stream {
     return Rx.combineLatestList([
-      audioQualityStream,
+      streamingQualityStream,
+      downloadingQualityStream,
       languageStream,
       locationStream,
       personalisedContentStream,
       visitorIdStream,
     ]).map((values) {
-      final audioQuality = values[0] ?? 'high';
-      final language = values[1] != null
-          ? YtMusicLanguage.fromJson(jsonDecode(values[1] as String))
+      final streamingAudioQuality = values[0] ?? 'high';
+      final downloadingAudioQuality = values[1] ?? 'high';
+      final language = values[2] != null
+          ? YtMusicLanguage.fromJson(jsonDecode(values[2] as String))
           : YtMusicLanguage(title: "English", value: 'en');
-      final location = values[2] != null
-          ? YtMusicLocation.fromJson(jsonDecode(values[2] as String))
+      final location = values[3] != null
+          ? YtMusicLocation.fromJson(jsonDecode(values[3] as String))
           : YtMusicLocation(title: "India", value: 'IN');
-      final personalisedContent = values[3] as bool? ?? true;
-      final visitorId = values[4] as String?;
+      final personalisedContent = values[4] as bool? ?? true;
+      final visitorId = values[5] as String?;
 
-      AudioQuality quality;
-      switch (audioQuality) {
+      YTAudioQuality streamingQuality;
+      switch (streamingAudioQuality) {
         case 'low':
-          quality = AudioQuality.low;
+          streamingQuality = YTAudioQuality.low;
           break;
         default:
-          quality = AudioQuality.high;
+          streamingQuality = YTAudioQuality.high;
+      }
+
+      YTAudioQuality downloadingQuality;
+      switch (downloadingAudioQuality) {
+        case 'low':
+          downloadingQuality = YTAudioQuality.low;
+          break;
+        default:
+          downloadingQuality = YTAudioQuality.high;
       }
 
       return YtMusicConfig(
-        audioQuality: quality,
+        streamingQuality: streamingQuality,
+        downloadingQuality: downloadingQuality,
         language: language,
         location: location,
         personalisedContent: personalisedContent,
@@ -81,20 +95,21 @@ class YtMusicSettings {
   }
 
   // Setters
-  Future<void> setAudioQuality(AudioQuality quality) {
-    final value = quality == AudioQuality.low ? 'low' : 'high';
-    return _dao.setSetting(AppSettingsIdentifiers.ytAudioQuality, value);
+  Future<void> setAudioStreamingQuality(YTAudioQuality quality) {
+    final value = quality == YTAudioQuality.low ? 'low' : 'high';
+    return _dao.setSetting(AppSettingsIdentifiers.ytAudioStreamingQuality, value);
   }
 
-  Future<void> setLanguage(YtMusicLanguage language) => _dao.setSetting(
-    AppSettingsIdentifiers.ytLanguage,
-    jsonEncode(language.toJson()),
-  );
+  Future<void> setAudioDownloadingQuality(YTAudioQuality quality) {
+    final value = quality == YTAudioQuality.low ? 'low' : 'high';
+    return _dao.setSetting(AppSettingsIdentifiers.ytAudioDownloadingQuality, value);
+  }
 
-  Future<void> setLocation(YtMusicLocation location) => _dao.setSetting(
-    AppSettingsIdentifiers.ytLocation,
-    jsonEncode(location.toJson()),
-  );
+  Future<void> setLanguage(YtMusicLanguage language) =>
+      _dao.setSetting(AppSettingsIdentifiers.ytLanguage, jsonEncode(language.toJson()));
+
+  Future<void> setLocation(YtMusicLocation location) =>
+      _dao.setSetting(AppSettingsIdentifiers.ytLocation, jsonEncode(location.toJson()));
 
   Future<void> setPersonalisedContent(bool value) =>
       _dao.setSetting(AppSettingsIdentifiers.ytPersonalisedContent, value);
@@ -110,27 +125,32 @@ class YtMusicSettings {
 
 class YtMusicConfig {
   const YtMusicConfig({
-    required this.audioQuality,
+    required this.streamingQuality,
+    required this.downloadingQuality,
     required this.language,
     required this.location,
     required this.personalisedContent,
     required this.visitorId,
   });
-  final AudioQuality audioQuality;
+  final YTAudioQuality streamingQuality;
+  final YTAudioQuality downloadingQuality;
+
   final YtMusicLanguage language;
   final YtMusicLocation location;
   final bool personalisedContent;
   final String? visitorId;
 
   YtMusicConfig copyWith({
-    AudioQuality? audioQuality,
+    YTAudioQuality? streamingQuality,
+    YTAudioQuality? downloadingQuality,
     YtMusicLanguage? language,
     YtMusicLocation? location,
     bool? personalisedContent,
     String? visitorId,
   }) {
     return YtMusicConfig(
-      audioQuality: audioQuality ?? this.audioQuality,
+      streamingQuality: streamingQuality ?? this.streamingQuality,
+      downloadingQuality: downloadingQuality ?? this.downloadingQuality,
       language: language ?? this.language,
       location: location ?? this.location,
       personalisedContent: personalisedContent ?? this.personalisedContent,
@@ -161,4 +181,4 @@ class YtMusicLocation {
   Map<String, dynamic> toJson() => {'title': title, 'value': value};
 }
 
-enum AudioQuality { low, high }
+enum YTAudioQuality { high, low }

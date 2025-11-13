@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
+import 'package:gyawun_music/core/widgets/page_header_widget.dart';
+import 'package:gyawun_music/core/widgets/section_widget.dart';
 import 'package:gyawun_music/features/services/yt_music/browse/cubit/browse_cubit.dart';
-import 'package:gyawun_music/features/services/yt_music/widgets/page_header.dart';
 import 'package:ytmusic/yt_music_base.dart';
-
-import '../widgets/section_widget.dart';
 
 class YTBrowseScreen extends StatelessWidget {
   const YTBrowseScreen({super.key, required this.body, this.title});
@@ -49,7 +48,7 @@ class YTBrowseScreenView extends StatelessWidget {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
-                      child: PageHeader(header: browseState.header!),
+                      child: PageHeaderWidget(header: browseState.header!),
                     ),
                   ),
 

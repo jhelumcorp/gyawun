@@ -42,28 +42,10 @@ class YoutubeMusicScreen extends StatelessWidget {
                     const SizedBox(height: 8),
                     const GroupTitle(title: "General"),
                     SettingTile(
-                      title: "Audio quality",
-                      leading: const Icon(Icons.spatial_audio_rounded),
-                      isFirst: true,
-                      subtitle: settings.audioQuality.name.toUpperCase(),
-                      onTap: () async {
-                        final quality = await AppDialogs.showOptionSelectionDialog(
-                          context,
-                          title: "Audio Quality",
-                          children: [
-                            AppDialogTileData(title: "HIGH", value: AudioQuality.high),
-                            AppDialogTileData(title: "LOW", value: AudioQuality.low),
-                          ],
-                        );
-                        if (quality != null) {
-                          await ytSettings.setAudioQuality(quality);
-                        }
-                      },
-                    ),
-                    SettingTile(
                       title: "Language",
                       leading: const Icon(FluentIcons.local_language_24_filled),
                       subtitle: settings.language.title,
+                      isFirst: true,
                       onTap: () async {
                         final language =
                             await AppDialogs.showOptionSelectionDialog<YtMusicLanguage>(
@@ -91,6 +73,46 @@ class YoutubeMusicScreen extends StatelessWidget {
                         }
                       },
                     ),
+                    const GroupTitle(title: "Audio quality"),
+                    SettingTile(
+                      title: "Streaming quality",
+                      leading: const Icon(Icons.spatial_audio_rounded),
+                      isFirst: true,
+                      subtitle: settings.streamingQuality.name.toUpperCase(),
+                      onTap: () async {
+                        final quality = await AppDialogs.showOptionSelectionDialog(
+                          context,
+                          title: "Audio Quality",
+                          children: [
+                            AppDialogTileData(title: "HIGH", value: YTAudioQuality.high),
+                            AppDialogTileData(title: "LOW", value: YTAudioQuality.low),
+                          ],
+                        );
+                        if (quality != null) {
+                          await ytSettings.setAudioStreamingQuality(quality);
+                        }
+                      },
+                    ),
+                    SettingTile(
+                      title: "Downloading quality",
+                      leading: const Icon(Icons.spatial_audio_rounded),
+                      subtitle: settings.downloadingQuality.name.toUpperCase(),
+                      isLast: true,
+                      onTap: () async {
+                        final quality = await AppDialogs.showOptionSelectionDialog(
+                          context,
+                          title: "Audio Quality",
+                          children: [
+                            AppDialogTileData(title: "HIGH", value: YTAudioQuality.high),
+                            AppDialogTileData(title: "LOW", value: YTAudioQuality.low),
+                          ],
+                        );
+                        if (quality != null) {
+                          await ytSettings.setAudioDownloadingQuality(quality);
+                        }
+                      },
+                    ),
+
                     const GroupTitle(title: "Privacy"),
                     SettingSwitchTile(
                       title: "Personalised Content",

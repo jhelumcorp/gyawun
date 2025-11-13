@@ -3,15 +3,10 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
-import 'package:ytmusic/models/models.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 
 class PlayerThumbnail extends StatefulWidget {
-  const PlayerThumbnail({
-    super.key,
-    this.width = 64,
-    this.borderRadius = 8,
-    this.onImageChanged,
-  });
+  const PlayerThumbnail({super.key, this.width = 64, this.borderRadius = 8, this.onImageChanged});
 
   final double width;
   final double borderRadius;
@@ -28,22 +23,15 @@ class _PlayerThumbnailState extends State<PlayerThumbnail> {
   Widget build(BuildContext context) {
     final media = sl<MediaPlayer>();
 
-    return StreamBuilder<List<YTThumbnail>>(
+    return StreamBuilder<List<Thumbnail>?>(
       stream: media.thumbnailStream,
       builder: (context, snapshot) {
         final thumbs = snapshot.data;
         if (thumbs == null || thumbs.isEmpty) {
-          return Icon(
-            FluentIcons.music_note_1_24_filled,
-            size: widget.width,
-            color: Colors.grey,
-          );
+          return Icon(FluentIcons.music_note_1_24_filled, size: widget.width, color: Colors.grey);
         }
 
-        String newUrl = thumbs.first.url;
-        if (widget.width > 150) {
-          newUrl = newUrl.replaceAll('w60-h60', 'w500-h500');
-        }
+        String newUrl = thumbs.last.url;
 
         // Precache image before animating to it
         if (_currentUrl != newUrl) {

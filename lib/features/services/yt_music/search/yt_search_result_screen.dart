@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
+import 'package:gyawun_music/core/widgets/section_header.dart';
+import 'package:gyawun_music/core/widgets/section_single_column.dart';
 
-import '../widgets/section_header.dart';
-import '../widgets/section_single_column.dart';
 import 'cubit/search_cubit.dart';
 
 class YTSearchResultView extends StatefulWidget {
@@ -29,7 +29,8 @@ class _YTSearchResultViewState extends State<YTSearchResultView> {
           return CustomScrollView(
             slivers: [
               for (final section in searchState.sections) ...[
-                if (section.title.isNotEmpty || section.trailing != null)
+                if ((section.title != null && section.title!.isNotEmpty) ||
+                    section.trailing != null)
                   SliverToBoxAdapter(child: SectionHeader(section: section)),
                 SectionSingleColumn(items: section.items),
               ],

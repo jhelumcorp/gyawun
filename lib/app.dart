@@ -1,12 +1,14 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/settings/app_settings.dart';
 import 'package:gyawun_music/core/theme/theme.dart';
 import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/router.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:m3e_design/m3e_design.dart';
+import 'package:rxdart/rxdart.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -15,10 +17,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final appSettings = sl<AppSettings>();
     return StreamBuilder(
-      stream: appSettings.appearanceSettings.stream,
+      stream: Rx.combineLatest2(
+        appSettings.appearanceSettings.stream,
+        sl<MediaPlayer>().dominantSeedColorStream,
+        (a, b) => (a, b),
+      ).distinct(),
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
-          final appearance = snapshot.data!;
+          final (appearance, dominatedColor) = snapshot.data!;
           return DynamicColorBuilder(
             builder: (lightDynamic, darkDynamic) {
               return MaterialApp.router(
@@ -26,23 +32,23 @@ class MyApp extends StatelessWidget {
                 routerConfig: router,
                 theme: withM3ETheme(
                   AppTheme.light(
-                    primary:
-                        appearance.enableSystemColors && lightDynamic != null
+                    primary: appearance.enableDynamicTheme
+                        ? dominatedColor
+                        : appearance.enableSystemColors && lightDynamic != null
                         ? lightDynamic.primary
                         : appearance.accentColor,
-                    androidPredictiveBack:
-                        appearance.enableAndroidPredictiveBack,
+                    androidPredictiveBack: appearance.enableAndroidPredictiveBack,
                   ),
                 ),
                 darkTheme: withM3ETheme(
                   AppTheme.dark(
-                    primary:
-                        appearance.enableSystemColors && darkDynamic != null
+                    primary: appearance.enableDynamicTheme
+                        ? dominatedColor
+                        : appearance.enableSystemColors && darkDynamic != null
                         ? darkDynamic.primary
                         : appearance.accentColor,
                     isPureBlack: appearance.isPureBlack,
-                    androidPredictiveBack:
-                        appearance.enableAndroidPredictiveBack,
+                    androidPredictiveBack: appearance.enableAndroidPredictiveBack,
                   ),
                 ),
                 themeMode: appearance.themeMode.mode,

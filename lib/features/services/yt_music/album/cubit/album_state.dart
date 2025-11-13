@@ -9,7 +9,7 @@ final class AlbumLoading extends AlbumState {}
 
 final class AlbumSuccess extends AlbumState {
   AlbumSuccess(this.data, {this.loadingMore = false});
-  final YTAlbumPage data;
+  final dp.Page data;
   final bool loadingMore;
 }
 

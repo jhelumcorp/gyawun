@@ -46,20 +46,19 @@ class AppearanceScreen extends StatelessWidget {
                         leading: const Icon(FluentIcons.dark_theme_24_filled),
                         subtitle: settings.themeMode.text,
                         isFirst: true,
-                        onTap: () =>
-                            _handleDarkThemeChange(context, appearanceSettings),
+                        onTap: () => _handleDarkThemeChange(context, appearanceSettings),
                       ),
                       SettingTile(
-                        onTap: () => _handleAccentColorChange(
-                          context,
-                          appearanceSettings,
-                        ),
+                        onTap: () => _handleAccentColorChange(context, appearanceSettings),
                         title: "Accent Color",
                         leading: const Icon(FluentIcons.color_24_filled),
-                        trailing: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: settings.accentColor,
-                        ),
+                        trailing: CircleAvatar(radius: 20, backgroundColor: settings.accentColor),
+                      ),
+                      SettingSwitchTile(
+                        value: settings.enableDynamicTheme,
+                        onChanged: appearanceSettings.setEnableDynamicTheme,
+                        title: "Enable dynamic theme",
+                        leading: const Icon(FluentIcons.color_background_24_filled),
                       ),
                       SettingSwitchTile(
                         title: "Pure black",
@@ -77,18 +76,14 @@ class AppearanceScreen extends StatelessWidget {
                       const GroupTitle(title: "Layout"),
                       SettingTile(
                         title: "Language",
-                        leading: const Icon(
-                          FluentIcons.local_language_24_filled,
-                        ),
+                        leading: const Icon(FluentIcons.local_language_24_filled),
                         isFirst: true,
                         subtitle: settings.language.title,
-                        onTap: () =>
-                            _handleLanguageChange(context, appearanceSettings),
+                        onTap: () => _handleLanguageChange(context, appearanceSettings),
                       ),
                       SettingSwitchTile(
                         value: settings.enableAndroidPredictiveBack,
-                        onChanged:
-                            appearanceSettings.setEnableAndroidPredictiveBack,
+                        onChanged: appearanceSettings.setEnableAndroidPredictiveBack,
                         subtitle: "Android 14+",
                         title: "Predictive Back",
                         leading: const Icon(FluentIcons.tabs_24_filled),
@@ -115,10 +110,7 @@ class AppearanceScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _handleDarkThemeChange(
-    BuildContext context,
-    AppearanceSettings settings,
-  ) async {
+  Future<void> _handleDarkThemeChange(BuildContext context, AppearanceSettings settings) async {
     final res = await AppDialogs.showOptionSelectionDialog(
       context,
       children: [
@@ -132,20 +124,14 @@ class AppearanceScreen extends StatelessWidget {
     }
   }
 
-  Future<void> _handleAccentColorChange(
-    BuildContext context,
-    AppearanceSettings settings,
-  ) async {
+  Future<void> _handleAccentColorChange(BuildContext context, AppearanceSettings settings) async {
     final color = await AppDialogs.showColorSelectionDialog(context);
     if (color != null) {
       await settings.setAccentColor(color);
     }
   }
 
-  Future<void> _handleLanguageChange(
-    BuildContext context,
-    AppearanceSettings settings,
-  ) async {
+  Future<void> _handleLanguageChange(BuildContext context, AppearanceSettings settings) async {
     final language = await AppDialogs.showOptionSelectionDialog<AppLanguage>(
       context,
       children: _appLanguage,

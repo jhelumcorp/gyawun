@@ -22,6 +22,12 @@ Future<MyAudioHandler> initAudioService() async {
 /// Only accessed through MediaPlayer - does NOT expose streams to UI
 class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   MyAudioHandler() {
+    _player.setAndroidAudioAttributes(
+      const AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.music,
+        usage: AndroidAudioUsage.media,
+      ),
+    );
     _initAudioSession();
     _initPlaybackStateStream();
     _initQueueSync();

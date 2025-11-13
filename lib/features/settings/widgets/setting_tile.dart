@@ -23,38 +23,40 @@ class SettingTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2),
-      child: ListTile(
-        onTap: onTap,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.only(
-            topLeft: Radius.circular(isFirst ? 20 : 4),
-            topRight: Radius.circular(isFirst ? 20 : 4),
-            bottomLeft: Radius.circular(isLast ? 20 : 4),
-            bottomRight: Radius.circular(isLast ? 20 : 4),
+      child: Material(
+        child: ListTile(
+          onTap: onTap,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.only(
+              topLeft: Radius.circular(isFirst ? 20 : 4),
+              topRight: Radius.circular(isFirst ? 20 : 4),
+              bottomLeft: Radius.circular(isLast ? 20 : 4),
+              bottomRight: Radius.circular(isLast ? 20 : 4),
+            ),
           ),
-        ),
-        tileColor: Theme.of(context).colorScheme.surfaceContainer,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        title: Text(
-          title,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Theme.of(context).colorScheme.primary,
+          tileColor: Theme.of(context).colorScheme.surfaceContainer,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          title: Text(
+            title,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
-        ),
-        leading: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer.withAlpha(150),
-            borderRadius: BorderRadius.circular(12),
+          leading: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer.withAlpha(150),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: leading,
           ),
-          child: leading,
+          subtitle: subtitle != null
+              ? Text(subtitle!, style: Theme.of(context).textTheme.labelLarge)
+              : null,
+          trailing: trailing,
         ),
-        subtitle: subtitle != null
-            ? Text(subtitle!, style: Theme.of(context).textTheme.labelLarge)
-            : null,
-        trailing: trailing,
       ),
     );
   }
@@ -83,39 +85,41 @@ class SettingSwitchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 1),
-      child: SwitchListTile(
-        value: value,
-        onChanged: onChanged,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.only(
-            topLeft: Radius.circular(isFirst ? 20 : 4),
-            topRight: Radius.circular(isFirst ? 20 : 4),
-            bottomLeft: Radius.circular(isLast ? 20 : 4),
-            bottomRight: Radius.circular(isLast ? 20 : 4),
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Material(
+        child: SwitchListTile(
+          value: value,
+          onChanged: onChanged,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.only(
+              topLeft: Radius.circular(isFirst ? 20 : 4),
+              topRight: Radius.circular(isFirst ? 20 : 4),
+              bottomLeft: Radius.circular(isLast ? 20 : 4),
+              bottomRight: Radius.circular(isLast ? 20 : 4),
+            ),
           ),
-        ),
-        tileColor: Theme.of(context).colorScheme.surfaceContainer,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        title: Text(
-          title,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Theme.of(context).colorScheme.primary,
+          tileColor: Theme.of(context).colorScheme.surfaceContainer,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          title: Text(
+            title,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
-        ),
-        subtitle: subtitle != null
-            ? Text(subtitle!, style: Theme.of(context).textTheme.labelLarge)
-            : null,
+          subtitle: subtitle != null
+              ? Text(subtitle!, style: Theme.of(context).textTheme.labelLarge)
+              : null,
 
-        secondary: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer.withAlpha(150),
-            borderRadius: BorderRadius.circular(12),
+          secondary: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer.withAlpha(150),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: leading,
           ),
-          child: leading,
         ),
       ),
     );

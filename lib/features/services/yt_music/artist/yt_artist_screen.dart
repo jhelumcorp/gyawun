@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
+import 'package:gyawun_music/core/widgets/artist_page_header.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
-import 'package:gyawun_music/features/services/yt_music/widgets/artist_page_header.dart';
-import 'package:gyawun_music/features/services/yt_music/widgets/section_widget.dart';
+import 'package:gyawun_music/core/widgets/section_widget.dart';
 import 'package:ytmusic/yt_music_base.dart';
 
 import 'cubit/artist_cubit.dart';
@@ -71,7 +71,7 @@ class _YTArtistScreenViewState extends State<YTArtistScreenView> {
           }
           if (state is ArtistSuccess) {
             final artistState = state.data;
-            final thumbnail = artistState.header.thumbnails.lastOrNull;
+            final thumbnail = artistState.header!.thumbnails.lastOrNull;
             return CustomScrollView(
               controller: _scrollController,
               slivers: [
@@ -85,16 +85,10 @@ class _YTArtistScreenViewState extends State<YTArtistScreenView> {
                         ),
                       ),
                     ),
-                    expandedHeight: min(
-                      (thumbnail?.height ?? 400).toDouble(),
-                      300,
-                    ),
+                    expandedHeight: min((thumbnail?.height ?? 400).toDouble(), 300),
                     flexibleSpace: LayoutBuilder(
                       builder: (context, constraints) {
-                        final maxHeight = min(
-                          (thumbnail?.height ?? 400).toDouble(),
-                          300,
-                        );
+                        final maxHeight = min((thumbnail?.height ?? 400).toDouble(), 300);
                         final t =
                             ((constraints.maxHeight - kToolbarHeight) /
                                     (maxHeight - kToolbarHeight))
@@ -103,12 +97,9 @@ class _YTArtistScreenViewState extends State<YTArtistScreenView> {
                         final paddingLeft = lerpDouble(16, 72, 1 - t)!;
 
                         return FlexibleSpaceBar(
-                          titlePadding: EdgeInsets.only(
-                            left: paddingLeft,
-                            bottom: 16,
-                          ),
+                          titlePadding: EdgeInsets.only(left: paddingLeft, bottom: 16),
                           title: Text(
-                            artistState.header.title,
+                            artistState.header!.title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -116,10 +107,7 @@ class _YTArtistScreenViewState extends State<YTArtistScreenView> {
                             fit: StackFit.expand,
                             children: [
                               if (thumbnail?.url != null)
-                                CachedNetworkImage(
-                                  imageUrl: thumbnail!.url,
-                                  fit: BoxFit.cover,
-                                ),
+                                CachedNetworkImage(imageUrl: thumbnail!.url, fit: BoxFit.cover),
                               DecoratedBox(
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
@@ -142,7 +130,7 @@ class _YTArtistScreenViewState extends State<YTArtistScreenView> {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
-                    child: ArtistPageHeader(header: artistState.header),
+                    child: ArtistPageHeader(header: artistState.header!),
                   ),
                 ),
 

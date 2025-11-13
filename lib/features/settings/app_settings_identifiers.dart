@@ -2,6 +2,7 @@ class AppSettingsIdentifiers {
   // Appearance Colors
   static String darkTheme = "DARK_THEME";
   static String accentColor = "ACCENT_COLOR";
+  static String enableDynamicTheme = "ENABLE_DYNAMIC_THEME";
   static String isPureBlack = "IS_PURE_BLACK";
   static String enableSystemColors = "ENABLE_SYSTEM_COLORS";
   static String enableAndroidPredictiveBack = "ENABLE_ANDROID_PREDICTIVE_BACK";
@@ -16,7 +17,9 @@ class AppSettingsIdentifiers {
   static String miniPlayerPreviousButton = "MINI_PLAYER_PREVIOUS_BUTTON";
 
   // Youtube Music Settings
-  static String ytAudioQuality = "YT_AUDIO_QUALITY";
+  static String ytAudioStreamingQuality = "YT_AUDIO_STREAMING_QUALITY";
+  static String ytAudioDownloadingQuality = "YT_AUDIO_Downloading_QUALITY";
+
   static String ytLanguage = "YT_LANGUAGE";
   static String ytLocation = "YT_LOCATION";
   static String ytPersonalisedContent = "YT_PERSONALISED_CONTENT";

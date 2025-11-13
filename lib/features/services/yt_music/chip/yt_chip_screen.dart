@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
+import 'package:gyawun_music/core/widgets/section_widget.dart';
 import 'package:ytmusic/ytmusic.dart';
 
-import '../widgets/section_widget.dart';
 import 'cubit/chip_cubit.dart';
 
 class YtChipScreen extends StatelessWidget {

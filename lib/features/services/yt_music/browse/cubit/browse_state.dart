@@ -9,7 +9,7 @@ final class BrowseLoading extends BrowseState {}
 
 final class BrowseSuccess extends BrowseState {
   BrowseSuccess(this.data, {this.loadingMore = false});
-  final YTBrowsePage data;
+  final Page data;
   final bool loadingMore;
 }
 

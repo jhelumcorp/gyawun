@@ -9,7 +9,7 @@ final class SearchLoading extends SearchState {}
 
 final class SearchSuccess extends SearchState {
   SearchSuccess(this.data, {this.loadingMore = false});
-  final YTSearchPage data;
+  final Page data;
   final bool loadingMore;
 }
 

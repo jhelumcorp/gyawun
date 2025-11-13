@@ -9,7 +9,7 @@ final class PlaylistLoading extends PlaylistState {}
 
 final class PlaylistSuccess extends PlaylistState {
   PlaylistSuccess(this.data, {this.loadingMore = false});
-  final YTPlaylistPage data;
+  final Page data;
   final bool loadingMore;
 }
 

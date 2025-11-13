@@ -1,11 +1,10 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/widgets/custom_tile.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 
 class QueueScreen extends StatefulWidget {
   const QueueScreen({super.key});
@@ -38,17 +37,17 @@ class _QueueScreenState extends State<QueueScreen> {
     final theme = Theme.of(context);
 
     return SafeArea(
-      child: StreamBuilder<SequenceState>(
-        stream: sl<MediaPlayer>().queueStateStream,
+      child: StreamBuilder<(List<PlayableItem>, int?)>(
+        stream: sl<MediaPlayer>().queueWithIndexStream,
         builder: (context, snapshot) {
           final state = snapshot.data;
 
-          if (state == null || state.sequence.isEmpty) {
+          if (state == null || state.$1.isEmpty) {
             return const Center(child: Text("Queue is empty"));
           }
 
-          final queue = state.sequence;
-          final currentIndex = state.currentIndex;
+          final queue = state.$1;
+          final currentIndex = state.$2;
 
           _scrollToCurrent(currentIndex ?? 0);
 
@@ -58,9 +57,9 @@ class _QueueScreenState extends State<QueueScreen> {
             padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 24),
             itemCount: queue.length,
             itemBuilder: (context, index) {
-              final item = queue[index].tag as MediaItem;
+              final item = queue[index];
               final isPlaying = index == currentIndex;
-              final thumbnails = item.extras?['thumbnails'] as List?;
+              final thumbnails = item.thumbnails;
 
               return Dismissible(
                 key: ValueKey(item.id),
@@ -87,10 +86,10 @@ class _QueueScreenState extends State<QueueScreen> {
                       height: 48,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        image: thumbnails?.firstOrNull?['url'] != null
+                        image: thumbnails.firstOrNull?.url != null
                             ? DecorationImage(
                                 image: CachedNetworkImageProvider(
-                                  thumbnails!.first!['url'],
+                                  thumbnails.first.url,
                                   maxHeight: 48,
                                   maxWidth: 48,
                                 ),
@@ -111,7 +110,9 @@ class _QueueScreenState extends State<QueueScreen> {
                     isFirst: index == 0,
                     isLast: index == queue.length - 1,
                     title: item.title,
-                    subtitle: item.artist ?? item.album ?? '',
+                    subtitle: item.artists.isNotEmpty
+                        ? item.artists.map((artist) => artist.name).join(', ')
+                        : (item.album?.name ?? ''),
                     trailing: ReorderableDragStartListener(
                       index: index,
                       child: Icon(

@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:gyawun_music/database/database.dart';
 import 'package:gyawun_music/services/audio_service/audio_handler.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
+import 'package:jio_saavn/jio_saavn.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ytmusic/models/config.dart';
@@ -17,6 +18,7 @@ Future<void> registerDependencies() async {
     final db = sl<AppSettingsDatabase>();
     return AppSettings(db.appSettingsTableDao);
   });
+  sl.registerLazySingleton<JioSaavn>(() => JioSaavn(null));
   sl.registerSingletonAsync<YTMusic>(() async {
     final appSettings = sl<AppSettings>();
     final ytMusicSettings = appSettings.youtubeMusicSettings;

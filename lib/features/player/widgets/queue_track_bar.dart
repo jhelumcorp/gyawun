@@ -1,4 +1,3 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/di.dart';
@@ -7,6 +6,7 @@ import 'package:gyawun_music/features/player/widgets/next_button.dart';
 import 'package:gyawun_music/features/player/widgets/play_button.dart';
 import 'package:gyawun_music/features/player/widgets/previous_button.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 
 class QueueTrackBar extends StatelessWidget {
   const QueueTrackBar({
@@ -14,14 +14,12 @@ class QueueTrackBar extends StatelessWidget {
     required this.item,
     required this.artworkSize,
     required this.iconSize,
-    required this.height,
     required this.hasNext,
     required this.hasPrevious,
   });
-  final MediaItem item;
+  final PlayableItem item;
   final double artworkSize;
   final double iconSize;
-  final double height;
   final bool hasNext;
   final bool hasPrevious;
 
@@ -62,7 +60,7 @@ class QueueTrackBar extends StatelessWidget {
 
 class _QueueArtwork extends StatelessWidget {
   const _QueueArtwork({required this.item, required this.size});
-  final MediaItem item;
+  final PlayableItem item;
   final double size;
 
   @override
@@ -76,7 +74,7 @@ class _QueueArtwork extends StatelessWidget {
         final (positions, mediaItem) = snapshot.data!;
         return CircleAvatar(
           radius: size / 2,
-          backgroundImage: CachedNetworkImageProvider(item.artUri.toString()),
+          backgroundImage: CachedNetworkImageProvider(item.thumbnails.first.url),
           child: snapshot.hasData && snapshot.data != null && mediaItem == item
               ? SizedBox(
                   height: size - 5,
@@ -99,7 +97,7 @@ class _QueueArtwork extends StatelessWidget {
 
 class _QueueTitleSubtitle extends StatelessWidget {
   const _QueueTitleSubtitle({required this.item});
-  final MediaItem item;
+  final PlayableItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +114,7 @@ class _QueueTitleSubtitle extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
         ),
         Text(
-          item.artist ?? '',
+          item.artists.map((artist) => artist.name).join(', '),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: cs.onSurfaceVariant),

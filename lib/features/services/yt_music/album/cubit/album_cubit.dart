@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:gyawun_shared/gyawun_shared.dart' as dp;
 import 'package:meta/meta.dart';
-import 'package:ytmusic/enums/section_type.dart';
-import 'package:ytmusic/models/album.dart';
 import 'package:ytmusic/yt_music_base.dart';
 
 part 'album_state.dart';
@@ -27,17 +27,14 @@ class AlbumCubit extends Cubit<AlbumState> {
     if (currentState.loadingMore) return;
     final currentData = currentState.data;
 
-    final lastSection = currentData.sections.isNotEmpty
-        ? currentData.sections.last
-        : null;
+    final lastSection = currentData.sections.isNotEmpty ? currentData.sections.last : null;
     final continuation = lastSection?.continuation ?? currentData.continuation;
     if (continuation == null) return;
 
     emit(AlbumSuccess(currentData, loadingMore: true));
 
     try {
-      if (lastSection?.continuation != null &&
-          lastSection?.type == YTSectionType.singleColumn) {
+      if (lastSection?.continuation != null && lastSection?.type == dp.SectionType.singleColumn) {
         final nextPage = await ytmusic.getContinuationItems(
           body: body,
           continuation: lastSection!.continuation!,
@@ -53,10 +50,11 @@ class AlbumCubit extends Cubit<AlbumState> {
 
         emit(
           AlbumSuccess(
-            YTAlbumPage(
+            dp.Page(
               header: currentData.header,
               sections: updatedSections,
               continuation: currentData.continuation,
+              provider: currentData.provider,
             ),
           ),
         );
@@ -72,10 +70,11 @@ class AlbumCubit extends Cubit<AlbumState> {
 
       emit(
         AlbumSuccess(
-          YTAlbumPage(
+          dp.Page(
             header: currentData.header,
             sections: updatedSections,
             continuation: nextPage.continuation,
+            provider: currentData.provider,
           ),
         ),
       );

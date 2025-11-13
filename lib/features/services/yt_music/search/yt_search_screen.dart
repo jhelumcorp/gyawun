@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/widgets/search_top_bar.dart';
 import 'package:gyawun_music/features/services/yt_music/explore/yt_explore_screen.dart';
 import 'package:gyawun_music/features/services/yt_music/search/cubit/search_cubit.dart';
 import 'package:gyawun_music/features/services/yt_music/search/yt_search_result_screen.dart';
-import 'package:gyawun_music/features/services/yt_music/widgets/search_top_bar.dart';
 import 'package:ytmusic/yt_music_base.dart';
 
 class YTSearchScreen extends StatelessWidget {
@@ -48,9 +48,7 @@ class _YTSearchScreenViewState extends State<YTSearchScreenView> {
           ];
         },
 
-        body: query == null
-            ? const YTExploreScreen()
-            : const YTSearchResultView(),
+        body: query == null ? const YTExploreScreen() : const YTSearchResultView(),
       ),
     );
   }

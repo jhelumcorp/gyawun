@@ -9,7 +9,7 @@ final class ChipLoading extends ChipState {}
 
 final class ChipSuccess extends ChipState {
   ChipSuccess(this.data, {this.loadingMore = false});
-  final YTChipPage data;
+  final Page data;
   final bool loadingMore;
 }
 

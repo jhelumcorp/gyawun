@@ -133,18 +133,18 @@ packages:
     dependency: transitive
     description:
       name: build_daemon
-      sha256: "409002f1adeea601018715d613115cfaf0e31f512cb80ae4534c79867ae2363d"
+      sha256: bf05f6e12cfea92d3c09308d7bcdab1906cd8a179b023269eed00c071004b957
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0"
+    version: "4.1.1"
   build_runner:
     dependency: "direct dev"
     description:
       name: build_runner
-      sha256: a9461b8e586bf018dd4afd2e13b49b08c6a844a4b226c8d1d10f3a723cdd78c3
+      sha256: "04f69b1502f66e22ae7990bbd01eb552b7f12793c4d3ea6e715d0ac5e98bcdac"
       url: "https://pub.dev"
     source: hosted
-    version: "2.10.1"
+    version: "2.10.2"
   built_collection:
     dependency: transitive
     description:
@@ -165,10 +165,10 @@ packages:
     dependency: transitive
     description:
       name: button_m3e
-      sha256: "60522e74d43c637dd69208afa1909cb4030efd090eea0b50f0b811e1bd1cb41f"
+      sha256: "6754ddeb9068ad2005bd26d5ceabc41268029465095686d7d228296c2e706909"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -297,6 +297,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  dart_des:
+    dependency: transitive
+    description:
+      name: dart_des
+      sha256: "0a66afb8883368c824497fd2a1fd67bdb1a785965a3956728382c03d40747c33"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   dart_style:
     dependency: transitive
     description:
@@ -369,6 +377,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.1"
+  exception_templates:
+    dependency: transitive
+    description:
+      name: exception_templates
+      sha256: "57adef649aa2a99a5b324a921355ee9214472a007ca257cbec2f3abae005c93e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.2"
   expandable_page_view:
     dependency: "direct main"
     description:
@@ -541,6 +557,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+  gyawun_shared:
+    dependency: "direct main"
+    description:
+      path: "../gyawun_shared"
+      relative: true
+    source: path
+    version: "1.0.0"
   html:
     dependency: transitive
     description:
@@ -553,10 +576,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: bb2ce4590bc2667c96f318d68cac1b5a7987ec819351d32b1c987239a815e007
+      sha256: "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.0"
+    version: "1.6.0"
   http_cache_core:
     dependency: transitive
     description:
@@ -621,6 +644,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  jio_saavn:
+    dependency: "direct main"
+    description:
+      path: "../jio_saavn"
+      relative: true
+    source: path
+    version: "1.0.0"
   js:
     dependency: transitive
     description:
@@ -669,6 +699,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
+  lazy_memo:
+    dependency: transitive
+    description:
+      name: lazy_memo
+      sha256: f3f4afe9c4ccf0f29082213c5319a3711041446fc41cd325a9bf91724d4ea9c8
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.5"
   leak_tracker:
     dependency: transitive
     description:
@@ -777,10 +815,10 @@ packages:
     dependency: "direct main"
     description:
       name: meta
-      sha256: e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c
+      sha256: "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394"
       url: "https://pub.dev"
     source: hosted
-    version: "1.16.0"
+    version: "1.17.0"
   mime:
     dependency: transitive
     description:
@@ -1078,6 +1116,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  serialize_enum:
+    dependency: transitive
+    description:
+      name: serialize_enum
+      sha256: "5a5223879c22c6ee1acedcdbe76016b3fd7f6cd24364b8b95581795b2bb24281"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.4"
   share_plus:
     dependency: "direct main"
     description:
@@ -1327,10 +1373,10 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: "522f00f556e73044315fa4585ec3270f1808a4b186c936e612cab0b565ff1e00"
+      sha256: ab2726c1a94d3176a45960b6234466ec367179b87dd74f1611adb1f3b5fb9d55
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.6"
+    version: "0.7.7"
   typed_data:
     dependency: transitive
     description:
@@ -1566,11 +1612,12 @@ packages:
   youtube_explode_dart:
     dependency: "direct main"
     description:
-      name: youtube_explode_dart
-      sha256: add33de45d80c7f71a5e3dd464dd82fafd7fb5ab875fd303c023f30f76618325
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
+      path: "."
+      ref: HEAD
+      resolved-ref: "2126d0b03e9d39501ccfd56da2429dd6c74fc922"
+      url: "https://github.com/sheikhhaziq/youtube_explode_dart.git"
+    source: git
+    version: "2.4.1"
   ytmusic:
     dependency: "direct main"
     description:
@@ -1579,5 +1626,5 @@ packages:
     source: path
     version: "0.0.1"
 sdks:
-  dart: ">=3.9.2 <4.0.0"
+  dart: ">=3.10.0-290.4.beta <4.0.0"
   flutter: ">=3.35.0"
