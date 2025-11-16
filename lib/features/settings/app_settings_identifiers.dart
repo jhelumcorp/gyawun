@@ -20,8 +20,22 @@ class AppSettingsIdentifiers {
   static String ytAudioStreamingQuality = "YT_AUDIO_STREAMING_QUALITY";
   static String ytAudioDownloadingQuality = "YT_AUDIO_Downloading_QUALITY";
 
+  // YT Music sponsor block
+  static String ytSponsorBlock = "YT_SPONSOR_BLOCK";
+  static String ytSponsorBlockSponsor = "YT_SPONSOR_BLOCK_SPONSOR";
+  static String ytSponsorBlockSelfPromo = "YT_SPONSOR_BLOCK_SELF_PROMO";
+  static String ytSponsorBlockInteraction = "YT_SPONSOR_BLOCK_INTERACTION";
+  static String ytSponsorBlockIntro = "YT_SPONSOR_BLOCK_INTRO";
+  static String ytSponsorBlockOutro = "YT_SPONSOR_BLOCK_OUTRO";
+  static String ytSponsorBlockPreview = "YT_SPONSOR_BLOCK_PREVIEW";
+  static String ytSponsorBlockMusicOfftopic = "YT_SPONSOR_BLOCK_MUSIC_OFFTOPIC";
+
   static String ytLanguage = "YT_LANGUAGE";
   static String ytLocation = "YT_LOCATION";
   static String ytPersonalisedContent = "YT_PERSONALISED_CONTENT";
   static String ytVisitorId = "YT_VISITOR_ID";
+
+  // Jio Saavn
+  static String jsAudioStreamingQuality = "JS_AUDIO_STREAMING_QUALITY";
+  static String jsAudioDownloadingQuality = "JS_AUDIO_Downloading_QUALITY";
 }

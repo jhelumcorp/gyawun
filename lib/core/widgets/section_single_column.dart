@@ -17,6 +17,7 @@ class SectionSingleColumn extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
             child: SectionColumnTile(
               item: items[index],
+              items: items.whereType<PlayableItem>().toList(),
               isFirst: index == 0,
               isLast: index == items.length - 1,
             ),

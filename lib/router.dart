@@ -15,6 +15,7 @@ import 'package:gyawun_music/features/services/yt_music/browse/yt_browse_screen.
 import 'package:gyawun_music/features/services/yt_music/chip/yt_chip_screen.dart';
 import 'package:gyawun_music/features/services/yt_music/playlist/yt_playlist_screen.dart';
 import 'package:gyawun_music/features/services/yt_music/podcast/yt_podcast_screen.dart';
+import 'package:gyawun_music/features/services/yt_music/search/yt_suggestions_screen.dart';
 import 'package:gyawun_music/features/settings/views/about_screen.dart';
 import 'package:gyawun_music/features/settings/views/appearance_screen.dart';
 import 'package:gyawun_music/features/settings/views/jio_saavn_screen.dart';
@@ -22,6 +23,7 @@ import 'package:gyawun_music/features/settings/views/player_screen.dart' as sett
 import 'package:gyawun_music/features/settings/views/privacy_screen.dart';
 import 'package:gyawun_music/features/settings/views/storage_screen.dart';
 import 'package:gyawun_music/features/settings/views/youtube_music_screen.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
@@ -55,9 +57,10 @@ final router = GoRouter(
                   YTPlaylistScreen(body: Map.from(jsonDecode(state.pathParameters['body']!))),
             ),
             GoRoute(
-              path: 'ytmusic/chip/:body/:title',
+              path: 'ytmusic/chip/:body/:title/:type',
               builder: (context, state) => YtChipScreen(
                 title: state.pathParameters['title']!,
+                type: state.pathParameters['type'] == 'search' ? ChipType.search : ChipType.browse,
                 body: Map.from(jsonDecode(state.pathParameters['body']!)),
               ),
             ),
@@ -91,6 +94,16 @@ final router = GoRouter(
               builder: (context, state) =>
                   YTPodcastScreen(body: Map.from(jsonDecode(state.pathParameters['body']!))),
             ),
+            GoRoute(
+              path: 'ytmusic/search/suggestions',
+              pageBuilder: (context, state) => CustomTransitionPage(
+                child: YTSuggestionsScreen(query: state.uri.queryParameters['q']),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+              ),
+            ),
+
             //  Settings Screens
             GoRoute(
               path: 'settings/appearance',

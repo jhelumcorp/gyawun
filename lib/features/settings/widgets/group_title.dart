@@ -7,7 +7,7 @@ class GroupTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 8),
+      padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 8),
       child: Text(
         title,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(

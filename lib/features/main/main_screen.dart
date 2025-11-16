@@ -1,10 +1,12 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/features/home/home_screen.dart';
 import 'package:gyawun_music/features/library/library_screen.dart';
 import 'package:gyawun_music/features/player/player_screen.dart';
 import 'package:gyawun_music/features/search/search_screen.dart';
 import 'package:gyawun_music/features/settings/settings_screen.dart';
+import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:navigation_rail_m3e/navigation_rail_m3e.dart';
 
 final destinations = [
@@ -69,22 +71,39 @@ class _MainScreenState extends State<MainScreen> {
       body: Row(
         children: [
           if (isWideScreen)
-            CustomNavigationRail(onChanged: onChanged, selectedIndex: selectedIndex),
-          Expanded(
-            child: PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: controller,
-              onPageChanged: (value) {
-                // Unfocus when swiping between pages
-                FocusScope.of(context).unfocus();
-                setState(() {
-                  selectedIndex = value;
-                });
-              },
-              children: const [HomeScreen(), SearchScreen(), LibraryScreen(), SettingsScreen()],
+            FocusTraversalGroup(
+              child: CustomNavigationRail(onChanged: onChanged, selectedIndex: selectedIndex),
+            ),
+          FocusTraversalGroup(
+            child: Expanded(
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: controller,
+                onPageChanged: (value) {
+                  // Unfocus when swiping between pages
+                  FocusScope.of(context).unfocus();
+                  setState(() {
+                    selectedIndex = value;
+                  });
+                },
+                children: const [HomeScreen(), SearchScreen(), LibraryScreen(), SettingsScreen()],
+              ),
             ),
           ),
-          if (showFullPlayer) const SizedBox(width: 400, child: PlayerScreen()),
+          if (showFullPlayer)
+            StreamBuilder(
+              stream: sl<MediaPlayer>().queueItemsStream.distinct(),
+              builder: (context, asyncSnapshot) {
+                if (asyncSnapshot.hasData &&
+                    asyncSnapshot.data != null &&
+                    asyncSnapshot.data!.isNotEmpty) {
+                  return FocusTraversalGroup(
+                    child: const SizedBox(width: 400, child: PlayerScreen(showBackButton: false)),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
         ],
       ),
       bottomNavigationBar: isWideScreen

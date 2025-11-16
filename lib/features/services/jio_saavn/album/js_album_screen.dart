@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/core/widgets/page_header_widget.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:jio_saavn/jio_saavn.dart';
 
 import '../../../../core/widgets/section_widget.dart';
@@ -74,7 +75,12 @@ class _JSAlbumScreenViewState extends State<JSAlbumScreenView> {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
-                      child: PageHeaderWidget(header: albumState.header!),
+                      child: PageHeaderWidget(
+                        header: albumState.header!,
+                        items: albumState.sections.firstOrNull?.items
+                            .whereType<PlayableItem>()
+                            .toList(),
+                      ),
                     ),
                   ),
 

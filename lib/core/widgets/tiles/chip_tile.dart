@@ -17,7 +17,9 @@ class ChipTile extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: () {
-          context.push('/ytmusic/chip/${jsonEncode(chip.endpoint)}/${chip.title}');
+          context.push(
+            '/ytmusic/chip/${jsonEncode(chip.endpoint)}/${chip.title}/${chip.type.name}',
+          );
         },
         child: Ink(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),

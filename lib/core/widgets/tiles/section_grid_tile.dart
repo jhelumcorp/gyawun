@@ -1,22 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/core/utils/item_click_handler.dart';
 import 'package:gyawun_music/core/utils/modals.dart';
 import 'package:gyawun_shared/gyawun_shared.dart';
 
 class SectionGridTile extends StatelessWidget {
-  const SectionGridTile({super.key, required this.item, required this.width});
+  const SectionGridTile({super.key, required this.item});
   final SectionItem item;
-  final double width;
 
   @override
   Widget build(BuildContext context) {
     final isHorizontal =
         (item.type == SectionItemType.video || item.type == SectionItemType.episode);
-    // final imageHeight = (context.isWideScreen ? 200 : 150).toInt();
-    // final imageWidth = (isHorizontal? imageHeight * (16 / 9) : imageHeight);
-    final imageWidth = width - 16;
-    final imageHeight = isHorizontal ? imageWidth * (9 / 16) : imageWidth;
+    final imageHeight = (context.isWideScreen ? 200 : 150).toInt();
+    final imageWidth = (isHorizontal ? imageHeight * (16 / 9) : imageHeight).toInt();
     final thumbnail = item.thumbnails.lastOrNull;
 
     return Material(

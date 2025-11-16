@@ -14,8 +14,8 @@ class StorageScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Storage & backups")),
 
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+        child: SafeArea(
+          minimum: const EdgeInsets.all(16.0),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 700),

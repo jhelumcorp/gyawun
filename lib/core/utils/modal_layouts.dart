@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -67,20 +69,20 @@ class ModalLayouts {
                       icon: FluentIcons.play_24_filled,
                       label: "Play Next",
                       onTap: () {
-                        // if (item is YTSong) {
-                        //   sl<MediaPlayer>().playYTNext(item);
-                        //   Navigator.pop(context);
-                        // }
+                        if (item is PlayableItem) {
+                          sl<MediaPlayer>().addNext(item);
+                          Navigator.pop(context);
+                        }
                       },
                     ),
                     TopIconButton(
                       icon: FluentIcons.task_list_add_24_filled,
                       label: "Add to queue",
                       onTap: () {
-                        // if (item is YTSong) {
-                        //   sl<MediaPlayer>().addYTToQueue(item);
-                        //   Navigator.pop(context);
-                        // }
+                        if (item is PlayableItem) {
+                          sl<MediaPlayer>().addToQueue(item);
+                          Navigator.pop(context);
+                        }
                       },
                     ),
                     TopIconButton(

@@ -13,8 +13,7 @@ dependencies:
   bloc: ^9.1.0
   cached_network_image: ^3.4.1
   cupertino_icons: ^1.0.8
-  drift: ^2.29.0
-  drift_flutter: ^0.2.7
+  dio: ^5.9.0
   dynamic_color: ^1.7.0
   expandable_page_view: ^1.0.17
   expressive_refresh: ^0.1.2
@@ -63,13 +62,15 @@ dependencies:
       url: https://github.com/sheikhhaziq/youtube_explode_dart.git
   ytmusic:
     path: ../ytmusic
+  hydrated_bloc: ^10.1.1
+  json_annotation: ^4.9.0
   
 dev_dependencies:
-  build_runner: ^2.10.1
-  drift_dev: ^2.29.0
+  build_runner: ^2.10.3
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.11.1
   pubspec_dependency_sorter: ^1.0.5
 flutter:
   generate: true

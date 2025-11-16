@@ -3,19 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/core/widgets/section_widget.dart';
+import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:ytmusic/ytmusic.dart';
 
 import 'cubit/chip_cubit.dart';
 
 class YtChipScreen extends StatelessWidget {
-  const YtChipScreen({super.key, required this.body, required this.title});
+  const YtChipScreen({super.key, required this.body, required this.title, required this.type});
   final Map<String, dynamic> body;
   final String title;
+  final ChipType type;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ChipCubit(sl<YTMusic>(), body),
+      create: (_) => ChipCubit(sl<YTMusic>(), body, type),
       child: YTChipScreenView(title: title),
     );
   }

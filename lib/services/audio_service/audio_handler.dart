@@ -52,15 +52,15 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
     await session.configure(const AudioSessionConfiguration.music());
 
     // Handle interruptions (e.g., phone calls)
-    session.interruptionEventStream.listen((event) {
-      if (event.begin) {
-        if (playbackState.value.playing) pause();
-      } else {
-        if (!playbackState.value.playing && event.type == AudioInterruptionType.pause) {
-          play();
-        }
-      }
-    });
+    // session.interruptionEventStream.listen((event) {
+    //   if (event.begin) {
+    //     if (playbackState.value.playing) pause();
+    //   } else {
+    //     if (!playbackState.value.playing && event.type == AudioInterruptionType.pause) {
+    //       play();
+    //     }
+    //   }
+    // });
 
     // Pause when headphones unplug
     session.becomingNoisyEventStream.listen((_) {

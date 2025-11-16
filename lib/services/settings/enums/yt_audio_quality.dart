@@ -1,0 +1,1 @@
+enum YTAudioQuality { high, low }

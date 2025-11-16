@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:gyawun_music/core/settings/youtube_settings.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+
+import '../settings/enums/yt_audio_quality.dart';
 
 /// Stream YouTube audio with full seek support.
 class YouTubeAudioSource extends StreamAudioSource {

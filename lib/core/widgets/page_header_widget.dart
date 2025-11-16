@@ -9,8 +9,9 @@ import 'package:readmore/readmore.dart';
 import 'package:ytmusic/yt_music_base.dart';
 
 class PageHeaderWidget extends StatelessWidget {
-  const PageHeaderWidget({super.key, required this.header});
+  const PageHeaderWidget({super.key, required this.header, this.items});
   final PageHeader header;
+  final List<PlayableItem>? items;
 
   List<Widget> _drawItems(BuildContext context) {
     final thumbnail = header.thumbnails.lastOrNull;
@@ -59,15 +60,21 @@ class PageHeaderWidget extends StatelessWidget {
           spacing: 4,
           runSpacing: 4,
           children: [
-            if (header.playEndpoint != null)
+            if (header.playEndpoint != null || (items != null && items!.isNotEmpty))
               FilledButton.icon(
                 onPressed: () async {
                   BottomSnackbar.showMessage(context, "Play starting");
-                  final items = await sl<YTMusic>().getNextSongs(body: header.playEndpoint!);
-                  final songs = items.whereType<PlayableItem>().toList();
-                  final first = songs.removeAt(0);
-                  sl<MediaPlayer>().playSong(first);
-                  await sl<MediaPlayer>().addSongs(songs.whereType<PlayableItem>().toList());
+                  if (items == null) {
+                    final items = await sl<YTMusic>().getNextSongs(
+                      body: header.playEndpoint!.cast(),
+                    );
+                    final songs = items.whereType<PlayableItem>().toList();
+                    final first = songs.removeAt(0);
+                    await sl<MediaPlayer>().playSong(first);
+                    await sl<MediaPlayer>().addSongs(songs);
+                  } else {
+                    await sl<MediaPlayer>().playSongs(items!);
+                  }
                 },
                 label: const Text("Play"),
                 icon: const Icon(Icons.play_arrow_rounded),
@@ -76,11 +83,11 @@ class PageHeaderWidget extends StatelessWidget {
               FilledButton.icon(
                 onPressed: () async {
                   BottomSnackbar.showMessage(context, "Play starting");
-                  final items = await sl<YTMusic>().getNextSongs(body: header.shuffleEndpoint!);
+                  final items = await sl<YTMusic>().getNextSongs(body: header.playEndpoint!.cast());
                   final songs = items.whereType<PlayableItem>().toList();
                   final first = songs.removeAt(0);
-                  sl<MediaPlayer>().playSong(first);
-                  await sl<MediaPlayer>().addSongs(songs.whereType<PlayableItem>().toList());
+                  await sl<MediaPlayer>().playSong(first);
+                  await sl<MediaPlayer>().addSongs(songs);
                 },
                 label: const Text("Shuffle"),
                 icon: const Icon(Icons.shuffle_rounded),
@@ -89,11 +96,11 @@ class PageHeaderWidget extends StatelessWidget {
               FilledButton.icon(
                 onPressed: () async {
                   BottomSnackbar.showMessage(context, "Play starting");
-                  final items = await sl<YTMusic>().getNextSongs(body: header.shuffleEndpoint!);
+                  final items = await sl<YTMusic>().getNextSongs(body: header.playEndpoint!.cast());
                   final songs = items.whereType<PlayableItem>().toList();
                   final first = songs.removeAt(0);
-                  sl<MediaPlayer>().playSong(first);
-                  await sl<MediaPlayer>().addSongs(songs.whereType<PlayableItem>().toList());
+                  await sl<MediaPlayer>().playSong(first);
+                  await sl<MediaPlayer>().addSongs(songs);
                 },
                 label: const Text("Radio"),
                 icon: const Icon(Icons.radar_outlined),

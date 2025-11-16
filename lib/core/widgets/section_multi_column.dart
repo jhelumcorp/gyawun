@@ -20,7 +20,10 @@ class _SectionMultiColumnState extends State<SectionMultiColumn> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    controller = PageController(viewportFraction: 350 / MediaQuery.sizeOf(context).width);
+    controller = PageController(
+      viewportFraction:
+          min(450, MediaQuery.sizeOf(context).width - 50) / MediaQuery.sizeOf(context).width,
+    );
   }
 
   @override

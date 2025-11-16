@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
-import 'package:gyawun_music/core/widgets/section_header.dart';
 import 'package:gyawun_music/core/widgets/section_single_column.dart';
+import 'package:gyawun_music/core/widgets/tiles/chip_tile.dart';
 
 import 'cubit/search_cubit.dart';
 
@@ -28,10 +28,26 @@ class _YTSearchResultViewState extends State<YTSearchResultView> {
           final searchState = state.data;
           return CustomScrollView(
             slivers: [
+              if (searchState.chips.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: SizedBox(
+                      height: 32,
+                      child: ListView.separated(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: searchState.chips.length,
+                        separatorBuilder: (context, index) => const SizedBox(width: 8),
+                        itemBuilder: (context, index) {
+                          final chip = searchState.chips[index];
+                          return ChipTile(chip: chip);
+                        },
+                      ),
+                    ),
+                  ),
+                ),
               for (final section in searchState.sections) ...[
-                if ((section.title != null && section.title!.isNotEmpty) ||
-                    section.trailing != null)
-                  SliverToBoxAdapter(child: SectionHeader(section: section)),
                 SectionSingleColumn(items: section.items),
               ],
               const SliverToBoxAdapter(child: BottomPlayingPadding()),

@@ -1,12 +1,13 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gyawun_music/core/di.dart';
-import 'package:gyawun_music/core/settings/app_settings.dart';
 import 'package:gyawun_music/core/utils/color_extractor.dart';
 import 'package:gyawun_music/services/audio_service/audio_handler.dart';
 import 'package:gyawun_music/services/audio_service/yt_audio_source.dart';
+import 'package:gyawun_music/services/settings/settings_service.dart';
 import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
@@ -23,6 +24,8 @@ class MediaPlayer {
   final MyAudioHandler _audioHandler;
   final AudioPlayer _player;
   final yt.YoutubeExplode _yt = yt.YoutubeExplode();
+
+  // SponsorBlock integration
 
   // --- Separate Queue Storage ------------------------------------------------
 
@@ -48,6 +51,12 @@ class MediaPlayer {
     if (index == null) return null;
     return getItemAt(index);
   }
+
+  // --- SponsorBlock Methods --------------------------------------------------
+
+  /// Reload SponsorBlock settings (call this when settings change)
+
+  /// Get current sponsor segments
 
   // --- State Getters ---------------------------------------------------------
 
@@ -148,6 +157,7 @@ class MediaPlayer {
         mediaItemStream.distinct(),
         (positionData, mediaItem) => (positionData, mediaItem),
       ).distinct();
+  Stream<Duration> get positionStream => _player.positionStream;
 
   /// Song title
   Stream<String> get titleStream => mediaItemStream.map((item) => item?.title ?? '');
@@ -188,7 +198,9 @@ class MediaPlayer {
   Future<void> play() => _player.play();
   Future<void> pause() => _player.pause();
   Future<void> stop() => _player.stop();
+
   Future<void> seek(Duration position) => _player.seek(position);
+
   Future<void> skipToNext() => _player.seekToNext();
   Future<void> skipToPrevious() => _player.seekToPrevious();
   Future<void> skipToIndex(int index) => _player.seek(Duration.zero, index: index);
@@ -205,12 +217,26 @@ class MediaPlayer {
   }
 
   Future<void> addSongs(List<PlayableItem> items) async {
+    if (items.isEmpty) return;
+
+    final updatedQueue = List<PlayableItem>.from(_queueItems.value);
+
     for (var item in items) {
       await _player.addAudioSource(await _createAudioSource(item));
+      updatedQueue.add(item);
     }
-    final currentQueue = List<PlayableItem>.from(queueItems);
-    currentQueue.addAll(items);
-    _queueItems.add(currentQueue);
+
+    // Single emit at the end
+    _queueItems.add(updatedQueue);
+  }
+
+  Future<void> addNext(PlayableItem item) async {
+    final updatedQueue = List<PlayableItem>.from(_queueItems.value);
+
+    final index = (_player.currentIndex ?? -1) + 1;
+    updatedQueue.insert(index, item);
+    _queueItems.add(updatedQueue);
+    await _player.insertAudioSource(index, await _createAudioSource(item));
   }
 
   Future<void> playSongs(List<PlayableItem> items) async {
@@ -225,10 +251,10 @@ class MediaPlayer {
   }
 
   Future<void> addToQueue(PlayableItem item) async {
-    await _player.addAudioSource(await _createAudioSource(item));
     final currentQueue = List<PlayableItem>.from(queueItems);
     currentQueue.add(item);
     _queueItems.add(currentQueue);
+    await _player.addAudioSource(await _createAudioSource(item));
   }
 
   /// Remove item from queue at index
@@ -249,8 +275,8 @@ class MediaPlayer {
   }
 
   Future<void> clearQueue() async {
-    await _player.clearAudioSources();
     _queueItems.add([]);
+    await _player.clearAudioSources();
   }
 
   Future<void> setSkipSilenceEnabled(bool enabled) => _player.setSkipSilenceEnabled(enabled);
@@ -266,14 +292,14 @@ class MediaPlayer {
       artist: item.artists.map((artist) => artist.name).join(", "),
     );
     if (item.provider == DataProvider.jiosavan) {
-      final bitrate = (await sl<AppSettings>().jioSaavnSettings.audioStreamingQuality).bitrate;
+      final bitrate = sl<SettingsService>().jioSaavn.state.streamingQuality.bitrate;
       final url = item.downloadItems!.where((e) => e.quality == bitrate).toList().firstOrNull?.url;
       return AudioSource.uri(Uri.parse(url ?? item.downloadItems!.last.url), tag: mediaItem);
     }
     return YouTubeAudioSource(
       item.id,
       yt: _yt,
-      audioQuality: (await sl<AppSettings>().youtubeMusicSettings.audioStreamingQuality),
+      audioQuality: sl<SettingsService>().youtubeMusic.state.streamingQuality,
       tag: mediaItem,
     );
   }

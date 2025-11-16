@@ -30,8 +30,9 @@ class _PlayerThumbnailState extends State<PlayerThumbnail> {
         if (thumbs == null || thumbs.isEmpty) {
           return Icon(FluentIcons.music_note_1_24_filled, size: widget.width, color: Colors.grey);
         }
-
-        String newUrl = thumbs.last.url;
+        String newUrl = thumbs.first.url.contains('w60-h60')
+            ? thumbs.first.url.replaceAll('w60-h60', 'w300-h300')
+            : thumbs.last.url;
 
         // Precache image before animating to it
         if (_currentUrl != newUrl) {

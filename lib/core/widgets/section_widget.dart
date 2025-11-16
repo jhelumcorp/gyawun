@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gyawun_music/core/utils/item_click_handler.dart';
 import 'package:gyawun_music/core/widgets/carousel_card.dart';
 import 'package:gyawun_music/core/widgets/section_grid.dart';
 import 'package:gyawun_music/core/widgets/section_multi_column.dart';
@@ -25,8 +26,13 @@ class SectionsWidget extends StatelessWidget {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 300),
               child: CarouselView(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                itemSnapping: true,
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 itemExtent: 300,
+                onTap: (index) {
+                  onSectionItemTap(context, sections.first.items[index]);
+                },
                 children: sections.first.items.map((item) => CarouselCard(item: item)).toList(),
               ),
             ),

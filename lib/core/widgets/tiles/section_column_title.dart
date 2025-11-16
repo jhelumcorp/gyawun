@@ -9,10 +9,12 @@ class SectionColumnTile extends StatelessWidget {
     super.key,
     required this.item,
     this.onTap,
+    this.items,
     this.isFirst = false,
     this.isLast = false,
   });
   final SectionItem item;
+  final List<PlayableItem>? items;
   final void Function()? onTap;
   final bool isFirst;
   final bool isLast;
@@ -31,7 +33,7 @@ class SectionColumnTile extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
       child: ListTile(
         onTap: () {
-          onSectionItemTap(context, item);
+          onSectionItemTap(context, item, items: items);
         },
         onLongPress: () {
           Modals.showItemBottomSheet(context, item);
@@ -94,7 +96,7 @@ class SectionColumnTile extends StatelessWidget {
               ),
         trailing: IconButton(
           onPressed: () {
-            // Modals.showItemBottomSheet(context, item);
+            Modals.showItemBottomSheet(context, item);
           },
           icon: const Icon(Icons.more_vert_rounded),
         ),

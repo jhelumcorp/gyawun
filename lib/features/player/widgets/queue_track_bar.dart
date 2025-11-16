@@ -37,7 +37,6 @@ class QueueTrackBar extends StatelessWidget {
           context: context,
           isScrollControlled: true,
           enableDrag: true,
-          backgroundColor: Colors.transparent,
           builder: (context) => const PlayerScreen(),
         ),
         child: Padding(

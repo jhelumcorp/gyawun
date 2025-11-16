@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     return Scaffold(
       appBar: AppBar(
         title: const Text("Gyawun"),
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 8),
         actions: [
           IconButton.filled(
             isSelected: false,

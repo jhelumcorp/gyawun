@@ -65,11 +65,11 @@ class ArtistPageHeader extends StatelessWidget {
               FilledButton.icon(
                 onPressed: () async {
                   BottomSnackbar.showMessage(context, "Play starting");
-                  final items = await sl<YTMusic>().getNextSongs(body: header.playEndpoint!);
+                  final items = await sl<YTMusic>().getNextSongs(body: header.playEndpoint!.cast());
                   final songs = items.whereType<PlayableItem>().toList();
                   final first = songs.removeAt(0);
-                  sl<MediaPlayer>().playSong(first);
-                  await sl<MediaPlayer>().addSongs(songs.whereType<PlayableItem>().toList());
+                  await sl<MediaPlayer>().playSong(first);
+                  await sl<MediaPlayer>().addSongs(songs);
                 },
                 label: const Text("Play"),
                 icon: const Icon(Icons.play_arrow_rounded),
@@ -78,11 +78,11 @@ class ArtistPageHeader extends StatelessWidget {
               FilledButton.icon(
                 onPressed: () async {
                   BottomSnackbar.showMessage(context, "Play starting");
-                  final items = await sl<YTMusic>().getNextSongs(body: header.shuffleEndpoint!);
+                  final items = await sl<YTMusic>().getNextSongs(body: header.playEndpoint!.cast());
                   final songs = items.whereType<PlayableItem>().toList();
                   final first = songs.removeAt(0);
-                  sl<MediaPlayer>().playSong(first);
-                  await sl<MediaPlayer>().addSongs(songs.whereType<PlayableItem>().toList());
+                  await sl<MediaPlayer>().playSong(first);
+                  await sl<MediaPlayer>().addSongs(songs);
                 },
                 label: const Text("Shuffle"),
                 icon: const Icon(Icons.shuffle_rounded),
@@ -91,11 +91,11 @@ class ArtistPageHeader extends StatelessWidget {
               FilledButton.icon(
                 onPressed: () async {
                   BottomSnackbar.showMessage(context, "Play starting");
-                  final items = await sl<YTMusic>().getNextSongs(body: header.shuffleEndpoint!);
+                  final items = await sl<YTMusic>().getNextSongs(body: header.playEndpoint!.cast());
                   final songs = items.whereType<PlayableItem>().toList();
                   final first = songs.removeAt(0);
-                  sl<MediaPlayer>().playSong(first);
-                  await sl<MediaPlayer>().addSongs(songs.whereType<PlayableItem>().toList());
+                  await sl<MediaPlayer>().playSong(first);
+                  await sl<MediaPlayer>().addSongs(songs);
                 },
                 label: const Text("Radio"),
                 icon: const Icon(Icons.radar_outlined),

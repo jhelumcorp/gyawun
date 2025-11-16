@@ -7,12 +7,26 @@ import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:ytmusic/yt_music_base.dart';
 
-void onSectionItemTap(BuildContext context, SectionItem item) async {
+void onSectionItemTap(BuildContext context, SectionItem item, {List<PlayableItem>? items}) async {
   if (item is PlayableItem) {
-    await sl<MediaPlayer>().playSong(item);
     if (item.provider == DataProvider.ytmusic) {
+      await sl<MediaPlayer>().playSong(item);
       final songs = await sl<YTMusic>().getNextSongs(body: item.endpoint!);
-      await sl<MediaPlayer>().addSongs(songs.whereType<PlayableItem>().toList().sublist(1));
+      if (songs.isNotEmpty) {
+        songs.removeAt(0);
+        await sl<MediaPlayer>().addSongs(songs.whereType<PlayableItem>().toList());
+      }
+    } else {
+      if (items != null) {
+        await sl<MediaPlayer>().clearQueue();
+        await sl<MediaPlayer>().addSongs(items);
+        final index = items.indexOf(item);
+
+        await sl<MediaPlayer>().skipToIndex(index);
+        sl<MediaPlayer>().play();
+      } else {
+        await sl<MediaPlayer>().playSong(item);
+      }
     }
     return;
   }

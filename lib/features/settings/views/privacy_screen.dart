@@ -25,8 +25,8 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
       appBar: AppBar(title: const Text("Privacy")),
 
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+        child: SafeArea(
+          minimum: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
