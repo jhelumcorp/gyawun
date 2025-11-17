@@ -29,7 +29,7 @@ class JioSaavnScreen extends StatelessWidget {
                 minimum: const EdgeInsets.all(16),
                 sliver: SliverList.list(
                   children: [
-                    const GroupTitle(title: "Audio quality"),
+                    const GroupTitle(title: "Audio quality", paddingTop: 0),
 
                     // Streaming quality
                     SettingTile(

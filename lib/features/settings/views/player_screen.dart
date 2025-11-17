@@ -30,7 +30,7 @@ class PlayerScreen extends StatelessWidget {
                 minimum: const EdgeInsets.all(16),
                 sliver: SliverList.list(
                   children: [
-                    if (Platform.isAndroid) const GroupTitle(title: "General"),
+                    if (Platform.isAndroid) const GroupTitle(title: "General", paddingTop: 0),
                     if (Platform.isAndroid)
                       SettingSwitchTile(
                         title: "Skip silence",
@@ -47,7 +47,7 @@ class PlayerScreen extends StatelessWidget {
                         },
                       ),
 
-                    const GroupTitle(title: "Mini Player"),
+                    GroupTitle(title: "Mini Player", paddingTop: Platform.isAndroid ? null : 0),
 
                     SettingSwitchTile(
                       title: "Enable next button",

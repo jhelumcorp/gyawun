@@ -41,21 +41,7 @@ class ArtistPageHeader extends StatelessWidget {
             padding: const EdgeInsets.only(top: 8),
             child: Text(header.subtitle, style: Theme.of(context).textTheme.bodyLarge),
           ),
-        // if (header.secondSubtitle.isNotEmpty)
-        //   Padding(
-        //     padding: const EdgeInsets.only(top: 4),
-        //     child: Text(header.secondSubtitle, style: Theme.of(context).textTheme.bodyLarge),
-        //   ),
-        // if (header.description.isNotEmpty)
-        //   Padding(
-        //     padding: const EdgeInsets.only(top: 4),
-        //     child: ReadMoreText(
-        //       header.description,
-        //       trimMode: TrimMode.Length,
-        //       style: Theme.of(context).textTheme.bodyLarge,
-        //       trimLines: 3,
-        //     ),
-        //   ),
+
         const SizedBox(height: 4),
         Wrap(
           spacing: 4,
@@ -78,7 +64,9 @@ class ArtistPageHeader extends StatelessWidget {
               FilledButton.icon(
                 onPressed: () async {
                   BottomSnackbar.showMessage(context, "Play starting");
-                  final items = await sl<YTMusic>().getNextSongs(body: header.playEndpoint!.cast());
+                  final items = await sl<YTMusic>().getNextSongs(
+                    body: header.shuffleEndpoint!.cast(),
+                  );
                   final songs = items.whereType<PlayableItem>().toList();
                   final first = songs.removeAt(0);
                   await sl<MediaPlayer>().playSong(first);
@@ -91,7 +79,9 @@ class ArtistPageHeader extends StatelessWidget {
               FilledButton.icon(
                 onPressed: () async {
                   BottomSnackbar.showMessage(context, "Play starting");
-                  final items = await sl<YTMusic>().getNextSongs(body: header.playEndpoint!.cast());
+                  final items = await sl<YTMusic>().getNextSongs(
+                    body: header.radioEndpoint!.cast(),
+                  );
                   final songs = items.whereType<PlayableItem>().toList();
                   final first = songs.removeAt(0);
                   await sl<MediaPlayer>().playSong(first);

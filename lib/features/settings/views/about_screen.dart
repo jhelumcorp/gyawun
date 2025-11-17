@@ -67,10 +67,15 @@ class AboutScreen extends StatelessWidget {
                     title: "Telegram",
                     leading: Icon(Icons.send_rounded),
                   ),
-                  const SettingTile(
+                  SettingTile(
                     isLast: true,
                     title: "Source code",
-                    leading: Icon(FluentIcons.code_24_filled),
+                    leading: const Icon(FluentIcons.code_24_filled),
+                    trailing: const Icon(FluentIcons.open_24_filled),
+
+                    onTap: () {
+                      launchUrl(Uri.parse("https://github.com/sheikhhaziq/gyawun"));
+                    },
                   ),
 
                   const GroupTitle(title: "Support"),

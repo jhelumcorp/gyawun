@@ -36,7 +36,7 @@ class AppearanceScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const GroupTitle(title: "Theme"),
+                      const GroupTitle(title: "Theme", paddingTop: 0),
 
                       // Dark Theme
                       SettingTile(

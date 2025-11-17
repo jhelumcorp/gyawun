@@ -22,7 +22,7 @@ class StorageScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const GroupTitle(title: "Storage"),
+                  const GroupTitle(title: "Storage", paddingTop: 0),
                   SettingTile(
                     title: "App Folder",
                     leading: const Icon(FluentIcons.folder_24_filled),

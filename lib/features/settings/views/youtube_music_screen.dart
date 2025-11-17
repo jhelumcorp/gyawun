@@ -11,6 +11,7 @@ import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
 import 'package:gyawun_music/services/settings/cubits/yt_music_cubit.dart';
 import 'package:gyawun_music/services/settings/settings_service.dart';
 import 'package:gyawun_music/services/settings/states/yt_music_state.dart';
+import 'package:ytmusic/yt_music_base.dart';
 
 import '../../../services/settings/enums/yt_audio_quality.dart';
 import '../../../services/settings/models/yt_music_language.dart';
@@ -35,7 +36,7 @@ class YoutubeMusicScreen extends StatelessWidget {
                 sliver: SliverList.list(
                   children: [
                     // GENERAL
-                    const GroupTitle(title: "General"),
+                    const GroupTitle(title: "General", paddingTop: 0),
                     SettingTile(
                       title: "Language",
                       leading: const Icon(FluentIcons.local_language_24_filled),
@@ -46,7 +47,10 @@ class YoutubeMusicScreen extends StatelessWidget {
                           context,
                           children: _languages,
                         );
-                        if (lang != null) cubit.setLanguage(lang);
+                        if (lang != null) {
+                          cubit.setLanguage(lang);
+                          sl<YTMusic>().setLanguage(lang.value);
+                        }
                       },
                     ),
 
@@ -60,7 +64,10 @@ class YoutubeMusicScreen extends StatelessWidget {
                           context,
                           children: _locations,
                         );
-                        if (loc != null) cubit.setLocation(loc);
+                        if (loc != null) {
+                          cubit.setLocation(loc);
+                          sl<YTMusic>().setLocation(loc.value);
+                        }
                       },
                     ),
 
@@ -193,7 +200,10 @@ class YoutubeMusicScreen extends StatelessWidget {
                           context,
                           title: "Enter Visitor Id",
                         );
-                        if (id != null) cubit.setVisitorId(id);
+                        if (id != null) {
+                          cubit.setVisitorId(id);
+                          sl<YTMusic>().setVisitorId(id);
+                        }
                       },
                     ),
 

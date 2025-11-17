@@ -23,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const GroupTitle(title: "General"),
+                  const GroupTitle(title: "General", paddingTop: 0),
                   SettingTile(
                     onTap: () {
                       context.push("/settings/appearance");

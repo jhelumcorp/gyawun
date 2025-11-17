@@ -30,7 +30,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const GroupTitle(title: "Playback"),
+              const GroupTitle(title: "Playback", paddingTop: 0),
               SettingSwitchTile(
                 value: false,
                 isFirst: true,

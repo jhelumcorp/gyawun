@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class GroupTitle extends StatelessWidget {
-  const GroupTitle({super.key, required this.title});
+  const GroupTitle({super.key, required this.title, this.paddingTop});
   final String title;
+  final double? paddingTop;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 8),
+      padding: EdgeInsets.only(top: paddingTop ?? 12, left: 20, right: 20, bottom: 8),
       child: Text(
         title,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
