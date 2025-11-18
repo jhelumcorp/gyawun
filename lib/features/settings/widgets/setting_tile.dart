@@ -6,7 +6,7 @@ class SettingTile extends StatelessWidget {
     super.key,
     required this.title,
     this.subtitle,
-    required this.leading,
+    this.leading,
     this.trailing,
     this.onTap,
     this.isFirst = false,
@@ -14,7 +14,7 @@ class SettingTile extends StatelessWidget {
   });
   final String title;
   final String? subtitle;
-  final Widget leading;
+  final Widget? leading;
   final Widget? trailing;
   final void Function()? onTap;
   final bool isFirst;
@@ -48,14 +48,16 @@ class SettingTile extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
-          leading: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer.withAlpha(150),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: leading,
-          ),
+          leading: leading == null
+              ? null
+              : Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primaryContainer.withAlpha(150),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: leading,
+                ),
           subtitle: subtitle != null
               ? Text(subtitle!, style: Theme.of(context).textTheme.labelLarge)
               : null,
@@ -244,6 +246,47 @@ class _SettingExpansionTileState extends State<SettingExpansionTile> {
         ],
       ),
       children: widget.children,
+    );
+  }
+}
+
+class SliverSettingTile extends StatelessWidget {
+  const SliverSettingTile({
+    super.key,
+    required this.title,
+    this.subtitle,
+    required this.leading,
+    this.trailing,
+    this.onTap,
+    this.isFirst = false,
+    this.isLast = false,
+    this.margin = const EdgeInsetsGeometry.symmetric(horizontal: 16),
+  });
+
+  final String title;
+  final String? subtitle;
+  final Widget leading;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+  final bool isFirst;
+  final bool isLast;
+  final EdgeInsetsGeometry margin;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: margin,
+      sliver: SliverToBoxAdapter(
+        child: SettingTile(
+          title: title,
+          subtitle: subtitle,
+          leading: leading,
+          trailing: trailing,
+          onTap: onTap,
+          isFirst: isFirst,
+          isLast: isLast,
+        ),
+      ),
     );
   }
 }

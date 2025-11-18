@@ -11,12 +11,16 @@ class SuggestionCubit extends Cubit<SuggestionState> {
 
   void fetchSuggestions(String? query) async {
     if (query == null) return;
-    emit(SuggestionLoading());
+    safeEmit(SuggestionLoading());
     try {
       final response = await _yt.getSearchSuggestions(query: query);
-      emit(SuggestionSuccess(response));
-    } catch (e) {
-      emit(SuggestionError(e.toString()));
+      safeEmit(SuggestionSuccess(response));
+    } catch (e, s) {
+      safeEmit(SuggestionError(e.toString(), s.toString()));
     }
+  }
+
+  void safeEmit(SuggestionState state) {
+    if (!isClosed) emit(state);
   }
 }

@@ -28,7 +28,7 @@ class LoopButton extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
 
     return StreamBuilder<LoopMode>(
-      stream: sl<MediaPlayer>().loopModeStream,
+      stream: sl<MediaPlayer>().loopModeStream.distinct(),
       builder: (context, snapshot) {
         final mode = snapshot.data ?? LoopMode.off;
 
@@ -36,18 +36,9 @@ class LoopButton extends StatelessWidget {
         final bool isActive = mode == LoopMode.all || mode == LoopMode.one;
 
         final Icon icon = switch (mode) {
-          LoopMode.off => Icon(
-            FluentIcons.arrow_repeat_all_24_regular,
-            size: iconSize,
-          ),
-          LoopMode.all => Icon(
-            FluentIcons.arrow_repeat_all_24_filled,
-            size: iconSize,
-          ),
-          LoopMode.one => Icon(
-            FluentIcons.arrow_repeat_1_24_filled,
-            size: iconSize,
-          ),
+          LoopMode.off => Icon(FluentIcons.arrow_repeat_all_24_regular, size: iconSize),
+          LoopMode.all => Icon(FluentIcons.arrow_repeat_all_24_filled, size: iconSize),
+          LoopMode.one => Icon(FluentIcons.arrow_repeat_1_24_filled, size: iconSize),
         };
 
         return IconButton.filled(

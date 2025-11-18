@@ -43,11 +43,5 @@ class YTExploreScreenView extends StatelessWidget {
         return const SizedBox();
       },
     );
-    // ListView.builder(
-    //   itemCount: 100,
-    //   itemBuilder: (context, index) {
-    //     return ListTile(title: Text('Item $index'));
-    //   },
-    // );
   }
 }

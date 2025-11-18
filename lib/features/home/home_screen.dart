@@ -58,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
             ),
           ),
         ],
+        animateColor: true,
       ),
 
       body: (provider == DataProvider.ytmusic) ? const YTHomeScreen() : const JSHomeScreen(),

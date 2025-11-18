@@ -25,39 +25,17 @@ class MediaPlayer {
   final AudioPlayer _player;
   final yt.YoutubeExplode _yt = yt.YoutubeExplode();
 
-  // SponsorBlock integration
-
-  // --- Separate Queue Storage ------------------------------------------------
-
-  /// Internal BehaviorSubject holding the queue items
-  final _queueItems = BehaviorSubject<List<PlayableItem>>.seeded([]);
-
   /// Stream of queue items (reactive)
-  Stream<List<PlayableItem>> get queueItemsStream => _queueItems.stream;
-
-  /// Current queue items (instant access, synchronous)
-  List<PlayableItem> get queueItems => _queueItems.value;
-
-  /// Get item at specific index (instant access)
-  PlayableItem? getItemAt(int index) {
-    final items = queueItems;
-    if (index < 0 || index >= items.length) return null;
-    return items[index];
-  }
+  Stream<List<PlayableItem>> get queueItemsStream => _player.sequenceStream.map((items) {
+    return items.map((item) {
+      return PlayableItem.fromJson((item.tag as MediaItem).extras!);
+    }).toList();
+  });
 
   /// Get current playing item (instant access)
-  PlayableItem? get currentItem {
-    final index = currentIndex;
-    if (index == null) return null;
-    return getItemAt(index);
-  }
-
-  // --- SponsorBlock Methods --------------------------------------------------
-
-  /// Reload SponsorBlock settings (call this when settings change)
-
-  /// Get current sponsor segments
-
+  PlayableItem? get currentItem => _player.currentIndex == null
+      ? null
+      : PlayableItem.fromJson((_player.sequence[_player.currentIndex!].tag as MediaItem).extras!);
   // --- State Getters ---------------------------------------------------------
 
   final _dominantSeedColor = BehaviorSubject<Color?>.seeded(null);
@@ -119,10 +97,10 @@ class MediaPlayer {
   Stream<bool> get isActiveStream => currentItemStream.map((item) => item != null);
 
   /// Shuffle mode enabled
-  Stream<bool> get shuffleModeEnabledStream => _player.shuffleModeEnabledStream;
+  Stream<bool> get shuffleModeEnabledStream => _player.shuffleModeEnabledStream.distinct();
 
   /// Loop mode
-  Stream<LoopMode> get loopModeStream => _player.loopModeStream;
+  Stream<LoopMode> get loopModeStream => _player.loopModeStream.distinct();
 
   /// Playback button state (loading/playing/paused)
   Stream<PlaybackButtonState> get playbackStateStream =>
@@ -211,71 +189,54 @@ class MediaPlayer {
   // --- Queue Management ------------------------------------------------------
 
   Future<void> playSong(PlayableItem item) async {
-    await _player.setAudioSource(await _createAudioSource(item));
-    _queueItems.add([item]);
+    await _player.setAudioSource(_createAudioSource(item));
     _player.play();
   }
 
   Future<void> addSongs(List<PlayableItem> items) async {
     if (items.isEmpty) return;
 
-    final updatedQueue = List<PlayableItem>.from(_queueItems.value);
-
     for (var item in items) {
-      await _player.addAudioSource(await _createAudioSource(item));
-      updatedQueue.add(item);
+      await _player.addAudioSource(_createAudioSource(item));
     }
-
-    // Single emit at the end
-    _queueItems.add(updatedQueue);
   }
 
   Future<void> addNext(PlayableItem item) async {
-    final updatedQueue = List<PlayableItem>.from(_queueItems.value);
-
     final index = (_player.currentIndex ?? -1) + 1;
-    updatedQueue.insert(index, item);
-    _queueItems.add(updatedQueue);
-    await _player.insertAudioSource(index, await _createAudioSource(item));
+    await _player.insertAudioSource(index, _createAudioSource(item));
   }
 
   Future<void> playSongs(List<PlayableItem> items) async {
-    final first = items.removeAt(0);
-    await _player.setAudioSource(await _createAudioSource(first));
-    _player.play();
-
+    final mediaItems = <AudioSource>[];
     for (var item in items) {
-      await _player.addAudioSource(await _createAudioSource(item));
+      mediaItems.add(_createAudioSource(item));
     }
-    _queueItems.add(items);
+
+    await _player.pause();
+    await _player.clearAudioSources();
+
+    // 3. Update your local queue only once if necessary
+    await _player.addAudioSources(mediaItems);
+
+    // 4. Start playback
+    await _player.play();
   }
 
   Future<void> addToQueue(PlayableItem item) async {
-    final currentQueue = List<PlayableItem>.from(queueItems);
-    currentQueue.add(item);
-    _queueItems.add(currentQueue);
-    await _player.addAudioSource(await _createAudioSource(item));
+    await _player.addAudioSource(_createAudioSource(item));
   }
 
   /// Remove item from queue at index
   Future<void> removeAt(int index) async {
     await _player.removeAudioSourceAt(index);
-    final currentQueue = List<PlayableItem>.from(queueItems);
-    currentQueue.removeAt(index);
-    _queueItems.add(currentQueue);
   }
 
   /// Move item in queue from currentIndex to newIndex
   Future<void> moveItem(int currentIndex, int newIndex) async {
     await _player.moveAudioSource(currentIndex, newIndex);
-    final currentQueue = List<PlayableItem>.from(queueItems);
-    final item = currentQueue.removeAt(currentIndex);
-    currentQueue.insert(newIndex, item);
-    _queueItems.add(currentQueue);
   }
 
   Future<void> clearQueue() async {
-    _queueItems.add([]);
     await _player.clearAudioSources();
   }
 
@@ -283,13 +244,14 @@ class MediaPlayer {
 
   // --- Helper Methods --------------------------------------------------------
 
-  Future<AudioSource> _createAudioSource(PlayableItem item) async {
+  AudioSource _createAudioSource(PlayableItem item) {
     final mediaItem = MediaItem(
       id: item.id,
       title: item.title,
       artUri: Uri.parse(item.thumbnails.last.url),
       album: item.album?.name,
       artist: item.artists.map((artist) => artist.name).join(", "),
+      extras: item.toJson(),
     );
     if (item.provider == DataProvider.jiosavan) {
       final bitrate = sl<SettingsService>().jioSaavn.state.streamingQuality.bitrate;
@@ -307,8 +269,8 @@ class MediaPlayer {
   // --- Cleanup ---------------------------------------------------------------
 
   void dispose() {
-    _queueItems.close();
     _dominantSeedColor.close();
+    _audioHandler.dispose();
   }
 }
 

@@ -4,10 +4,8 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/di.dart';
-import 'package:gyawun_music/core/utils/snackbar.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:gyawun_shared/gyawun_shared.dart';
-import 'package:ytmusic/yt_music_base.dart';
 
 class SectionHeader extends StatelessWidget {
   const SectionHeader({super.key, required this.section});
@@ -35,14 +33,16 @@ class SectionHeader extends StatelessWidget {
               iconAlignment: IconAlignment.end,
               onPressed: () async {
                 if (section.trailing!.isPlayable == true) {
-                  BottomSnackbar.showMessage(context, "Play starting");
-                  final items = await sl<YTMusic>().getNextSongs(
-                    body: section.trailing!.endpoint!.cast(),
-                  );
-                  final songs = items.whereType<PlayableItem>().toList();
-                  final first = songs.removeAt(0);
-                  await sl<MediaPlayer>().playSong(first);
-                  await sl<MediaPlayer>().addSongs(songs);
+                  final songs = section.items.whereType<PlayableItem>().toList();
+                  sl<MediaPlayer>().playSongs(songs);
+                  // BottomSnackbar.showMessage(context, "Play starting");
+                  // final items = await sl<YTMusic>().getNextSongs(
+                  //   body: section.trailing!.endpoint!.cast(),
+                  // );
+                  // final songs = items.whereType<PlayableItem>().toList();
+                  // final first = songs.removeAt(0);
+                  // await sl<MediaPlayer>().playSong(first);
+                  // await sl<MediaPlayer>().addSongs(songs);
                   return;
                 }
                 if (section.provider == DataProvider.ytmusic) {

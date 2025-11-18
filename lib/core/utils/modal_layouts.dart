@@ -5,21 +5,43 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:gyawun_shared/gyawun_shared.dart';
+import 'package:library_manager/library_manager.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'modals.dart';
 
-class ModalLayouts {
-  static Widget itemBottomLayout(BuildContext context, SectionItem item) {
-    final isPlayable =
-        item.type == SectionItemType.video ||
-        item.type == SectionItemType.song ||
-        item.type == SectionItemType.episode;
-    final isHorizontal =
-        (item.type == SectionItemType.video || item.type == SectionItemType.episode);
+class ItemBottomLayout extends StatefulWidget {
+  const ItemBottomLayout({super.key, required this.item});
+  final SectionItem item;
 
+  @override
+  State<ItemBottomLayout> createState() => _ItemBottomLayoutState();
+}
+
+class _ItemBottomLayoutState extends State<ItemBottomLayout> {
+  late final bool isPlayable;
+  late final bool isHorizontal;
+  late final SectionItem item;
+  late bool isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    item = widget.item;
+    isPlayable = item is PlayableItem;
+    isHorizontal = (item.type == SectionItemType.video || item.type == SectionItemType.episode);
+    isFavorite = sl<LibraryManager>().isSongInPlaylist(
+      playlistId: "favorites",
+      itemId: item.id,
+      provider: item.provider,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -53,7 +75,30 @@ class ModalLayouts {
                   )
                 : null,
             trailing: isPlayable
-                ? IconButton(onPressed: () => {}, icon: const Icon(FluentIcons.heart_24_regular))
+                ? IconButton(
+                    onPressed: () async {
+                      if (item is PlayableItem) {
+                        if (isFavorite) {
+                          await sl<LibraryManager>().removeSongFromPlaylist(
+                            playlistId: "favorites",
+                            itemId: item.id,
+                            provider: item.provider,
+                          );
+                          isFavorite = false;
+                        } else {
+                          await sl<LibraryManager>().addSongToPlaylist(
+                            playlistId: "favorites",
+                            item: item as PlayableItem,
+                          );
+                          isFavorite = true;
+                        }
+                        setState(() {});
+                      }
+                    },
+                    icon: Icon(
+                      isFavorite ? FluentIcons.heart_24_filled : FluentIcons.heart_24_regular,
+                    ),
+                  )
                 : null,
           ),
           const Divider(height: 1),
@@ -70,7 +115,7 @@ class ModalLayouts {
                       label: "Play Next",
                       onTap: () {
                         if (item is PlayableItem) {
-                          sl<MediaPlayer>().addNext(item);
+                          sl<MediaPlayer>().addNext(item as PlayableItem);
                           Navigator.pop(context);
                         }
                       },
@@ -80,7 +125,7 @@ class ModalLayouts {
                       label: "Add to queue",
                       onTap: () {
                         if (item is PlayableItem) {
-                          sl<MediaPlayer>().addToQueue(item);
+                          sl<MediaPlayer>().addToQueue(item as PlayableItem);
                           Navigator.pop(context);
                         }
                       },
@@ -107,20 +152,21 @@ class ModalLayouts {
                   ],
                 ),
                 const SizedBox(height: 8),
-                if (isPlayable)
-                  ListTile(
-                    title: Text(
-                      "Add to Playlist",
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
+                if (item is PlayableItem)
+                  if (isPlayable)
+                    ListTile(
+                      title: Text(
+                        "Add to Playlist",
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      leading: const Icon(FluentIcons.document_one_page_add_24_filled),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        await Modals.showAddToPlaylist(context, item as PlayableItem);
+                      },
                     ),
-                    leading: const Icon(FluentIcons.document_one_page_add_24_filled),
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Modals.addToPlaylist(context, song);
-                    },
-                  ),
                 if (isPlayable)
                   ListTile(
                     title: Text(
@@ -183,7 +229,7 @@ class ModalLayouts {
                       Modals.showArtistsBottomSheet(context, item.artists);
                     },
                   ),
-                if (item is PlayableItem && item.album != null)
+                if (item is PlayableItem && (item as PlayableItem).album != null)
                   ListTile(
                     title: Text(
                       "Album",
@@ -197,7 +243,9 @@ class ModalLayouts {
                     trailing: const Icon(FluentIcons.chevron_right_24_filled),
                     onTap: () {
                       Navigator.pop(context);
-                      context.push('/ytmusic/album/${jsonEncode(item.album!.endpoint)}');
+                      context.push(
+                        '/ytmusic/album/${jsonEncode((item as PlayableItem).album!.endpoint)}',
+                      );
                     },
                   ),
               ],
@@ -207,6 +255,140 @@ class ModalLayouts {
       ),
     );
   }
+}
+
+class CreatePlaylistLayout extends StatefulWidget {
+  const CreatePlaylistLayout({super.key});
+
+  @override
+  State<CreatePlaylistLayout> createState() => _CreatePlaylistLayoutState();
+}
+
+class _CreatePlaylistLayoutState extends State<CreatePlaylistLayout> {
+  final controller = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: MediaQuery.of(context).viewInsets,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Create Playlist", style: Theme.of(context).textTheme.headlineSmall),
+              const SizedBox(height: 16),
+
+              /// NAME FIELD
+              TextFormField(
+                controller: controller,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  labelText: "Playlist Name",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "Please enter a name";
+                  }
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 20),
+
+              /// ACTION BUTTONS
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(child: const Text("Cancel"), onPressed: () => Navigator.pop(context)),
+                  const SizedBox(width: 8),
+                  FilledButton(
+                    child: const Text("Create"),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+
+                      final name = controller.text.trim();
+
+                      Navigator.pop(context, name);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AddToPlaylistLayout extends StatefulWidget {
+  const AddToPlaylistLayout({super.key, required this.item});
+  final PlayableItem item;
+
+  @override
+  State<AddToPlaylistLayout> createState() => _AddToPlaylistLayoutState();
+}
+
+class _AddToPlaylistLayoutState extends State<AddToPlaylistLayout> {
+  late final List<Playlist> playlists;
+
+  @override
+  initState() {
+    super.initState();
+    playlists = sl<LibraryManager>().getPlaylistsExcludingSong(
+      widget.item.id,
+      PlaylistType.custom,
+      widget.item.provider,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      minimum: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (playlists.isEmpty) const Text("No Playlist"),
+          ...playlists.indexed.map(
+            (playlist) => SettingTile(
+              title: playlist.$2.name,
+              isFirst: playlist.$1 == 0,
+              isLast: playlist.$1 == playlists.length - 1,
+              onTap: () async {
+                await sl<LibraryManager>().addSongToPlaylist(
+                  playlistId: playlist.$2.id,
+                  item: widget.item,
+                );
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ModalLayouts {
+  // static Widget itemBottomLayout(BuildContext context, SectionItem item) {
+
+  //   return
+  // }
 
   static Widget artistsBottomLayout(BuildContext context, List<Artist> artists) {
     return SafeArea(

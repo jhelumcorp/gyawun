@@ -14,6 +14,7 @@ final class SuggestionSuccess extends SuggestionState {
 }
 
 final class SuggestionError extends SuggestionState {
-  SuggestionError([this.message]);
+  SuggestionError([this.message, this.stackTrace]);
   final String? message;
+  final String? stackTrace;
 }

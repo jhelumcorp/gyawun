@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
+import 'package:gyawun_music/features/library/views/playlist_details.dart';
 import 'package:gyawun_music/features/main/main_screen.dart';
 import 'package:gyawun_music/features/onboarding/view/onboarding_screen.dart';
 import 'package:gyawun_music/features/player/player_screen.dart';
@@ -30,8 +31,6 @@ final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
 final searchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'search');
 final libraryNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'library');
 final settingsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'settings');
-
-ValueNotifier<int> bottomSheetCounter = ValueNotifier(0);
 
 final router = GoRouter(
   navigatorKey: rootNavigatorKey,
@@ -101,6 +100,15 @@ final router = GoRouter(
                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   return FadeTransition(opacity: animation, child: child);
                 },
+              ),
+            ),
+
+            /// Library Routes
+            GoRoute(
+              path: 'library/playlists/:name/:id',
+              builder: (context, state) => PlaylistDetailsScreen(
+                name: state.pathParameters['name']!,
+                id: state.pathParameters['id']!,
               ),
             ),
 

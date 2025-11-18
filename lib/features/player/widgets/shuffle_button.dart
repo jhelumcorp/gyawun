@@ -13,7 +13,7 @@ class ShuffleButton extends StatelessWidget {
     final media = sl<MediaPlayer>();
 
     return StreamBuilder<bool>(
-      stream: media.shuffleModeEnabledStream,
+      stream: media.shuffleModeEnabledStream.distinct(),
       builder: (context, snapshot) {
         final enabled = snapshot.data == true;
 
@@ -23,10 +23,7 @@ class ShuffleButton extends StatelessWidget {
           onPressed: () => media.setShuffleModeEnabled(!enabled),
 
           icon: Icon(FluentIcons.arrow_shuffle_off_24_filled, size: iconSize),
-          selectedIcon: Icon(
-            FluentIcons.arrow_shuffle_24_filled,
-            size: iconSize,
-          ),
+          selectedIcon: Icon(FluentIcons.arrow_shuffle_24_filled, size: iconSize),
 
           // Only apply primaryContainer when shuffle is OFF.
           style: ButtonStyle(

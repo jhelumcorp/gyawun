@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:gyawun_music/services/settings/cubits/yt_music_cubit.dart';
-import 'package:gyawun_music/services/settings/settings_service.dart';
 import 'package:gyawun_music/services/settings/states/yt_music_state.dart';
 import 'package:gyawun_shared/gyawun_shared.dart';
 
@@ -42,11 +40,18 @@ class SponsorSegment {
 }
 
 class SponsorBlockService {
-  SponsorBlockService() {
+  SponsorBlockService(MediaPlayer player, YtMusicCubit settings)
+    : _media = player,
+      _settings = settings {
     _listenToSettings();
     _listenToCurrentItem();
     _listenToPosition();
   }
+
+  // Inject dependencies
+  final MediaPlayer _media;
+  final YtMusicCubit _settings;
+
   static const String _baseUrl = 'https://sponsor.ajay.app/api';
   final Dio _dio = Dio(BaseOptions(baseUrl: _baseUrl));
 
@@ -60,10 +65,6 @@ class SponsorBlockService {
   StreamSubscription? _currentItemSub;
   StreamSubscription? _positionSub;
 
-  // Inject dependencies
-  final MediaPlayer _media = sl<MediaPlayer>();
-  final YtMusicCubit _settings = sl<SettingsService>().youtubeMusic;
-
   /// STREAM OUTPUT
   Stream<List<SponsorSegment>> get segmentsStream => _segments.stream;
 
@@ -75,16 +76,10 @@ class SponsorBlockService {
       _enabled = state.sponsorBlock;
       _reloadSkipCategories(state);
 
-      // If disabled: clear segments
-      if (!_enabled) {
-        _currentSegments = [];
-        _segments.add([]);
-      } else {
-        // If enabled: refresh current video
-        final item = _media.currentItem;
-        if (item != null && item.provider == DataProvider.ytmusic) {
-          _fetchFor(item.id);
-        }
+      // Always refresh segments when settings change
+      final item = _media.currentItem;
+      if (item != null && item.provider == DataProvider.ytmusic) {
+        _fetchFor(item.id);
       }
     });
   }
@@ -105,7 +100,7 @@ class SponsorBlockService {
   // ------------------------------------------------------
   void _listenToCurrentItem() {
     _currentItemSub = _media.currentItemStream.listen((item) async {
-      if (!_enabled || item == null) {
+      if (item == null) {
         _segments.add([]);
         return;
       }
@@ -120,10 +115,19 @@ class SponsorBlockService {
   }
 
   Future<void> _fetchFor(String videoId) async {
-    if (!_enabled || _skipCategories.isEmpty) return;
-
     try {
-      final catJson = '[${_skipCategories.map((c) => '"$c"').join(',')}]';
+      // Fetch ALL categories, not just enabled ones
+      final allCategories = [
+        "sponsor",
+        "selfpromo",
+        "interaction",
+        "intro",
+        "outro",
+        "preview",
+        "music_offtopic",
+      ];
+
+      final catJson = '[${allCategories.map((c) => '"$c"').join(',')}]';
 
       final res = await _dio.get(
         '/skipSegments',
@@ -140,18 +144,21 @@ class SponsorBlockService {
   }
 
   // ------------------------------------------------------
-  // 3. Listen to position stream → auto skip
+  // 3. Listen to position stream → auto skip (only enabled categories)
   // ------------------------------------------------------
   void _listenToPosition() {
-    _positionSub = _media.positionStream.listen((pos) {
+    _positionSub = _media.positionStream.listen((pos) async {
       if (!_enabled) return;
       if (_currentSegments.isEmpty) return;
 
       final sec = pos.inMilliseconds / 1000.0;
 
       for (final seg in _currentSegments) {
+        // Only skip if this category is enabled
+        if (!_skipCategories.contains(seg.category)) continue;
+
         if (sec >= seg.startTime && sec < seg.endTime) {
-          _media.seek(Duration(milliseconds: (seg.endTime * 1000).toInt()));
+          await _media.seek(Duration(milliseconds: (seg.endTime * 1000).toInt()));
           break;
         }
       }

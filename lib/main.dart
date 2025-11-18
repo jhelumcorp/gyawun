@@ -14,7 +14,7 @@ import 'app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final directory = await getApplicationDocumentsDirectory();
+  final directory = await getApplicationSupportDirectory();
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: HydratedStorageDirectory(directory.path),
   );
@@ -24,9 +24,8 @@ void main() async {
     JustAudioMediaKit.title = 'Gyawun Music';
   }
 
-  await registerDependencies();
+  await registerDependencies(directory);
 
-  registerListeners();
   await initPlayerSettings(sl<MediaPlayer>(), sl<SettingsService>().player.state);
 
   await SystemChrome.setEnabledSystemUIMode(

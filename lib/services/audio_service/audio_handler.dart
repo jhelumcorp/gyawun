@@ -144,16 +144,7 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   Future<void> skipToPrevious() => _player.seekToPrevious();
 
   @override
-  Future<void> skipToQueueItem(int index) async {
-    final sequence = _player.sequence;
-    if (index >= 0 && index < sequence.length) {
-      await _player.seek(Duration.zero, index: index);
-      // Auto-play if not already playing
-      if (!_player.playing) {
-        play();
-      }
-    }
-  }
+  Future<void> skipToQueueItem(int index) => _player.seek(null, index: index);
 
   // --- Queue Management ------------------------------------------------------
 

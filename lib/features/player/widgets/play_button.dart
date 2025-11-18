@@ -1,7 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/di.dart';
-import 'package:gyawun_music/services/audio_service/audio_handler.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 
 class PlayButton extends StatelessWidget {
@@ -37,12 +36,12 @@ class PlayButton extends StatelessWidget {
 
           case PlaybackButtonState.playing:
             icon = const Icon(FluentIcons.pause_24_filled);
-            onPressed = sl<MyAudioHandler>().pause;
+            onPressed = sl<MediaPlayer>().pause;
             break;
 
           case PlaybackButtonState.paused:
             icon = const Icon(FluentIcons.play_24_filled);
-            onPressed = sl<MyAudioHandler>().play;
+            onPressed = sl<MediaPlayer>().play;
             break;
         }
 

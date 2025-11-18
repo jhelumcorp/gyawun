@@ -18,56 +18,67 @@ class TimerButton extends StatelessWidget {
         final formatted = snapshot.data;
         final active = formatted != null;
 
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 220),
-          curve: Curves.easeOutCubic,
-          padding: EdgeInsets.symmetric(
-            horizontal: active ? 14 : 10,
-            vertical: 10,
-          ),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.secondaryContainer,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          constraints: BoxConstraints(minWidth: active ? 90 : 0),
+        return Material(
+          color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(30),
-            onTap: () =>
-                active ? media.cancelSleepTimer() : _showTimerMenu(context),
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 160),
-              transitionBuilder: (child, animation) =>
-                  FadeTransition(opacity: animation, child: child),
-              child: !active
-                  ? Icon(
-                      FluentIcons.timer_24_regular,
-                      key: const ValueKey("timer-off"),
-                      size: iconSize,
-                      color: theme.colorScheme.onSecondaryContainer,
-                    )
-                  : Row(
-                      key: const ValueKey("timer-on"),
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          formatted,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.onSecondaryContainer,
-                            fontFeatures: const [
-                              FontFeature.tabularFigures(),
-                            ], // ← This line fixes spacing
-                          ),
-                        ),
-
-                        const SizedBox(width: 6),
-                        Icon(
-                          FluentIcons.dismiss_24_filled,
+            onTap: () => active ? media.cancelSleepTimer() : _showTimerMenu(context),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCubic,
+              padding: EdgeInsets.symmetric(horizontal: active ? 16 : 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.secondaryContainer,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOutCubic,
+                alignment: Alignment.center,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  switchInCurve: Curves.easeOutCubic,
+                  switchOutCurve: Curves.easeInCubic,
+                  transitionBuilder: (child, animation) => FadeTransition(
+                    opacity: animation,
+                    child: ScaleTransition(
+                      scale: Tween<double>(
+                        begin: 0.8,
+                        end: 1.0,
+                      ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+                      child: child,
+                    ),
+                  ),
+                  child: !active
+                      ? Icon(
+                          FluentIcons.timer_24_regular,
+                          key: const ValueKey("timer-off"),
                           size: iconSize,
                           color: theme.colorScheme.onSecondaryContainer,
+                        )
+                      : Row(
+                          key: ValueKey("timer-on-$formatted"),
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              formatted,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                color: theme.colorScheme.onSecondaryContainer,
+                                fontFeatures: const [FontFeature.tabularFigures()],
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Icon(
+                              FluentIcons.dismiss_24_filled,
+                              size: iconSize * 0.85,
+                              color: theme.colorScheme.onSecondaryContainer,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                ),
+              ),
             ),
           ),
         );
@@ -124,12 +135,7 @@ class TimerButton extends StatelessWidget {
       builder: (context) {
         final theme = Theme.of(context);
 
-        Widget counter(
-          String label,
-          int value,
-          VoidCallback onInc,
-          VoidCallback onDec,
-        ) {
+        Widget counter(String label, int value, VoidCallback onInc, VoidCallback onDec) {
           return Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -148,9 +154,7 @@ class TimerButton extends StatelessWidget {
                     ),
                     Text(
                       value.toString().padLeft(2, '0'),
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
                     ),
                     IconButton(
                       icon: const Icon(Icons.add),
@@ -187,10 +191,7 @@ class TimerButton extends StatelessWidget {
             ],
           ),
           actions: [
-            TextButton(
-              child: const Text("Cancel"),
-              onPressed: () => Navigator.pop(context),
-            ),
+            TextButton(child: const Text("Cancel"), onPressed: () => Navigator.pop(context)),
             FilledButton(
               child: const Text("Set"),
               onPressed: () {

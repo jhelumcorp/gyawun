@@ -102,7 +102,7 @@ class _YTSearchScreenViewState extends State<YTSearchScreenView> {
                                     setState(() {
                                       query = q;
                                     });
-                                    if (context.mounted) {
+                                    if (context.mounted && query != null) {
                                       context.read<SearchCubit>().search(query!);
                                     }
                                   }
@@ -131,7 +131,7 @@ class _YTSearchScreenViewState extends State<YTSearchScreenView> {
           ];
         },
 
-        body: query == null ? const YTExploreScreen() : const YTSearchResultView(),
+        body: query != null ? const YTSearchResultView() : const YTExploreScreen(),
       ),
     );
   }

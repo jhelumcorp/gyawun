@@ -11,14 +11,17 @@ class SearchCubit extends Cubit<SearchState> {
   final YTMusic ytmusic;
   Future<void> search(String query) async {
     try {
-      emit(SearchLoading());
+      safeEmit(SearchLoading());
       final data = await ytmusic.getSearch(query: query);
-      emit(SearchSuccess(data));
+      safeEmit(SearchSuccess(data));
     } catch (e) {
-      emit(SearchError(e.toString()));
+      safeEmit(SearchError(e.toString()));
     }
   }
 
   Future<YTSearchSuggestions> searchSuggestions(String query) =>
       ytmusic.getSearchSuggestions(query: query);
+  void safeEmit(SearchState state) {
+    if (!isClosed) emit(state);
+  }
 }

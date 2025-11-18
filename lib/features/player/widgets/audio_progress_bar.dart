@@ -83,15 +83,12 @@ class _AudioProgressBarState extends State<AudioProgressBar> {
                         value: position.clamp(0, duration > 0 ? duration : 1),
                         min: 0,
                         max: duration > 0 ? duration : 1,
-                        secondaryTrackValue: buffered,
+                        secondaryTrackValue: buffered.clamp(0, duration > 0 ? duration : 1),
                         onChanged: (v) {
                           setState(() => _dragValue = v);
                         },
-                        onChangeStart: (_) {
-                          // Optional: pause auto updates during drag
-                        },
                         onChangeEnd: (v) {
-                          _dragValue = null;
+                          setState(() => _dragValue = null);
                           sl<MediaPlayer>().seek(Duration(milliseconds: v.toInt()));
                         },
                       ),
@@ -124,12 +121,14 @@ class _AudioProgressBarState extends State<AudioProgressBar> {
                         _formatDuration(position),
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
+                          fontFeatures: const [FontFeature.tabularFigures()],
                         ),
                       ),
                       Text(
                         _formatDuration(duration),
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
+                          fontFeatures: const [FontFeature.tabularFigures()],
                         ),
                       ),
                     ],
@@ -151,6 +150,7 @@ class SponsorSegmentPainter extends CustomPainter {
     required this.duration,
     required this.getCategoryColor,
   });
+
   final List<SponsorSegment> segments;
   final double duration;
   final Color Function(String) getCategoryColor;
@@ -165,7 +165,7 @@ class SponsorSegmentPainter extends CustomPainter {
     for (final segment in segments) {
       final startX = (segment.startTime * 1000 / duration) * size.width;
       final endX = (segment.endTime * 1000 / duration) * size.width;
-      final width = endX - startX;
+      final width = (endX - startX).clamp(1.0, size.width);
 
       if (width > 0) {
         final paint = Paint()
