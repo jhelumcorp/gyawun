@@ -12,6 +12,7 @@ import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
+import 'package:ytmusic/yt_music_base.dart';
 
 /// Public-facing media player with separate queue storage
 class MediaPlayer {
@@ -19,7 +20,13 @@ class MediaPlayer {
     : _audioHandler = audioHandler,
       _player = audioHandler.player {
     currentItemStream.listen(_updateDominantColorSong);
+    statsTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (_player.playing && currentItem != null && currentItem!.provider == DataProvider.ytmusic) {
+        sl<YTMusic>().addPlayingStats(currentItem!.id, _player.position);
+      }
+    });
   }
+  Timer? statsTimer;
 
   final MyAudioHandler _audioHandler;
   final AudioPlayer _player;
@@ -270,6 +277,7 @@ class MediaPlayer {
 
   void dispose() {
     _dominantSeedColor.close();
+    statsTimer?.cancel();
     _audioHandler.dispose();
   }
 }

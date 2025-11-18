@@ -30,10 +30,7 @@ class OnboardingScreen extends StatelessWidget {
             children: [
               Flexible(
                 flex: 4,
-                child: Lottie.asset(
-                  'assets/animations/welcome.json',
-                  fit: BoxFit.contain,
-                ),
+                child: Lottie.asset('assets/animations/welcome.json', fit: BoxFit.contain),
               ),
               const SizedBox(height: 22),
               if (parts.first.isNotEmpty)
@@ -48,10 +45,7 @@ class OnboardingScreen extends StatelessWidget {
 
               ShaderMask(
                 shaderCallback: (bounds) => LinearGradient(
-                  colors: [
-                    theme.colorScheme.primary,
-                    theme.colorScheme.tertiary,
-                  ],
+                  colors: [theme.colorScheme.primary, theme.colorScheme.tertiary],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ).createShader(bounds),
@@ -101,7 +95,7 @@ class OnboardingScreen extends StatelessWidget {
                           : null,
                     ),
                     onPressed: () {
-                      context.go('/');
+                      context.go('/setup');
                     },
                     child: Text(
                       loc.getStarted,

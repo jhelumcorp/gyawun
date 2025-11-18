@@ -6,6 +6,7 @@ import 'package:gyawun_music/core/extensions/context_extensions.dart';
 import 'package:gyawun_music/features/library/views/playlist_details.dart';
 import 'package:gyawun_music/features/main/main_screen.dart';
 import 'package:gyawun_music/features/onboarding/view/onboarding_screen.dart';
+import 'package:gyawun_music/features/onboarding/view/setting_up_screen.dart';
 import 'package:gyawun_music/features/player/player_screen.dart';
 import 'package:gyawun_music/features/player/queue_screen.dart';
 import 'package:gyawun_music/features/player/widgets/bottom_player.dart';
@@ -36,11 +37,8 @@ final router = GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: '/onboarding',
   routes: [
-    GoRoute(
-      path: '/onboarding',
-      name: 'onboarding',
-      builder: (context, state) => const OnboardingScreen(),
-    ),
+    GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingScreen()),
+    GoRoute(path: '/setup', builder: (context, state) => const SettingUpScreen()),
     ShellRoute(
       builder: (context, state, child) {
         return Stack(children: [child, if (!context.isWideScreen) const BottomPlayer()]);
