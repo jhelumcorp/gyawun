@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
@@ -5,7 +6,6 @@ import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/core/widgets/page_header_widget.dart';
 import 'package:gyawun_music/core/widgets/section_widget.dart';
 import 'package:gyawun_music/features/services/yt_music/playlist/cubit/playlist_cubit.dart';
-import 'package:ytmusic/yt_music_base.dart';
 
 class YTPlaylistScreen extends StatelessWidget {
   const YTPlaylistScreen({super.key, required this.body});
@@ -14,7 +14,7 @@ class YTPlaylistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => PlaylistCubit(sl<YTMusic>(), body),
+      create: (_) => PlaylistCubit(sl(), sl(), body),
       child: const YTPlaylistScreenView(),
     );
   }
@@ -54,7 +54,6 @@ class _YTPlaylistScreenViewState extends State<YTPlaylistScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Playlist")),
       body: BlocBuilder<PlaylistCubit, PlaylistState>(
         builder: (context, state) {
           if (state is PlaylistLoading) {
@@ -69,6 +68,20 @@ class _YTPlaylistScreenViewState extends State<YTPlaylistScreenView> {
               controller: _scrollController,
 
               slivers: [
+                SliverAppBar(
+                  pinned: true,
+                  title: const Text("Playlist"),
+                  actions: [
+                    IconButton(
+                      icon: Icon(
+                        state.isSaved ? FluentIcons.star_24_filled : FluentIcons.star_24_regular,
+                      ),
+                      onPressed: () {
+                        context.read<PlaylistCubit>().toggleSavedPlaylist();
+                      },
+                    ),
+                  ],
+                ),
                 if (playlistState.header != null)
                   SliverToBoxAdapter(
                     child: Padding(

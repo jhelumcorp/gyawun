@@ -26,4 +26,11 @@ class PlaylistDetailsCubit extends Cubit<PlaylistDetailsState> {
       fetchSongs();
     }
   }
+
+  Future<void> remove(String itemId, DataProvider provider) async {
+    if (state is PlaylistDetailsSuccess) {
+      await _lb.removeSongFromPlaylist(playlistId: id, itemId: itemId, provider: provider);
+      fetchSongs();
+    }
+  }
 }

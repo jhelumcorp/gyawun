@@ -8,9 +8,10 @@ final class PlaylistInitial extends PlaylistState {}
 final class PlaylistLoading extends PlaylistState {}
 
 final class PlaylistSuccess extends PlaylistState {
-  PlaylistSuccess(this.data, {this.loadingMore = false});
+  PlaylistSuccess(this.data, {this.loadingMore = false, this.isSaved = false});
   final Page data;
   final bool loadingMore;
+  final bool isSaved;
 }
 
 final class PlaylistError extends PlaylistState {

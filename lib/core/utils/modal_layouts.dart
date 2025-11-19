@@ -5,11 +5,13 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/utils/snackbar.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:library_manager/library_manager.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:ytmusic/yt_music_base.dart';
 
 import 'modals.dart';
 
@@ -152,7 +154,10 @@ class _ItemBottomLayoutState extends State<ItemBottomLayout> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                if (item is PlayableItem)
+                if (item is PlayableItem &&
+                    sl<LibraryManager>()
+                        .getPlaylistsExcludingSong(item.id, PlaylistType.custom, item.provider)
+                        .isNotEmpty)
                   if (isPlayable)
                     ListTile(
                       title: Text(
@@ -167,20 +172,20 @@ class _ItemBottomLayoutState extends State<ItemBottomLayout> {
                         await Modals.showAddToPlaylist(context, item as PlayableItem);
                       },
                     ),
-                if (isPlayable)
-                  ListTile(
-                    title: Text(
-                      "Download",
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
-                    ),
-                    leading: const Icon(FluentIcons.cloud_arrow_down_24_filled),
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Modals.addToPlaylist(context, song);
-                    },
-                  ),
+                // if (isPlayable)
+                //   ListTile(
+                //     title: Text(
+                //       "Download",
+                //       style: Theme.of(
+                //         context,
+                //       ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
+                //     ),
+                //     leading: const Icon(FluentIcons.cloud_arrow_down_24_filled),
+                //     onTap: () {
+                //       Navigator.pop(context);
+                //       // Modals.addToPlaylist(context, song);
+                //     },
+                //   ),
                 if (item.radioEndpoint != null)
                   ListTile(
                     title: Text(
@@ -192,25 +197,32 @@ class _ItemBottomLayoutState extends State<ItemBottomLayout> {
                     leading: const Icon(FluentIcons.remix_add_24_filled),
                     onTap: () async {
                       Navigator.pop(context);
-                      // BottomSnackbar.showMessage(context, "Starting radio...");
-                      // await sl<MediaPlayer>().playYTRadio(item);
+                      BottomSnackbar.showMessage(context, "Play starting");
+                      final items = await sl<YTMusic>().getNextSongs(
+                        body: item.radioEndpoint!.cast(),
+                      );
+                      final songs = items.whereType<PlayableItem>().toList();
+                      await sl<MediaPlayer>().playSongs(songs);
                     },
                   ),
                 if (item.shuffleEndpoint != null)
                   ListTile(
                     title: Text(
-                      "Start Radio",
+                      "Shuffle Play",
                       style: Theme.of(
                         context,
                       ).textTheme.bodyLarge?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
-                    leading: const Icon(FluentIcons.remix_add_24_filled),
+                    leading: const Icon(FluentIcons.arrow_shuffle_24_filled),
                     onTap: () async {
                       Navigator.pop(context);
-                      // BottomSnackbar.showMessage(context, "Play starting");
-                      // await sl<MediaPlayer>().playYTFromEndpoint(
-                      //   (item as HasShuffleEndpoint).shuffleEndpoint!,
-                      // );
+                      Navigator.pop(context);
+                      BottomSnackbar.showMessage(context, "Play starting");
+                      final items = await sl<YTMusic>().getNextSongs(
+                        body: item.shuffleEndpoint!.cast(),
+                      );
+                      final songs = items.whereType<PlayableItem>().toList();
+                      await sl<MediaPlayer>().playSongs(songs);
                     },
                   ),
 

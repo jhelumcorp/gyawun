@@ -18,7 +18,10 @@ class LibraryCubit extends Cubit<LibraryState> {
       final history = all.firstWhere((e) => e.type == PlaylistType.history);
       final downloads = all.firstWhere((e) => e.type == PlaylistType.downloads);
 
-      final custom = all.where((e) => e.type == PlaylistType.custom).toList();
+      final custom = all
+          .where((e) => e.type == PlaylistType.custom && e.origin == PlaylistOrigin.local)
+          .toList();
+      final remote = all.where((e) => e.origin == PlaylistOrigin.remote).toList();
 
       emit(
         LibrarySuccess(
@@ -26,6 +29,7 @@ class LibraryCubit extends Cubit<LibraryState> {
           history: history,
           downloads: downloads,
           customPlaylists: custom,
+          remotePlaylists: remote,
         ),
       );
     } catch (e) {

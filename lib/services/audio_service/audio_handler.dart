@@ -11,7 +11,7 @@ Future<MyAudioHandler> initAudioService() async {
     builder: MyAudioHandler.new,
     config: const AudioServiceConfig(
       androidNotificationChannelId: 'com.sheikhhaziq.gyawun.audio',
-      androidNotificationChannelName: 'Audio Playback',
+      androidNotificationChannelName: 'Gyawun Audio Playback',
       androidShowNotificationBadge: true,
       androidStopForegroundOnPause: false,
     ),

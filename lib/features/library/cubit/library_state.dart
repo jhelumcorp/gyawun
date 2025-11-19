@@ -13,11 +13,13 @@ final class LibrarySuccess extends LibraryState {
     required this.history,
     required this.downloads,
     required this.customPlaylists,
+    required this.remotePlaylists,
   });
   final Playlist favorites;
   final Playlist history;
   final Playlist downloads;
   final List<Playlist> customPlaylists;
+  final List<Playlist> remotePlaylists;
 }
 
 /// Error state

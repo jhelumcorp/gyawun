@@ -211,8 +211,12 @@ class YoutubeMusicScreen extends StatelessWidget {
                       title: "Reset Visitor ID",
                       leading: const Icon(FluentIcons.key_reset_24_filled),
                       isLast: true,
-                      onTap: () {
-                        cubit.setVisitorId(null);
+                      onTap: () async {
+                        final c = await YTMusic.fetchConfig();
+                        if (c != null) {
+                          cubit.setVisitorId(c.visitorData);
+                          sl<YTMusic>().setConfig(c);
+                        }
                       },
                     ),
 

@@ -104,49 +104,87 @@ class PlaylistDetailsView extends StatelessWidget {
                         ],
                       ),
                     )
-                  : ReorderableListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: songs.length,
-                      buildDefaultDragHandles: false,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          key: ValueKey('${songs[index].provider.name}_${songs[index].id}'),
-                          padding: const EdgeInsets.symmetric(vertical: 1),
-                          child: LibrarySongTile(
-                            item: songs[index],
-                            isFirst: index == 0,
-                            isLast: index == songs.length - 1,
-                            trailing: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () async {
-                                    await Modals.showItemBottomSheet(context, songs[index]);
-                                    if (context.mounted) {
-                                      context.read<PlaylistDetailsCubit>().fetchSongs();
-                                    }
-                                  },
-                                  icon: const Icon(Icons.more_vert_rounded),
-                                ),
-                                ReorderableDragStartListener(
-                                  index: index,
-                                  child: Icon(
-                                    FluentIcons.re_order_24_filled,
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                    size: 30,
-                                  ),
-                                ),
-                              ],
+                  : Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Text(
+                            "Swipe left on an item to remove it from the playlist",
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                           ),
-                        );
-                      },
-                      onReorder: (int oldIndex, int newIndex) async {
-                        await context.read<PlaylistDetailsCubit>().reorder(
-                          songs[oldIndex],
-                          oldIndex,
-                          newIndex,
-                        );
-                      },
+                        ),
+                        Expanded(
+                          child: ReorderableListView.builder(
+                            padding: const EdgeInsets.all(16),
+                            itemCount: songs.length,
+                            buildDefaultDragHandles: false,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                key: ValueKey('${songs[index].provider.name}_${songs[index].id}'),
+                                padding: const EdgeInsets.symmetric(vertical: 1),
+                                child: Dismissible(
+                                  key: ValueKey(
+                                    '${songs[index].provider.name}__${songs[index].id}',
+                                  ),
+                                  resizeDuration: const Duration(milliseconds: 200),
+
+                                  direction: DismissDirection.endToStart,
+                                  background: Container(
+                                    alignment: Alignment.centerRight,
+                                    padding: const EdgeInsets.only(right: 20),
+                                    color: Theme.of(context).colorScheme.errorContainer,
+                                    child: Icon(
+                                      Icons.delete_rounded,
+                                      color: Theme.of(context).colorScheme.onErrorContainer,
+                                      size: 24,
+                                    ),
+                                  ),
+                                  onDismissed: (_) => context.read<PlaylistDetailsCubit>().remove(
+                                    songs[index].id,
+                                    songs[index].provider,
+                                  ),
+
+                                  child: LibrarySongTile(
+                                    item: songs[index],
+                                    isFirst: index == 0,
+                                    isLast: index == songs.length - 1,
+                                    trailing: Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () async {
+                                            await Modals.showItemBottomSheet(context, songs[index]);
+                                            if (context.mounted) {
+                                              context.read<PlaylistDetailsCubit>().fetchSongs();
+                                            }
+                                          },
+                                          icon: const Icon(Icons.more_vert_rounded),
+                                        ),
+                                        ReorderableDragStartListener(
+                                          index: index,
+                                          child: Icon(
+                                            FluentIcons.re_order_24_filled,
+                                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                            size: 30,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            onReorder: (int oldIndex, int newIndex) async {
+                              await context.read<PlaylistDetailsCubit>().reorder(
+                                songs[oldIndex],
+                                oldIndex,
+                                newIndex,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
             );
           }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,6 +55,7 @@ class _LibrarySuccessView extends StatelessWidget {
     final history = state.history;
     final downloads = state.downloads;
     final playlists = state.customPlaylists;
+    final remotePlaylists = state.remotePlaylists;
 
     return Scaffold(
       body: NestedScrollView(
@@ -115,7 +118,7 @@ class _LibrarySuccessView extends StatelessWidget {
               ),
             ),
 
-            const SliverGroupTitle(title: "Custom"),
+            if (playlists.isNotEmpty) const SliverGroupTitle(title: "Custom"),
 
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -140,6 +143,30 @@ class _LibrarySuccessView extends StatelessWidget {
                 }, childCount: playlists.length * 2 - 1),
               ),
             ),
+            if (remotePlaylists.isNotEmpty) const SliverGroupTitle(title: "Remote"),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              sliver: SliverList.separated(
+                itemCount: remotePlaylists.length,
+                itemBuilder: (context, index) {
+                  final playlist = remotePlaylists[index];
+
+                  return LibraryTile(
+                    title: playlist.name,
+                    isFirst: index == 0,
+                    isLast: index == remotePlaylists.length - 1,
+                    onTap: () {
+                      if (playlist.extraJson != null) {
+                        context.push(
+                          '/ytmusic/playlist/${jsonEncode(playlist.extraJson!.endpoint)}',
+                        );
+                      }
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) => const SizedBox(height: 1),
+              ),
+            ),
           ],
         ),
       ),
@@ -151,10 +178,10 @@ class _LibrarySuccessView extends StatelessWidget {
             padding: EdgeInsets.only(bottom: asyncSnapshot.data == true ? 80 : 0),
             child: FloatingActionButton(
               onPressed: () async {
-                final playlist = await Modals.showCreatePlaylistModal(context);
-                if (context.mounted && playlist != null) {
-                  final id = "pl_${DateTime.now().millisecondsSinceEpoch}";
-                  context.read<LibraryCubit>().createPlaylist(id, playlist);
+                final name = await Modals.showCreatePlaylistModal(context);
+                if (context.mounted && name != null) {
+                  final id = '$name-${DateTime.now().millisecondsSinceEpoch}';
+                  await context.read<LibraryCubit>().createPlaylist(id, name);
                 }
               },
               child: const Icon(FluentIcons.add_24_filled),

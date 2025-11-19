@@ -22,7 +22,6 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
 
   Future<void> init() async {
     final c = sl<YTMusic>().config;
-    ;
     if (c.visitorData.trim().isEmpty) {
       final config = await YTMusic.fetchConfig();
       if (config != null) {
