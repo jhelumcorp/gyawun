@@ -1,11 +1,12 @@
 import 'dart:core';
 import 'dart:math';
 
+import 'package:gyawun/ytmusic/client.dart';
+
 import '../helpers.dart';
-import '../yt_service_provider.dart';
 import 'utils.dart';
 
-mixin BrowsingMixin on YTMusicServices {
+mixin BrowsingMixin on YTClient {
   Future<Map<String, dynamic>> browse(
       {Map<String, dynamic>? body,
       int limit = 2,
@@ -175,21 +176,35 @@ mixin BrowsingMixin on YTMusicServices {
 
     return result;
   }
-  Future<Map<String, dynamic>> getMoreItems(
-      {continuation=''}) async {
+
+  Future<Map<String, dynamic>> getMoreItems({continuation = ''}) async {
     String endpoint = 'browse';
-    Map<String,dynamic>? body = {"browseId": "FEmusic_home"};
+    Map<String, dynamic>? body = {"browseId": "FEmusic_home"};
 
     var response =
         await sendRequest(endpoint, body, additionalParams: continuation);
-    String? continuationString = nav(response,['continuationContents','musicPlaylistShelfContinuation','continuations',0,'nextContinuationData','continuation']);
-    List contents = 
-        nav(response,['continuationContents','musicPlaylistShelfContinuation','contents'])??[];
+    String? continuationString = nav(response, [
+      'continuationContents',
+      'musicPlaylistShelfContinuation',
+      'continuations',
+      0,
+      'nextContinuationData',
+      'continuation'
+    ]);
+    List contents = nav(response, [
+          'continuationContents',
+          'musicPlaylistShelfContinuation',
+          'contents'
+        ]) ??
+        [];
     return {
-      'items':handleContents(contents),
-      'continuation':continuationString!=null ? getContinuationString(continuationString):null,
+      'items': handleContents(contents),
+      'continuation': continuationString != null
+          ? getContinuationString(continuationString)
+          : null,
     };
-      }
+  }
+
   int getDatestamp() {
     final DateTime now = DateTime.now();
     final DateTime epoch = DateTime.fromMillisecondsSinceEpoch(0);
@@ -372,8 +387,7 @@ List<Map<String, dynamic>> handleOuterContents(List contents,
           handleMusicShelfRenderer(musicShelfRenderer, thumbnails: thumbnails));
     } else if (gridRenderer != null) {
       results.add(handleGridRenderer(gridRenderer));
-    } else {
-    }
+    } else {}
     results.add(result);
   }
 

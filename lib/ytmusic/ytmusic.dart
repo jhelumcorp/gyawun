@@ -1,9 +1,9 @@
-
+import 'package:gyawun/ytmusic/client.dart';
 import 'package:gyawun/ytmusic/mixins/library.dart';
 
 import 'mixins/browsing.dart';
 import 'mixins/search.dart';
-import 'yt_service_provider.dart';
 
-class YTMusic extends YTMusicServices
-    with BrowsingMixin, LibraryMixin, SearchMixin {}
+class YTMusic extends YTClient with BrowsingMixin, LibraryMixin, SearchMixin {
+  YTMusic({super.config, super.onIdUpdate});
+}

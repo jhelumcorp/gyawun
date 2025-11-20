@@ -1,8 +1,9 @@
+import 'package:gyawun/ytmusic/client.dart';
+
 import '../helpers.dart';
-import '../yt_service_provider.dart';
 import 'utils.dart';
 
-mixin LibraryMixin on YTMusicServices {
+mixin LibraryMixin on YTClient {
   Future<Map> getLibrarySongs({String? continuationParams}) async {
     Map<String, dynamic> body = {'browseId': 'FEmusic_liked_videos'};
 

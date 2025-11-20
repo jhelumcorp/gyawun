@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gyawun/themes/theme.dart';
+import 'package:gyawun/ytmusic/modals/yt_config.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
@@ -34,8 +35,8 @@ void main() async {
   await initialiseHive();
   if (Platform.isWindows || Platform.isLinux) {
     JustAudioMediaKit.ensureInitialized(
-      // libmpv: Platform.isLinux ? '/app/lib/libmpv.so' : null,
-    );
+        // libmpv: Platform.isLinux ? '/app/lib/libmpv.so' : null,
+        );
     JustAudioMediaKit.bufferSize = 8 * 1024 * 1024;
     JustAudioMediaKit.title = 'Gyawun Music';
     JustAudioMediaKit.prefetchPlaylist = true;
@@ -51,8 +52,15 @@ void main() async {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
-  YTMusic ytMusic = YTMusic();
-  await ytMusic.init();
+  String? visitorId = await Hive.box('SETTINGS').get('VISITOR_ID');
+
+  YTMusic ytMusic = YTMusic(
+    config:
+        YTConfig(visitorData: visitorId ?? '', language: 'en', location: 'IN'),
+    onIdUpdate: (visitorId) async {
+      await Hive.box('SETTINGS').put('VISITOR_ID', visitorId);
+    },
+  );
 
   final GlobalKey<NavigatorState> panelKey = GlobalKey<NavigatorState>();
 
@@ -108,16 +116,18 @@ class Gyawun extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           themeMode: context.watch<SettingsManager>().themeMode,
           theme: AppTheme.light(
-                primary: context.watch<SettingsManager>().dynamicColors && lightScheme != null
-                    ? lightScheme.primary
-                    : context.watch<SettingsManager>().accentColor,
-              ),
-              darkTheme: AppTheme.dark(
-                primary: context.watch<SettingsManager>().dynamicColors && darkScheme != null
-                    ? darkScheme.primary
-                    : context.watch<SettingsManager>().accentColor,
-                isPureBlack: context.watch<SettingsManager>().amoledBlack,
-              ),
+            primary: context.watch<SettingsManager>().dynamicColors &&
+                    lightScheme != null
+                ? lightScheme.primary
+                : context.watch<SettingsManager>().accentColor,
+          ),
+          darkTheme: AppTheme.dark(
+            primary: context.watch<SettingsManager>().dynamicColors &&
+                    darkScheme != null
+                ? darkScheme.primary
+                : context.watch<SettingsManager>().accentColor,
+            isPureBlack: context.watch<SettingsManager>().amoledBlack,
+          ),
           // theme: lightTheme(
           //   colorScheme: context.watch<SettingsManager>().dynamicColors &&
           //           lightScheme != null

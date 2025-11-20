@@ -1,10 +1,10 @@
+import 'package:gyawun/ytmusic/client.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../helpers.dart';
-import '../yt_service_provider.dart';
 import 'utils.dart';
 
-mixin SearchMixin on YTMusicServices {
+mixin SearchMixin on YTClient {
   Future<List<Map<String, dynamic>>> getSearchSuggestions(String query,
       {bool detailedRuns = false}) async {
     if (query == '') {

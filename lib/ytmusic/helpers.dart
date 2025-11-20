@@ -12,10 +12,7 @@ Map<String, String> initializeHeaders({String language = 'en'}) {
     'cookie': 'CONSENT=YES+1',
     'Accept-Language': language,
   };
-  String? visitorId = Hive.box('SETTINGS').get('VISITOR_ID');
-  if (visitorId != null) {
-    h['X-Goog-Visitor-Id'] = visitorId;
-  }
+
   return h;
 }
 
