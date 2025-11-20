@@ -10,6 +10,7 @@ import 'package:gyawun_music/services/audio_service/yt_audio_source.dart';
 import 'package:gyawun_music/services/settings/settings_service.dart';
 import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:library_manager/library_manager.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 import 'package:ytmusic/yt_music_base.dart';
@@ -19,7 +20,25 @@ class MediaPlayer {
   MediaPlayer(MyAudioHandler audioHandler)
     : _audioHandler = audioHandler,
       _player = audioHandler.player {
-    currentItemStream.listen(_updateDominantColorSong);
+    currentItemStream.listen((item) async {
+      if (item != null) {
+        // Add to recently played history
+        try {
+          await sl<LibraryManager>().addToPlaybackHistory(item: item);
+        } catch (e) {
+          debugPrint("Failed to add to history: $e");
+        }
+      }
+
+      // Update dominant color
+      _updateDominantColorSong(item);
+    });
+    _player.playbackEventStream.listen(
+      (event) {},
+      onError: (Object e, StackTrace st) {
+        _errorController.add('Playback error: $e');
+      },
+    );
     statsTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
       if (_player.playing && currentItem != null && currentItem!.provider == DataProvider.ytmusic) {
         sl<YTMusic>().addPlayingStats(currentItem!.id, _player.position);
@@ -27,6 +46,8 @@ class MediaPlayer {
     });
   }
   Timer? statsTimer;
+  final _errorController = StreamController<String>.broadcast();
+  Stream<String> get errorStream => _errorController.stream;
 
   final MyAudioHandler _audioHandler;
   final AudioPlayer _player;
@@ -65,14 +86,14 @@ class MediaPlayer {
   MediaItem? get currentMediaItem =>
       _player.currentIndex == null ? null : _player.sequence[_player.currentIndex!].tag;
 
-  // --- Streams ---------------------------------------------------------------
-
-  /// Current media item stream
-  Stream<PlayableItem?> get currentItemStream => Rx.combineLatest2(
-    queueItemsStream,
-    _player.currentIndexStream,
-    (items, index) => index != null && index < items.length ? items[index] : null,
-  );
+  /// Fires ONLY when the active song changes.
+  Stream<PlayableItem?> get currentItemStream =>
+      _player.currentIndexStream.where((index) => index != null).distinct().map((index) {
+        final sequence = _player.sequence;
+        if (index == null || index >= sequence.length) return null;
+        final mediaItem = sequence[index].tag as MediaItem;
+        return PlayableItem.fromJson(mediaItem.extras!);
+      });
 
   Stream<PlayableItem?> get mediaItemStream => currentItemStream;
 
@@ -154,7 +175,7 @@ class MediaPlayer {
   Stream<List<Thumbnail>?> get thumbnailStream => mediaItemStream.map((item) => item?.thumbnails);
 
   Stream<DateTime?> get sleepTimerStream => _audioHandler.sleepTimerStream;
-  Stream<String?> get sleepTimerFormattedStream => Rx.combineLatest2<DateTime?, int, String?>(
+  Stream<Duration?> get sleepTimerRemainingStream => Rx.combineLatest2<DateTime?, int, Duration?>(
     sleepTimerStream,
     Stream.periodic(const Duration(seconds: 1), (i) => i),
     (expiry, _) {
@@ -162,16 +183,17 @@ class MediaPlayer {
 
       final diff = expiry.difference(DateTime.now());
       if (diff.isNegative) return null;
+      return diff;
 
-      final hours = diff.inHours;
-      final minutes = diff.inMinutes.remainder(60);
-      final seconds = diff.inSeconds.remainder(60);
+      // final hours = diff.inHours;
+      // final minutes = diff.inMinutes.remainder(60);
+      // final seconds = diff.inSeconds.remainder(60);
 
-      if (hours > 0) {
-        return "$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
-      } else {
-        return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
-      }
+      // if (hours > 0) {
+      //   return "$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
+      // } else {
+      //   return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
+      // }
     },
   ).distinct();
 
@@ -180,71 +202,170 @@ class MediaPlayer {
 
   // --- Basic Playback Controls -----------------------------------------------
 
-  Future<void> play() => _player.play();
-  Future<void> pause() => _player.pause();
-  Future<void> stop() => _player.stop();
+  Future<void> play() async {
+    try {
+      await _player.play();
+    } catch (e) {
+      _errorController.add("Failed to play: $e");
+    }
+  }
 
-  Future<void> seek(Duration position) => _player.seek(position);
+  Future<void> pause() async {
+    try {
+      await _player.pause();
+    } catch (e) {
+      _errorController.add("Failed to pause: $e");
+    }
+  }
 
-  Future<void> skipToNext() => _player.seekToNext();
-  Future<void> skipToPrevious() => _player.seekToPrevious();
-  Future<void> skipToIndex(int index) => _player.seek(Duration.zero, index: index);
-  Future<void> setSpeed(double speed) => _player.setSpeed(speed);
-  Future<void> setLoopMode(LoopMode loopMode) => _player.setLoopMode(loopMode);
-  Future<void> setShuffleModeEnabled(bool enabled) => _player.setShuffleModeEnabled(enabled);
+  Future<void> stop() async {
+    try {
+      await _player.stop();
+    } catch (e) {
+      _errorController.add("Failed to stop: $e");
+    }
+  }
+
+  Future<void> seek(Duration position) async {
+    try {
+      await _player.seek(position);
+    } catch (e) {
+      _errorController.add("Failed to seek: $e");
+    }
+  }
+
+  Future<void> skipToNext() async {
+    try {
+      await _player.seekToNext();
+    } catch (e) {
+      _errorController.add("Failed to skip to next: $e");
+    }
+  }
+
+  Future<void> skipToPrevious() async {
+    try {
+      await _player.seekToPrevious();
+    } catch (e) {
+      _errorController.add("Failed to skip to previous: $e");
+    }
+  }
+
+  Future<void> skipToIndex(int index) async {
+    try {
+      await _player.seek(Duration.zero, index: index);
+    } catch (e) {
+      _errorController.add("Failed to skip to index: $e");
+    }
+  }
+
+  Future<void> setSpeed(double speed) async {
+    try {
+      await _player.setSpeed(speed);
+    } catch (e) {
+      _errorController.add("Failed to set speed: $e");
+    }
+  }
+
+  Future<void> setLoopMode(LoopMode loopMode) async {
+    try {
+      await _player.setLoopMode(loopMode);
+    } catch (e) {
+      _errorController.add("Failed to set loop mode: $e");
+    }
+  }
+
+  Future<void> setShuffleModeEnabled(bool enabled) async {
+    try {
+      await _player.setShuffleModeEnabled(enabled);
+    } catch (e) {
+      _errorController.add("Failed to set shuffle mode: $e");
+    }
+  }
 
   // --- Queue Management ------------------------------------------------------
 
   Future<void> playSong(PlayableItem item) async {
-    await _player.setAudioSource(_createAudioSource(item));
-    _player.play();
+    try {
+      await _player.setAudioSource(_createAudioSource(item));
+      _player.play();
+    } catch (e) {
+      _errorController.add("Failed to play song: $e");
+    }
   }
 
   Future<void> addSongs(List<PlayableItem> items) async {
     if (items.isEmpty) return;
 
-    for (var item in items) {
-      await _player.addAudioSource(_createAudioSource(item));
+    try {
+      for (var item in items) {
+        await _player.addAudioSource(_createAudioSource(item));
+      }
+    } catch (e) {
+      _errorController.add("Failed to add songs: $e");
     }
   }
 
   Future<void> addNext(PlayableItem item) async {
-    final index = (_player.currentIndex ?? -1) + 1;
-    await _player.insertAudioSource(index, _createAudioSource(item));
+    try {
+      final index = (_player.currentIndex ?? -1) + 1;
+      await _player.insertAudioSource(index, _createAudioSource(item));
+    } catch (e) {
+      _errorController.add("Failed to add next song: $e");
+    }
   }
 
   Future<void> playSongs(List<PlayableItem> items) async {
-    final mediaItems = <AudioSource>[];
-    for (var item in items) {
-      mediaItems.add(_createAudioSource(item));
+    try {
+      final mediaItems = <AudioSource>[];
+      for (var item in items) {
+        mediaItems.add(_createAudioSource(item));
+      }
+
+      await _player.pause();
+      await _player.clearAudioSources();
+
+      // 3. Update your local queue only once if necessary
+      await _player.addAudioSources(mediaItems);
+
+      // 4. Start playback
+      await _player.play();
+    } catch (e) {
+      _errorController.add("Failed to play songs: $e");
     }
-
-    await _player.pause();
-    await _player.clearAudioSources();
-
-    // 3. Update your local queue only once if necessary
-    await _player.addAudioSources(mediaItems);
-
-    // 4. Start playback
-    await _player.play();
   }
 
   Future<void> addToQueue(PlayableItem item) async {
-    await _player.addAudioSource(_createAudioSource(item));
+    try {
+      await _player.addAudioSource(_createAudioSource(item));
+    } catch (e) {
+      _errorController.add("Failed to add to queue: $e");
+    }
   }
 
   /// Remove item from queue at index
   Future<void> removeAt(int index) async {
-    await _player.removeAudioSourceAt(index);
+    try {
+      await _player.removeAudioSourceAt(index);
+    } catch (e) {
+      _errorController.add("Failed to remove from queue: $e");
+    }
   }
 
   /// Move item in queue from currentIndex to newIndex
   Future<void> moveItem(int currentIndex, int newIndex) async {
-    await _player.moveAudioSource(currentIndex, newIndex);
+    try {
+      await _player.moveAudioSource(currentIndex, newIndex);
+    } catch (e) {
+      _errorController.add("Failed to move item: $e");
+    }
   }
 
   Future<void> clearQueue() async {
-    await _player.clearAudioSources();
+    try {
+      await _player.clearAudioSources();
+    } catch (e) {
+      _errorController.add("Failed to clear queue: $e");
+    }
   }
 
   Future<void> setSkipSilenceEnabled(bool enabled) => _player.setSkipSilenceEnabled(enabled);
@@ -277,6 +398,7 @@ class MediaPlayer {
 
   void dispose() {
     _dominantSeedColor.close();
+    _errorController.close();
     statsTimer?.cancel();
     _audioHandler.dispose();
   }

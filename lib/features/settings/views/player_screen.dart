@@ -7,6 +7,7 @@ import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:gyawun_music/services/settings/cubits/player_settings_cubit.dart';
 import 'package:gyawun_music/services/settings/settings_service.dart';
@@ -18,9 +19,10 @@ class PlayerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = sl<SettingsService>().player;
+    final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Player")),
+      appBar: AppBar(title: Text(loc.player)),
       body: BlocBuilder<PlayerSettingsCubit, PlayerSettingsState>(
         bloc: cubit,
         builder: (context, state) {
@@ -30,10 +32,10 @@ class PlayerScreen extends StatelessWidget {
                 minimum: const EdgeInsets.all(16),
                 sliver: SliverList.list(
                   children: [
-                    if (Platform.isAndroid) const GroupTitle(title: "General", paddingTop: 0),
+                    if (Platform.isAndroid) GroupTitle(title: loc.general, paddingTop: 0),
                     if (Platform.isAndroid)
                       SettingSwitchTile(
-                        title: "Skip silence",
+                        title: loc.skipSilence,
                         leading: const Icon(FluentIcons.fast_forward_24_filled),
                         isFirst: true,
                         isLast: true,
@@ -47,10 +49,10 @@ class PlayerScreen extends StatelessWidget {
                         },
                       ),
 
-                    GroupTitle(title: "Mini Player", paddingTop: Platform.isAndroid ? null : 0),
+                    GroupTitle(title: loc.miniPlayer, paddingTop: Platform.isAndroid ? null : 0),
 
                     SettingSwitchTile(
-                      title: "Enable next button",
+                      title: loc.enableNextButton,
                       leading: const Icon(FluentIcons.next_24_filled),
                       isFirst: true,
                       value: state.miniPlayerNextButton,
@@ -58,7 +60,7 @@ class PlayerScreen extends StatelessWidget {
                     ),
 
                     SettingSwitchTile(
-                      title: "Enable previous button",
+                      title: loc.enablePreviousButton,
                       leading: const Icon(FluentIcons.previous_24_filled),
                       isLast: true,
                       value: state.miniPlayerPreviousButton,

@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/router/route_paths.dart';
 import 'package:gyawun_music/core/utils/modals.dart';
 import 'package:gyawun_music/features/library/cubit/library_cubit.dart';
 import 'package:gyawun_music/features/library/widgets/library_tile.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 
 class LibraryScreen extends StatelessWidget {
@@ -32,7 +34,9 @@ class Libraryview extends StatelessWidget {
         }
 
         if (state is LibraryError) {
-          return Scaffold(body: Center(child: Text("Error: ${state.message}")));
+          return Scaffold(
+            body: Center(child: Text(AppLocalizations.of(context)!.error(state.failure.message))),
+          );
         }
 
         if (state is LibrarySuccess) {
@@ -66,7 +70,10 @@ class _LibrarySuccessView extends StatelessWidget {
               expandedHeight: 100,
 
               flexibleSpace: FlexibleSpaceBar(
-                title: Text("Library", style: Theme.of(context).appBarTheme.titleTextStyle),
+                title: Text(
+                  AppLocalizations.of(context)!.library,
+                  style: Theme.of(context).appBarTheme.titleTextStyle,
+                ),
                 // expandedTitleScale: 1.5,
                 titlePadding: const EdgeInsets.only(left: 16, bottom: 12),
               ),
@@ -75,7 +82,7 @@ class _LibrarySuccessView extends StatelessWidget {
         },
         body: CustomScrollView(
           slivers: [
-            const SliverGroupTitle(title: "Default"),
+            SliverGroupTitle(title: AppLocalizations.of(context)!.defaultCollection),
 
             // favourites
             SliverPadding(
@@ -84,10 +91,10 @@ class _LibrarySuccessView extends StatelessWidget {
                 child: LibraryTile(
                   leadingIcon: const Icon(FluentIcons.heart_24_filled, size: 30),
                   subtitle: favorites.description,
-                  title: "Favourites",
+                  title: AppLocalizations.of(context)!.favourites,
                   isFirst: true,
                   onTap: () {
-                    context.push('/library/playlists/${favorites.name}/${favorites.id}');
+                    context.push(RouteLocations.libraryPlaylist(favorites.name, favorites.id));
                   },
                 ),
               ),
@@ -99,8 +106,11 @@ class _LibrarySuccessView extends StatelessWidget {
               sliver: SliverToBoxAdapter(
                 child: LibraryTile(
                   leadingIcon: const Icon(Icons.queue_music, size: 30),
-                  title: "History",
+                  title: AppLocalizations.of(context)!.history,
                   subtitle: history.description,
+                  onTap: () {
+                    context.push(RouteLocations.libraryHistory(history.name));
+                  },
                 ),
               ),
             ),
@@ -111,14 +121,17 @@ class _LibrarySuccessView extends StatelessWidget {
               sliver: SliverToBoxAdapter(
                 child: LibraryTile(
                   leadingIcon: const Icon(FluentIcons.cloud_arrow_down_24_filled, size: 30),
-                  title: "Downloads",
+                  title: AppLocalizations.of(context)!.downloads,
                   subtitle: downloads.description,
                   isLast: true,
+                  onTap: () {
+                    context.push(RouteLocations.libraryPlaylist(downloads.name, downloads.id));
+                  },
                 ),
               ),
             ),
 
-            if (playlists.isNotEmpty) const SliverGroupTitle(title: "Custom"),
+            if (playlists.isNotEmpty) SliverGroupTitle(title: AppLocalizations.of(context)!.custom),
 
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -129,13 +142,32 @@ class _LibrarySuccessView extends StatelessWidget {
                   if (index.isEven) {
                     final playlist = playlists[itemIndex];
 
-                    return LibraryTile(
-                      title: playlist.name,
-                      isFirst: itemIndex == 0,
-                      isLast: itemIndex == playlists.length - 1,
-                      onTap: () {
-                        context.push('/library/playlists/${playlist.name}/${playlist.id}');
+                    return Dismissible(
+                      key: ValueKey(playlist.id),
+                      resizeDuration: const Duration(milliseconds: 200),
+
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 20),
+                        color: Theme.of(context).colorScheme.errorContainer,
+                        child: Icon(
+                          Icons.delete_rounded,
+                          color: Theme.of(context).colorScheme.onErrorContainer,
+                          size: 24,
+                        ),
+                      ),
+                      onDismissed: (_) async {
+                        await context.read<LibraryCubit>().deletePlaylist(playlist);
                       },
+                      child: LibraryTile(
+                        title: playlist.name,
+                        isFirst: itemIndex == 0,
+                        isLast: itemIndex == playlists.length - 1,
+                        onTap: () {
+                          context.push(RouteLocations.libraryPlaylist(playlist.name, playlist.id));
+                        },
+                      ),
                     );
                   }
 
@@ -143,7 +175,8 @@ class _LibrarySuccessView extends StatelessWidget {
                 }, childCount: playlists.length * 2 - 1),
               ),
             ),
-            if (remotePlaylists.isNotEmpty) const SliverGroupTitle(title: "Remote"),
+            if (remotePlaylists.isNotEmpty)
+              SliverGroupTitle(title: AppLocalizations.of(context)!.remote),
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               sliver: SliverList.separated(
@@ -151,17 +184,37 @@ class _LibrarySuccessView extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final playlist = remotePlaylists[index];
 
-                  return LibraryTile(
-                    title: playlist.name,
-                    isFirst: index == 0,
-                    isLast: index == remotePlaylists.length - 1,
-                    onTap: () {
-                      if (playlist.extraJson != null) {
-                        context.push(
-                          '/ytmusic/playlist/${jsonEncode(playlist.extraJson!.endpoint)}',
-                        );
-                      }
+                  return Dismissible(
+                    key: ValueKey(playlist.id),
+                    resizeDuration: const Duration(milliseconds: 200),
+
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 20),
+                      color: Theme.of(context).colorScheme.errorContainer,
+                      child: Icon(
+                        Icons.delete_rounded,
+                        color: Theme.of(context).colorScheme.onErrorContainer,
+                        size: 24,
+                      ),
+                    ),
+                    onDismissed: (_) async {
+                      await context.read<LibraryCubit>().deletePlaylist(playlist);
                     },
+
+                    child: LibraryTile(
+                      title: playlist.name,
+                      isFirst: index == 0,
+                      isLast: index == remotePlaylists.length - 1,
+                      onTap: () {
+                        if (playlist.extraJson != null) {
+                          context.push(
+                            '/ytmusic/playlist/${jsonEncode(playlist.extraJson!.endpoint)}',
+                          );
+                        }
+                      },
+                    ),
                   );
                 },
                 separatorBuilder: (context, index) => const SizedBox(height: 1),

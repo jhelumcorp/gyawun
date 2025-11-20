@@ -9,6 +9,7 @@ import 'package:gyawun_music/core/utils/app_dialogs/app_dialogs.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/services/settings/cubits/appearance_settings_cubit.dart';
 import 'package:gyawun_music/services/settings/settings_service.dart';
 import 'package:gyawun_music/services/settings/states/app_appearance_state.dart';
@@ -22,8 +23,10 @@ class AppearanceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = sl<SettingsService>().appearance;
 
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Appearance")),
+      appBar: AppBar(title: Text(loc.appearance)),
       body: BlocBuilder<AppearanceSettingsCubit, AppAppearanceState>(
         bloc: cubit,
         builder: (context, settings) {
@@ -36,11 +39,11 @@ class AppearanceScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const GroupTitle(title: "Theme", paddingTop: 0),
+                      GroupTitle(title: loc.theme, paddingTop: 0),
 
                       // Dark Theme
                       SettingTile(
-                        title: "Dark theme",
+                        title: loc.darkTheme,
                         leading: const Icon(FluentIcons.dark_theme_24_filled),
                         subtitle: settings.themeMode.name,
                         isFirst: true,
@@ -50,7 +53,7 @@ class AppearanceScreen extends StatelessWidget {
                       // Accent Color
                       SettingTile(
                         onTap: () => _handleAccentColorChange(context),
-                        title: "Accent Color",
+                        title: loc.accentColor,
                         leading: const Icon(FluentIcons.color_24_filled),
                         trailing: CircleAvatar(
                           radius: 20,
@@ -62,13 +65,13 @@ class AppearanceScreen extends StatelessWidget {
                       SettingSwitchTile(
                         value: settings.enableDynamicTheme,
                         onChanged: cubit.setEnableDynamicTheme,
-                        title: "Enable dynamic theme",
+                        title: loc.enableDynamicTheme,
                         leading: const Icon(FluentIcons.color_background_24_filled),
                       ),
 
                       // Pure Black
                       SettingSwitchTile(
-                        title: "Pure black",
+                        title: loc.pureBlack,
                         leading: const Icon(FluentIcons.drop_24_filled),
                         value: settings.isPureBlack,
                         onChanged: cubit.setIsPureBlack,
@@ -78,16 +81,16 @@ class AppearanceScreen extends StatelessWidget {
                       SettingSwitchTile(
                         value: settings.enableSystemColors,
                         onChanged: cubit.setEnableSystemColors,
-                        title: "Enable system colors",
+                        title: loc.enableSystemColors,
                         leading: const Icon(FluentIcons.system_24_filled),
                         isLast: true,
                       ),
 
-                      const GroupTitle(title: "Layout"),
+                      GroupTitle(title: loc.layout),
 
                       // Language
                       SettingTile(
-                        title: "Language",
+                        title: loc.language,
                         leading: const Icon(FluentIcons.local_language_24_filled),
                         isFirst: true,
                         isLast: !Platform.isAndroid,
@@ -100,18 +103,18 @@ class AppearanceScreen extends StatelessWidget {
                         SettingSwitchTile(
                           value: settings.enableAndroidPredictiveBack,
                           onChanged: cubit.setEnableAndroidPredictiveBack,
-                          subtitle: "Android 14+",
-                          title: "Predictive Back",
+                          subtitle: loc.android14Plus,
+                          title: loc.predictiveBack,
                           leading: const Icon(FluentIcons.tabs_24_filled),
                           isLast: true,
                         ),
 
-                      const GroupTitle(title: "Player"),
+                      GroupTitle(title: loc.player),
 
                       SettingSwitchTile(
                         value: settings.enableNewPlayer,
                         onChanged: cubit.setEnableNewPlayer,
-                        title: "Enable new player",
+                        title: loc.enableNewPlayer,
                         leading: const Icon(FluentIcons.slide_play_24_filled),
                         isFirst: true,
                         isLast: true,
@@ -135,9 +138,12 @@ class AppearanceScreen extends StatelessWidget {
     final res = await AppDialogs.showOptionSelectionDialog(
       context,
       children: [
-        AppDialogTileData(title: 'On', value: ThemeMode.dark),
-        AppDialogTileData(title: 'Off', value: ThemeMode.light),
-        AppDialogTileData(title: 'Follow system', value: ThemeMode.system),
+        AppDialogTileData(title: AppLocalizations.of(context)!.on, value: ThemeMode.dark),
+        AppDialogTileData(title: AppLocalizations.of(context)!.off, value: ThemeMode.light),
+        AppDialogTileData(
+          title: AppLocalizations.of(context)!.followSystem,
+          value: ThemeMode.system,
+        ),
       ],
     );
 

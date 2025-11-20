@@ -8,6 +8,7 @@ import 'package:gyawun_music/core/utils/app_dialogs/app_dialogs.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/services/settings/cubits/yt_music_cubit.dart';
 import 'package:gyawun_music/services/settings/settings_service.dart';
 import 'package:gyawun_music/services/settings/states/yt_music_state.dart';
@@ -24,8 +25,10 @@ class YoutubeMusicScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = sl<SettingsService>().youtubeMusic;
 
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Youtube Music")),
+      appBar: AppBar(title: Text(loc.youtubeMusic)),
       body: BlocBuilder<YtMusicCubit, YtMusicState>(
         bloc: cubit,
         builder: (context, settings) {
@@ -36,9 +39,9 @@ class YoutubeMusicScreen extends StatelessWidget {
                 sliver: SliverList.list(
                   children: [
                     // GENERAL
-                    const GroupTitle(title: "General", paddingTop: 0),
+                    GroupTitle(title: loc.general, paddingTop: 0),
                     SettingTile(
-                      title: "Language",
+                      title: loc.language,
                       leading: const Icon(FluentIcons.local_language_24_filled),
                       subtitle: settings.language.title,
                       isFirst: true,
@@ -72,17 +75,17 @@ class YoutubeMusicScreen extends StatelessWidget {
                     ),
 
                     // AUDIO QUALITY
-                    const GroupTitle(title: "Audio quality"),
+                    GroupTitle(title: loc.audioQuality),
 
                     SettingTile(
-                      title: "Streaming quality",
+                      title: loc.streamingQuality,
                       leading: const Icon(Icons.spatial_audio_rounded),
                       isFirst: true,
                       subtitle: settings.streamingQuality.name.toUpperCase(),
                       onTap: () async {
                         final q = await AppDialogs.showOptionSelectionDialog(
                           context,
-                          title: "Audio Quality",
+                          title: loc.audioQuality,
                           children: [
                             AppDialogTileData(title: "HIGH", value: YTAudioQuality.high),
                             AppDialogTileData(title: "LOW", value: YTAudioQuality.low),
@@ -93,14 +96,14 @@ class YoutubeMusicScreen extends StatelessWidget {
                     ),
 
                     SettingTile(
-                      title: "Downloading quality",
+                      title: loc.downloadingQuality,
                       leading: const Icon(Icons.spatial_audio_rounded),
                       subtitle: settings.downloadingQuality.name.toUpperCase(),
                       isLast: true,
                       onTap: () async {
                         final q = await AppDialogs.showOptionSelectionDialog(
                           context,
-                          title: "Audio Quality",
+                          title: loc.audioQuality,
                           children: [
                             AppDialogTileData(title: "HIGH", value: YTAudioQuality.high),
                             AppDialogTileData(title: "LOW", value: YTAudioQuality.low),
@@ -111,10 +114,10 @@ class YoutubeMusicScreen extends StatelessWidget {
                     ),
 
                     // SPONSOR BLOCK
-                    const GroupTitle(title: "Sponsor Block"),
+                    GroupTitle(title: loc.sponsorBlock),
 
                     SettingExpansionTile(
-                      title: "Enable Sponsor Block",
+                      title: loc.enableSponsorBlock,
                       leading: const Icon(FluentIcons.presence_blocked_24_regular),
                       value: settings.sponsorBlock,
                       isFirst: true,
@@ -123,43 +126,43 @@ class YoutubeMusicScreen extends StatelessWidget {
                       children: [
                         _sb(
                           context,
-                          title: "Block Sponsors",
+                          title: loc.blockSponsors,
                           value: settings.sponsorBlockSponsor,
                           onChanged: cubit.setSponsorBlockSponsor,
                         ),
                         _sb(
                           context,
-                          title: "Block Self Promo",
+                          title: loc.blockSelfPromo,
                           value: settings.sponsorBlockSelfpromo,
                           onChanged: cubit.setSponsorBlockSelfPromo,
                         ),
                         _sb(
                           context,
-                          title: "Block Interaction",
+                          title: loc.blockInteraction,
                           value: settings.sponsorBlockInteraction,
                           onChanged: cubit.setSponsorBlockInteraction,
                         ),
                         _sb(
                           context,
-                          title: "Block Intro",
+                          title: loc.blockIntro,
                           value: settings.sponsorBlockIntro,
                           onChanged: cubit.setSponsorBlockIntro,
                         ),
                         _sb(
                           context,
-                          title: "Block Outro",
+                          title: loc.blockOutro,
                           value: settings.sponsorBlockOutro,
                           onChanged: cubit.setSponsorBlockOutro,
                         ),
                         _sb(
                           context,
-                          title: "Block Preview",
+                          title: loc.blockPreview,
                           value: settings.sponsorBlockPreview,
                           onChanged: cubit.setSponsorBlockPreview,
                         ),
                         _sb(
                           context,
-                          title: "Block Music Offtopic",
+                          title: loc.blockMusicOffTopic,
                           isLast: true,
                           value: settings.sponsorBlockMusicOffTopic,
                           onChanged: cubit.setSponsorBlockMusicOffTopic,
@@ -168,10 +171,10 @@ class YoutubeMusicScreen extends StatelessWidget {
                     ),
 
                     // PRIVACY
-                    const GroupTitle(title: "Privacy"),
+                    GroupTitle(title: loc.privacy),
 
                     SettingSwitchTile(
-                      title: "Personalised Content",
+                      title: loc.personalisedContent,
                       leading: const Icon(Icons.recommend),
                       value: settings.personalisedContent,
                       isFirst: true,
@@ -179,7 +182,7 @@ class YoutubeMusicScreen extends StatelessWidget {
                     ),
 
                     SettingTile(
-                      title: "Enter visitor ID",
+                      title: loc.enterVisitorId,
                       leading: const Icon(FluentIcons.edit_24_filled),
                       subtitle: settings.visitorId,
                       trailing: IconButton.filled(
@@ -198,7 +201,7 @@ class YoutubeMusicScreen extends StatelessWidget {
                       onTap: () async {
                         final id = await AppDialogs.showPromptDialog(
                           context,
-                          title: "Enter Visitor Id",
+                          title: loc.enterVisitorId,
                         );
                         if (id != null) {
                           cubit.setVisitorId(id);
@@ -208,7 +211,7 @@ class YoutubeMusicScreen extends StatelessWidget {
                     ),
 
                     SettingTile(
-                      title: "Reset Visitor ID",
+                      title: loc.resetVisitorId,
                       leading: const Icon(FluentIcons.key_reset_24_filled),
                       isLast: true,
                       onTap: () async {

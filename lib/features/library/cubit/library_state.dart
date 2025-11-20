@@ -20,10 +20,26 @@ final class LibrarySuccess extends LibraryState {
   final Playlist downloads;
   final List<Playlist> customPlaylists;
   final List<Playlist> remotePlaylists;
+
+  LibrarySuccess copyWith({
+    Playlist? favorites,
+    Playlist? history,
+    Playlist? downloads,
+    List<Playlist>? customPlaylists,
+    List<Playlist>? remotePlaylists,
+  }) {
+    return LibrarySuccess(
+      favorites: favorites ?? this.favorites,
+      history: history ?? this.history,
+      downloads: downloads ?? this.downloads,
+      customPlaylists: customPlaylists ?? this.customPlaylists,
+      remotePlaylists: remotePlaylists ?? this.remotePlaylists,
+    );
+  }
 }
 
 /// Error state
 final class LibraryError extends LibraryState {
-  LibraryError(this.message);
-  final String message;
+  LibraryError(this.failure);
+  final Failure failure;
 }

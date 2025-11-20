@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/services/storage/image_cache_manager.dart';
 
 class PrivacyScreen extends StatefulWidget {
@@ -21,8 +22,10 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Privacy")),
+      appBar: AppBar(title: Text(loc.privacy)),
 
       body: SingleChildScrollView(
         child: SafeArea(
@@ -34,25 +37,25 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
               SettingSwitchTile(
                 value: false,
                 isFirst: true,
-                title: "Disable playback history",
+                title: "Disable Playback History",
                 leading: const Icon(Icons.play_disabled_rounded),
                 onChanged: (value) {},
               ),
               const SettingTile(
-                title: "Delete playback history",
+                title: "Delete Playback History",
                 leading: Icon(FluentIcons.history_dismiss_24_filled),
                 isLast: true,
               ),
-              const GroupTitle(title: "Search"),
+              GroupTitle(title: loc.search),
               SettingSwitchTile(
                 value: false,
                 isFirst: true,
-                title: "Disable search history",
+                title: "Disable Search History",
                 leading: const Icon(Icons.search_off_rounded),
                 onChanged: (value) {},
               ),
               const SettingTile(
-                title: "Delete search history",
+                title: "Delete Search History",
                 leading: Icon(Icons.manage_search_rounded),
                 isLast: true,
               ),
@@ -61,7 +64,6 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
           ),
         ),
       ),
-      // ),
     );
   }
 }

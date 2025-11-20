@@ -28,15 +28,15 @@ class LibraryTile extends StatelessWidget {
       child: Material(
         color: Theme.of(context).colorScheme.surfaceContainer,
         shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.only(
-            topLeft: Radius.circular(isFirst ? 20 : 4),
-            topRight: Radius.circular(isFirst ? 20 : 4),
-            bottomLeft: Radius.circular(isLast ? 20 : 4),
-            bottomRight: Radius.circular(isLast ? 20 : 4),
-          ),
+        borderRadius: BorderRadiusGeometry.only(
+          topLeft: Radius.circular(isFirst ? 20 : 4),
+          topRight: Radius.circular(isFirst ? 20 : 4),
+          bottomLeft: Radius.circular(isLast ? 20 : 4),
+          bottomRight: Radius.circular(isLast ? 20 : 4),
         ),
+        borderOnForeground: false,
         child: InkWell(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(isFirst ? 20 : 4),

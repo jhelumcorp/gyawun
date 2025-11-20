@@ -12,6 +12,7 @@ class PlaylistDetailsCubit extends Cubit<PlaylistDetailsState> {
 
   void fetchSongs() {
     final songs = _lb.getPlaylistItems(id);
+
     emit(PlaylistDetailsSuccess(songs));
   }
 

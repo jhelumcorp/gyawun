@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/services/storage/image_cache_manager.dart';
 
 class StorageScreen extends StatelessWidget {
@@ -10,8 +11,10 @@ class StorageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Storage & backups")),
+      appBar: AppBar(title: Text(loc.storageAndBackups)),
 
       body: SingleChildScrollView(
         child: SafeArea(
@@ -24,7 +27,7 @@ class StorageScreen extends StatelessWidget {
                 children: [
                   const GroupTitle(title: "Storage", paddingTop: 0),
                   SettingTile(
-                    title: "App Folder",
+                    title: loc.appFolder,
                     leading: const Icon(FluentIcons.folder_24_filled),
                     isFirst: true,
                     isLast: true,
@@ -47,7 +50,7 @@ class StorageScreen extends StatelessWidget {
                         builder: (context, value, child) {
                           return SettingTile(
                             isFirst: true,
-                            title: "Image Cache",
+                            title: loc.imageCache,
                             leading: const Icon(FluentIcons.error_circle_24_filled),
                             subtitle: "${value.toStringAsFixed(2)} MB".toString(),
                             trailing: IconButton.filled(
@@ -62,21 +65,21 @@ class StorageScreen extends StatelessWidget {
                       );
                     },
                   ),
-                  const SettingTile(
+                  SettingTile(
                     isLast: true,
-                    title: "Song Cache",
-                    leading: Icon(FluentIcons.error_circle_24_filled),
+                    title: loc.songCache,
+                    leading: const Icon(FluentIcons.error_circle_24_filled),
                   ),
-                  const GroupTitle(title: "Backup and restore"),
-                  const SettingTile(
+                  GroupTitle(title: loc.backupAndRestore),
+                  SettingTile(
                     isFirst: true,
-                    title: "Backup",
-                    leading: Icon(Icons.backup_rounded),
+                    title: loc.backup,
+                    leading: const Icon(Icons.backup_rounded),
                   ),
-                  const SettingTile(
+                  SettingTile(
                     isLast: true,
-                    title: "Restore",
-                    leading: Icon(Icons.cloud_download_rounded),
+                    title: loc.restore,
+                    leading: const Icon(Icons.cloud_download_rounded),
                   ),
                   const BottomPlayingPadding(),
                 ],

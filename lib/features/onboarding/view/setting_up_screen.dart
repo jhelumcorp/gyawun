@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/services/settings/settings_service.dart';
 import 'package:ytmusic/yt_music_base.dart';
 
@@ -45,7 +46,10 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const CircularProgressIndicator(),
-            Text("Setting up...", style: Theme.of(context).textTheme.bodyLarge),
+            Text(
+              AppLocalizations.of(context)!.settingUp,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
           ],
         ),
       ),

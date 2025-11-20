@@ -3,6 +3,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gyawun_music/core/di.dart';
 import 'package:gyawun_music/core/widgets/custom_tile.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:gyawun_shared/gyawun_shared.dart';
 
@@ -43,7 +44,7 @@ class _QueueScreenState extends State<QueueScreen> {
           final state = snapshot.data;
 
           if (state == null || state.$1.isEmpty) {
-            return const Center(child: Text("Queue is empty"));
+            return Center(child: Text(AppLocalizations.of(context)!.queueIsEmpty));
           }
 
           final queue = state.$1;

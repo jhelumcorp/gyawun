@@ -6,7 +6,9 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/features/player/widgets/add_to_playlist.dart';
 import 'package:gyawun_music/features/player/widgets/audio_progress_bar.dart';
+import 'package:gyawun_music/features/player/widgets/favourite_button.dart';
 import 'package:gyawun_music/features/player/widgets/loop_button.dart';
 import 'package:gyawun_music/features/player/widgets/next_button.dart';
 import 'package:gyawun_music/features/player/widgets/play_button.dart';
@@ -94,7 +96,7 @@ class PlayerScreen extends StatelessWidget {
 
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [TimerButton(), SizedBox(width: 8), QueueButton()],
+                    children: [TimerButton(), QueueButton(), AddToPlaylist(), FavouriteButton()],
                   ),
                 ],
               ),

@@ -6,31 +6,9 @@ import 'package:gyawun_music/features/library/library_screen.dart';
 import 'package:gyawun_music/features/player/player_screen.dart';
 import 'package:gyawun_music/features/search/search_screen.dart';
 import 'package:gyawun_music/features/settings/settings_screen.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:navigation_rail_m3e/navigation_rail_m3e.dart';
-
-final destinations = [
-  const NavigationDestination(
-    icon: Icon(FluentIcons.home_24_regular),
-    selectedIcon: Icon(FluentIcons.home_24_filled),
-    label: 'Home',
-  ),
-  const NavigationDestination(
-    icon: Icon(FluentIcons.search_24_regular),
-    selectedIcon: Icon(FluentIcons.search_24_filled),
-    label: 'Search',
-  ),
-  const NavigationDestination(
-    icon: Icon(FluentIcons.book_24_regular),
-    selectedIcon: Icon(FluentIcons.book_24_filled),
-    label: 'Library',
-  ),
-  const NavigationDestination(
-    icon: Icon(FluentIcons.settings_24_regular),
-    selectedIcon: Icon(FluentIcons.settings_24_filled),
-    label: 'Settings',
-  ),
-];
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -66,13 +44,41 @@ class _MainScreenState extends State<MainScreen> {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final isWideScreen = screenWidth >= 600;
     final showFullPlayer = screenWidth >= 1000;
+    final loc = AppLocalizations.of(context)!;
+
+    final destinations = [
+      NavigationDestination(
+        icon: const Icon(FluentIcons.home_24_regular),
+        selectedIcon: const Icon(FluentIcons.home_24_filled),
+        label: loc.home,
+      ),
+      NavigationDestination(
+        icon: const Icon(FluentIcons.search_24_regular),
+        selectedIcon: const Icon(FluentIcons.search_24_filled),
+        label: loc.search,
+      ),
+      NavigationDestination(
+        icon: const Icon(FluentIcons.book_24_regular),
+        selectedIcon: const Icon(FluentIcons.book_24_filled),
+        label: loc.library,
+      ),
+      NavigationDestination(
+        icon: const Icon(FluentIcons.settings_24_regular),
+        selectedIcon: const Icon(FluentIcons.settings_24_filled),
+        label: loc.settings,
+      ),
+    ];
 
     return Scaffold(
       body: Row(
         children: [
           if (isWideScreen)
             FocusTraversalGroup(
-              child: CustomNavigationRail(onChanged: onChanged, selectedIndex: selectedIndex),
+              child: CustomNavigationRail(
+                onChanged: onChanged,
+                selectedIndex: selectedIndex,
+                destinations: destinations,
+              ),
             ),
           FocusTraversalGroup(
             child: Expanded(
@@ -119,10 +125,16 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 class CustomNavigationRail extends StatefulWidget {
-  const CustomNavigationRail({super.key, required this.selectedIndex, required this.onChanged});
+  const CustomNavigationRail({
+    super.key,
+    required this.selectedIndex,
+    required this.onChanged,
+    required this.destinations,
+  });
 
   final int selectedIndex;
   final void Function(int index) onChanged;
+  final List<NavigationDestination> destinations;
 
   @override
   State<CustomNavigationRail> createState() => _CustomNavigationRailState();
@@ -144,7 +156,7 @@ class _CustomNavigationRailState extends State<CustomNavigationRail> {
             modality: NavigationRailM3EModality.standard,
             sections: [
               NavigationRailM3ESection(
-                destinations: destinations
+                destinations: widget.destinations
                     .map(
                       (destination) => NavigationRailM3EDestination(
                         icon: destination.icon,

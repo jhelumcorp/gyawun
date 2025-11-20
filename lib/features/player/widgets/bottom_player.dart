@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/router/route_paths.dart';
 import 'package:gyawun_music/features/player/widgets/queue_track_bar.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:gyawun_music/services/settings/cubits/player_settings_cubit.dart';
@@ -30,7 +31,7 @@ class _BottomPlayerState extends State<BottomPlayer> {
     final settingsCubit = sl<SettingsService>().player;
 
     final currentLocation = GoRouterState.of(context).uri.path;
-    final isOnMainRoute = currentLocation == '/';
+    final isOnMainRoute = currentLocation == RoutePaths.home;
     final bottomNavBarHeight = isOnMainRoute ? 80.0 : 0.0;
 
     return AnimatedPositioned(

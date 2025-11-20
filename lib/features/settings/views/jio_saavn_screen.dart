@@ -6,6 +6,7 @@ import 'package:gyawun_music/core/utils/app_dialogs/app_dialogs.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 import 'package:gyawun_music/services/settings/cubits/jiosaavn_settings_cubit.dart';
 import 'package:gyawun_music/services/settings/enums/js_audio_quality.dart';
 import 'package:gyawun_music/services/settings/settings_service.dart';
@@ -17,9 +18,10 @@ class JioSaavnScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = sl<SettingsService>().jioSaavn;
+    final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("JioSaavn")),
+      appBar: AppBar(title: Text(loc.jioSaavn)),
       body: BlocBuilder<JioSaavnCubit, JioSaavnState>(
         bloc: cubit,
         builder: (context, state) {
@@ -29,18 +31,18 @@ class JioSaavnScreen extends StatelessWidget {
                 minimum: const EdgeInsets.all(16),
                 sliver: SliverList.list(
                   children: [
-                    const GroupTitle(title: "Audio quality", paddingTop: 0),
+                    GroupTitle(title: loc.audioQuality, paddingTop: 0),
 
                     // Streaming quality
                     SettingTile(
-                      title: "Streaming quality",
+                      title: loc.streamingQuality,
                       leading: const Icon(Icons.spatial_audio_rounded),
                       subtitle: "${state.streamingQuality.bitrate} Kbps",
                       isFirst: true,
                       onTap: () async {
                         final q = await AppDialogs.showOptionSelectionDialog<JSAudioQuality>(
                           context,
-                          title: "Streaming Quality",
+                          title: loc.streamingQuality,
                           children: JSAudioQuality.values
                               .map(
                                 (quality) => AppDialogTileData(
@@ -57,14 +59,14 @@ class JioSaavnScreen extends StatelessWidget {
 
                     // Downloading quality
                     SettingTile(
-                      title: "Downloading quality",
+                      title: loc.downloadingQuality,
                       leading: const Icon(Icons.spatial_audio_rounded),
                       subtitle: "${state.downloadingQuality.bitrate} Kbps",
                       isLast: true,
                       onTap: () async {
                         final q = await AppDialogs.showOptionSelectionDialog<JSAudioQuality>(
                           context,
-                          title: "Downloading Quality",
+                          title: loc.downloadingQuality,
                           children: JSAudioQuality.values
                               .map(
                                 (quality) => AppDialogTileData(

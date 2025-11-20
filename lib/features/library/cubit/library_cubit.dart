@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:gyawun_music/core/errors/failure.dart';
 import 'package:library_manager/library_manager.dart';
 
 part 'library_state.dart';
@@ -33,7 +34,7 @@ class LibraryCubit extends Cubit<LibraryState> {
         ),
       );
     } catch (e) {
-      emit(LibraryError(e.toString()));
+      emit(LibraryError(GeneralFailure(e.toString())));
     }
   }
 
@@ -42,16 +43,24 @@ class LibraryCubit extends Cubit<LibraryState> {
       await libraryManager.createPlaylist(id: id, name: name);
       await loadLibrary(); // reload
     } catch (e) {
-      emit(LibraryError(e.toString()));
+      emit(LibraryError(GeneralFailure(e.toString())));
     }
   }
 
   Future<void> deletePlaylist(Playlist playlist) async {
+    final previousState = state;
+    if (previousState is LibrarySuccess) {
+      final updatedCustom = List<Playlist>.from(previousState.customPlaylists)..remove(playlist);
+      emit(previousState.copyWith(customPlaylists: updatedCustom));
+    }
+
     try {
       await libraryManager.deletePlaylist(playlist.id);
-      await loadLibrary();
     } catch (e) {
-      emit(LibraryError(e.toString()));
+      if (previousState is LibrarySuccess) {
+        emit(previousState);
+      }
+      emit(LibraryError(GeneralFailure(e.toString())));
     }
   }
 }

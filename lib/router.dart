@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/extensions/context_extensions.dart';
+import 'package:gyawun_music/core/router/route_paths.dart';
+import 'package:gyawun_music/features/library/views/history_details.dart';
 import 'package:gyawun_music/features/library/views/playlist_details.dart';
 import 'package:gyawun_music/features/main/main_screen.dart';
 import 'package:gyawun_music/features/onboarding/view/onboarding_screen.dart';
@@ -33,115 +35,139 @@ final searchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'search');
 final libraryNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'library');
 final settingsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'settings');
 
+Map<String, dynamic> decodedBody(GoRouterState state) =>
+    Map<String, dynamic>.from(jsonDecode(Uri.decodeComponent(state.pathParameters['body']!)));
+
 final router = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/onboarding',
+  initialLocation: RoutePaths.onboarding,
   routes: [
-    GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingScreen()),
-    GoRoute(path: '/setup', builder: (context, state) => const SettingUpScreen()),
+    GoRoute(path: RoutePaths.onboarding, builder: (context, state) => const OnboardingScreen()),
+    GoRoute(path: RoutePaths.setup, builder: (context, state) => const SettingUpScreen()),
+
+    /// Main Shell
     ShellRoute(
       builder: (context, state, child) {
         return Stack(children: [child, if (!context.isWideScreen) const BottomPlayer()]);
       },
       routes: [
         GoRoute(
-          path: '/',
+          path: RoutePaths.home,
           builder: (context, state) => const MainScreen(),
           routes: [
+            /// ---------- YT MUSIC ROUTES ----------
             GoRoute(
-              path: 'ytmusic/playlist/:body',
-              builder: (context, state) =>
-                  YTPlaylistScreen(body: Map.from(jsonDecode(state.pathParameters['body']!))),
+              path: RoutePaths.ytPlaylist,
+              builder: (context, state) => YTPlaylistScreen(body: decodedBody(state)),
             ),
+
             GoRoute(
-              path: 'ytmusic/chip/:body/:title/:type',
+              path: RoutePaths.ytChip,
               builder: (context, state) => YtChipScreen(
                 title: state.pathParameters['title']!,
                 type: state.pathParameters['type'] == 'search' ? ChipType.search : ChipType.browse,
-                body: Map.from(jsonDecode(state.pathParameters['body']!)),
+                body: decodedBody(state),
               ),
             ),
+
             GoRoute(
-              path: 'ytmusic/browse/:body',
-              builder: (context, state) =>
-                  YTBrowseScreen(body: Map.from(jsonDecode(state.pathParameters['body']!))),
+              path: RoutePaths.ytBrowse,
+              builder: (context, state) => YTBrowseScreen(body: decodedBody(state)),
             ),
+
             GoRoute(
-              path: 'ytmusic/playlist/:body',
+              path: RoutePaths.ytBrowseTitle,
               builder: (context, state) =>
-                  YTPlaylistScreen(body: Map.from(jsonDecode(state.pathParameters['body']!))),
+                  YTBrowseScreen(body: decodedBody(state), title: state.pathParameters['title']),
             ),
+
             GoRoute(
-              path: 'ytmusic/album/:body',
-              builder: (context, state) =>
-                  YTAlbumScreen(body: Map.from(jsonDecode(state.pathParameters['body']!))),
+              path: RoutePaths.ytAlbum,
+              builder: (context, state) => YTAlbumScreen(body: decodedBody(state)),
             ),
+
             GoRoute(
-              path: 'jiosaavn/album/:id',
+              path: RoutePaths.jsAlbum,
               builder: (context, state) => JSAlbumScreen(id: state.pathParameters['id']!),
             ),
 
             GoRoute(
-              path: 'ytmusic/artist/:body',
-              builder: (context, state) =>
-                  YTArtistScreen(body: Map.from(jsonDecode(state.pathParameters['body']!))),
+              path: RoutePaths.ytArtist,
+              builder: (context, state) => YTArtistScreen(body: decodedBody(state)),
             ),
+
             GoRoute(
-              path: 'ytmusic/podcast/:body',
-              builder: (context, state) =>
-                  YTPodcastScreen(body: Map.from(jsonDecode(state.pathParameters['body']!))),
+              path: RoutePaths.ytPodcast,
+              builder: (context, state) => YTPodcastScreen(body: decodedBody(state)),
             ),
+
             GoRoute(
-              path: 'ytmusic/search/suggestions',
+              path: RoutePaths.ytSuggestions,
               pageBuilder: (context, state) => CustomTransitionPage(
                 child: YTSuggestionsScreen(query: state.uri.queryParameters['q']),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
+                transitionsBuilder: (context, animation, secondary, child) =>
+                    FadeTransition(opacity: animation, child: child),
               ),
             ),
 
-            /// Library Routes
+            /// ---------- LIBRARY ----------
             GoRoute(
-              path: 'library/playlists/:name/:id',
+              path: RoutePaths.libraryPlaylist,
               builder: (context, state) => PlaylistDetailsScreen(
                 name: state.pathParameters['name']!,
                 id: state.pathParameters['id']!,
               ),
             ),
-
-            //  Settings Screens
             GoRoute(
-              path: 'settings/appearance',
+              path: RoutePaths.libraryHistory,
+              builder: (context, state) =>
+                  HistoryDetailsScreen(name: state.pathParameters['name']!),
+            ),
+
+            /// ---------- SETTINGS ----------
+            GoRoute(
+              path: RoutePaths.settingsAppearance,
               builder: (context, state) => const AppearanceScreen(),
             ),
             GoRoute(
-              path: 'settings/player',
+              path: RoutePaths.settingsPlayer,
               builder: (context, state) => const settings.PlayerScreen(),
             ),
             GoRoute(
-              path: 'settings/ytmusic',
+              path: RoutePaths.settingsYtMusic,
               builder: (context, state) => const YoutubeMusicScreen(),
             ),
-            GoRoute(path: 'settings/jiosaavn', builder: (context, state) => const JioSaavnScreen()),
-            GoRoute(path: 'settings/storage', builder: (context, state) => const StorageScreen()),
-            GoRoute(path: 'settings/privacy', builder: (context, state) => const PrivacyScreen()),
-            GoRoute(path: 'settings/about', builder: (context, state) => const AboutScreen()),
+            GoRoute(
+              path: RoutePaths.settingsJioSaavn,
+              builder: (context, state) => const JioSaavnScreen(),
+            ),
+            GoRoute(
+              path: RoutePaths.settingsStorage,
+              builder: (context, state) => const StorageScreen(),
+            ),
+            GoRoute(
+              path: RoutePaths.settingsPrivacy,
+              builder: (context, state) => const PrivacyScreen(),
+            ),
+            GoRoute(
+              path: RoutePaths.settingsAbout,
+              builder: (context, state) => const AboutScreen(),
+            ),
           ],
         ),
       ],
     ),
+
+    /// PLAYER ROUTES
     GoRoute(
-      path: '/player',
-      pageBuilder: (context, state) {
-        return const CupertinoPage(fullscreenDialog: true, child: PlayerScreen());
-      },
+      path: RoutePaths.player,
+      pageBuilder: (context, state) =>
+          const CupertinoPage(fullscreenDialog: true, child: PlayerScreen()),
       routes: [
         GoRoute(
-          path: 'queue',
-          pageBuilder: (context, state) {
-            return const CupertinoPage(fullscreenDialog: true, child: QueueScreen());
-          },
+          path: RoutePaths.queue,
+          pageBuilder: (context, state) =>
+              const CupertinoPage(fullscreenDialog: true, child: QueueScreen()),
         ),
       ],
     ),

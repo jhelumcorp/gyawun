@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gyawun_music/core/di.dart';
+import 'package:gyawun_music/core/router/route_paths.dart';
 import 'package:gyawun_music/services/audio_service/media_player.dart';
 import 'package:gyawun_shared/gyawun_shared.dart';
 import 'package:ytmusic/yt_music_base.dart';
@@ -45,10 +44,10 @@ void onSectionItemTap(BuildContext context, SectionItem item, {List<PlayableItem
   };
   if (page != null) {
     if (item.provider == DataProvider.ytmusic) {
-      context.push('/ytmusic/$page/${jsonEncode(item.endpoint)}');
+      context.push(RouteLocations.ytMusicPage(page, item.endpoint!));
     } else {
       if (item.type == SectionItemType.album) {
-        context.push('/jiosaavn/album/${item.id}');
+        context.push(RouteLocations.jsAlbum(item.id));
       }
     }
     return;

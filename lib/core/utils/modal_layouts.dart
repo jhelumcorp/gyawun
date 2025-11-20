@@ -363,6 +363,7 @@ class _AddToPlaylistLayoutState extends State<AddToPlaylistLayout> {
       widget.item.id,
       PlaylistType.custom,
       widget.item.provider,
+      origin: PlaylistOrigin.local,
     );
   }
 

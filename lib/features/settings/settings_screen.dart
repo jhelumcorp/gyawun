@@ -2,15 +2,19 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gyawun_music/core/router/route_paths.dart';
 import 'package:gyawun_music/core/widgets/bottom_playing_padding.dart';
 import 'package:gyawun_music/features/settings/widgets/group_title.dart';
 import 'package:gyawun_music/features/settings/widgets/setting_tile.dart';
+import 'package:gyawun_music/l10n/generated/app_localizations.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -20,7 +24,7 @@ class SettingsScreen extends StatelessWidget {
               expandedHeight: 100,
 
               flexibleSpace: FlexibleSpaceBar(
-                title: Text("Settings", style: Theme.of(context).appBarTheme.titleTextStyle),
+                title: Text(loc.settings, style: Theme.of(context).appBarTheme.titleTextStyle),
                 // expandedTitleScale: 1.2,
                 titlePadding: const EdgeInsets.only(left: 16, bottom: 12),
               ),
@@ -29,28 +33,28 @@ class SettingsScreen extends StatelessWidget {
         },
         body: CustomScrollView(
           slivers: [
-            const SliverGroupTitle(title: "General", paddingTop: 0),
+            SliverGroupTitle(title: loc.general, paddingTop: 0),
             SliverSettingTile(
               onTap: () {
-                context.push("/settings/appearance");
+                context.push(RoutePaths.settingsAppearance);
               },
               isFirst: true,
-              title: "Appearance",
+              title: loc.appearance,
               leading: const Icon(FluentIcons.color_background_24_filled),
             ),
 
             SliverSettingTile(
               onTap: () {
-                context.push("/settings/player");
+                context.push(RoutePaths.settingsPlayer);
               },
               isLast: true,
-              title: "Player",
+              title: loc.player,
               leading: const Icon(FluentIcons.play_24_filled),
             ),
-            const SliverGroupTitle(title: "Services"),
+            SliverGroupTitle(title: loc.services),
 
             SliverSettingTile(
-              title: "Youtube Music",
+              title: loc.youtubeMusic,
               leading: SvgPicture.asset(
                 'assets/svgs/youtube_music.svg',
                 width: 22,
@@ -62,11 +66,11 @@ class SettingsScreen extends StatelessWidget {
               ),
               isFirst: true,
               onTap: () {
-                context.push("/settings/ytmusic");
+                context.push(RoutePaths.settingsYtMusic);
               },
             ),
             SliverSettingTile(
-              title: "Jio Saavn",
+              title: loc.jioSaavn,
               leading: SvgPicture.asset(
                 'assets/svgs/jio_saavn.svg',
                 width: 22,
@@ -78,43 +82,43 @@ class SettingsScreen extends StatelessWidget {
               ),
               isLast: true,
               onTap: () {
-                context.push("/settings/jiosaavn");
+                context.push(RoutePaths.settingsJioSaavn);
               },
             ),
 
-            const SliverGroupTitle(title: "Storage & Privacy"),
+            SliverGroupTitle(title: loc.storageAndPrivacy),
 
             SliverSettingTile(
-              title: "Storage and backups",
+              title: loc.storageAndBackups,
               isFirst: true,
               leading: const Icon(FluentIcons.storage_24_filled),
               onTap: () {
-                context.push("/settings/storage");
+                context.push(RoutePaths.settingsStorage);
               },
             ),
 
             SliverSettingTile(
-              title: "Privacy",
+              title: loc.privacy,
               isLast: true,
               leading: const Icon(FluentIcons.shield_keyhole_24_filled),
               onTap: () {
-                context.push("/settings/privacy");
+                context.push(RoutePaths.settingsPrivacy);
               },
             ),
 
-            const SliverGroupTitle(title: "Updates & About"),
+            SliverGroupTitle(title: loc.updatesAndAbout),
 
             SliverSettingTile(
               onTap: () {
-                context.push("/settings/about");
+                context.push(RoutePaths.settingsAbout);
               },
-              title: "About",
+              title: loc.about,
               leading: const Icon(FluentIcons.info_24_filled),
               isFirst: true,
             ),
             SliverSettingTile(
               onTap: () {},
-              title: "Check for update",
+              title: loc.checkForUpdate,
               leading: const Icon(FluentIcons.arrow_circle_up_24_filled),
               isLast: true,
             ),
