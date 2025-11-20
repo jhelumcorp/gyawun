@@ -26,8 +26,8 @@ Future<void> registerDependencies(Directory directory) async {
         language: ytmusic.language.value,
         location: ytmusic.location.value,
       ),
-      onConfigUpdate: (config) async {
-        ytMusicSettings.setVisitorId(config.visitorData);
+      onIdUpdate: (config) async {
+        ytMusicSettings.setVisitorId(config);
       },
     );
   });

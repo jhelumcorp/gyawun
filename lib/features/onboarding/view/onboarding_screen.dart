@@ -95,7 +95,7 @@ class OnboardingScreen extends StatelessWidget {
                           : null,
                     ),
                     onPressed: () {
-                      context.go('/setup');
+                      context.go('/');
                     },
                     child: Text(
                       loc.getStarted,

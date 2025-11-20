@@ -8,7 +8,6 @@ import 'package:gyawun_music/features/library/views/history_details.dart';
 import 'package:gyawun_music/features/library/views/playlist_details.dart';
 import 'package:gyawun_music/features/main/main_screen.dart';
 import 'package:gyawun_music/features/onboarding/view/onboarding_screen.dart';
-import 'package:gyawun_music/features/onboarding/view/setting_up_screen.dart';
 import 'package:gyawun_music/features/player/player_screen.dart';
 import 'package:gyawun_music/features/player/queue_screen.dart';
 import 'package:gyawun_music/features/player/widgets/bottom_player.dart';
@@ -43,7 +42,7 @@ final router = GoRouter(
   initialLocation: RoutePaths.onboarding,
   routes: [
     GoRoute(path: RoutePaths.onboarding, builder: (context, state) => const OnboardingScreen()),
-    GoRoute(path: RoutePaths.setup, builder: (context, state) => const SettingUpScreen()),
+    // GoRoute(path: RoutePaths.setup, builder: (context, state) => const SettingUpScreen()),
 
     /// Main Shell
     ShellRoute(
